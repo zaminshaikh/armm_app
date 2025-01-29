@@ -1,6 +1,6 @@
 {
-    "name": "mobile",
-    "short_name": "mobile",
+    "name": "armm_app",
+    "short_name": "armm_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
