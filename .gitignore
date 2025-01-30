@@ -1,2 +1,14 @@
-.env*
 apps/.DS_Store
+# Flutter build outputs
+/build/
+/apps/mobile/build/
+/apps/mobile/ios/Pods/
+.dart_tool/
+
+# Android signing
+*.jks
+key.properties
+
+# Environment files
+.env
+.env.*
