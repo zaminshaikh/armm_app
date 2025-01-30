@@ -1,2 +1,2 @@
-.env.development
+.env*
 apps/.DS_Store
