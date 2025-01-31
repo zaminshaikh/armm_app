@@ -35,7 +35,7 @@ jobs:
       # 5. Decode the Android keystore (from Base64)
       - name: Decode Keystore
         working-directory: apps/mobile
-        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > $HOME/android_keystore.jks
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $HOME/android_keystore.jks
 
       - name: Check if keystore is valid
         run: | 
