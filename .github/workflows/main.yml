@@ -26,6 +26,7 @@ jobs:
 
       - name: Go to Flutter project
         working-directory: apps/mobile
+        run: echo "Now in correct directory"
 
       - name: Decode Keystore
         working-directory: apps/mobile
