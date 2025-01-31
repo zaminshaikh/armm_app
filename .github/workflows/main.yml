@@ -1,20 +1,20 @@
-name: Build & Deploy to Google Play
+name: Build & Deploy (Fastlane)
 
 on:
   push:
     branches:
-      - main  # or your preferred branch
+      - main  # or your release branch
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out repository
-      - name: Check out
+      # 1. Check out the repository
+      - name: Check out code
         uses: actions/checkout@v3
 
-      # 2. Set up Java (required for Android builds)
+      # 2. Set up Java (required for the Android SDK and Flutter)
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
@@ -28,16 +28,16 @@ jobs:
           channel: 'stable'
 
       # 4. Navigate to the Flutter app directory
-      - name: Navigate to apps/mobile
+      - name: Go to Flutter project
         working-directory: apps/mobile
-        run: pwd
+        run: echo "In directory: $(pwd)"
 
-      # 5. Decode the Android keystore from GitHub Secret
+      # 5. Decode the Android keystore (from base64)
       - name: Decode Keystore
         working-directory: apps/mobile
         run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > $HOME/android_keystore.jks
 
-      # 6. Create key.properties for Gradle signing config
+      # 6. Create key.properties (used by Gradle to sign the app)
       - name: Create key.properties
         working-directory: apps/mobile
         run: |
@@ -48,45 +48,35 @@ jobs:
           storeFile=${HOME}/android_keystore.jks
           EOF
 
-      # 7. Fetch Flutter dependencies
+      # 7. Get Flutter dependencies
       - name: Flutter Pub Get
         working-directory: apps/mobile
         run: flutter pub get
 
-      # 8. Build the Android App Bundle (AAB)
-      #    This will automatically pick up the version from pubspec.yaml
-      - name: Build Android App Bundle
+      # 8. Build the Android App Bundle
+      #    This will read version info from pubspec.yaml (e.g., "version: 1.0.0+1")
+      - name: Build AAB
         working-directory: apps/mobile
         run: flutter build appbundle --release
 
-      # 9. Deploy to Google Play
-      #    Option A: Use a dedicated GitHub Action
-      #    ------------------------------------------------------
-      - name: Deploy to Google Play
-        uses: r0adpunch/google-play-publisher-action@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
-          packageName: com.yourdomain.yourapp  # Update to your real package name
-          releaseFiles: "build/app/outputs/bundle/release/app-release.aab"
-          track: production
+      # 9. Install Fastlane (Ruby-based)
+      - name: Install Fastlane
+        run: sudo gem install fastlane
 
-      #
-      #    Option B: Use Fastlane directly (if you prefer)
-      #    (In this case, you might need to install Ruby, fastlane, etc.)
-      #    ------------------------------------------------------
-      # - name: Install Fastlane
-      #   run: sudo gem install fastlane
-      #
-      # - name: Deploy with Fastlane
-      #   run: |
-      #     echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}" | base64 --decode > service_account.json
-      #     fastlane supply \
-      #       --track "production" \
-      #       --package_name "com.yourdomain.yourapp" \
-      #       --json_key service_account.json \
-      #       --aab build/app/outputs/bundle/release/app-release.aab \
-      #       --skip_upload_metadata true \
-      #       --skip_upload_images true \
-      #       --skip_upload_screenshots true
-      #
-      #   working-directory: apps/mobile
+      # 10. Deploy to Google Play using Fastlane "supply"
+      - name: Deploy to Google Play
+        working-directory: apps/mobile
+        run: |
+          # Decode the Google Play service account from base64 to a JSON file
+          echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}" | base64 --decode > service_account.json
+
+          # Use Fastlane supply
+          fastlane supply \
+            --track "production" \
+            --package_name "com.example.app" \
+            --json_key service_account.json \
+            --aab "build/app/outputs/bundle/release/app-release.aab" \
+            --skip_upload_changelogs true \
+            --skip_upload_metadata true \
+            --skip_upload_images true \
+            --skip_upload_screenshots true
