@@ -1,0 +1,85 @@
+name: Build & Deploy (Fastlane)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # 2. Set up Java 17 (required by AGP 8.x)
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # 3. Install Flutter
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # 4. Navigate to the Flutter app directory
+      - name: Go to Flutter project
+        working-directory: apps/mobile
+        run: echo "In correct directory"
+
+      # 5. Decode the Android keystore (from Base64)
+      - name: Decode Keystore
+        working-directory: apps/mobile
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $HOME/android_keystore.jks
+
+      - name: Check if keystore is valid
+        run: | 
+          sha256sum $HOME/android_keystore.jks
+
+      # 6. Create key.properties for Gradle signing
+      - name: Create key.properties
+        working-directory: apps/mobile
+        run: |
+          cat <<EOF > android/key.properties
+          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
+          storeFile=${HOME}/android_keystore.jks
+          EOF
+
+      # 7. Get Flutter dependencies
+      - name: Flutter Pub Get
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      # 8. Build the Android App Bundle (.aab)
+      - name: Build AAB
+        working-directory: apps/mobile
+        run: flutter build appbundle --release
+
+      # 9. Install Fastlane (Ruby-based)
+      - name: Install Fastlane
+        run: sudo gem install fastlane
+
+      # 10. Deploy to Google Play (Fastlane supply)
+      - name: Deploy to Google Play
+        working-directory: apps/mobile
+        run: |
+          # Decode the Google Play service account from Base64
+          echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}" | base64 --decode > service_account.json
+
+          # Fastlane supply command
+          fastlane supply \
+            --track "production" \
+            --package_name "com.armm.investmentportfolio" \
+            --json_key service_account.json \
+            --aab build/app/outputs/bundle/release/app-release.aab \
+            --skip_upload_changelogs true \
+            --skip_upload_metadata true \
+            --skip_upload_images true \
+            --skip_upload_screenshots true
