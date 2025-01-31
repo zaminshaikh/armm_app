@@ -30,7 +30,7 @@ jobs:
       # 4. Navigate to the Flutter app directory
       - name: Go to Flutter project
         working-directory: apps/mobile
-        run: echo "In directory: apps/mobile"
+        run: echo "In correct directory"
 
       # 5. Decode the Android keystore (from Base64)
       - name: Decode Keystore
