@@ -1,13 +1,20 @@
 #!/bin/sh
-
-# Fail on first error.
+# ^ or use #!/bin/zsh if you want zsh
+# Fail on first error:
 set -e
 
-cd "$CI_PRIMARY_REPOSITORY_PATH"
+echo "=== In ci_post_clone.sh ==="
+echo "Current directory: $(pwd)"
+
+# If $CI_PRIMARY_REPOSITORY_PATH points to /Volumes/workspace/repository,
+# and your Flutter project is in apps/mobile, do:
+cd "$CI_PRIMARY_REPOSITORY_PATH/apps/mobile"
+echo "Now in: $(pwd)"
 
 echo "=== Cloning Flutter SDK ==="
 git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
 export PATH="$PATH:$HOME/flutter/bin"
+
 flutter --version
 
 echo "=== Pre-caching iOS artifacts ==="
@@ -16,17 +23,9 @@ flutter precache --ios
 echo "=== Running flutter pub get ==="
 flutter pub get
 
-# Check if CocoaPods is already installed
-echo "=== Checking for CocoaPods ==="
-if ! command -v pod &> /dev/null
-then
-  echo "CocoaPods not found, installing via gem..."
-  sudo gem install cocoapods
-fi
-
-echo "=== Installing pods in ios/ ==="
+echo "=== Installing pods ==="
 cd ios
 pod install
 
-echo "=== Done. ==="
+echo "=== ci_post_clone.sh completed successfully. ==="
 exit 0
