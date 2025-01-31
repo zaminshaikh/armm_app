@@ -1,0 +1,92 @@
+name: Build & Deploy to Google Play
+
+on:
+  push:
+    branches:
+      - main  # or your preferred branch
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out repository
+      - name: Check out
+        uses: actions/checkout@v3
+
+      # 2. Set up Java (required for Android builds)
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      # 3. Install Flutter
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # 4. Navigate to the Flutter app directory
+      - name: Navigate to apps/mobile
+        working-directory: apps/mobile
+        run: pwd
+
+      # 5. Decode the Android keystore from GitHub Secret
+      - name: Decode Keystore
+        working-directory: apps/mobile
+        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > $HOME/android_keystore.jks
+
+      # 6. Create key.properties for Gradle signing config
+      - name: Create key.properties
+        working-directory: apps/mobile
+        run: |
+          cat <<EOF > android/key.properties
+          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
+          storeFile=${HOME}/android_keystore.jks
+          EOF
+
+      # 7. Fetch Flutter dependencies
+      - name: Flutter Pub Get
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      # 8. Build the Android App Bundle (AAB)
+      #    This will automatically pick up the version from pubspec.yaml
+      - name: Build Android App Bundle
+        working-directory: apps/mobile
+        run: flutter build appbundle --release
+
+      # 9. Deploy to Google Play
+      #    Option A: Use a dedicated GitHub Action
+      #    ------------------------------------------------------
+      - name: Deploy to Google Play
+        uses: r0adpunch/google-play-publisher-action@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+          packageName: com.yourdomain.yourapp  # Update to your real package name
+          releaseFiles: "build/app/outputs/bundle/release/app-release.aab"
+          track: production
+
+      #
+      #    Option B: Use Fastlane directly (if you prefer)
+      #    (In this case, you might need to install Ruby, fastlane, etc.)
+      #    ------------------------------------------------------
+      # - name: Install Fastlane
+      #   run: sudo gem install fastlane
+      #
+      # - name: Deploy with Fastlane
+      #   run: |
+      #     echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}" | base64 --decode > service_account.json
+      #     fastlane supply \
+      #       --track "production" \
+      #       --package_name "com.yourdomain.yourapp" \
+      #       --json_key service_account.json \
+      #       --aab build/app/outputs/bundle/release/app-release.aab \
+      #       --skip_upload_metadata true \
+      #       --skip_upload_images true \
+      #       --skip_upload_screenshots true
+      #
+      #   working-directory: apps/mobile
