@@ -47,7 +47,7 @@ jobs:
         run: |
           cat <<EOF > android/key.properties
           storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}
           keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
           storeFile=${HOME}/android_keystore.jks
           EOF
