@@ -75,7 +75,7 @@ jobs:
 
           # Fastlane supply command
           fastlane supply \
-            --track "production" \
+            --track "internal" \
             --package_name "com.armm.investmentportfolio" \
             --json_key service_account.json \
             --aab build/app/outputs/bundle/release/app-release.aab \
