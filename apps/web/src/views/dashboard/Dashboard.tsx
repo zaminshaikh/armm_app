@@ -161,7 +161,7 @@ const Dashboard = () => {
     {
       avatar: { src: avatar3, status: 'warning' },
       user: {
-        name: 'Quintin Ed',
+        name: 'Quintin Eddie',
         new: true,
         registered: t('date', {
           date: new Date(2023, 0, 10),
