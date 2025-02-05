@@ -1,4 +1,4 @@
-name: Build & Deploy (Fastlane)
+name: Build & Deploy for Google Play (Fastlane)
 
 on:
   push:
