@@ -6,6 +6,8 @@ import { ClientInputModalBody } from "./ClientInputModalBody.tsx";
 import { ValidateClient } from "./ClientInputModalBody.tsx";
 import { FormValidationErrorModal } from '../../components/ErrorModal.tsx';
 import { Option, OptionsGroup } from "@coreui/react-pro/dist/esm/components/multi-select/types";
+import { cilPlus, cilTrash } from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
 
 // const CFormInputWithMask = React.forwardRef<HTMLInputElement, any>((props, ref) => (
 //     <CFormInput
@@ -90,8 +92,14 @@ const CreateClient: React.FC<ShowModalProps> = ({showModal, setShowModal, client
                     setClientOptions={setClientOptions}
                     viewOnly={false}/>
                 <CModalFooter>
-                    <CButton color="danger" variant="outline" onClick={() => setShowModal(false)}>Discard</CButton>
-                    <CButton color="primary" onClick={() => handleCreateClient()}>Create +</CButton>
+                    <CButton color="danger" variant="outline" onClick={() => setShowModal(false)}>                  
+                        <CIcon icon={cilTrash} className="me-1" />
+                        Discard
+                    </CButton>
+                    <CButton color="primary" onClick={() => handleCreateClient()}>                  
+                        <CIcon icon={cilPlus} className="me-1" />
+                        Create
+                    </CButton>
                 </CModalFooter>
             </CModal>
         </div>

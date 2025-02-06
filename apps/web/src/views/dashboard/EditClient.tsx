@@ -6,6 +6,8 @@ import { DatabaseService, Client, emptyClient } from '../../db/database.ts'
 import { ClientInputModalBody, ValidateClient } from './ClientInputModalBody.tsx'
 import { FormValidationErrorModal } from '../../components/ErrorModal';
 import { Option, OptionsGroup } from '@coreui/react-pro/dist/esm/components/multi-select/types';
+import CIcon from '@coreui/icons-react';
+import { cilX, cilCloudUpload } from '@coreui/icons';
 
 // const CFormInputWithMask = React.forwardRef<HTMLInputElement, any>((props, ref) => (
 //     <CFormInput
@@ -92,7 +94,10 @@ export const EditClient: React.FC<ShowModalProps> = ({showModal, setShowModal, c
                     clients={clients}
                     viewOnly={false}/>
                 <CModalFooter>
-                    <CButton color="secondary" variant="outline" onClick={() => setShowModal(false)}>Cancel</CButton>
+                    <CButton color="secondary" variant="outline" onClick={() => setShowModal(false)}>
+                        <CIcon icon={cilX} className="me-1" />
+                        Cancel
+                    </CButton>
                     <CLoadingButton color="primary" 
                         loading={isLoading}
                         onClick={async () => {
@@ -110,7 +115,10 @@ export const EditClient: React.FC<ShowModalProps> = ({showModal, setShowModal, c
                             }
                             setIsLoading(false);
                         }}
-                        >Update</CLoadingButton>
+                        >
+                        <CIcon icon={cilCloudUpload} className="me-1" />
+                        Update
+                    </CLoadingButton>
                 </CModalFooter>
             </CModal>
         </div>
