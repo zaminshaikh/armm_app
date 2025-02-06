@@ -273,75 +273,48 @@ export class DatabaseService {
      * - formattedAssets: The client's total assets, formatted as a currency string.
      */
     getClients = async () => {
-        // Fetch all documents from the clients collection
         const querySnapshot = await getDocs(this.clientsCollection);
-
-        // Initialize an empty array to hold the client objects
         const clients: Client[] = [];
 
-        // Use Promise.all to fetch all clients concurrently
         const clientPromises = querySnapshot.docs.map(async (clientSnapshot) => {
-            // Get a reference to the 'assets' subcollection for this client
+            // Get all docs in assets subcollection
             const assetsSubcollection = collection(this.clientsCollection, clientSnapshot.id, config.ASSETS_SUBCOLLECTION);
+            const assetDocs = await getDocs(assetsSubcollection);
 
-            // References to each doc in assets subcollection
-            const generalAssetsDoc = doc(assetsSubcollection, config.ASSETS_GENERAL_DOC_ID);
-            const agqAssetsDoc = doc(assetsSubcollection, config.ASSETS_AGQ_DOC_ID);
-            const ak1AssetsDoc = doc(assetsSubcollection, config.ASSETS_AK1_DOC_ID);
-
-            // Fetch all the assets documents concurrently
-            const [generalAssetsSnapshot, agqAssetsSnapshot, ak1AssetsSnapshot] = await Promise.all([
-                getDoc(generalAssetsDoc),
-                getDoc(agqAssetsDoc),
-                getDoc(ak1AssetsDoc),
-            ]);
-
-            // Process the snapshots to create the client object
-            return this.getClientFromSnapshot(clientSnapshot, generalAssetsSnapshot, agqAssetsSnapshot, ak1AssetsSnapshot);
+            return this.getClientFromSnapshot(clientSnapshot, assetDocs);
         });
 
-        // Wait for all client processing promises to resolve
         const processedClients = await Promise.all(clientPromises);
-
-        // Filter out any null values in case some clients couldn't be created
         clients.push(...processedClients.filter(client => client !== null));
-
-        // Return the array of client objects
         return clients;
+    };
+
+    getClient = async (cid: string) => {
+        const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, cid);
+        const clientSnapshot = await getDoc(clientRef);
+        const assetsSubcollection = collection(this.clientsCollection, cid, config.ASSETS_SUBCOLLECTION);
+        const assetDocs = await getDocs(assetsSubcollection);
+
+        return this.getClientFromSnapshot(clientSnapshot, assetDocs);
     };
 
     getClientFromSnapshot = (
         clientSnapshot: DocumentSnapshot,
-        generalAssetsSnapshot: DocumentSnapshot,
-        agqAssetsSnapshot: DocumentSnapshot,
-        ak1AssetsSnapshot: DocumentSnapshot
+        assetDocs: any // or QuerySnapshot<DocumentData>
     ): Client | null => {
-        if (!clientSnapshot.exists()) {
-            return null;
-        }
+        if (!clientSnapshot.exists()) { return null; }
 
         const data = clientSnapshot.data();
-        const generalAssetsData = generalAssetsSnapshot.data();
-        const agqAssetsData = agqAssetsSnapshot.data();
-        const ak1AssetsData = ak1AssetsSnapshot.data();
+        let generalAssetsData: any = {};
+        const funds: { [fundName: string]: { [assetType: string]: AssetDetails } } = {};
 
-        const parseAssetsData = (assetsData: any): { [assetType: string]: AssetDetails } => {
-            const parsedAssets: { [assetType: string]: AssetDetails } = {};
-            if (assetsData) {
-                Object.keys(assetsData).forEach(assetType => {
-                    if (assetType !== 'fund' && assetType !== 'total') {
-                        const asset = assetsData[assetType];
-                        parsedAssets[assetType] = {
-                            amount: asset.amount ?? 0,
-                            firstDepositDate: asset.firstDepositDate?.toDate?.() ?? null,
-                            displayTitle: asset.displayTitle ?? '',
-                            index: asset.index ?? 0, // Include index
-                        };
-                    }
-                });
+        assetDocs.forEach((docItem: any) => {
+            if (docItem.id === config.ASSETS_GENERAL_DOC_ID) {
+                generalAssetsData = docItem.data();
+            } else {
+                funds[docItem.id] = this.parseAssetsData(docItem.data());
             }
-            return parsedAssets;
-        };
+        });
 
         const client: Client = {
             cid: clientSnapshot.id,
@@ -360,9 +333,9 @@ export class DatabaseService {
             initEmail: data?.initEmail ?? data?.email ?? '',
             appEmail: data?.appEmail ?? data?.email ?? 'Client has not logged in yet',
             connectedUsers: data?.connectedUsers ?? [],
-            totalAssets: generalAssetsData ? generalAssetsData.total : 0,
-            ytd: generalAssetsData ? generalAssetsData.ytd : 0,
-            totalYTD: generalAssetsData ? generalAssetsData.totalYTD : 0,
+            totalAssets: generalAssetsData.total ?? 0,
+            ytd: generalAssetsData.ytd ?? 0,
+            totalYTD: generalAssetsData.totalYTD ?? 0,
             phoneNumber: data?.phoneNumber ?? '',
             firstDepositDate: data?.firstDepositDate?.toDate() ?? null,
             beneficiaries: data?.beneficiaries ?? [],
@@ -373,32 +346,27 @@ export class DatabaseService {
                     : 'N/A'), // If they haven't, we'll display N/A, because they have not linked their account
             _selected: false,
             notes: data?.notes ?? '',
-            assets: {
-                agq: parseAssetsData(agqAssetsData), // Dynamically parse AGQ assets
-                ak1: parseAssetsData(ak1AssetsData), // Dynamically parse AK1 assets
-            },
+            assets: funds,
         };
 
         return client;
     };
 
-    getClient = async (cid: string) => {
-        const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, cid);
-        const clientSnapshot = await getDoc(clientRef);
-        // Get a reference to the 'assets' subcollection for this client
-        const assetsSubcollection = collection(this.clientsCollection, cid, config.ASSETS_SUBCOLLECTION)
-
-        // References to each doc in assets subcollection, one for each fund and a general overview doc
-        const generalAssetsDoc = doc(assetsSubcollection, config.ASSETS_GENERAL_DOC_ID)
-        const agqAssetsDoc = doc(assetsSubcollection, config.ASSETS_AGQ_DOC_ID)
-        const ak1AssetsDoc = doc(assetsSubcollection, config.ASSETS_AK1_DOC_ID)
-
-        // Use the references to fetch the snapshots of the documents
-        const generalAssetsSnapshot = await getDoc(generalAssetsDoc)
-        const agqAssetsSnapshot = await getDoc(agqAssetsDoc)
-        const ak1AssetsSnapshot = await getDoc(ak1AssetsDoc)
-
-        return this.getClientFromSnapshot(clientSnapshot, generalAssetsSnapshot, agqAssetsSnapshot, ak1AssetsSnapshot);
+    // Helper to parse a fund doc into assetTypes
+    private parseAssetsData(assetsData: any): { [assetType: string]: AssetDetails } {
+        const parsedAssets: { [assetType: string]: AssetDetails } = {};
+        Object.keys(assetsData).forEach(assetType => {
+            if (assetType !== 'fund' && assetType !== 'total') {
+                const asset = assetsData[assetType];
+                parsedAssets[assetType] = {
+                    amount: asset.amount ?? 0,
+                    firstDepositDate: asset.firstDepositDate?.toDate?.() ?? null,
+                    displayTitle: asset.displayTitle ?? '',
+                    index: asset.index ?? 0,
+                };
+            }
+        });
+        return parsedAssets;
     }
 
     /**
@@ -437,6 +405,21 @@ export class DatabaseService {
         newClient = {...newClient, cid: newClientDocId};
         // Since the CID is unique, this will create a unique client in the database
         await this.setClient(newClient);
+        const now = new Date();
+        for (const [fundName, fundAssets] of Object.entries(newClient.assets)) {
+            for (const assetDetails of Object.values(fundAssets)) {
+                const depositActivity: Activity = {
+                    ...emptyActivity,
+                    amount: assetDetails.amount,
+                    fund: fundName,
+                    time: now,
+                    type: 'deposit',
+                    recipient: assetDetails.displayTitle === 'Personal' ? `${newClient.firstName} ${newClient.lastName}` : assetDetails.displayTitle,
+                    parentName: `${newClient.firstName} ${newClient.lastName}`,
+                };
+                await this.createActivity(depositActivity, newClient.cid);
+            }
+        }
     }
 
     /**
@@ -517,46 +500,40 @@ export class DatabaseService {
         const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, client.cid);
         const assetCollectionRef = collection(clientRef, config.ASSETS_SUBCOLLECTION);
 
-        // // Filter out assets with amount 0
-        // const agqAssets = this.filterAssets(client.assets.agq);
-        // const ak1Assets = this.filterAssets(client.assets.ak1);
+        let totalAllFunds = 0;
+        
+        // For each fund (e.g. 'agq', 'ak1', or others):
+        for (const [fundName, fundAssets] of Object.entries(client.assets)) {
+            let fundTotal = 0;
+            const fundDoc: any = { fund: fundName };
 
-        const agqAssets = client.assets.agq;
-        const ak1Assets = client.assets.ak1;
-
-        const prepareAssetDoc = (assets: { [assetType: string]: AssetDetails }, fundName: string) => {
-            let total = 0;
-            const assetDoc: any = { fund: fundName };
-            Object.keys(assets).forEach(assetType => {
-                const asset = assets[assetType];
-                assetDoc[assetType] = {
+            Object.keys(fundAssets).forEach(assetType => {
+                const asset = fundAssets[assetType];
+                fundDoc[assetType] = {
                     amount: asset.amount,
                     firstDepositDate: asset.firstDepositDate ? Timestamp.fromDate(asset.firstDepositDate) : null,
                     displayTitle: asset.displayTitle,
                     index: asset.index,
                 };
-                total += asset.amount;
+                fundTotal += asset.amount;
             });
-            assetDoc.total = total;
-            return assetDoc;
-        };
 
-        const agqDoc = prepareAssetDoc(agqAssets, 'AGQ');
-        const ak1Doc = prepareAssetDoc(ak1Assets, 'AK1');
+            fundDoc.total = fundTotal;
+            totalAllFunds += fundTotal;
 
+            // Create or update doc for this fund
+            const fundRef = doc(assetCollectionRef, fundName);
+            await setDoc(fundRef, fundDoc, { merge: true });
+        }
+
+        // Create/update a single "general" doc with combined totals for all funds
+        const generalRef = doc(assetCollectionRef, config.ASSETS_GENERAL_DOC_ID);
         const general = {
             ytd: client.ytd ?? 0,
             totalYTD: client.totalYTD ?? 0,
-            total: agqDoc.total + ak1Doc.total,
+            total: totalAllFunds,
         };
-
-        const agqRef = doc(assetCollectionRef, config.ASSETS_AGQ_DOC_ID);
-        const ak1Ref = doc(assetCollectionRef, config.ASSETS_AK1_DOC_ID);
-        const genRef = doc(assetCollectionRef, config.ASSETS_GENERAL_DOC_ID);
-
-        await setDoc(agqRef, agqDoc);
-        await setDoc(ak1Ref, ak1Doc);
-        await setDoc(genRef, general);
+        await setDoc(generalRef, general, { merge: true });
     }
 
     /**
