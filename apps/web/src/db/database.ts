@@ -24,11 +24,11 @@ export interface AssetDetails {
  * .uid - The client's UID, or the empty string if they have not signed up
  */
 export interface Client {
+    companyName: string
     cid: string;
     uid: string;
     firstName: string;
     lastName: string;
-    companyName: string;
     address: string;
     province: string
     state: string
@@ -355,9 +355,9 @@ export class DatabaseService {
         const client: Client = {
             cid: clientSnapshot.id,
             uid: data?.uid ?? '',
-            firstName: data?.name?.first ?? '',
-            lastName: data?.name?.last ?? '',
-            companyName: data?.name?.company ?? '',
+            firstName: data?.firstName ?? '',
+            lastName: data?.lastName ?? '',
+            companyName: data?.companyName ?? '',
             address: data?.address ?? '',
             province: data?.province ?? '',
             state: data?.state ?? '',
@@ -459,11 +459,6 @@ export class DatabaseService {
         // Create a new DocumentData object from the newClient object, with a name property that is an object containing first, last, and company properties.
         let newClientDocData: DocumentData = {
             ...client,
-            name: {
-                first: client.firstName.trimEnd(),
-                last: client.lastName.trimEnd(),
-                company: client.companyName.trimEnd(),
-            },
         };
 
         // Delete these unused properties from the newClientDocData object

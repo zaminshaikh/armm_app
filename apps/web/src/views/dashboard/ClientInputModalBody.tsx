@@ -113,10 +113,8 @@ const exceptions = ["LLC", "Inc", "Ltd"];
                     recipient = name; // Default to the parsed name if no specific keyword is found
                 }
 
-                if (securityNameLower.includes('agq')) {
+                if (securityNameLower.includes('armm')) {
                     fund = 'AGQ';
-                } else if (securityNameLower.includes('ak1')) {
-                    fund = 'AK1';
                 }
     
                 // Create an activity from each row of the CSV
@@ -634,8 +632,7 @@ export const ClientInputModalBody: React.FC<ClientInputProps> = ({
                                 onChange={(e) => setEditedActivity({ ...editedActivity, fund: e.target.value.toLowerCase() })
                                 }
                                 options={[
-                                    { label: 'AK1', value: 'AK1' },
-                                    { label: 'AGQ', value: 'AGQ' },
+                                    { label: 'ARMM', value: 'ARMM', selected: true },
                                 ]}
                             />
                         </CTableDataCell>
