@@ -1,13 +1,10 @@
 import React from 'react'
 import { CButton, CCard, CCardBody, CCardHeader, CCol, CBadge, CRow } from '@coreui/react-pro'
-import { DocsComponents, DocsExample } from 'src/components'
+import { DocsExample } from 'src/components'
 
 const Badges = () => {
   return (
     <CRow>
-      <CCol xs={12}>
-        <DocsComponents href="components/badge/" />
-      </CCol>
       <CCol lg={6}>
         <CCard className="mb-4">
           <CCardHeader>
@@ -96,22 +93,22 @@ const Badges = () => {
               <CBadge color="primary" shape="rounded-pill">
                 primary
               </CBadge>
-              <CBadge color="success" shape="rounded-pill">
+              <CBadge color="success-gradient" shape="rounded-pill">
                 success
               </CBadge>
-              <CBadge color="danger" shape="rounded-pill">
+              <CBadge color="danger-gradient" shape="rounded-pill">
                 danger
               </CBadge>
-              <CBadge color="warning" shape="rounded-pill">
+              <CBadge color="warning-gradient" shape="rounded-pill">
                 warning
               </CBadge>
-              <CBadge color="info" shape="rounded-pill">
+              <CBadge color="info-gradient" shape="rounded-pill">
                 info
               </CBadge>
-              <CBadge color="light" shape="rounded-pill">
+              <CBadge color="light-gradient" shape="rounded-pill">
                 light
               </CBadge>
-              <CBadge color="dark" shape="rounded-pill">
+              <CBadge color="dark-gradient" shape="rounded-pill">
                 dark
               </CBadge>
             </DocsExample>
