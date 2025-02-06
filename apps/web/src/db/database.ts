@@ -136,15 +136,7 @@ export const emptyClient: Client = {
     ytd: 0,
     totalYTD: 0,
     assets: {
-        agq: {
-            personal: {
-                amount: 0,
-                firstDepositDate: null,
-                displayTitle: 'Personal',
-                index: 0,
-            },
-        },
-        ak1: {
+        armm: {
             personal: {
                 amount: 0,
                 firstDepositDate: null,
@@ -170,7 +162,7 @@ export const roundToNearestHour = (date: Date): Date => {
 
 export const emptyActivity: Activity = {
     amount: 0,
-    fund: 'AGQ',
+    fund: 'ARMM',
     recipient: '',
     time: roundToNearestHour(new Date()),
     type: 'profit',
@@ -201,7 +193,6 @@ export const emptyActivity: Activity = {
 export const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 }
-
 
 export class DatabaseService {
 
@@ -462,7 +453,7 @@ export class DatabaseService {
         };
 
         // Delete these unused properties from the newClientDocData object
-        ['firstName', 'lastName', 'companyName', 'email', 'cid', 'assets', 'activities', 'totalAssets', 'graphPoints', 'ytd', 'totalYTD'].forEach(key => {
+        ['email', 'cid', 'assets', 'activities', 'totalAssets', 'graphPoints', 'ytd', 'totalYTD'].forEach(key => {
                 delete newClientDocData[key];
         });
 
