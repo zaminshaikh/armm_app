@@ -98,7 +98,7 @@ export const EditAssetsSection: React.FC<EditAssetsSectionProps> = ({
           ...fundAssets,
           [newAssetType]: {
             amount: 0,
-            firstDepositDate: null,
+            firstDepositDate: new Date(),
             displayTitle: assetTitleTrimmed,
             index: maxIndex + 1, // Assign the next index
           },

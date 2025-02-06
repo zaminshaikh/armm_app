@@ -139,7 +139,7 @@ export const emptyClient: Client = {
         armm: {
             personal: {
                 amount: 0,
-                firstDepositDate: null,
+                firstDepositDate: new Date(),
                 displayTitle: 'Personal',
                 index: 0,
             },
@@ -411,7 +411,7 @@ export class DatabaseService {
                 const depositActivity: Activity = {
                     ...emptyActivity,
                     amount: assetDetails.amount,
-                    fund: fundName,
+                    fund: fundName.toUpperCase(),
                     time: now,
                     type: 'deposit',
                     recipient: assetDetails.displayTitle === 'Personal' ? `${newClient.firstName} ${newClient.lastName}` : assetDetails.displayTitle,
