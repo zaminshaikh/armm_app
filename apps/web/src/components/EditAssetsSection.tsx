@@ -12,7 +12,8 @@ import {
 } from "@coreui/react-pro";
 import { Client } from "../db/database";
 import { AssetFormComponent } from "./AssetFormComponent";
-import { cilArrowTop, cilArrowBottom } from "@coreui/icons"; // Import icons for reordering
+import { cilArrowTop, cilArrowBottom, cilPlus, cilFolder, cilTrash } from "@coreui/icons"; // Import icons for reordering
+import CIcon from '@coreui/icons-react';
 
 interface EditAssetsSectionProps {
   clientState: Client;
@@ -36,6 +37,53 @@ export const EditAssetsSection: React.FC<EditAssetsSectionProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFundKey, setCurrentFundKey] = useState<string | null>(null);
   const [newAssetTitle, setNewAssetTitle] = useState<string>("");
+
+  // New state and functions for funds
+  const [isFundModalOpen, setIsFundModalOpen] = useState(false);
+  const [newFundName, setNewFundName] = useState<string>("");
+
+  const openAddFundModal = () => {
+    setNewFundName("");
+    setIsFundModalOpen(true);
+  };
+
+  const closeAddFundModal = () => {
+    setIsFundModalOpen(false);
+    setNewFundName("");
+  };
+
+  const handleAddFund = () => {
+    const fundNameTrimmed = newFundName.trim();
+    if (!fundNameTrimmed) {
+      alert("Fund name cannot be empty.");
+      return;
+    }
+    const newFundKey = fundNameTrimmed.toLowerCase().replace(/\s+/g, "-");
+    if (clientState.assets[newFundKey]) {
+      alert("A fund with this name already exists.");
+      return;
+    }
+    const newState: typeof clientState = {
+      ...clientState,
+      assets: {
+        ...clientState.assets,
+        [newFundKey]: {}
+      },
+    };
+    setClientState(newState);
+    closeAddFundModal();
+  };
+
+  const handleDeleteFund = (fundKey: string) => {
+    if (!window.confirm(`Are you sure you want to delete the fund "${fundKey}" and all its assets?`)) return;
+    const newAssets = { ...clientState.assets };
+    delete newAssets[fundKey];
+    const newState: typeof clientState = {
+      ...clientState,
+      assets: newAssets,
+    };
+    setClientState(newState);
+  };
 
   // Function to handle opening the modal
   const openAddAssetModal = (fundKey: string) => {
@@ -268,33 +316,22 @@ export const EditAssetsSection: React.FC<EditAssetsSectionProps> = ({
 
   return (
     <CContainer className="py-3">
-      {Object.entries(clientState.assets).map(([fundKey, fundAssets]) => {
-        // Sort assets based on the index property
-        const sortedAssets = Object.entries(fundAssets)
-          .filter(([assetType]) => !excludedAssetKeys.includes(assetType.toLowerCase()))
-          .sort(([, a], [, b]) => (a.index ?? 0) - (b.index ?? 0));
-
-        return (
-          <div key={fundKey} className="mb-5">
-            <div className="mb-2 pb-3">
-              <h5>{fundKey.toUpperCase()} Fund Assets</h5>
-            </div>
-            {sortedAssets.map(([assetType, asset], index) => {
-              // Determine if the asset is the first or last in the list
+      {Object.entries(clientState.assets).map(([fundKey, fundAssets]) => (
+        <div key={fundKey} className="mb-5">
+          <div className="mb-2 pb-3">
+            <h5>{fundKey.toUpperCase()} Fund Assets</h5>
+          </div>
+          {/* ...existing asset mapping code... */}
+          {Object.entries(fundAssets)
+            .filter(([assetType]) => !["total", "fund"].includes(assetType.toLowerCase()))
+            .sort(([, a], [, b]) => (a.index ?? 0) - (b.index ?? 0))
+            .map(([assetType, asset], index) => {
               const isFirst = index === 0;
-              const isLast = index === sortedAssets.length - 1;
-
-              // Determine the disabled state based on props and asset type
+              const isLast = index === Object.keys(fundAssets).length - 1;
               let isDisabled = viewOnly;
-
-              if (!isDisabled) {
-                if (activeFund !== undefined) {
-                  if (fundKey.toUpperCase() !== activeFund.toUpperCase()) {
-                    isDisabled = true;
-                  }
-                }
+              if (!isDisabled && activeFund !== undefined && fundKey.toUpperCase() !== activeFund.toUpperCase()) {
+                isDisabled = true;
               }
-
               return (
                 <AssetFormComponent
                   key={`${fundKey}-${assetType}`}
@@ -310,31 +347,42 @@ export const EditAssetsSection: React.FC<EditAssetsSectionProps> = ({
                   onEdit={handleEditAsset}
                   onMoveUp={handleMoveAssetUp}
                   onMoveDown={handleMoveAssetDown}
-                  isEditable={!isDisabled} // All assets are editable unless restricted
+                  isEditable={!isDisabled}
                   isFirst={isFirst}
                   isLast={isLast}
                 />
               );
             })}
-            {/* Add Asset Button at the Bottom */}
-            {!viewOnly && (
-              <div className="mt-3">
+          {!viewOnly && (
+            <div className="mt-3 d-flex justify-content-between align-items-center">
+              <div>
                 <CButton color="primary" onClick={() => openAddAssetModal(fundKey)}>
+                  <CIcon icon={cilPlus} className="me-1" />
                   Add Asset
                 </CButton>
               </div>
-            )}
-          </div>
-        );
-      })}
+              <div className="d-flex gap-2">
+                <CButton color="success" variant="outline" onClick={openAddFundModal}>
+                  <CIcon icon={cilFolder} className="me-1" />
+                  Add Fund
+                </CButton>
+                <CButton color="danger" variant="outline" size="sm" onClick={() => handleDeleteFund(fundKey)}>
+                  <CIcon icon={cilTrash} className="me-1" />
+                  Delete Fund
+                </CButton>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
 
-      {/* Add Asset Modal */}
+      {/* Existing Modals */}
       <CModal visible={isModalOpen} onClose={closeAddAssetModal} alignment="center">
         <CModalHeader>Add New Asset</CModalHeader>
         <CModalBody>
           <CFormInput
             label="Asset Name"
-            placeholder="Enter asset name (e.g., Personal 2, IRA 3, Custom Field)"
+            placeholder="Enter asset name"
             value={newAssetTitle}
             onChange={(e) => setNewAssetTitle(e.target.value.replace(/["']/g, ""))}
           />
@@ -345,6 +393,26 @@ export const EditAssetsSection: React.FC<EditAssetsSectionProps> = ({
           </CButton>
           <CButton color="primary" onClick={handleAddAsset}>
             Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      <CModal visible={isFundModalOpen} onClose={closeAddFundModal} alignment="center">
+        <CModalHeader>Add New Fund</CModalHeader>
+        <CModalBody>
+          <CFormInput
+            label="Fund Name"
+            placeholder="Enter fund name"
+            value={newFundName}
+            onChange={(e) => setNewFundName(e.target.value.replace(/["']/g, ""))}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeAddFundModal}>
+            Cancel
+          </CButton>
+          <CButton color="success" variant="outline" onClick={handleAddFund}>
+            Add Fund
           </CButton>
         </CModalFooter>
       </CModal>
