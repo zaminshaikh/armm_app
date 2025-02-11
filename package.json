@@ -1,5 +1,6 @@
 {
   "scripts": {
+<<<<<<< HEAD
     "start:web": "cd apps/web && npm start",
     "deploy:functions": "cd services/functions && npm run deploy"
   },
@@ -7,3 +8,8 @@
     "typescript": "^5.7.3"
   }
 }
+=======
+    "start:web": "cd apps/web && npm start"
+  }
+}
+>>>>>>> 4b50974 (Add package.json with start script for web application)
