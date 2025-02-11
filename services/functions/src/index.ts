@@ -1,19 +1,44 @@
 /**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ * @file index.ts
+ * @description Main entry point for Firebase Functions. Imports and re-exports
+ *              all triggers, callable, and scheduled functions for deployment.
  */
 
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+import * as admin from "firebase-admin";
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+// Initialize Firebase Admin SDK once here
+admin.initializeApp();
 
-export const helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
+// ======= TRIGGERS =======
+import { handleActivity, onActivityWrite } from "./triggers/activityTriggers";
+import { onAssetUpdate } from "./triggers/assetTriggers";
+import { onConnectedUsersChange } from "./triggers/connectedUsersTriggers";
+
+// ======= SCHEDULED =======
+import { scheduledYTDReset } from "./scheduled/scheduledReset";
+import { processScheduledActivities } from "./scheduled/scheduledActivities";
+
+// ======= CALLABLE =======
+import { linkNewUser } from "./callable/linkUser";
+import { isUIDLinked, checkDocumentExists, checkDocumentLinked } from "./callable/checkDocsAndUID";
+import { unlinkUser } from "./callable/unlinkUser";
+import { calculateTotalYTD, calculateYTD } from "./callable/ytd";
+
+// Expose Firestore triggers
+export const f_handleActivity = handleActivity;
+export const f_onActivityWrite = onActivityWrite;
+export const f_onAssetUpdate = onAssetUpdate;
+export const f_onConnectedUsersChange = onConnectedUsersChange;
+
+// Expose scheduled tasks
+export const f_scheduledYTDReset = scheduledYTDReset;
+export const f_processScheduledActivities = processScheduledActivities;
+
+// Expose callable functions
+export const f_linkNewUser = linkNewUser;
+export const f_checkDocumentExists = checkDocumentExists;
+export const f_checkDocumentLinked = checkDocumentLinked;
+export const f_unlinkUser = unlinkUser;
+export const f_isUIDLinked = isUIDLinked;
+export const f_calculateTotalYTD = calculateTotalYTD;
+export const f_calculateYTD = calculateYTD;
