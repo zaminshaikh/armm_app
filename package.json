@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "start:web": "cd apps/web && npm start"
+  }
+}
