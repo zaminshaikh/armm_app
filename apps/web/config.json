@@ -6,10 +6,14 @@
     "GRAPHPOINTS_SUBCOLLECTION": "graphpoints",
     "SCHEDULED_ACTIVITIES_COLLECTION": "scheduledActivities",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "ASSETS_GENERAL_DOC_ID": "general"
 =======
     "ASSETS_GENERAL_DOC_ID": "general",
     "NUM_ASSETS_PER_FUND": 7,
     "FCM": "fzPD9rBAXEJHjUpjljmJ6c:APA91bGmSFAZwNB5IdUZM9KTSOX4El9hHQ1y6ZbXuyOwXL1s7FWCCXZf_SHd8txUDM_-BTsKjm0Rw0sCimPtcfCIs5cHuH6qJrwNmSjm4tU5YSEM7-SGRPJqyEA_t2r6X8uloW1Vvyjo"
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+    "ASSETS_GENERAL_DOC_ID": "general"
+>>>>>>> 74f0f4a (remove unused configuration entries from JSON files)
 }
