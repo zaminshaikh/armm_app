@@ -1,5 +1,7 @@
 {
   "scripts": {
-    "start:web": "cd apps/web && npm start"
+    "start:web": "cd apps/web && npm start",
+    "deploy:functions": "cd services/functions && npm run deploy"
+    
   }
 }
