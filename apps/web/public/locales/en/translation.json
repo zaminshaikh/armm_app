@@ -1,8 +1,8 @@
 {
-    "accordion": "Accordion",
     "account": "Account",
     "action": "Action",
     "activity": "Activity",
+    "activities": "Activities",
     "addNewUser": "Add new user",
     "anotherAction": "Another action",
     "apps": "Apps",
@@ -88,6 +88,7 @@
     "sessions": "Sessions",
     "somethingElseHere": "Something else here",
     "settings": "Settings",
+    "statements": "Statements",
     "ssdUsage": "SSD Usage",
     "systemUtilization": "System Utilization",
     "taskCounter": "You have {{counter}} pending tasks",
