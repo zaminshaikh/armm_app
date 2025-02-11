@@ -1,3 +1,4 @@
+import 'package:armm_app/screens/login/login.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingButtons extends StatelessWidget {
@@ -42,7 +43,10 @@ class OnboardingButtons extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
             onPressed: () {
-              // TODO: Handle log in action
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
             },
             child: const Text(
               'Log In',

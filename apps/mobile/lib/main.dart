@@ -1,4 +1,5 @@
 import 'package:armm_app/screens/forgot_password/forgot_password.dart';
+import 'package:armm_app/screens/onboarding/onboarding_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'MADE Tommy Soft',
       ),
-      home: const ForgotPasswordPage(),
+      home: const OnboardingPage(),
     );
   }
 }
