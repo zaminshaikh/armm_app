@@ -1,5 +1,8 @@
+import 'package:armm_app/screens/auth/forgot_password/forgot_password.dart';
+import 'package:armm_app/screens/auth/signup/password_page.dart';
+import 'package:armm_app/screens/auth/auth.dart';
+import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
-import 'package:armm_app/screens/forgot_password/forgot_password.dart';
 
 class LoginForm extends StatelessWidget {
   final TextEditingController emailController;
@@ -7,6 +10,7 @@ class LoginForm extends StatelessWidget {
   final bool obscurePassword;
   final Color primaryColor;
   final VoidCallback onTogglePassword;
+  final SignUpData signUpData;
 
   const LoginForm({
     Key? key,
@@ -15,7 +19,41 @@ class LoginForm extends StatelessWidget {
     required this.obscurePassword,
     required this.primaryColor,
     required this.onTogglePassword,
+    required this.signUpData,
   }) : super(key: key);
+
+  void _handleLogin(BuildContext context) async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter both email and password")),
+      );
+      return;
+    }
+
+    try {
+      // Authentication logic
+      await AuthService().signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Navigate to the Client Info Page on successful login
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PasswordPage(signUpData: signUpData),
+        ),
+      );
+    } catch (e) {
+      // Handle error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +73,7 @@ class LoginForm extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        // Password TextField
+        // Password TextField with toggle visibility
         TextField(
           controller: passwordController,
           obscureText: obscurePassword,
@@ -68,9 +106,7 @@ class LoginForm extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
               ),
             ),
-            onPressed: () {
-              // TODO: Handle Log In
-            },
+            onPressed: () => _handleLogin(context),
             child: const Text(
               'Log in',
               style: TextStyle(
@@ -81,7 +117,7 @@ class LoginForm extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        // Forgot Password?
+        // Forgot Password button
         Center(
           child: TextButton(
             onPressed: () {

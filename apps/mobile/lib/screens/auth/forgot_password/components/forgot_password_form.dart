@@ -1,4 +1,4 @@
-import 'package:armm_app/screens/link_sent/link_sent.dart';
+import 'package:armm_app/screens/auth/link_sent/link_sent.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordForm extends StatefulWidget {

@@ -1,3 +1,5 @@
+import 'package:armm_app/screens/auth/auth.dart';
+import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -7,13 +9,18 @@ import 'login_form.dart';
 import 'login_social.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final SignUpData signUpData;
+
+  const LoginPage({Key? key, required this.signUpData}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String? errorMessage = '';
+  bool isLogin = true;
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -57,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                     _obscurePassword = !_obscurePassword;
                   });
                 },
+                signUpData: widget.signUpData,
               ),
               const SizedBox(height: 12),
               // The divider & social login buttons & sign-up link

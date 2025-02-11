@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'onboarding_top_section.dart';
 import 'onboarding_buttons.dart';
+import 'package:armm_app/signup_data.dart';
 
+class OnboardingPage extends StatefulWidget {
+  final SignUpData signUpData;
 
-class OnboardingPage extends StatelessWidget {
-  const OnboardingPage({Key? key}) : super(key: key);
+  const OnboardingPage({Key? key, required this.signUpData}) : super(key: key);
 
+  @override
+  _OnboardingPageState createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +33,7 @@ class OnboardingPage extends StatelessWidget {
               ),
               const Spacer(),
               // The bottom portion with Sign Up & Log In buttons
-              const OnboardingButtons(),
+              OnboardingButtons(signUpData: widget.signUpData),
             ],
           ),
         ),
@@ -34,4 +41,3 @@ class OnboardingPage extends StatelessWidget {
     );
   }
 }
-
