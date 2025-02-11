@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "compilerOptions": {
     "module": "CommonJS",
     "esModuleInterop": true,
@@ -15,3 +16,22 @@
     "src"
   ]
 }
+=======
+    "compilerOptions": {
+      "module": "NodeNext",
+      "esModuleInterop": true,
+      "moduleResolution": "nodenext",
+      "noImplicitReturns": true,
+      "noUnusedLocals": true,
+      "resolveJsonModule": true,
+      "outDir": "lib",
+      "sourceMap": true,
+      "strict": true,
+      "target": "es2017"
+    },
+    "compileOnSave": true,
+    "include": [
+      "src",
+    ]
+  }
+>>>>>>> 653f995 (feat(notifications): integrate notification helpers and add config for Firestore collections)

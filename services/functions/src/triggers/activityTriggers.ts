@@ -20,7 +20,11 @@ import config from "../../lib/config.json";
 import { Activity } from "../interfaces/activity.interface";
 import { updateYTD } from "../helpers/ytd";
 import { updateGraphpoints } from "../helpers/graphpoints";
+<<<<<<< HEAD
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+import { createNotif, sendNotif } from "../helpers/notifications";
+>>>>>>> 653f995 (feat(notifications): integrate notification helpers and add config for Firestore collections)
 
 /**
  * Trigger: onCreate for a new Activity document.
@@ -48,11 +52,14 @@ export const handleActivity = functions.firestore
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     // Import notification helpers dynamically or statically:
     const { createNotif, sendNotif } = await import("../helpers/notifications");
 
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+>>>>>>> 653f995 (feat(notifications): integrate notification helpers and add config for Firestore collections)
     try {
       const { title, body, userRef } = await createNotif(activity, userId, activityId, userCollection);
       return sendNotif(title, body, userRef);
