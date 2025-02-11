@@ -4,10 +4,8 @@ import AppContent from './AppContent'
 import AppFooter from './AppFooter'
 import AppHeader from './AppHeader'
 import AppSidebar from './AppSidebar'
-import DocsComponents from './DocsComponents'
+import DocsCallout from './DocsCallout'
 import DocsExample from './DocsExample'
-import DocsIcons from './DocsIcons'
-import ProBadge from './ProBadge'
 
 export {
   AppAside,
@@ -16,8 +14,6 @@ export {
   AppFooter,
   AppHeader,
   AppSidebar,
-  DocsComponents,
+  DocsCallout,
   DocsExample,
-  DocsIcons,
-  ProBadge,
 }

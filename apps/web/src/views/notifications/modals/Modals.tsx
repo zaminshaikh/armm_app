@@ -15,7 +15,7 @@ import {
   CRow,
   CTooltip,
 } from '@coreui/react-pro'
-import { DocsComponents, DocsExample } from 'src/components'
+import { DocsExample } from 'src/components'
 
 const LiveDemo = () => {
   const [visible, setVisible] = useState(false)
@@ -493,7 +493,6 @@ const Modals = () => {
   return (
     <CRow>
       <CCol xs={12}>
-        <DocsComponents href="components/modal/" />
         <CCard className="mb-4">
           <CCardHeader>
             <strong>React Modal</strong>
@@ -684,12 +683,12 @@ const Modals = () => {
           <CCardBody>
             <p className="text-body-secondary small">
               Another override is the option to pop up a modal that covers the user viewport,
-              available via property <code>fullscrean</code>.
+              available via property <code>fullscreen</code>.
             </p>
             <table className="table">
               <thead>
                 <tr>
-                  <th>Property fullscrean</th>
+                  <th>Property fullscreen</th>
                   <th>Availability</th>
                 </tr>
               </thead>

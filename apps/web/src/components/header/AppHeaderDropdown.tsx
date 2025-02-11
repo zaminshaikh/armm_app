@@ -37,7 +37,7 @@ const AppHeaderDropdown = () => {
         <CDropdownHeader className="bg-body-secondary text-body-secondary fw-semibold rounded-top mb-2">
           {t('account')}
         </CDropdownHeader>
-        <CDropdownItem href="#">
+        {/* <CDropdownItem href="#">
           <CIcon icon={cilBell} className="me-2" />
           {t('updates')}
           <CBadge color="info-gradient" className="ms-2">
@@ -67,12 +67,12 @@ const AppHeaderDropdown = () => {
         </CDropdownItem>
         <CDropdownHeader className="bg-body-secondary text-body-secondary fw-semibold my-2">
           {t('settings')}
-        </CDropdownHeader>
+        </CDropdownHeader> */}
         <CDropdownItem href="#">
           <CIcon icon={cilUser} className="me-2" />
           {t('profile')}
         </CDropdownItem>
-        <CDropdownItem href="#">
+        {/* <CDropdownItem href="#">
           <CIcon icon={cilSettings} className="me-2" />
           {t('settings')}
         </CDropdownItem>
@@ -94,7 +94,7 @@ const AppHeaderDropdown = () => {
         <CDropdownItem href="#">
           <CIcon icon={cilLockLocked} className="me-2" />
           {t('lockAccount')}
-        </CDropdownItem>
+        </CDropdownItem> */}
         <CDropdownItem href="#">
           <CIcon icon={cilAccountLogout} className="me-2" />
           {t('logout')}
