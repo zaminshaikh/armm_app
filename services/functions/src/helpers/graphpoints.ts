@@ -21,7 +21,7 @@ const db = admin.firestore();
  * @function updateGraphpoints
  * @param {string} userCollection - The parent collection containing the user doc (e.g. 'testUsers').
  * @param {string} userId - The specific user doc ID.
- * @returns {Promise<void>} Resolves once the graphpoints are fully updated.
+ * @return {Promise<void>} Resolves once the graphpoints are fully updated.
  */
 export async function updateGraphpoints(userCollection: string, userId: string): Promise<void> {
   const userRef = db.collection(userCollection).doc(userId);

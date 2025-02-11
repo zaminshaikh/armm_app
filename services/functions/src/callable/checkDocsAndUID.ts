@@ -25,7 +25,7 @@ export const checkDocumentExists = functions.https.onCall(async (data, context) 
   if (!cid || !usersCollectionID) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      'Must provide "cid" and "usersCollectionID".'
+      "Must provide 'cid' and 'usersCollectionID'."
     );
   }
 
@@ -55,7 +55,7 @@ export const checkDocumentLinked = functions.https.onCall(async (data, context) 
   if (!cid || !usersCollectionID) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      'Must provide "cid" and "usersCollectionID".'
+      "Must provide 'cid' and 'usersCollectionID'."
     );
   }
 
@@ -89,7 +89,7 @@ export const isUIDLinked = functions.https.onCall(async (data, context) => {
   if (!uid || !usersCollectionID) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      'Requires "uid" and "usersCollectionID".'
+      "Must provide 'cid' and 'usersCollectionID'."
     );
   }
 
