@@ -6,7 +6,11 @@
  */
 
 import * as admin from "firebase-admin";
+<<<<<<< HEAD
 import config from "../../config.json";
+=======
+import config from "../../lib/config.json";
+>>>>>>> 6543ce9 (Imported CF from AGQ)
 import { Activity } from "../interfaces/activity.interface";
 
 const db = admin.firestore();
@@ -21,7 +25,11 @@ const db = admin.firestore();
  * @function updateGraphpoints
  * @param {string} userCollection - The parent collection containing the user doc (e.g. 'testUsers').
  * @param {string} userId - The specific user doc ID.
+<<<<<<< HEAD
  * @return {Promise<void>} Resolves once the graphpoints are fully updated.
+=======
+ * @returns {Promise<void>} Resolves once the graphpoints are fully updated.
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  */
 export async function updateGraphpoints(userCollection: string, userId: string): Promise<void> {
   const userRef = db.collection(userCollection).doc(userId);

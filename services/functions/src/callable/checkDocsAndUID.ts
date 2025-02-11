@@ -25,7 +25,11 @@ export const checkDocumentExists = functions.https.onCall(async (data, context) 
   if (!cid || !usersCollectionID) {
     throw new functions.https.HttpsError(
       "invalid-argument",
+<<<<<<< HEAD
       "Must provide 'cid' and 'usersCollectionID'."
+=======
+      'Must provide "cid" and "usersCollectionID".'
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     );
   }
 
@@ -55,7 +59,11 @@ export const checkDocumentLinked = functions.https.onCall(async (data, context) 
   if (!cid || !usersCollectionID) {
     throw new functions.https.HttpsError(
       "invalid-argument",
+<<<<<<< HEAD
       "Must provide 'cid' and 'usersCollectionID'."
+=======
+      'Must provide "cid" and "usersCollectionID".'
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     );
   }
 
@@ -89,7 +97,11 @@ export const isUIDLinked = functions.https.onCall(async (data, context) => {
   if (!uid || !usersCollectionID) {
     throw new functions.https.HttpsError(
       "invalid-argument",
+<<<<<<< HEAD
       "Must provide 'cid' and 'usersCollectionID'."
+=======
+      'Requires "uid" and "usersCollectionID".'
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     );
   }
 

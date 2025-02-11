@@ -11,7 +11,11 @@ import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 const db = admin.firestore();
 
 /**
+<<<<<<< HEAD
  * Trigger: onUpdate of a user's asset document
+=======
+ * Trigger: onUpdate of a user's asset document (e.g., assets/agq or assets/ak1).
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  *
  * @description If the displayTitle of an asset changes, we reflect this change
  *              in the "recipient" field of any matching activities.
@@ -19,6 +23,7 @@ const db = admin.firestore();
 export const onAssetUpdate = functions.firestore
   .document("/{userCollection}/{userId}/assets/{assetId}")
   .onUpdate(async (change, context) => {
+<<<<<<< HEAD
     const { userCollection, userId } = context.params;
     console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);
 
@@ -27,6 +32,17 @@ export const onAssetUpdate = functions.firestore
 
     const fund = afterData.fund;
 
+=======
+    const { userCollection, userId, assetId } = context.params;
+    console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);
+
+    // Determine the fund name based on assetId
+    const fund = assetId === "agq" ? "AGQ" : "AK1";
+
+    const beforeData = change.before.data();
+    const afterData = change.after.data();
+
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     // Helper to filter out the keys "total" and "fund"
     const filterAssetEntries = (obj: object) =>
       Object.entries(obj)
@@ -75,9 +91,15 @@ export const onAssetUpdate = functions.firestore
 
     for (const { oldDisplayTitle, newDisplayTitle } of assetsToUpdate) {
       // If the new title is "Personal", set it to the client's name
+<<<<<<< HEAD
       const updatedNew = newDisplayTitle === "Personal" ? clientName : newDisplayTitle;
       // If the old title is "Personal", set it to the client's name
       const updatedOld = oldDisplayTitle === "Personal" ? clientName : oldDisplayTitle;
+=======
+      let updatedNew = newDisplayTitle === "Personal" ? clientName : newDisplayTitle;
+      // If the old title is "Personal", set it to the client's name
+      let updatedOld = oldDisplayTitle === "Personal" ? clientName : oldDisplayTitle;
+>>>>>>> 6543ce9 (Imported CF from AGQ)
 
       // Query all activities where fund == <fund> and recipient == oldDisplayTitle
       const snapshot = await activitiesRef

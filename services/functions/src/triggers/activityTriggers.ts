@@ -9,11 +9,18 @@
 
 import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
+<<<<<<< HEAD
 import config from "../../config.json";
 import { Activity } from "../interfaces/activity.interface";
 import { updateYTD } from "../helpers/ytd";
 import { updateGraphpoints } from "../helpers/graphpoints";
 import { createNotif, sendNotif } from "../helpers/notifications";
+=======
+import config from "../../lib/config.json";
+import { Activity } from "../interfaces/activity.interface";
+import { updateYTD } from "../helpers/ytd";
+import { updateGraphpoints } from "../helpers/graphpoints";
+>>>>>>> 6543ce9 (Imported CF from AGQ)
 
 /**
  * Trigger: onCreate for a new Activity document.
@@ -40,6 +47,12 @@ export const handleActivity = functions.firestore
       return null;
     }
 
+<<<<<<< HEAD
+=======
+    // Import notification helpers dynamically or statically:
+    const { createNotif, sendNotif } = await import("../helpers/notifications");
+
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     try {
       const { title, body, userRef } = await createNotif(activity, userId, activityId, userCollection);
       return sendNotif(title, body, userRef);
@@ -89,13 +102,23 @@ export const onActivityWrite = functions.firestore
       const activity = change.after.data() as Activity;
       if (doesAffectYTD(activity)) {
         shouldUpdateYTD = true;
+<<<<<<< HEAD
       }}
+=======
+      }
+    }
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     // Case: doc deleted
     else if (change.before.exists && !change.after.exists) {
       const activity = change.before.data() as Activity;
       if (doesAffectYTD(activity)) {
         shouldUpdateYTD = true;
+<<<<<<< HEAD
       }}
+=======
+      }
+    }
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     // Case: doc updated
     else if (change.before.exists && change.after.exists) {
       const beforeActivity = change.before.data() as Activity;

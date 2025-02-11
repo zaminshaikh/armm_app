@@ -6,7 +6,11 @@
 
 import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
+<<<<<<< HEAD
 import config from "../../config.json";
+=======
+import config from "../../lib/config.json";
+>>>>>>> 6543ce9 (Imported CF from AGQ)
 
 /**
  * Scheduled: Runs at midnight on January 1st (US Eastern time). 

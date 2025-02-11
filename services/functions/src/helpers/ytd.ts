@@ -5,7 +5,11 @@
  */
 
 import * as admin from "firebase-admin";
+<<<<<<< HEAD
 import config from "../../config.json";
+=======
+import config from "../../lib/config.json";
+>>>>>>> 6543ce9 (Imported CF from AGQ)
 import { Activity } from "../interfaces/activity.interface";
 
 /**
@@ -16,7 +20,11 @@ import { Activity } from "../interfaces/activity.interface";
  * @function calculateYTDForUser
  * @param {string} userCid - The Firestore document ID for the target user.
  * @param {string} usersCollectionID - The collection in which the user doc resides (e.g., 'testUsers').
+<<<<<<< HEAD
  * @return {Promise<number>} The numeric total YTD amount for the specified user.
+=======
+ * @returns {Promise<number>} The numeric total YTD amount for the specified user.
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  */
 export async function calculateYTDForUser(userCid: string, usersCollectionID: string): Promise<number> {
   const currentYear = new Date().getFullYear();
@@ -55,7 +63,11 @@ export async function calculateYTDForUser(userCid: string, usersCollectionID: st
  * @function calculateTotalYTDForUser
  * @param {string} cid - The Firestore document ID of the base user.
  * @param {string} usersCollectionID - The name of the Firestore collection (e.g., 'testUsers').
+<<<<<<< HEAD
  * @return {Promise<number>} The combined YTD of the user and all connected users.
+=======
+ * @returns {Promise<number>} The combined YTD of the user and all connected users.
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  */
 export async function calculateTotalYTDForUser(cid: string, usersCollectionID: string): Promise<number> {
   const processedUsers: Set<string> = new Set();

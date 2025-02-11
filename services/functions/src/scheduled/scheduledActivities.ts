@@ -2,23 +2,40 @@
  * @file scheduledActivities.ts
  * @description Cloud Function (Pub/Sub scheduled) that processes scheduled
  *              activity documents. If a scheduled time has arrived, it creates
+<<<<<<< HEAD
  *              real activities and updates user assets, then marks them 'completed'.
+=======
+ *              actual activities and updates user assets, then marks them 'completed'.
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  */
 
 import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
+<<<<<<< HEAD
 import config from "../../config.json";
+=======
+import config from "../../lib/config.json";
+>>>>>>> 6543ce9 (Imported CF from AGQ)
 
 const db = admin.firestore();
 
 /**
  * Scheduled: Runs every 12 hours (adjust as needed) to check for scheduled activities
+<<<<<<< HEAD
  * where scheduledTime <= now and status == 'pending'.
  *
  * For each match:
  *  1) Creates a real Activity in the user's subcollection.
  *  2) Optionally updates clientState (any funds, YTD, totalYTD, etc.).
  *  3) Marks the scheduled activity doc as 'completed'.
+=======
+ * where scheduledTime <= now and status == 'pending'. 
+ * 
+ * For each match:
+ * 1) Creates a real Activity in the user's subcollection.
+ * 2) Optionally updates clientState (assets, ytd, totalYTD, etc.).
+ * 3) Marks the scheduled activity doc as 'completed'.
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  */
 export const processScheduledActivities = functions.pubsub
   .schedule("0 */12 * * *") // Runs every 12 hours
@@ -26,7 +43,11 @@ export const processScheduledActivities = functions.pubsub
     const now = admin.firestore.Timestamp.now();
     const scheduledActivitiesRef = db.collection("scheduledActivities");
 
+<<<<<<< HEAD
     // Find all scheduled activities that are pending and due
+=======
+    // Find all scheduled activities that are pending and are due
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     const querySnapshot = await scheduledActivitiesRef
       .where("scheduledTime", "<=", now)
       .where("status", "==", "pending")
@@ -40,6 +61,10 @@ export const processScheduledActivities = functions.pubsub
     const batch = db.batch();
     console.log(`Found ${querySnapshot.size} scheduled activities to process.`);
 
+<<<<<<< HEAD
+=======
+    // Process each pending doc
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       const { cid, activity, clientState, usersCollectionID } = data;
@@ -61,11 +86,19 @@ export const processScheduledActivities = functions.pubsub
         formattedTime: admin.firestore.FieldValue.serverTimestamp(),
       });
 
+<<<<<<< HEAD
       // 2) If clientState is provided, update the user's asset docs for ALL funds dynamically
       if (clientState) {
         const assetCollectionRef = clientRef.collection(config.ASSETS_SUBCOLLECTION);
 
         // Helper to shape the doc updates for a single fund
+=======
+      // 2) If clientState is provided, we update the user's asset docs
+      if (clientState) {
+        const assetCollectionRef = clientRef.collection(config.ASSETS_SUBCOLLECTION);
+
+        // Helper to shape the doc updates
+>>>>>>> 6543ce9 (Imported CF from AGQ)
         const prepareAssetDoc = (assets: any, fundName: string) => {
           let total = 0;
           const docObj: any = { fund: fundName };
@@ -73,9 +106,15 @@ export const processScheduledActivities = functions.pubsub
             const asset = assets[key];
             docObj[key] = {
               amount: asset.amount,
+<<<<<<< HEAD
               firstDepositDate: asset.firstDepositDate ? 
                 admin.firestore.Timestamp.fromDate(asset.firstDepositDate) : 
                 null,
+=======
+              firstDepositDate: asset.firstDepositDate
+                ? admin.firestore.Timestamp.fromDate(asset.firstDepositDate)
+                : null,
+>>>>>>> 6543ce9 (Imported CF from AGQ)
               displayTitle: asset.displayTitle,
               index: asset.index,
             };
@@ -85,6 +124,7 @@ export const processScheduledActivities = functions.pubsub
           return docObj;
         };
 
+<<<<<<< HEAD
         // We’ll iterate over all fund keys in clientState.assets
         const allFunds = Object.keys(clientState.assets || {});
         let sumOfAllFunds = 0;
@@ -110,6 +150,24 @@ export const processScheduledActivities = functions.pubsub
           total: sumOfAllFunds,
         };
         batch.set(genRef, generalData, { merge: true });
+=======
+        // Recreate AGQ doc, AK1 doc, and general doc
+        const agqDoc = prepareAssetDoc(clientState.assets.agq, "AGQ");
+        const ak1Doc = prepareAssetDoc(clientState.assets.ak1, "AK1");
+        const general = {
+          ytd: clientState.ytd ?? 0,
+          totalYTD: clientState.totalYTD ?? 0,
+          total: agqDoc.total + ak1Doc.total,
+        };
+
+        const agqRef = assetCollectionRef.doc(config.ASSETS_AGQ_DOC_ID);
+        const ak1Ref = assetCollectionRef.doc(config.ASSETS_AK1_DOC_ID);
+        const genRef = assetCollectionRef.doc(config.ASSETS_GENERAL_DOC_ID);
+
+        batch.update(agqRef, agqDoc);
+        batch.update(ak1Ref, ak1Doc);
+        batch.update(genRef, general);
+>>>>>>> 6543ce9 (Imported CF from AGQ)
       }
 
       // 3) Mark this scheduled doc as 'completed'
@@ -117,7 +175,11 @@ export const processScheduledActivities = functions.pubsub
       batch.update(scheduledActivityRef, { status: "completed" });
     });
 
+<<<<<<< HEAD
     // Attempt to commit the batch of updates
+=======
+    // Commit
+>>>>>>> 6543ce9 (Imported CF from AGQ)
     try {
       await batch.commit();
       console.log(`Processed ${querySnapshot.size} scheduled activities.`);

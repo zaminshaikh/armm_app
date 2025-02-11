@@ -7,7 +7,11 @@
 import * as admin from "firebase-admin";
 import { Activity } from "../interfaces/activity.interface";
 import { Notification } from "../interfaces/notification.interface";
+<<<<<<< HEAD
 import config from "../../config.json";
+=======
+import config from "../../lib/config.json";
+>>>>>>> 6543ce9 (Imported CF from AGQ)
 
 const messaging = admin.messaging();
 
@@ -15,7 +19,11 @@ const messaging = admin.messaging();
  * Generates a custom string message based on the type of activity.
  *
  * @param {Activity} activity - The activity object which provides data such as fund, amount, type, etc.
+<<<<<<< HEAD
  * @return {string} - A user-friendly string that describes the activity event.
+=======
+ * @returns {string} - A user-friendly string that describes the activity event.
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  */
 export function getActivityMessage(activity: Activity): string {
   let message: string;
@@ -40,6 +48,7 @@ export function getActivityMessage(activity: Activity): string {
 
 /**
  * Creates a new Notification document in Firestore based on a given Activity.
+<<<<<<< HEAD
  *
  * @async
  * @param {Activity} activity - The activity data used to build the notification message/title/body.
@@ -47,6 +56,16 @@ export function getActivityMessage(activity: Activity): string {
  * @param {string} activityId - The Firestore document ID of the associated activity.
  * @param {string} usersCollectionID - The collection path for the user documents (e.g., "testUsers").
  * @returns {Promise<{ title: string; body: string; userRef: FirebaseFirestore.DocumentReference }>}
+=======
+ * 
+ * @async
+ * @function createNotif
+ * @param {Activity} activity - The activity data used to build the notification message/title/body.
+ * @param {string} cid - The client/user's Firestore document ID.
+ * @param {string} activityId - The Firestore document ID of the associated activity.
+ * @param {string} usersCollectionID - The collection path for the user documents (e.g., 'testUsers').
+ * @returns {Promise<{ title: string; body: string; userRef: FirebaseFirestore.DocumentReference }>} 
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  *          An object containing the notification's title, body, and a userDoc reference.
  */
 export async function createNotif(
@@ -88,7 +107,11 @@ export async function createNotif(
  * @param {string} title - Notification title to display on device.
  * @param {string} body - Notification body text to display on device.
  * @param {FirebaseFirestore.DocumentReference} userRef - Reference to the user’s Firestore document (used to retrieve tokens).
+<<<<<<< HEAD
  * @return {Promise<string[]>} A Promise resolving to an array of message IDs that were successfully sent.
+=======
+ * @returns {Promise<string[]>} A Promise resolving to an array of message IDs that were successfully sent.
+>>>>>>> 6543ce9 (Imported CF from AGQ)
  * @throws {Error} If the user has no FCM tokens registered.
  */
 export async function sendNotif(
