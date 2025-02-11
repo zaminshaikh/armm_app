@@ -12,10 +12,14 @@ const db = admin.firestore();
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Trigger: onUpdate of a user's asset document
 =======
  * Trigger: onUpdate of a user's asset document (e.g., assets/agq or assets/ak1).
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+ * Trigger: onUpdate of a user's asset document
+>>>>>>> 7fba470 (Refactor asset update trigger to dynamically determine fund name from asset data)
  *
  * @description If the displayTitle of an asset changes, we reflect this change
  *              in the "recipient" field of any matching activities.
@@ -34,15 +38,17 @@ export const onAssetUpdate = functions.firestore
 
 =======
     const { userCollection, userId, assetId } = context.params;
-    console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);
-
-    // Determine the fund name based on assetId
-    const fund = assetId === "agq" ? "AGQ" : "AK1";
+    console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);;
 
     const beforeData = change.before.data();
     const afterData = change.after.data();
 
+<<<<<<< HEAD
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+    const fund = afterData.fund;
+
+>>>>>>> 7fba470 (Refactor asset update trigger to dynamically determine fund name from asset data)
     // Helper to filter out the keys "total" and "fund"
     const filterAssetEntries = (obj: object) =>
       Object.entries(obj)
