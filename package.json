@@ -1,6 +1,7 @@
 {
   "scripts": {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "start:web": "cd apps/web && npm start",
     "deploy:functions": "cd services/functions && npm run deploy"
   },
@@ -10,6 +11,11 @@
 }
 =======
     "start:web": "cd apps/web && npm start"
+=======
+    "start:web": "cd apps/web && npm start",
+    "deploy:functions": "cd services/functions && npm run deploy"
+    
+>>>>>>> fbe763b (add deploy script for functions)
   }
 }
 >>>>>>> 4b50974 (Add package.json with start script for web application)
