@@ -110,22 +110,30 @@ export const onActivityWrite = functions.firestore
       if (doesAffectYTD(activity)) {
         shouldUpdateYTD = true;
 <<<<<<< HEAD
-      }}
-=======
-      }
-    }
->>>>>>> 6543ce9 (Imported CF from AGQ)
-    // Case: doc deleted
-    else if (change.before.exists && !change.after.exists) {
-      const activity = change.before.data() as Activity;
-      if (doesAffectYTD(activity)) {
-        shouldUpdateYTD = true;
 <<<<<<< HEAD
       }}
 =======
       }
     }
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+      }}
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
+    // Case: doc deleted
+    else if (change.before.exists && !change.after.exists) {
+      const activity = change.before.data() as Activity;
+      if (doesAffectYTD(activity)) {
+        shouldUpdateYTD = true;
+<<<<<<< HEAD
+<<<<<<< HEAD
+      }}
+=======
+      }
+    }
+>>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+      }}
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
     // Case: doc updated
     else if (change.before.exists && change.after.exists) {
       const beforeActivity = change.before.data() as Activity;

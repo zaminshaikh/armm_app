@@ -26,10 +26,14 @@ const db = admin.firestore();
  * @param {string} userCollection - The parent collection containing the user doc (e.g. 'testUsers').
  * @param {string} userId - The specific user doc ID.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @return {Promise<void>} Resolves once the graphpoints are fully updated.
 =======
  * @returns {Promise<void>} Resolves once the graphpoints are fully updated.
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+ * @return {Promise<void>} Resolves once the graphpoints are fully updated.
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  */
 export async function updateGraphpoints(userCollection: string, userId: string): Promise<void> {
   const userRef = db.collection(userCollection).doc(userId);

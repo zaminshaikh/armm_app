@@ -26,10 +26,14 @@ export const checkDocumentExists = functions.https.onCall(async (data, context) 
     throw new functions.https.HttpsError(
       "invalid-argument",
 <<<<<<< HEAD
+<<<<<<< HEAD
       "Must provide 'cid' and 'usersCollectionID'."
 =======
       'Must provide "cid" and "usersCollectionID".'
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+      "Must provide 'cid' and 'usersCollectionID'."
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
     );
   }
 
@@ -60,10 +64,14 @@ export const checkDocumentLinked = functions.https.onCall(async (data, context) 
     throw new functions.https.HttpsError(
       "invalid-argument",
 <<<<<<< HEAD
+<<<<<<< HEAD
       "Must provide 'cid' and 'usersCollectionID'."
 =======
       'Must provide "cid" and "usersCollectionID".'
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+      "Must provide 'cid' and 'usersCollectionID'."
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
     );
   }
 
@@ -98,10 +106,14 @@ export const isUIDLinked = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError(
       "invalid-argument",
 <<<<<<< HEAD
+<<<<<<< HEAD
       "Must provide 'cid' and 'usersCollectionID'."
 =======
       'Requires "uid" and "usersCollectionID".'
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+      "Must provide 'cid' and 'usersCollectionID'."
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
     );
   }
 

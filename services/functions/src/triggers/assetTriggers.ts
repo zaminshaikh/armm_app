@@ -28,6 +28,9 @@ export const onAssetUpdate = functions.firestore
   .document("/{userCollection}/{userId}/assets/{assetId}")
   .onUpdate(async (change, context) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
     const { userCollection, userId } = context.params;
     console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);
 
@@ -98,6 +101,7 @@ export const onAssetUpdate = functions.firestore
     for (const { oldDisplayTitle, newDisplayTitle } of assetsToUpdate) {
       // If the new title is "Personal", set it to the client's name
 <<<<<<< HEAD
+<<<<<<< HEAD
       const updatedNew = newDisplayTitle === "Personal" ? clientName : newDisplayTitle;
       // If the old title is "Personal", set it to the client's name
       const updatedOld = oldDisplayTitle === "Personal" ? clientName : oldDisplayTitle;
@@ -106,6 +110,11 @@ export const onAssetUpdate = functions.firestore
       // If the old title is "Personal", set it to the client's name
       let updatedOld = oldDisplayTitle === "Personal" ? clientName : oldDisplayTitle;
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+      const updatedNew = newDisplayTitle === "Personal" ? clientName : newDisplayTitle;
+      // If the old title is "Personal", set it to the client's name
+      const updatedOld = oldDisplayTitle === "Personal" ? clientName : oldDisplayTitle;
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
 
       // Query all activities where fund == <fund> and recipient == oldDisplayTitle
       const snapshot = await activitiesRef

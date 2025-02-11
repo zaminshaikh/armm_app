@@ -135,6 +135,7 @@ export const processScheduledActivities = functions.pubsub
             docObj[key] = {
               amount: asset.amount,
 <<<<<<< HEAD
+<<<<<<< HEAD
               firstDepositDate: asset.firstDepositDate ? 
                 admin.firestore.Timestamp.fromDate(asset.firstDepositDate) : 
                 null,
@@ -143,6 +144,11 @@ export const processScheduledActivities = functions.pubsub
                 ? admin.firestore.Timestamp.fromDate(asset.firstDepositDate)
                 : null,
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+              firstDepositDate: asset.firstDepositDate ? 
+                admin.firestore.Timestamp.fromDate(asset.firstDepositDate) : 
+                null,
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
               displayTitle: asset.displayTitle,
               index: asset.index,
             };

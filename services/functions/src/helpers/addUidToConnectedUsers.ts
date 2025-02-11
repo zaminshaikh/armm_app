@@ -15,10 +15,14 @@ import * as admin from "firebase-admin";
  * @param {string} uid - The newly linked user’s Firebase Auth UID.
  * @param {admin.firestore.CollectionReference} usersCollection - A reference to the user collection.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @return {Promise<void>} Resolves once all connected docs are updated.
 =======
  * @returns {Promise<void>} Resolves once all connected docs are updated.
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+ * @return {Promise<void>} Resolves once all connected docs are updated.
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  */
 export async function addUidToConnectedUsers(
   connectedUsers: string[],

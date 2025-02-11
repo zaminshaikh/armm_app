@@ -20,10 +20,14 @@ const messaging = admin.messaging();
  *
  * @param {Activity} activity - The activity object which provides data such as fund, amount, type, etc.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @return {string} - A user-friendly string that describes the activity event.
 =======
  * @returns {string} - A user-friendly string that describes the activity event.
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+ * @return {string} - A user-friendly string that describes the activity event.
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  */
 export function getActivityMessage(activity: Activity): string {
   let message: string;
@@ -49,6 +53,7 @@ export function getActivityMessage(activity: Activity): string {
 /**
  * Creates a new Notification document in Firestore based on a given Activity.
 <<<<<<< HEAD
+<<<<<<< HEAD
  *
  * @async
  * @param {Activity} activity - The activity data used to build the notification message/title/body.
@@ -58,14 +63,21 @@ export function getActivityMessage(activity: Activity): string {
  * @returns {Promise<{ title: string; body: string; userRef: FirebaseFirestore.DocumentReference }>}
 =======
  * 
+=======
+ *
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  * @async
- * @function createNotif
  * @param {Activity} activity - The activity data used to build the notification message/title/body.
  * @param {string} cid - The client/user's Firestore document ID.
  * @param {string} activityId - The Firestore document ID of the associated activity.
+<<<<<<< HEAD
  * @param {string} usersCollectionID - The collection path for the user documents (e.g., 'testUsers').
  * @returns {Promise<{ title: string; body: string; userRef: FirebaseFirestore.DocumentReference }>} 
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+ * @param {string} usersCollectionID - The collection path for the user documents (e.g., "testUsers").
+ * @returns {Promise<{ title: string; body: string; userRef: FirebaseFirestore.DocumentReference }>}
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  *          An object containing the notification's title, body, and a userDoc reference.
  */
 export async function createNotif(
@@ -108,10 +120,14 @@ export async function createNotif(
  * @param {string} body - Notification body text to display on device.
  * @param {FirebaseFirestore.DocumentReference} userRef - Reference to the user’s Firestore document (used to retrieve tokens).
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @return {Promise<string[]>} A Promise resolving to an array of message IDs that were successfully sent.
 =======
  * @returns {Promise<string[]>} A Promise resolving to an array of message IDs that were successfully sent.
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+ * @return {Promise<string[]>} A Promise resolving to an array of message IDs that were successfully sent.
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  * @throws {Error} If the user has no FCM tokens registered.
  */
 export async function sendNotif(

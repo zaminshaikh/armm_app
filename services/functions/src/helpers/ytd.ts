@@ -21,10 +21,14 @@ import { Activity } from "../interfaces/activity.interface";
  * @param {string} userCid - The Firestore document ID for the target user.
  * @param {string} usersCollectionID - The collection in which the user doc resides (e.g., 'testUsers').
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @return {Promise<number>} The numeric total YTD amount for the specified user.
 =======
  * @returns {Promise<number>} The numeric total YTD amount for the specified user.
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+ * @return {Promise<number>} The numeric total YTD amount for the specified user.
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  */
 export async function calculateYTDForUser(userCid: string, usersCollectionID: string): Promise<number> {
   const currentYear = new Date().getFullYear();
@@ -64,10 +68,14 @@ export async function calculateYTDForUser(userCid: string, usersCollectionID: st
  * @param {string} cid - The Firestore document ID of the base user.
  * @param {string} usersCollectionID - The name of the Firestore collection (e.g., 'testUsers').
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @return {Promise<number>} The combined YTD of the user and all connected users.
 =======
  * @returns {Promise<number>} The combined YTD of the user and all connected users.
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+ * @return {Promise<number>} The combined YTD of the user and all connected users.
+>>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  */
 export async function calculateTotalYTDForUser(cid: string, usersCollectionID: string): Promise<number> {
   const processedUsers: Set<string> = new Set();
