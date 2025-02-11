@@ -11,7 +11,7 @@ import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 const db = admin.firestore();
 
 /**
- * Trigger: onUpdate of a user's asset document (e.g., assets/agq or assets/ak1).
+ * Trigger: onUpdate of a user's asset document
  *
  * @description If the displayTitle of an asset changes, we reflect this change
  *              in the "recipient" field of any matching activities.
@@ -20,13 +20,12 @@ export const onAssetUpdate = functions.firestore
   .document("/{userCollection}/{userId}/assets/{assetId}")
   .onUpdate(async (change, context) => {
     const { userCollection, userId, assetId } = context.params;
-    console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);
-
-    // Determine the fund name based on assetId
-    const fund = assetId === "agq" ? "AGQ" : "AK1";
+    console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);;
 
     const beforeData = change.before.data();
     const afterData = change.after.data();
+
+    const fund = afterData.fund;
 
     // Helper to filter out the keys "total" and "fund"
     const filterAssetEntries = (obj: object) =>
