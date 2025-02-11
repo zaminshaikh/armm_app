@@ -13,6 +13,7 @@ import config from "../../lib/config.json";
 import { Activity } from "../interfaces/activity.interface";
 import { updateYTD } from "../helpers/ytd";
 import { updateGraphpoints } from "../helpers/graphpoints";
+import { createNotif, sendNotif } from "../helpers/notifications";
 
 /**
  * Trigger: onCreate for a new Activity document.
@@ -38,9 +39,6 @@ export const handleActivity = functions.firestore
       // If we do not send notifications for the environment or if sendNotif is false, exit.
       return null;
     }
-
-    // Import notification helpers dynamically or statically:
-    const { createNotif, sendNotif } = await import("../helpers/notifications");
 
     try {
       const { title, body, userRef } = await createNotif(activity, userId, activityId, userCollection);
