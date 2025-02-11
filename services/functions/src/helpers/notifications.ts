@@ -15,7 +15,7 @@ const messaging = admin.messaging();
  * Generates a custom string message based on the type of activity.
  *
  * @param {Activity} activity - The activity object which provides data such as fund, amount, type, etc.
- * @returns {string} - A user-friendly string that describes the activity event.
+ * @return {string} - A user-friendly string that describes the activity event.
  */
 export function getActivityMessage(activity: Activity): string {
   let message: string;
@@ -40,14 +40,13 @@ export function getActivityMessage(activity: Activity): string {
 
 /**
  * Creates a new Notification document in Firestore based on a given Activity.
- * 
+ *
  * @async
- * @function createNotif
  * @param {Activity} activity - The activity data used to build the notification message/title/body.
  * @param {string} cid - The client/user's Firestore document ID.
  * @param {string} activityId - The Firestore document ID of the associated activity.
- * @param {string} usersCollectionID - The collection path for the user documents (e.g., 'testUsers').
- * @returns {Promise<{ title: string; body: string; userRef: FirebaseFirestore.DocumentReference }>} 
+ * @param {string} usersCollectionID - The collection path for the user documents (e.g., "testUsers").
+ * @returns {Promise<{ title: string; body: string; userRef: FirebaseFirestore.DocumentReference }>}
  *          An object containing the notification's title, body, and a userDoc reference.
  */
 export async function createNotif(
@@ -89,7 +88,7 @@ export async function createNotif(
  * @param {string} title - Notification title to display on device.
  * @param {string} body - Notification body text to display on device.
  * @param {FirebaseFirestore.DocumentReference} userRef - Reference to the user’s Firestore document (used to retrieve tokens).
- * @returns {Promise<string[]>} A Promise resolving to an array of message IDs that were successfully sent.
+ * @return {Promise<string[]>} A Promise resolving to an array of message IDs that were successfully sent.
  * @throws {Error} If the user has no FCM tokens registered.
  */
 export async function sendNotif(

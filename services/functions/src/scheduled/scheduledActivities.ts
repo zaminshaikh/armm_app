@@ -73,9 +73,9 @@ export const processScheduledActivities = functions.pubsub
             const asset = assets[key];
             docObj[key] = {
               amount: asset.amount,
-              firstDepositDate: asset.firstDepositDate
-                ? admin.firestore.Timestamp.fromDate(asset.firstDepositDate)
-                : null,
+              firstDepositDate: asset.firstDepositDate ? 
+                admin.firestore.Timestamp.fromDate(asset.firstDepositDate) : 
+                null,
               displayTitle: asset.displayTitle,
               index: asset.index,
             };

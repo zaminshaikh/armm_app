@@ -89,15 +89,13 @@ export const onActivityWrite = functions.firestore
       const activity = change.after.data() as Activity;
       if (doesAffectYTD(activity)) {
         shouldUpdateYTD = true;
-      }
-    }
+      }}
     // Case: doc deleted
     else if (change.before.exists && !change.after.exists) {
       const activity = change.before.data() as Activity;
       if (doesAffectYTD(activity)) {
         shouldUpdateYTD = true;
-      }
-    }
+      }}
     // Case: doc updated
     else if (change.before.exists && change.after.exists) {
       const beforeActivity = change.before.data() as Activity;

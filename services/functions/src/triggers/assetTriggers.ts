@@ -19,8 +19,8 @@ const db = admin.firestore();
 export const onAssetUpdate = functions.firestore
   .document("/{userCollection}/{userId}/assets/{assetId}")
   .onUpdate(async (change, context) => {
-    const { userCollection, userId, assetId } = context.params;
-    console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);;
+    const { userCollection, userId } = context.params;
+    console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);
 
     const beforeData = change.before.data();
     const afterData = change.after.data();
@@ -75,9 +75,9 @@ export const onAssetUpdate = functions.firestore
 
     for (const { oldDisplayTitle, newDisplayTitle } of assetsToUpdate) {
       // If the new title is "Personal", set it to the client's name
-      let updatedNew = newDisplayTitle === "Personal" ? clientName : newDisplayTitle;
+      const updatedNew = newDisplayTitle === "Personal" ? clientName : newDisplayTitle;
       // If the old title is "Personal", set it to the client's name
-      let updatedOld = oldDisplayTitle === "Personal" ? clientName : oldDisplayTitle;
+      const updatedOld = oldDisplayTitle === "Personal" ? clientName : oldDisplayTitle;
 
       // Query all activities where fund == <fund> and recipient == oldDisplayTitle
       const snapshot = await activitiesRef
