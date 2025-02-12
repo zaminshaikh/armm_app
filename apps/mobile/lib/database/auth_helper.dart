@@ -10,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Future<void> deleteUserInBuffer() async {
   if (FirebaseAuth.instance.currentUser != null) {
     try {
@@ -17,6 +18,8 @@ Future<void> deleteUserInBuffer() async {
 =======
 
 /// Deletes any user currently in the Firebase Auth buffer.
+=======
+>>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
 Future<void> deleteUserInBuffer() async {
   if (FirebaseAuth.instance.currentUser != null) {
     try {
@@ -34,9 +37,13 @@ Future<void> deleteUserInBuffer() async {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
+=======
+
+>>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
 /// Handles FirebaseAuthException and displays an error message.
 Future<void> handleFirebaseAuthException(
     BuildContext context, FirebaseAuthException e, String email) async {
@@ -48,10 +55,13 @@ Future<void> handleFirebaseAuthException(
   String? temp = FirebaseAuth.instance.currentUser?.email;
   switch (e.code) {
     case 'email-already-in-use':
+<<<<<<< HEAD
       if (FirebaseAuth.instance.currentUser?.email == email) {
         await deleteUserInBuffer();
       } 
 >>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
+=======
+>>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
       errorMessage =
           'Email $email is already in use. Please use a different email.';
       break;

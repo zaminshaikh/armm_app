@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //// filepath: /Users/omarsyed/development/armm_app/apps/mobile/lib/main.dart
 import 'dart:async';
 import 'dart:developer';
@@ -14,6 +15,12 @@ import 'package:armm_app/screens/profile/pages/support_page.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+=======
+import 'package:armm_app/client_info.dart';
+import 'package:armm_app/screens/auth/forgot_password/forgot_password.dart';
+import 'package:armm_app/screens/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/utils/utilities.dart';
+>>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +67,7 @@ Stream<Client?> getClientStream(BuildContext context) =>
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+<<<<<<< HEAD
   await _initializeServices();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -71,6 +79,11 @@ void main() async {
       child: const MyApp(),
     ),
   );
+=======
+  await Firebase.initializeApp();
+  await Config.loadConfig();
+  runApp(const MyApp());
+>>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
 }
 
 class MyApp extends StatefulWidget {

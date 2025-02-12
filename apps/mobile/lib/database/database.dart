@@ -469,6 +469,9 @@ class DatabaseService {
   /// bool exists = await checkDocumentExists('some-document-id');
   /// ```
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
     Future<bool> checkDocumentExists(String cid) async {
       debugPrint('checkDocumentExists: Called with cid: $cid');
       
@@ -508,6 +511,7 @@ class DatabaseService {
         debugPrint('checkDocumentExists: Stack trace: $stackTrace');
         return false;
       }
+<<<<<<< HEAD
     }
 
 
@@ -534,6 +538,13 @@ class DatabaseService {
     }
   }
 >>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
+=======
+    }
+
+
+
+
+>>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
 
   /// Checks if a document with a specific ID is linked to a user.
   ///
