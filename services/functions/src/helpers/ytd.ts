@@ -17,7 +17,7 @@ import { Activity } from "../interfaces/activity.interface";
  * activity types (e.g., 'profit' or 'income' within the 'AGQ' fund).
  *
  * @async
- * @function calculateYTDForUser
+ * @function f_calculateYTDForUser
  * @param {string} userCid - The Firestore document ID for the target user.
  * @param {string} usersCollectionID - The collection in which the user doc resides (e.g., 'testUsers').
 <<<<<<< HEAD
@@ -30,7 +30,7 @@ import { Activity } from "../interfaces/activity.interface";
  * @return {Promise<number>} The numeric total YTD amount for the specified user.
 >>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  */
-export async function calculateYTDForUser(userCid: string, usersCollectionID: string): Promise<number> {
+export async function f_calculateYTDForUser(userCid: string, usersCollectionID: string): Promise<number> {
   const currentYear = new Date().getFullYear();
   const startOfYear = new Date(currentYear, 0, 1);
   const endOfYear = new Date(currentYear + 1, 0, 1);
@@ -61,10 +61,10 @@ export async function calculateYTDForUser(userCid: string, usersCollectionID: st
  * Calculates the total YTD for a user by also including all connected (linked) users.
  * 
  * This function iterates through each user and any users in its `connectedUsers` array,
- * summing the results of `calculateYTDForUser`.
+ * summing the results of `f_calculateYTDForUser`.
  *
  * @async
- * @function calculateTotalYTDForUser
+ * @function f_calculateTotalYTDForUser
  * @param {string} cid - The Firestore document ID of the base user.
  * @param {string} usersCollectionID - The name of the Firestore collection (e.g., 'testUsers').
 <<<<<<< HEAD
@@ -77,7 +77,7 @@ export async function calculateYTDForUser(userCid: string, usersCollectionID: st
  * @return {Promise<number>} The combined YTD of the user and all connected users.
 >>>>>>> 0080eca (update ESLint rules and improve code formatting across multiple files)
  */
-export async function calculateTotalYTDForUser(cid: string, usersCollectionID: string): Promise<number> {
+export async function f_calculateTotalYTDForUser(cid: string, usersCollectionID: string): Promise<number> {
   const processedUsers: Set<string> = new Set();
   const userQueue: string[] = [cid];
   let totalYTD = 0;
@@ -89,7 +89,7 @@ export async function calculateTotalYTDForUser(cid: string, usersCollectionID: s
       processedUsers.add(currentUserCid);
 
       // Calculate the individual's YTD
-      const ytd = await calculateYTDForUser(currentUserCid, usersCollectionID);
+      const ytd = await f_calculateYTDForUser(currentUserCid, usersCollectionID);
       totalYTD += ytd;
 
       // Retrieve doc to find further connected users
@@ -125,8 +125,8 @@ export async function calculateTotalYTDForUser(cid: string, usersCollectionID: s
 export async function updateYTD(cid: string, usersCollectionID: string): Promise<void> {
   try {
     // 1. Calculate the base user’s YTD + totalYTD
-    const ytd = await calculateYTDForUser(cid, usersCollectionID);
-    const totalYTD = await calculateTotalYTDForUser(cid, usersCollectionID);
+    const ytd = await f_calculateYTDForUser(cid, usersCollectionID);
+    const totalYTD = await f_calculateTotalYTDForUser(cid, usersCollectionID);
 
     // 2. Update the user’s general doc in the assets subcollection
     const userGeneralAssetRef = admin
@@ -147,7 +147,7 @@ export async function updateYTD(cid: string, usersCollectionID: string): Promise
     // For each parent user, recalc their totalYTD and update
     const updatePromises = parentUsersSnapshot.docs.map(async (doc) => {
       const parentUserCID = doc.id;
-      const parentUserTotalYTD = await calculateTotalYTDForUser(parentUserCID, usersCollectionID);
+      const parentUserTotalYTD = await f_calculateTotalYTDForUser(parentUserCID, usersCollectionID);
 
       const parentUserGeneralAssetRef = admin
         .firestore()

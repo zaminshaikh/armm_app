@@ -16,7 +16,7 @@ import config from "../../lib/config.json";
  * Scheduled: Runs at midnight on January 1st (US Eastern time). 
  * Resets YTD totals for all users in the specified collection.
  */
-export const scheduledYTDReset = functions.pubsub
+export const f_scheduledYTDReset = functions.pubsub
   // Cron: minute=0 hour=0 day=1 month=1 => Jan 1st at 00:00
   .schedule("0 0 1 1 *")
   .timeZone("America/New_York") 

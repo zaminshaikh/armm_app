@@ -50,7 +50,7 @@ const db = admin.firestore();
  *  3) Marks the scheduled activity doc as 'completed'.
 >>>>>>> 3ccfbe5 (feat(scheduledActivities): dynamic asset updates for multiple funds)
  */
-export const processScheduledActivities = functions.pubsub
+export const f_processScheduledActivities = functions.pubsub
   .schedule("0 */12 * * *") // Runs every 12 hours
   .onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();

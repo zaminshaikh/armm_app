@@ -4,6 +4,7 @@ import 'package:armm_app/screens/forgot_password/forgot_password.dart';
 =======
 import 'dart:developer';
 
+import 'package:armm_app/client_info.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/screens/auth/forgot_password/forgot_password.dart';
 import 'package:armm_app/screens/auth/signup/password_page.dart';
@@ -50,6 +51,12 @@ class LoginForm extends StatelessWidget {
       // Set initiallyAuthenticated to true
       Provider.of<AuthState>(context, listen: false)
           .setInitiallyAuthenticated(true);
+
+      // Navigate to the dashboard
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => ClientInfoPage(cid: "")),
+      );
 
       return true;
     } on FirebaseAuthException catch (e) {

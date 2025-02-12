@@ -10,15 +10,16 @@ import * as admin from "firebase-admin";
 admin.initializeApp();
 
 // ======= TRIGGERS =======
-import { handleActivity, onActivityWrite } from "./triggers/activityTriggers";
-import { onAssetUpdate } from "./triggers/assetTriggers";
-import { onConnectedUsersChange } from "./triggers/connectedUsersTriggers";
+import { f_handleActivity, f_onActivityWrite } from "./triggers/activityTriggers";
+import { f_onAssetUpdate } from "./triggers/assetTriggers";
+import { f_onConnectedUsersChange } from "./triggers/connectedUsersTriggers";
 
 // ======= SCHEDULED =======
-import { scheduledYTDReset } from "./scheduled/scheduledReset";
-import { processScheduledActivities } from "./scheduled/scheduledActivities";
+import { f_scheduledYTDReset } from "./scheduled/scheduledReset";
+import { f_processScheduledActivities } from "./scheduled/scheduledActivities";
 
 // ======= CALLABLE =======
+<<<<<<< HEAD
 import { linkNewUser } from "./callable/linkUser";
 import { isUIDLinked, checkDocumentExists, checkDocumentLinked } from "./callable/checkDocsAndUID";
 import { unlinkUser } from "./callable/unlinkUser";
@@ -52,3 +53,9 @@ export const f_isUIDLinked = isUIDLinked;
 export const f_calculateTotalYTD = calculateTotalYTD;
 export const f_calculateYTD = calculateYTD;
 >>>>>>> 6543ce9 (Imported CF from AGQ)
+=======
+import { f_linkNewUser } from "./callable/linkUser";
+import { f_isUIDLinked, f_checkDocumentExists, f_checkDocumentLinked } from "./callable/checkDocsAndUID";
+import { f_unlinkUser } from "./callable/unlinkUser";
+import { f_calculateTotalYTD, f_calculateYTD } from "./callable/ytd";
+>>>>>>> d743458 (Set the cloud functions)

@@ -1,5 +1,5 @@
 /**
- * @file unlinkUser.ts
+ * @file f_unlinkUser.ts
  * @description Contains callable functions for unlinking a user from Firebase Auth and 
  *              clearing their associated Firestore doc fields.
  */
@@ -8,7 +8,7 @@ import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 
 /**
- * Callable: unlinkUser
+ * Callable: f_unlinkUser
  * 
  * @description Clears the user's `uid` and `appEmail` in Firestore, then deletes the user from Firebase Auth.
  *
@@ -19,7 +19,7 @@ import * as admin from "firebase-admin";
  * @returns {Promise<{ success: boolean; message: string }>} 
  *          Object indicating success and a descriptive message.
  */
-export const unlinkUser = functions.https.onCall(async (data, context) => {
+export const f_unlinkUser = functions.https.onCall(async (data, context) => {
   const { uid, cid, usersCollectionID } = data;
   if (!uid || !cid || !usersCollectionID) {
     throw new functions.https.HttpsError(

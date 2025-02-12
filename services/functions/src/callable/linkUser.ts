@@ -9,7 +9,7 @@ import * as admin from "firebase-admin";
 import { addUidToConnectedUsers } from "../helpers/addUidToConnectedUsers";
 
 /**
- * Callable: linkNewUser
+ * Callable: f_linkNewUser
  * 
  * @description Links a Firestore document (identified by "cid") to a newly registered user's
  *              Firebase Auth UID. Updates the doc with the user’s email and uid, and ensures
@@ -24,7 +24,7 @@ import { addUidToConnectedUsers } from "../helpers/addUidToConnectedUsers";
  * @returns {Promise<void>}
  * @throws {functions.https.HttpsError} If arguments are missing or if linking fails.
  */
-export const linkNewUser = functions.https.onCall(async (data, context): Promise<void> => {
+export const f_linkNewUser = functions.https.onCall(async (data, context): Promise<void> => {
   // Validate that the caller is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "Must be called while authenticated.");

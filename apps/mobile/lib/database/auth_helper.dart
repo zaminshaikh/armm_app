@@ -1,9 +1,13 @@
 import 'dart:developer';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'dart:io' show Platform;
 =======
 import 'dart:io';
 >>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
+=======
+import 'dart:io' show Platform;
+>>>>>>> d743458 (Set the cloud functions)
 import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -23,8 +27,12 @@ Future<void> deleteUserInBuffer() async {
 Future<void> deleteUserInBuffer() async {
   if (FirebaseAuth.instance.currentUser != null) {
     try {
+<<<<<<< HEAD
       await FirebaseAuth.instance.currentUser!.delete();
 >>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
+=======
+      // await FirebaseAuth.instance.currentUser!.delete();
+>>>>>>> d743458 (Set the cloud functions)
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         await FirebaseAuth.instance.signOut();
@@ -96,6 +104,7 @@ Future<void> handleFirebaseAuthException(
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) async {
   if (user == null) return;
@@ -164,39 +173,78 @@ Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) asyn
 
 =======
 /// Updates Firebase Messaging token.
+=======
+
+>>>>>>> d743458 (Set the cloud functions)
 Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) async {
-  if (user == null) {
-    return;
-  }
+  if (user == null) return;
+
   String? token;
+
+  // First, try to fetch the FCM token.
   try {
     token = await FirebaseMessaging.instance.getToken();
+    debugPrint('FCM token fetched: $token');
   } catch (e) {
-    log('Error fetching token: $e');
-    token = await FirebaseMessaging.instance.getAPNSToken();
-    log('APNS Token found: $token');
+    log('Error fetching FCM token: $e');
   }
-  if (token != null) {
-    // Fetch CID using async constructor
-    DatabaseService? db = await DatabaseService.fetchCID(user.uid, context);
 
-    if (db != null) {
+  // If FCM token isn’t available and the platform is iOS,
+  // try to fetch the APNS token with a retry.
+  if (token == null && Platform.isIOS) {
     try {
-      List<dynamic> tokens =
-          (await db.getField('tokens') ?? []);
-
-      if (!tokens.contains(token)) {
-        tokens = [...tokens, token];
-        await db.updateField('tokens', tokens);
+      token = await FirebaseMessaging.instance.getAPNSToken();
+      debugPrint('Initial APNS token fetched: $token');
+      if (token == null) {
+        // Retry after a short delay.
+        await Future.delayed(const Duration(seconds: 3));
+        token = await FirebaseMessaging.instance.getAPNSToken();
+        debugPrint('Retried APNS token fetched: $token');
       }
     } catch (e) {
-      log('login.dart: Error fetching tokens: $e');
+      log('Error fetching APNS token: $e');
     }
   }
-  }// async gap widget mounting check
+
+  // Only attempt subscription and update if we got a token.
+  if (token != null) {
+    try {
+      await FirebaseMessaging.instance.subscribeToTopic(user.uid);
+      debugPrint('Subscribed to topic: ${user.uid}');
+    } catch (e) {
+      log('Error subscribing to topic ${user.uid}: $e');
+    }
+
+    // Update the token in your database.
+    DatabaseService? db = await DatabaseService.fetchCID(user.uid, context);
+    if (db != null) {
+      try {
+        List<dynamic> tokens = (await db.getField('tokens')) ?? [];
+        if (!tokens.contains(token)) {
+          tokens = [...tokens, token];
+          await db.updateField('tokens', tokens);
+          debugPrint('Token updated in database: $token');
+        } else {
+          debugPrint('Token already exists in the database.');
+        }
+      } catch (e) {
+        log('Error updating tokens: $e');
+      }
+    } else {
+      log('DatabaseService instance not found for user ${user.uid}');
+    }
+  } else {
+    log('No messaging token available.');
+  }
 }
 
+<<<<<<< HEAD
 >>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
+=======
+
+
+
+>>>>>>> d743458 (Set the cloud functions)
 /// Deletes the Firebase Messaging token when the user signs out.
 Future<void> deleteFirebaseMessagingToken(User? user, BuildContext context) async {
   if (user == null) {

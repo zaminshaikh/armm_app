@@ -9,6 +9,7 @@ class ClientIDPage extends StatefulWidget {
   _ClientIDPageState createState() => _ClientIDPageState();
 }
 
+const ARMM_Blue = const Color(0xFF1C32A4);
 class _ClientIDPageState extends State<ClientIDPage> {
   final TextEditingController _cidController = TextEditingController();
 

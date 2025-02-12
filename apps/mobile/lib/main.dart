@@ -19,10 +19,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:armm_app/client_info.dart';
 import 'package:armm_app/screens/auth/forgot_password/forgot_password.dart';
 import 'package:armm_app/screens/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/utilities.dart';
 >>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,6 +67,20 @@ Stream<Client?> getClientStream(BuildContext context) =>
         }
       }
     });
+=======
+import 'package:armm_app/signup_data.dart';
+import 'package:provider/provider.dart';
+
+
+Future<void> requestNotificationPermission() async {
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  debugPrint('User granted permission: ${settings.authorizationStatus}');
+}
+>>>>>>> d743458 (Set the cloud functions)
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,9 +98,24 @@ void main() async {
   );
 =======
   await Firebase.initializeApp();
+  await requestNotificationPermission();
   await Config.loadConfig();
+<<<<<<< HEAD
   runApp(const MyApp());
 >>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
+=======
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<AuthState>(
+          create: (_) => AuthState(), // or ChangeNotifierProvider if needed
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
+
+>>>>>>> d743458 (Set the cloud functions)
 }
 
 class MyApp extends StatefulWidget {
