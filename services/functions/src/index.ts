@@ -10,35 +10,16 @@ import * as admin from "firebase-admin";
 admin.initializeApp();
 
 // ======= TRIGGERS =======
-import { handleActivity, onActivityWrite } from "./triggers/activityTriggers";
-import { onAssetUpdate } from "./triggers/assetTriggers";
-import { onConnectedUsersChange } from "./triggers/connectedUsersTriggers";
+import { f_handleActivity, f_onActivityWrite } from "./triggers/activityTriggers";
+import { f_onAssetUpdate } from "./triggers/assetTriggers";
+import { f_onConnectedUsersChange } from "./triggers/connectedUsersTriggers";
 
 // ======= SCHEDULED =======
-import { scheduledYTDReset } from "./scheduled/scheduledReset";
-import { processScheduledActivities } from "./scheduled/scheduledActivities";
+import { f_scheduledYTDReset } from "./scheduled/scheduledReset";
+import { f_processScheduledActivities } from "./scheduled/scheduledActivities";
 
 // ======= CALLABLE =======
-import { linkNewUser } from "./callable/linkUser";
-import { isUIDLinked, checkDocumentExists, checkDocumentLinked } from "./callable/checkDocsAndUID";
-import { unlinkUser } from "./callable/unlinkUser";
-import { calculateTotalYTD, calculateYTD } from "./callable/ytd";
-
-// Expose Firestore triggers
-export const f_handleActivity = handleActivity;
-export const f_onActivityWrite = onActivityWrite;
-export const f_onAssetUpdate = onAssetUpdate;
-export const f_onConnectedUsersChange = onConnectedUsersChange;
-
-// Expose scheduled tasks
-export const f_scheduledYTDReset = scheduledYTDReset;
-export const f_processScheduledActivities = processScheduledActivities;
-
-// Expose callable functions
-export const f_linkNewUser = linkNewUser;
-export const f_checkDocumentExists = checkDocumentExists;
-export const f_checkDocumentLinked = checkDocumentLinked;
-export const f_unlinkUser = unlinkUser;
-export const f_isUIDLinked = isUIDLinked;
-export const f_calculateTotalYTD = calculateTotalYTD;
-export const f_calculateYTD = calculateYTD;
+import { f_linkNewUser } from "./callable/linkUser";
+import { f_isUIDLinked, f_checkDocumentExists, f_checkDocumentLinked } from "./callable/checkDocsAndUID";
+import { f_unlinkUser } from "./callable/unlinkUser";
+import { f_calculateTotalYTD, f_calculateYTD } from "./callable/ytd";

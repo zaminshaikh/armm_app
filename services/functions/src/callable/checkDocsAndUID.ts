@@ -10,7 +10,7 @@ import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 
 /**
- * Callable: checkDocumentExists
+ * Callable: f_checkDocumentExists
  *
  * @description Checks if a Firestore doc with the given `cid` exists within `usersCollectionID`.
  *
@@ -20,7 +20,7 @@ import * as admin from "firebase-admin";
  * @returns {Promise<{ exists: boolean }>}
  * @throws {functions.https.HttpsError} If any validation or retrieval error occurs.
  */
-export const checkDocumentExists = functions.https.onCall(async (data, context) => {
+export const f_checkDocumentExists = functions.https.onCall(async (data, context) => {
   const { cid, usersCollectionID } = data;
   if (!cid || !usersCollectionID) {
     throw new functions.https.HttpsError(
@@ -39,7 +39,7 @@ export const checkDocumentExists = functions.https.onCall(async (data, context) 
 });
 
 /**
- * Callable: checkDocumentLinked
+ * Callable: f_checkDocumentLinked
  *
  * @description Determines if a Firestore doc (specified by `cid`) has a non-empty UID field,
  *              indicating it's already linked to an Auth user.
@@ -50,7 +50,7 @@ export const checkDocumentExists = functions.https.onCall(async (data, context) 
  * @returns {Promise<{ isLinked: boolean }>}
  * @throws {functions.https.HttpsError} If any validation or retrieval error occurs.
  */
-export const checkDocumentLinked = functions.https.onCall(async (data, context) => {
+export const f_checkDocumentLinked = functions.https.onCall(async (data, context) => {
   const { cid, usersCollectionID } = data;
   if (!cid || !usersCollectionID) {
     throw new functions.https.HttpsError(
@@ -73,7 +73,7 @@ export const checkDocumentLinked = functions.https.onCall(async (data, context) 
 });
 
 /**
- * Callable: isUIDLinked
+ * Callable: f_isUIDLinked
  *
  * @description Checks whether the provided Auth UID is linked to any user document
  *              in the specified Firestore collection (i.e., a doc with `uid` = provided UID).
@@ -84,7 +84,7 @@ export const checkDocumentLinked = functions.https.onCall(async (data, context) 
  * @returns {Promise<{ isLinked: boolean }>} - Whether or not the UID is found in that collection.
  * @throws {functions.https.HttpsError} If any validation or retrieval error occurs.
  */
-export const isUIDLinked = functions.https.onCall(async (data, context) => {
+export const f_isUIDLinked = functions.https.onCall(async (data, context) => {
   const { uid, usersCollectionID } = data;
   if (!uid || !usersCollectionID) {
     throw new functions.https.HttpsError(
