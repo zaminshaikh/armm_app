@@ -23,9 +23,15 @@ class PushNotificationService {
   
         // Initialize local notifications
         notifications.AndroidInitializationSettings initializationSettingsAndroid =
+<<<<<<< HEAD
             const notifications.AndroidInitializationSettings('@mipmap/ic_launcher');
         notifications.DarwinInitializationSettings initializationSettingsIOS =
             const notifications.DarwinInitializationSettings();
+=======
+            notifications.AndroidInitializationSettings('@mipmap/team_shaikh_app_icon');
+        notifications.DarwinInitializationSettings initializationSettingsIOS =
+            notifications.DarwinInitializationSettings();
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
         notifications.InitializationSettings initializationSettings = notifications.InitializationSettings(
           android: initializationSettingsAndroid,
           iOS: initializationSettingsIOS,
@@ -101,9 +107,12 @@ class PushNotificationService {
     }
   }
 
+<<<<<<< HEAD
 
   
 
+=======
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
   Future<void> _showNotification(RemoteNotification notification) async {
     log('Showing notification with title: ${notification.title} and body: ${notification.body}');
 
@@ -138,5 +147,9 @@ class PushNotificationService {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   log('Handling a background message: ${message.messageId}');
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)

@@ -1,14 +1,27 @@
 import 'dart:developer';
+<<<<<<< HEAD
 import 'dart:io' show Platform;
+=======
+import 'dart:io';
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
 import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+<<<<<<< HEAD
 Future<void> deleteUserInBuffer() async {
   if (FirebaseAuth.instance.currentUser != null) {
     try {
       // await FirebaseAuth.instance.currentUser!.delete();
+=======
+
+/// Deletes any user currently in the Firebase Auth buffer.
+Future<void> deleteUserInBuffer() async {
+  if (FirebaseAuth.instance.currentUser != null) {
+    try {
+      await FirebaseAuth.instance.currentUser!.delete();
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         await FirebaseAuth.instance.signOut();
@@ -20,13 +33,25 @@ Future<void> deleteUserInBuffer() async {
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
 /// Handles FirebaseAuthException and displays an error message.
 Future<void> handleFirebaseAuthException(
     BuildContext context, FirebaseAuthException e, String email) async {
   String errorMessage = 'Failed to sign up. Please try again.';
+<<<<<<< HEAD
   switch (e.code) {
     case 'email-already-in-use':
+=======
+  String? temp = FirebaseAuth.instance.currentUser?.email;
+  switch (e.code) {
+    case 'email-already-in-use':
+      if (FirebaseAuth.instance.currentUser?.email == email) {
+        await deleteUserInBuffer();
+      } 
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
       errorMessage =
           'Email $email is already in use. Please use a different email.';
       break;
@@ -60,6 +85,7 @@ Future<void> handleFirebaseAuthException(
   );
 }
 
+<<<<<<< HEAD
 
 Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) async {
   if (user == null) return;
@@ -126,6 +152,41 @@ Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) asyn
 
 
 
+=======
+/// Updates Firebase Messaging token.
+Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) async {
+  if (user == null) {
+    return;
+  }
+  String? token;
+  try {
+    token = await FirebaseMessaging.instance.getToken();
+  } catch (e) {
+    log('Error fetching token: $e');
+    token = await FirebaseMessaging.instance.getAPNSToken();
+    log('APNS Token found: $token');
+  }
+  if (token != null) {
+    // Fetch CID using async constructor
+    DatabaseService? db = await DatabaseService.fetchCID(user.uid, context);
+
+    if (db != null) {
+    try {
+      List<dynamic> tokens =
+          (await db.getField('tokens') ?? []);
+
+      if (!tokens.contains(token)) {
+        tokens = [...tokens, token];
+        await db.updateField('tokens', tokens);
+      }
+    } catch (e) {
+      log('login.dart: Error fetching tokens: $e');
+    }
+  }
+  }// async gap widget mounting check
+}
+
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
 /// Deletes the Firebase Messaging token when the user signs out.
 Future<void> deleteFirebaseMessagingToken(User? user, BuildContext context) async {
   if (user == null) {

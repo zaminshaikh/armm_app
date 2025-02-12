@@ -141,8 +141,13 @@ class Client {
     return Client(
       cid: data['cid'] ?? cid ?? '',
       uid: data['uid'] ?? '',
+<<<<<<< HEAD
       firstName: data['firstName'] ?? '', 
       lastName: data['lastName'] ?? '',   
+=======
+      firstName: data['name']?['first'] ?? '',
+      lastName: data['name']?['last'] ?? '',
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
       companyName: data['name']?['company'] ?? '',
       address: data['address'] ?? '',
       dob: (data['dob'] as Timestamp?)?.toDate(),

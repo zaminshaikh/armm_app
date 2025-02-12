@@ -51,6 +51,7 @@ class DatabaseService {
   /// Each user in Firestore has a document with a unique [uid] field. If the [uid] is found, the method fetches the [cid] and connected users from the document.
   
   static Future<DatabaseService?> fetchCID(String uid, BuildContext context) async {
+<<<<<<< HEAD
     print('fetchCID: Starting fetch for UID: $uid');
     
     // Create a new instance of DatabaseService using the provided uid.
@@ -86,16 +87,54 @@ class DatabaseService {
       print('fetchCID: Sub-collections set for CID: ${db.cid}');
     } else {
       print('fetchCID: Document with UID $uid not found in Firestore.');
+=======
+    DatabaseService db = DatabaseService(uid);
+  
+    // Access Firestore and get the document
+    QuerySnapshot querySnapshot =
+        await usersCollection.where('uid', isEqualTo: uid).get();
+  
+    if (querySnapshot.size > 0) {
+      log('database.dart: UID $uid found in Firestore.');
+  
+      // Document found, access the 'cid' field
+      QueryDocumentSnapshot snapshot = querySnapshot.docs.first;
+      db.cid = snapshot.id;
+  
+      // Cast snapshot.data() to Map<String, dynamic>
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+  
+      // Check if 'connectedUsers' field exists before trying to access it
+      if (data.containsKey('connectedUsers')) {
+        db.connectedUsersCIDs = data['connectedUsers'] ?? [];
+      } else {
+        log('database.dart: Field "connectedUsers" does not exist in document.');
+        db.connectedUsersCIDs = []; // Or handle this case as needed
+      }
+  
+      setSubCollections(db);
+    } else {
+      log('database.dart: Document with UID $uid not found in Firestore.');
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
       // log('database.dart: User signed out.');
       // await FirebaseAuth.instance.signOut();
       return null;
     }
+<<<<<<< HEAD
     
     print('fetchCID: Returning DatabaseService instance for UID: $uid');
+=======
+  
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
     return db;
   }
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
   /// Sets the sub-collections for the given [DatabaseService] instance.
   ///
   /// This includes assets, activities, notifications, and graph points sub-collections.
@@ -429,6 +468,7 @@ class DatabaseService {
   /// ```dart
   /// bool exists = await checkDocumentExists('some-document-id');
   /// ```
+<<<<<<< HEAD
     Future<bool> checkDocumentExists(String cid) async {
       debugPrint('checkDocumentExists: Called with cid: $cid');
       
@@ -473,6 +513,27 @@ class DatabaseService {
 
 
 
+=======
+  Future<bool> checkDocumentExists(String cid) async {
+    try {
+      // Create an instance of the callable function 'checkDocumentExists' from Firebase Functions
+      HttpsCallable callable =
+          FirebaseFunctions.instance.httpsCallable('checkDocumentExists');
+
+      // Call the function with 'cid' as the parameter
+      final result = await callable.call({'cid': cid, 'usersCollectionID': Config.get('FIRESTORE_ACTIVE_USERS_COLLECTION')});
+
+      // Return the boolean result from the function call
+      return result.data['exists'] as bool;
+    } catch (e) {
+      // Log any errors encountered during the function call
+      print('Error calling function: $e');
+
+      // Return false by default if an error occurs to handle the error gracefully
+      return false;
+    }
+  }
+>>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
 
   /// Checks if a document with a specific ID is linked to a user.
   ///
