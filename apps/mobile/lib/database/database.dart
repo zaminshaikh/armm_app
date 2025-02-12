@@ -422,25 +422,50 @@ class DatabaseService {
   /// ```dart
   /// bool exists = await checkDocumentExists('some-document-id');
   /// ```
-  Future<bool> checkDocumentExists(String cid) async {
-    try {
-      // Create an instance of the callable function 'checkDocumentExists' from Firebase Functions
-      HttpsCallable callable =
-          FirebaseFunctions.instance.httpsCallable('checkDocumentExists');
-
-      // Call the function with 'cid' as the parameter
-      final result = await callable.call({'cid': cid, 'usersCollectionID': Config.get('FIRESTORE_ACTIVE_USERS_COLLECTION')});
-
-      // Return the boolean result from the function call
-      return result.data['exists'] as bool;
-    } catch (e) {
-      // Log any errors encountered during the function call
-      print('Error calling function: $e');
-
-      // Return false by default if an error occurs to handle the error gracefully
-      return false;
+    Future<bool> checkDocumentExists(String cid) async {
+      debugPrint('checkDocumentExists: Called with cid: $cid');
+      
+      // Retrieve the collection ID from config.
+      final String usersCollectionID = "users";
+      debugPrint('checkDocumentExists: Using usersCollectionID from config: $usersCollectionID');
+      
+      try {
+        // Create an instance of the callable Cloud Function.
+        final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+          'checkDocumentExists',
+          options: HttpsCallableOptions(timeout: const Duration(seconds: 30)),
+        );
+        
+        // Define parameters for the call.
+        final Map<String, dynamic> params = {
+          'cid': cid,
+          'usersCollectionID': usersCollectionID,
+        };
+        debugPrint('checkDocumentExists: Calling Cloud Function with parameters: $params');
+    
+        // Call the function and await its response.
+        final HttpsCallableResult result = await callable.call(params);
+        debugPrint('checkDocumentExists: Cloud Function response: ${result.data}');
+    
+        // Check for the expected response format and extract "exists".
+        if (result.data is Map<String, dynamic> && result.data.containsKey('exists')) {
+          final bool exists = result.data['exists'] as bool;
+          debugPrint('checkDocumentExists: Document existence returned: $exists');
+          return exists;
+        } else {
+          debugPrint('checkDocumentExists: Unexpected response format: ${result.data}');
+          return false;
+        }
+      } catch (error, stackTrace) {
+        debugPrint('checkDocumentExists: Error encountered: $error');
+        debugPrint('checkDocumentExists: Stack trace: $stackTrace');
+        return false;
+      }
     }
-  }
+
+
+
+
 
   /// Checks if a document with a specific ID is linked to a user.
   ///

@@ -10,7 +10,7 @@ class ClientIDPage extends StatefulWidget {
 }
 
 class _ClientIDPageState extends State<ClientIDPage> {
-  final TextEditingController _clientIdController = TextEditingController();
+  final TextEditingController _cidController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
 
             // Client ID Text Field
             TextField(
-              controller: _clientIdController,
+              controller: _cidController,
               decoration: InputDecoration(
                 labelText: 'Client ID',
                 fillColor: const Color(0xFFF0F0F0),
@@ -96,9 +96,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   ),
                 ),
                 onPressed: () {
-                  print(_clientIdController.text);
+                  print(_cidController.text);
                   // Pass data to the next screen
-                  SignUpData signUpData = SignUpData(clientId: _clientIdController.text);
+                  SignUpData signUpData = SignUpData(cid: _cidController.text);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

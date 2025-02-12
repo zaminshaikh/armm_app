@@ -1,6 +1,7 @@
 import 'package:armm_app/client_info.dart';
 import 'package:armm_app/screens/auth/forgot_password/forgot_password.dart';
 import 'package:armm_app/screens/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/utils/utilities.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:armm_app/signup_data.dart';
@@ -8,9 +9,8 @@ import 'package:armm_app/signup_data.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // Uncomment the desired version:
+  await Config.loadConfig();
   runApp(const MyApp());
-  // runApp(const MyApp());
 }
 
 

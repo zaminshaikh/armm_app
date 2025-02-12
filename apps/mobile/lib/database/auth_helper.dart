@@ -5,8 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-
-/// Deletes any user currently in the Firebase Auth buffer.
 Future<void> deleteUserInBuffer() async {
   if (FirebaseAuth.instance.currentUser != null) {
     try {
@@ -22,6 +20,7 @@ Future<void> deleteUserInBuffer() async {
   }
 }
 
+
 /// Handles FirebaseAuthException and displays an error message.
 Future<void> handleFirebaseAuthException(
     BuildContext context, FirebaseAuthException e, String email) async {
@@ -29,9 +28,6 @@ Future<void> handleFirebaseAuthException(
   String? temp = FirebaseAuth.instance.currentUser?.email;
   switch (e.code) {
     case 'email-already-in-use':
-      if (FirebaseAuth.instance.currentUser?.email == email) {
-        await deleteUserInBuffer();
-      } 
       errorMessage =
           'Email $email is already in use. Please use a different email.';
       break;

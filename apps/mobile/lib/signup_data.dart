@@ -1,7 +1,7 @@
 class SignUpData {
-  String clientId;
+  String cid;
   String email;
   String password;
 
-  SignUpData({this.clientId = '', this.email = '', this.password = ''});
+  SignUpData({this.cid = '', this.email = '', this.password = ''});
 }

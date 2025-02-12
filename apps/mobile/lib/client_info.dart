@@ -20,23 +20,23 @@ class _ClientInfoPageState extends State<ClientInfoPage> {
   @override
   void initState() {
     super.initState();
-    print("Client ID: ${widget.signUpData.clientId}");
+    print("Client ID: ${widget.signUpData.cid}");
     _fetchClientData();
   }
 
-  Future<Client?> getClientData(String clientId) async {
-  if (clientId.isEmpty) {
+  Future<Client?> getClientData(String cid) async {
+  if (cid.isEmpty) {
     print("Error: Client ID is empty.");
     return null;
   }
 
   try {
-    final doc = await FirebaseFirestore.instance.collection('users').doc(clientId).get();
-    print("Fetching Firestore document: users/$clientId");
+    final doc = await FirebaseFirestore.instance.collection('users').doc(cid).get();
+    print("Fetching Firestore document: users/$cid");
     if (doc.exists && doc.data() != null) {
       return Client.fromMap(doc.data() as Map<String, dynamic>, doc.id);
     } else {
-      print("Client with id $clientId does not exist.");
+      print("Client with id $cid does not exist.");
       return null;
     }
   } catch (e) {
@@ -47,7 +47,7 @@ class _ClientInfoPageState extends State<ClientInfoPage> {
 
   Future<void> _fetchClientData() async {
     try {
-      final client = await getClientData(widget.signUpData.clientId);
+      final client = await getClientData(widget.signUpData.cid);
       if (client != null) {
         setState(() {
           _client = client;
@@ -73,7 +73,7 @@ class _ClientInfoPageState extends State<ClientInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Client ID received in client_info page: ${widget.signUpData.clientId}"); // DEBUG PRINT
+    print("Client ID received in client_info page: ${widget.signUpData.cid}"); // DEBUG PRINT
     return Scaffold(
       appBar: AppBar(title: const Text("Client Info")),
       body: _isLoading

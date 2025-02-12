@@ -16,7 +16,7 @@ class _EmailPageState extends State<EmailPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Client ID received in EmailPage: ${widget.signUpData.clientId}"); // DEBUG PRINT
+    print("Client ID received in EmailPage: ${widget.signUpData.cid}"); // DEBUG PRINT
     return Scaffold(
       // Top AppBar with Back Button
       appBar: AppBar(
