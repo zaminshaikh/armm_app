@@ -7,6 +7,7 @@ class AuthButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? foregroundColor; // Sets text and icon color.
   final Color? borderColor;
+  final bool isEnabled;
 
   const AuthButton({
     Key? key,
@@ -16,8 +17,8 @@ class AuthButton extends StatelessWidget {
     this.backgroundColor,
     this.foregroundColor,
     this.borderColor,
+    this.isEnabled = true,
   }) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +33,13 @@ class AuthButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: effectiveBorderColor, width: 2.0), // Increased border width
           shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(26),
+            borderRadius: BorderRadius.circular(26),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
           backgroundColor: backgroundColor,
           foregroundColor: effectiveForegroundColor,
         ),
-        onPressed: onPressed,
+        onPressed: isEnabled ? onPressed : null,
         child: icon != null
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,

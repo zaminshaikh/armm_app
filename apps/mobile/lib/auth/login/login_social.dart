@@ -1,5 +1,6 @@
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/signup/client_id_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -52,7 +53,12 @@ class LoginSocial extends StatelessWidget {
         AuthFooter(
           primaryColor: primaryColor,
           onSignUpPressed: () {
-            // TODO: Navigate to Sign Up screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ClientIDPage(),
+              ),
+            );
           },
           questionText: 'Don\'t have an account?',
           buttonText: 'Sign Up',

@@ -2,6 +2,7 @@ import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _EmailPageState extends State<EmailPage> {
                     'to continue the registration process',
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
 
                   // Email Text Field
                   AuthTextField(
@@ -88,11 +89,18 @@ class _EmailPageState extends State<EmailPage> {
                   AuthFooter(
                     primaryColor: ARMM_Blue,
                     onSignUpPressed: () {
-                      // Navigate to login
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                        ),
+                      );
                     },
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
                   ),
+                  
+                  
                   const SizedBox(height: 24),
                 ],
               ),

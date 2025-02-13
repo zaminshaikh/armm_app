@@ -5,6 +5,7 @@ import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/client_info.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
@@ -374,15 +375,23 @@ class _PasswordPageState extends State<PasswordPage> {
                   ),
                   const SizedBox(height: 24),
 
+
+
                   // Already have an account? Log in
                   AuthFooter(
                     primaryColor: ARMM_Blue,
                     onSignUpPressed: () {
-                      // Navigate to login
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                        ),
+                      );
                     },
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
                   ),
+
                   const SizedBox(height: 24),
                 ],
               ),

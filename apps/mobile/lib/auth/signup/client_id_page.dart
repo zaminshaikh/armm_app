@@ -2,8 +2,8 @@ import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
-import 'package:armm_app/auth/signup/client_id_page_header.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,20 +33,66 @@ class _ClientIDPageState extends State<ClientIDPage> {
                 children: [
                   const SizedBox(height: 72),
 
-                  // Client ID Page Header
-                  ClientIDPageHeader(
-                    onBackPressed: () => Navigator.pop(context),
-                    illustrationAsset: 'assets/icons/client_id.svg',
-                    titleColor: ARMM_Blue,
+                  // Center illustration
+                  Center(
+                    child: SvgPicture.asset(
+                      'assets/icons/client_id.svg',
+                      height: 180,
+                    ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 30),
+
+                  // Title text: "First, enter your CID"
+                  Center(
+                    child: Text(
+                      'First, enter your CID',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Subtitle text
+                  const Center(
+                    child: Text(
+                      'This will help us confirm your identity\n'
+                      'to protect your data securely',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // "What is my Client ID?" (You could make this a clickable text or info button)
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.info_outline_rounded,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          'What is my Client ID?',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
 
                   // Client ID Text Field
                   AuthTextField(
                     hintText: 'Client ID',
                     controller: _cidController,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
 
                   // Continue Button
                   AuthButton(
@@ -99,7 +145,12 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   AuthFooter(
                     primaryColor: ARMM_Blue,
                     onSignUpPressed: () {
-                      // Implement navigation to Log in
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                        ),
+                      );
                     },
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
@@ -109,7 +160,11 @@ class _ClientIDPageState extends State<ClientIDPage> {
               ),
             ),
           ),
-          AuthBack(onBackPressed: () => Navigator.pop(context)),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: AuthBack(onBackPressed: () => Navigator.pop(context)),
+          ),
         ],
       ),
     );
