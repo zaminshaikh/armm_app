@@ -1,5 +1,6 @@
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -45,7 +46,7 @@ class LoginSocial extends StatelessWidget {
           foregroundColor: primaryColor,
           borderColor: primaryColor,
           onPressed: () {
-            // TODO: Handle Google sign-in
+            GoogleAuthService().signInWithGoogle(context);
           },
         ),
         const SizedBox(height: 32),

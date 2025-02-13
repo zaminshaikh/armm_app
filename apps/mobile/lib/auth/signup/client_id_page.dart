@@ -7,6 +7,7 @@ import 'package:armm_app/auth/signup/email_page.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:armm_app/auth/auth_utils/google_auth.dart';
 
 class ClientIDPage extends StatefulWidget {
   const ClientIDPage({Key? key}) : super(key: key);
@@ -136,7 +137,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     ),
                     foregroundColor: ARMM_Blue,
                     onPressed: () {
-                      // Implement your Google sign-up logic
+                      GoogleAuthService().signUpWithGoogle(context, _cidController.text);
                     },
                   ),
                   const SizedBox(height: 24),
