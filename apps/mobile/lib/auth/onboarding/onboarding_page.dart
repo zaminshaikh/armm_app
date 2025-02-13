@@ -33,7 +33,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
               const Spacer(),
               // The bottom portion with Sign Up & Log In buttons
-              OnboardingButtons(signUpData: widget.signUpData),
+              AuthButtons(signUpData: widget.signUpData),
             ],
           ),
         ),

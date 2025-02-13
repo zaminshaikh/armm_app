@@ -1,4 +1,4 @@
-import 'package:armm_app/screens/auth/forgot_password/components/forgot_password_footer.dart';
+import 'package:armm_app/auth/forgot_password/components/forgot_password_footer.dart';
 import 'package:flutter/material.dart';
 
 // Import components for this screen

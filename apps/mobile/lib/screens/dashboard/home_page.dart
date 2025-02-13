@@ -1,5 +1,5 @@
-import 'package:armm_app/screens/auth/auth.dart';
-import 'package:armm_app/screens/auth/login/login.dart';
+import 'package:armm_app/auth/auth_utils/auth_functions.dart';
+import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 

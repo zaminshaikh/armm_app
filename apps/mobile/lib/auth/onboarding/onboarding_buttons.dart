@@ -1,13 +1,13 @@
-import 'package:armm_app/screens/auth/login/login.dart';
-import 'package:armm_app/screens/auth/signup/client_id_page.dart';
+import 'package:armm_app/auth/login/login.dart';
+import 'package:armm_app/auth/signup/client_id_page.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 
 /// Stateless version
-class OnboardingButtons extends StatelessWidget {
+class AuthButtons extends StatelessWidget {
   final SignUpData signUpData;
 
-  const OnboardingButtons({Key? key, required this.signUpData}) : super(key: key);
+  const AuthButtons({Key? key, required this.signUpData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,16 +69,16 @@ class OnboardingButtons extends StatelessWidget {
 }
 
 /// Stateful version
-class OnboardingButtonsStateful extends StatefulWidget {
+class AuthButtonsStateful extends StatefulWidget {
   final SignUpData signUpData;
 
-  const OnboardingButtonsStateful({Key? key, required this.signUpData}) : super(key: key);
+  const AuthButtonsStateful({Key? key, required this.signUpData}) : super(key: key);
 
   @override
-  _OnboardingButtonsStatefulState createState() => _OnboardingButtonsStatefulState();
+  _AuthButtonsStatefulState createState() => _AuthButtonsStatefulState();
 }
 
-class _OnboardingButtonsStatefulState extends State<OnboardingButtonsStateful> {
+class _AuthButtonsStatefulState extends State<AuthButtonsStateful> {
   @override
   Widget build(BuildContext context) {
     return Column(
