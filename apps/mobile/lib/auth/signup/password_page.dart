@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 // ignore_for_file: must_be_immutable, library_private_types_in_public_api
 
+=======
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
@@ -7,6 +10,7 @@ import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+<<<<<<< HEAD
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/database/auth_helper.dart';
@@ -21,6 +25,23 @@ class PasswordPage extends StatefulWidget {
   String password = '';
 
   PasswordPage({super.key, required this.cid, required this.email});
+=======
+import 'package:armm_app/client_info.dart';
+import 'package:armm_app/database/auth_helper.dart';
+import 'package:armm_app/database/database.dart';
+import 'package:armm_app/screens/dashboard/home_page.dart';
+import 'package:armm_app/signup_data.dart';
+import 'package:armm_app/utils/app_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
+class PasswordPage extends StatefulWidget {
+  final SignUpData signUpData;
+
+  const PasswordPage({Key? key, required this.signUpData}) : super(key: key);
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
   @override
   _PasswordPageState createState() => _PasswordPageState();
@@ -35,13 +56,19 @@ class _PasswordPageState extends State<PasswordPage> {
   late DatabaseService db;
   late AuthService appState;
 
+<<<<<<< HEAD
   final bool _obscurePassword = true;
   final bool _obscureConfirmPassword = true;
+=======
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasCapitalLetter => _passwordController.text.contains(RegExp(r'[A-Z]'));
   bool get _hasNumber => _passwordController.text.contains(RegExp(r'\d'));
 
+<<<<<<< HEAD
 
   @override
   void initState() {
@@ -49,6 +76,9 @@ class _PasswordPageState extends State<PasswordPage> {
     log("Email received in PasswordPage: ${widget.email}");
     log("CID received in PasswordPage: ${widget.cid}");
   }
+=======
+  int _passwordSecurityIndicator = 0;
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
   /// Check if the user is authenticated and linked
   Future<bool> isAuthenticated() async {
@@ -58,6 +88,7 @@ class _PasswordPageState extends State<PasswordPage> {
     }
 
     String uid = user.uid;
+<<<<<<< HEAD
     DatabaseService db = DatabaseService(uid);
     bool isLinked = await db.isUIDLinked(uid);
     return isLinked;
@@ -107,14 +138,32 @@ class _PasswordPageState extends State<PasswordPage> {
     // First validate password requirements
     if (!_validatePassword()) return;
 
+=======
+
+    DatabaseService db = DatabaseService(uid);
+
+    bool isLinked = await db.f_isUIDLinked(uid);
+
+    return isLinked;
+  }
+
+  /// Handles the sign-up process.
+  void _signUserUp() async {
+>>>>>>> 07991de (Fixed UI of all Auth pages)
     setState(() { isLoading = true; });
     // Delete any existing user in the buffer.
     await deleteUserInBuffer();
 
     try {
       // Create a new user with email and password.
+<<<<<<< HEAD
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: widget.email,
+=======
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: widget.signUpData.email,
+>>>>>>> 07991de (Fixed UI of all Auth pages)
         password: _passwordController.text,
       );
 
@@ -125,11 +174,27 @@ class _PasswordPageState extends State<PasswordPage> {
       log('UserCredential created: ${userCredential.user!.uid}. In buffer.');
 
       // Initialize database service with CID.
+<<<<<<< HEAD
       db = DatabaseService.withCID(userCredential.user!.uid, widget.cid);
+=======
+      db = DatabaseService.withCID(userCredential.user!.uid, widget.signUpData.cid);
+
+      // Check if CID exists and is not linked.
+      if (!(await db.f_checkDocumentExists(widget.signUpData.cid))) {
+        await _showErrorAndDeleteUser(
+            'There is no record of the Client ID $widget.signUpData.cid in the database. Please contact support or re-enter your Client ID.');
+        return;
+      } else if (await db.f_checkDocumentLinked(widget.signUpData.cid)) {
+        await _showErrorAndDeleteUser(
+            'User already exists for given Client ID $widget.signUpData.cid. Please log in instead.');
+        return;
+      }
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
       // Send email verification.
       User? user = FirebaseAuth.instance.currentUser;
       
+<<<<<<< HEAD
       if (user != null) {
         await user.sendEmailVerification();
       } else {
@@ -154,11 +219,42 @@ class _PasswordPageState extends State<PasswordPage> {
             child: const Text('Continue'),
           ),
         ],
+=======
+      if (user == null) {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: widget.signUpData.email,
+          password: widget.signUpData.password,
+        );
+      }
+
+      user = FirebaseAuth.instance.currentUser;
+
+      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+
+      // Show email verification dialog.
+      if (!mounted) return;
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Verify your email'),
+            content: const Text('A verification link has been sent to your email. Please verify your email to continue.'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await _verifyEmail();
+                },
+                child: const Text('Continue'),
+              ),
+            ],
+>>>>>>> 07991de (Fixed UI of all Auth pages)
           );
         },
       );
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
+<<<<<<< HEAD
       await handleFirebaseAuthException(context, e, widget.email);
     } catch (e) {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
@@ -181,6 +277,14 @@ class _PasswordPageState extends State<PasswordPage> {
       }
     } finally {
       if (mounted) setState(() { isLoading = false; });
+=======
+      await handleFirebaseAuthException(context, e, widget.signUpData.email);
+    } catch (e) {
+      log('Error signing user up: $e', stackTrace: StackTrace.current);
+      await FirebaseAuth.instance.currentUser?.delete();
+    } finally {
+      setState(() { isLoading = false; });
+>>>>>>> 07991de (Fixed UI of all Auth pages)
     }
   }
 
@@ -193,8 +297,13 @@ class _PasswordPageState extends State<PasswordPage> {
 
     if (user != null && user.emailVerified) {
       String uid = user.uid;
+<<<<<<< HEAD
       await db.linkNewUser(user.email!);
       log('User $uid connected to Client ID ${widget.cid}');
+=======
+      await db.f_linkNewUser(user.email!);
+      log('User $uid connected to Client ID $widget.signUpData.cid');
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
       // await updateFirebaseMessagingToken(user, context);
 
@@ -217,14 +326,23 @@ class _PasswordPageState extends State<PasswordPage> {
         },
       );
       if (!mounted) return true;
+<<<<<<< HEAD
+=======
+      appState = Provider.of<AuthState>(context, listen: false) as AuthService;
+>>>>>>> 07991de (Fixed UI of all Auth pages)
       setState(() {
         isLoading = false;
       });
 
+<<<<<<< HEAD
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
+=======
+      await Navigator.of(context)
+          .pushNamedAndRemoveUntil('/dashboard', (route) => false);
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
       return true;
     } else {
@@ -246,17 +364,53 @@ class _PasswordPageState extends State<PasswordPage> {
           );
         },
       );
+<<<<<<< HEAD
       if (mounted) {
         setState(() {
           isLoading = false;
         });
       }
+=======
+      setState(() {
+        isLoading = false;
+      });
+>>>>>>> 07991de (Fixed UI of all Auth pages)
       return false;
     }
   }
 
+<<<<<<< HEAD
   @override
   Widget build(BuildContext context) {
+=======
+  /// Shows an error dialog and deletes the current user.
+  Future<void> _showErrorAndDeleteUser(String message) async {
+    if (!mounted) return;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    await FirebaseAuth.instance.currentUser?.delete();
+    log('Error: $message');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("Client ID received in PasswordPage: ${widget.signUpData.cid}"); // DEBUG PRINT
+>>>>>>> 07991de (Fixed UI of all Auth pages)
     return Scaffold(
       body: Stack(
         children: [
@@ -264,7 +418,11 @@ class _PasswordPageState extends State<PasswordPage> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
+<<<<<<< HEAD
                 // ...existing code...
+=======
+                mainAxisAlignment: MainAxisAlignment.center,
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                 children: [
                   // Top illustration
                   const SizedBox(height: 72),
@@ -376,7 +534,11 @@ class _PasswordPageState extends State<PasswordPage> {
                     hintText: 'Password',
                     controller: _passwordController,
                     obscureText: _obscurePassword,
+<<<<<<< HEAD
                     onChanged: (_) => setState(() {widget.password = _passwordController.text;}),
+=======
+                    onChanged: (_) => setState(() {}),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                   ),
 
                   // Confirm Password
@@ -388,6 +550,7 @@ class _PasswordPageState extends State<PasswordPage> {
                   const SizedBox(height: 24),
 
                   // Sign Up Button
+<<<<<<< HEAD
                   isLoading
                       ? const CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(ARMM_Blue),
@@ -398,23 +561,40 @@ class _PasswordPageState extends State<PasswordPage> {
                           backgroundColor: ARMM_Blue,
                           foregroundColor: Colors.white,
                         ),
+=======
+                  AuthButton(
+                    label: 'Sign Up',
+                    onPressed: () async {
+                      _signUserUp();
+                    },
+                    backgroundColor: ARMM_Blue,
+                    foregroundColor: Colors.white,
+                  ),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                   const SizedBox(height: 24),
 
                   // Already have an account? Log in
                   AuthFooter(
                     primaryColor: ARMM_Blue,
                     onSignUpPressed: () {
+<<<<<<< HEAD
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const LoginPage(),
                         ),
                       );
+=======
+                      // Navigate to login
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                     },
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
                   ),
+<<<<<<< HEAD
 
+=======
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                   const SizedBox(height: 24),
                 ],
               ),

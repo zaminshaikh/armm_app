@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import 'package:armm_app/auth/auth_utils/auth_back.dart';
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -48,6 +52,7 @@ class ClientIDPageHeader extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         // "What is my Client ID?" (You could make this a clickable text or info button)
+<<<<<<< HEAD
         const Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -58,6 +63,18 @@ class ClientIDPageHeader extends StatelessWidget {
               ),
               SizedBox(width: 12),
               Text(
+=======
+        Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.info_outline_rounded,
+                color: Colors.grey,
+              ),
+              const SizedBox(width: 12),
+              const Text(
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                 'What is my Client ID?',
                 style: TextStyle(
                   color: Colors.grey,

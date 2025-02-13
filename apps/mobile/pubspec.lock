@@ -440,6 +440,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.8.0"
+<<<<<<< HEAD
   google_fonts:
     dependency: "direct main"
     description:
@@ -448,6 +449,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.1"
+=======
+>>>>>>> 07991de (Fixed UI of all Auth pages)
   google_identity_services_web:
     dependency: transitive
     description:

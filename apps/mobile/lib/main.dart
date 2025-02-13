@@ -17,8 +17,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 =======
 import 'package:armm_app/client_info.dart';
-import 'package:armm_app/screens/auth/forgot_password/forgot_password.dart';
-import 'package:armm_app/screens/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/auth/forgot_password/forgot_password.dart';
+import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/utilities.dart';
 >>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)

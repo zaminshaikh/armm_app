@@ -3,7 +3,7 @@ import 'package:armm_app/database/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:armm_app/screens/auth/auth.dart';
+import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'signup_data.dart'; // (Not needed anymore here if we only require the CID)
 
 // This widget now only requires a cid parameter.

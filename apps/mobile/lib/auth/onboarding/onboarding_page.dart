@@ -31,7 +31,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
               const Spacer(),
               // The bottom portion with Sign Up & Log In buttons
+<<<<<<< HEAD
               const AuthButtons(),
+=======
+              AuthButtons(signUpData: widget.signUpData),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
             ],
           ),
         ),

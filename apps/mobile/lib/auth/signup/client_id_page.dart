@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'dart:developer';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
@@ -11,6 +12,19 @@ import 'package:armm_app/auth/auth_utils/google_auth.dart';
 
 class ClientIDPage extends StatefulWidget {
 
+=======
+import 'package:armm_app/auth/auth_utils/auth_back.dart';
+import 'package:armm_app/auth/auth_utils/auth_button.dart';
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
+import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/signup/email_page.dart';
+import 'package:armm_app/auth/signup/client_id_page_header.dart';
+import 'package:armm_app/signup_data.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+class ClientIDPage extends StatefulWidget {
+>>>>>>> 07991de (Fixed UI of all Auth pages)
   const ClientIDPage({Key? key}) : super(key: key);
 
   @override
@@ -21,6 +35,7 @@ const ARMM_Blue = Color(0xFF1C32A4);
 
 class _ClientIDPageState extends State<ClientIDPage> {
   final TextEditingController _cidController = TextEditingController();
+<<<<<<< HEAD
   bool isLoading = false;
 
   Future<bool> isValidCID(String cid) async {
@@ -71,6 +86,8 @@ class _ClientIDPageState extends State<ClientIDPage> {
     
     return true;
   }
+=======
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +102,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                 children: [
                   const SizedBox(height: 72),
 
+<<<<<<< HEAD
                   // Center illustration
                   Center(
                     child: SvgPicture.asset(
@@ -138,17 +156,31 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
+=======
+                  // Client ID Page Header
+                  ClientIDPageHeader(
+                    onBackPressed: () => Navigator.pop(context),
+                    illustrationAsset: 'assets/icons/client_id.svg',
+                    titleColor: ARMM_Blue,
+                  ),
+                  const SizedBox(height: 32),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
                   // Client ID Text Field
                   AuthTextField(
                     hintText: 'Client ID',
                     controller: _cidController,
                   ),
+<<<<<<< HEAD
                   const SizedBox(height: 12),
+=======
+                  const SizedBox(height: 24),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
                   // Continue Button
                   AuthButton(
                     label: 'Continue',
+<<<<<<< HEAD
                     onPressed: () async {
                       log('client_id_page.dart: Checking CID: ${_cidController.text}');
                       setState(() => isLoading = true);
@@ -162,6 +194,16 @@ class _ClientIDPageState extends State<ClientIDPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => EmailPage(cid: _cidController.text),
+=======
+                    onPressed: () {
+                      print(_cidController.text);
+                      // Pass data to the next screen
+                      SignUpData signUpData = SignUpData(cid: _cidController.text);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EmailPage(signUpData: signUpData),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                         ),
                       );
                     },
@@ -171,8 +213,13 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   const SizedBox(height: 16),
 
                   // OR Divider
+<<<<<<< HEAD
                   const Row(
                     children: [
+=======
+                  Row(
+                    children: const [
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                       Expanded(child: Divider()),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -192,6 +239,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       height: 24,
                     ),
                     foregroundColor: ARMM_Blue,
+<<<<<<< HEAD
                     onPressed: () async {
                       // Dismiss the keyboard
                       FocusScope.of(context).unfocus();
@@ -201,6 +249,10 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       } finally {
                         setState(() => isLoading = false);
                       }
+=======
+                    onPressed: () {
+                      // Implement your Google sign-up logic
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                     },
                   ),
                   const SizedBox(height: 24),
@@ -209,12 +261,16 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   AuthFooter(
                     primaryColor: ARMM_Blue,
                     onSignUpPressed: () {
+<<<<<<< HEAD
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => LoginPage(),
                         ),
                       );
+=======
+                      // Implement navigation to Log in
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                     },
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
@@ -224,11 +280,15 @@ class _ClientIDPageState extends State<ClientIDPage> {
               ),
             ),
           ),
+<<<<<<< HEAD
           if (isLoading)
             Container(
               color: Colors.black54,
               child: const Center(child: CircularProgressIndicator()),
             ),
+=======
+          AuthBack(onBackPressed: () => Navigator.pop(context)),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
         ],
       ),
     );

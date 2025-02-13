@@ -4,11 +4,13 @@ import 'package:armm_app/screens/forgot_password/forgot_password.dart';
 =======
 import 'dart:developer';
 
+import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/client_info.dart';
 import 'package:armm_app/database/auth_helper.dart';
-import 'package:armm_app/screens/auth/forgot_password/forgot_password.dart';
-import 'package:armm_app/screens/auth/signup/password_page.dart';
-import 'package:armm_app/screens/auth/auth.dart';
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
+import 'package:armm_app/auth/forgot_password/forgot_password.dart';
+import 'package:armm_app/auth/signup/password_page.dart';
+import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,7 +46,7 @@ class LoginForm extends StatelessWidget {
         email: emailController.text,
         password: passwordController.text,
       );
-      await updateFirebaseMessagingToken(userCredential.user, context);
+      // await updateFirebaseMessagingToken(userCredential.user, context);
       log('login.dart: Signed in user ${userCredential.user!.uid}'); // Debugging output
       log('login.dart: Sign in successful, proceeding to dashboard...'); // Debugging output
 
@@ -104,6 +106,7 @@ class LoginForm extends StatelessWidget {
     return Column(
       children: [
         // Email TextField
+<<<<<<<< HEAD:apps/mobile/lib/screens/login/login_form.dart
         TextField(
           controller: emailController,
           decoration: InputDecoration(
@@ -119,26 +122,20 @@ class LoginForm extends StatelessWidget {
         const SizedBox(height: 16),
         // Password TextField
         TextField(
+========
+        AuthTextField(hintText: 'Email', controller: emailController),
+        const SizedBox(height: 5),
+        // Password TextField with toggle visibility
+        AuthTextField(
+          hintText: 'Password',
+>>>>>>>> 07991de (Fixed UI of all Auth pages):apps/mobile/lib/auth/login/login_form.dart
           controller: passwordController,
           obscureText: obscurePassword,
-          decoration: InputDecoration(
-            labelText: 'Password',
-            filled: true,
-            fillColor: const Color(0xFFF0F0F0),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide.none,
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(
-                obscurePassword ? Icons.visibility_off : Icons.visibility,
-              ),
-              onPressed: onTogglePassword,
-            ),
-          ),
+          onChanged: (value) {},
         ),
         const SizedBox(height: 16),
         // Log In button
+<<<<<<<< HEAD:apps/mobile/lib/screens/login/login_form.dart
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -165,6 +162,13 @@ class LoginForm extends StatelessWidget {
               ),
             ),
           ),
+========
+        AuthButton(
+          label: 'Log in',
+          onPressed: () => signUserIn(context),
+          backgroundColor: primaryColor,
+          foregroundColor: Colors.white,
+>>>>>>>> 07991de (Fixed UI of all Auth pages):apps/mobile/lib/auth/login/login_form.dart
         ),
         const SizedBox(height: 16),
         // Forgot Password?

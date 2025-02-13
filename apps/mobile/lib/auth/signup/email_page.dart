@@ -1,10 +1,14 @@
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use, must_be_immutable
 
 import 'dart:developer';
+=======
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+<<<<<<< HEAD
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +20,17 @@ class EmailPage extends StatefulWidget {
   String email = '';
 
   EmailPage({super.key, required this.cid});
+=======
+import 'package:armm_app/auth/signup/password_page.dart';
+import 'package:armm_app/signup_data.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+class EmailPage extends StatefulWidget {
+  final SignUpData signUpData;
+
+  const EmailPage({Key? key, required this.signUpData}) : super(key: key);
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
   @override
   _EmailPageState createState() => _EmailPageState();
@@ -25,6 +40,7 @@ const ARMM_Blue = Color(0xFF1C32A4);
 
 class _EmailPageState extends State<EmailPage> {
   final TextEditingController _emailController = TextEditingController();
+<<<<<<< HEAD
   bool _isLoading = false;
 
   /// Checks if the email is available (i.e. not registered) in Firebase Auth.
@@ -104,6 +120,12 @@ class _EmailPageState extends State<EmailPage> {
   @override
   Widget build(BuildContext context) {
     log("Client ID received in EmailPage: ${widget.cid}");
+=======
+
+  @override
+  Widget build(BuildContext context) {
+    print("Client ID received in EmailPage: ${widget.signUpData.cid}"); // DEBUG PRINT
+>>>>>>> 07991de (Fixed UI of all Auth pages)
     return Scaffold(
       body: Stack(
         children: [
@@ -138,7 +160,11 @@ class _EmailPageState extends State<EmailPage> {
                     'to continue the registration process',
                     textAlign: TextAlign.center,
                   ),
+<<<<<<< HEAD
                   const SizedBox(height: 32),
+=======
+                  const SizedBox(height: 16),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
                   // Email Text Field
                   AuthTextField(
@@ -147,6 +173,7 @@ class _EmailPageState extends State<EmailPage> {
                   ),
                   const SizedBox(height: 24),
 
+<<<<<<< HEAD
                   // Continue Button or CircularProgressIndicator
                   _isLoading
                       ? const CircularProgressIndicator(
@@ -158,18 +185,39 @@ class _EmailPageState extends State<EmailPage> {
                           backgroundColor: ARMM_Blue,
                           foregroundColor: Colors.white,
                         ),
+=======
+                  // Continue Button
+                  AuthButton(
+                    label: 'Continue',
+                    onPressed: () {
+                      widget.signUpData.email = _emailController.text;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PasswordPage(signUpData: widget.signUpData),
+                        ),
+                      );
+                    },
+                    backgroundColor: ARMM_Blue,
+                    foregroundColor: Colors.white,
+                  ),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                   const SizedBox(height: 24),
 
                   // Already have an account? Log in
                   AuthFooter(
                     primaryColor: ARMM_Blue,
                     onSignUpPressed: () {
+<<<<<<< HEAD
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => LoginPage(),
                         ),
                       );
+=======
+                      // Navigate to login
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                     },
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',

@@ -7,7 +7,10 @@ class AuthButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? foregroundColor; // Sets text and icon color.
   final Color? borderColor;
+<<<<<<< HEAD
   final bool isEnabled;
+=======
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
   const AuthButton({
     Key? key,
@@ -17,8 +20,13 @@ class AuthButton extends StatelessWidget {
     this.backgroundColor,
     this.foregroundColor,
     this.borderColor,
+<<<<<<< HEAD
     this.isEnabled = true,
   }) : super(key: key);
+=======
+  }) : super(key: key);
+  
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +41,21 @@ class AuthButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: effectiveBorderColor, width: 2.0), // Increased border width
           shape: RoundedRectangleBorder(
+<<<<<<< HEAD
             borderRadius: BorderRadius.circular(26),
+=======
+        borderRadius: BorderRadius.circular(26),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
           backgroundColor: backgroundColor,
           foregroundColor: effectiveForegroundColor,
         ),
+<<<<<<< HEAD
         onPressed: isEnabled ? onPressed : null,
+=======
+        onPressed: onPressed,
+>>>>>>> 07991de (Fixed UI of all Auth pages)
         child: icon != null
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,

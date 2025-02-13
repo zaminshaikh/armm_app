@@ -1,13 +1,29 @@
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
+=======
+import 'package:armm_app/auth/auth_utils/auth_functions.dart';
+import 'package:armm_app/signup_data.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
 // Import your separate widgets
 import 'login_header.dart';
 import 'login_form.dart';
 import 'login_social.dart';
+<<<<<<< HEAD
 
 class LoginPage extends StatefulWidget {
 
   const LoginPage({Key? key}) : super(key: key);
+=======
+import 'package:armm_app/auth/auth_utils/auth_back.dart';
+
+class LoginPage extends StatefulWidget {
+  final SignUpData signUpData;
+
+  const LoginPage({Key? key, required this.signUpData}) : super(key: key);
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -62,10 +78,18 @@ class _LoginPageState extends State<LoginPage> {
                         _obscurePassword = !_obscurePassword;
                       });
                     },
+<<<<<<< HEAD
                   ),
                   const SizedBox(height: 12),
                   // The divider & social login buttons & sign-up link
                   const LoginSocial(
+=======
+                    signUpData: widget.signUpData,
+                  ),
+                  const SizedBox(height: 12),
+                  // The divider & social login buttons & sign-up link
+                  LoginSocial(
+>>>>>>> 07991de (Fixed UI of all Auth pages)
                     primaryColor: primaryColor,
                   ),
                   const SizedBox(height: 24),
@@ -73,6 +97,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
+<<<<<<< HEAD
+=======
+          Positioned(
+            top: 0,
+            left: 0,
+            child: AuthBack(onBackPressed: () => Navigator.pop(context)),
+          ),
+>>>>>>> 07991de (Fixed UI of all Auth pages)
         ],
       ),
     );

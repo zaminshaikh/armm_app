@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import 'package:armm_app/auth/auth_utils/auth_back.dart';
+>>>>>>> 07991de (Fixed UI of all Auth pages)
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
