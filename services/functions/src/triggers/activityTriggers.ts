@@ -22,7 +22,7 @@ import { createNotif, sendNotif } from "../helpers/notifications";
  *  1) Updates YTD totals for the user (and connected users).
  *  2) Optionally sends a push notification if `sendNotif` is true.
  */
-export const f_handleActivity = functions.firestore
+export const handleActivity = functions.firestore
   .document(`/{userCollection}/{userId}/${config.ACTIVITIES_SUBCOLLECTION}/{activityId}`)
   .onCreate(async (snapshot, context) => {
     const activity = snapshot.data() as Activity;
@@ -56,7 +56,7 @@ export const f_handleActivity = functions.firestore
  *  1) Recalculates YTD if the activity affects YTD (AGQ + profit/income).
  *  2) Updates graphpoints for this user so the historical chart is current.
  */
-export const f_onActivityWrite = functions.firestore
+export const onActivityWrite = functions.firestore
   .document(`/{userCollection}/{userId}/${config.ACTIVITIES_SUBCOLLECTION}/{activityId}`)
   .onWrite(async (change, context) => {
     const { userId, userCollection } = context.params;

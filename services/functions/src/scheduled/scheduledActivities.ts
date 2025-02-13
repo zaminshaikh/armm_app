@@ -20,7 +20,7 @@ const db = admin.firestore();
  *  2) Optionally updates clientState (any funds, YTD, totalYTD, etc.).
  *  3) Marks the scheduled activity doc as 'completed'.
  */
-export const f_processScheduledActivities = functions.pubsub
+export const processScheduledActivities = functions.pubsub
   .schedule("0 */12 * * *") // Runs every 12 hours
   .onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();

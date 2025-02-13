@@ -12,7 +12,7 @@ import { addUidToConnectedUsers } from "../helpers/addUidToConnectedUsers";
  * Trigger: onUpdate of a user's main doc. When `connectedUsers` changes, we add/remove
  * the current user's UID from the connected users' `uidGrantedAccess` array.
  */
-export const f_onConnectedUsersChange = functions.firestore
+export const onConnectedUsersChange = functions.firestore
   .document("{userCollection}/{userId}")
   .onUpdate(async (change, context) => {
     const userCollection = context.params.userCollection;

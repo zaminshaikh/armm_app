@@ -16,11 +16,11 @@ const db = admin.firestore();
  * @description If the displayTitle of an asset changes, we reflect this change
  *              in the "recipient" field of any matching activities.
  */
-export const f_onAssetUpdate = functions.firestore
+export const onAssetUpdate = functions.firestore
   .document("/{userCollection}/{userId}/assets/{assetId}")
   .onUpdate(async (change, context) => {
     const { userCollection, userId } = context.params;
-    console.log(`f_onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);
+    console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);
 
     const beforeData = change.before.data();
     const afterData = change.after.data();
