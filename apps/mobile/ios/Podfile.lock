@@ -1238,10 +1238,14 @@ PODS:
     - firebase_core
     - Flutter
 <<<<<<< HEAD
+<<<<<<< HEAD
   - FirebaseAppCheckInterop (11.7.0)
 =======
   - FirebaseAppCheckInterop (11.8.0)
 >>>>>>> d743458 (Set the cloud functions)
+=======
+  - FirebaseAppCheckInterop (11.7.0)
+>>>>>>> 0f6084e (Update Google services configuration and dependencies for improved authentication and push notifications)
   - FirebaseAuth (11.7.0):
     - FirebaseAppCheckInterop (~> 11.0)
     - FirebaseAuthInterop (~> 11.0)
@@ -1303,12 +1307,17 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
 <<<<<<< HEAD
+<<<<<<< HEAD
   - FirebaseMessagingInterop (11.7.0)
   - FirebaseSharedSwift (11.7.0)
 =======
   - FirebaseMessagingInterop (11.8.0)
   - FirebaseSharedSwift (11.8.0)
 >>>>>>> d743458 (Set the cloud functions)
+=======
+  - FirebaseMessagingInterop (11.7.0)
+  - FirebaseSharedSwift (11.7.0)
+>>>>>>> 0f6084e (Update Google services configuration and dependencies for improved authentication and push notifications)
   - FirebaseStorage (11.7.0):
     - FirebaseAppCheckInterop (~> 11.0)
     - FirebaseAuthInterop (~> 11.0)
@@ -1602,10 +1611,14 @@ SPEC CHECKSUMS:
   firebase_messaging: 5881ea6744fe41f0759bc52844c530d64f3c37e3
   firebase_storage: 8f65b231a5ff6e98d63f736420e278673f08d7bb
 <<<<<<< HEAD
+<<<<<<< HEAD
   FirebaseAppCheckInterop: 2376d3ec5cb4267facad4fe754ab4f301a5a519b
 =======
   FirebaseAppCheckInterop: 7bf86d55a2b7e9bd91464120eba3e52e4b63b2e2
 >>>>>>> d743458 (Set the cloud functions)
+=======
+  FirebaseAppCheckInterop: 2376d3ec5cb4267facad4fe754ab4f301a5a519b
+>>>>>>> 0f6084e (Update Google services configuration and dependencies for improved authentication and push notifications)
   FirebaseAuth: 77e25aa24f3e1c626c5babd3338551fc1669ee0e
   FirebaseAuthInterop: a6973d72aa242ea88ffb6be9c9b06c65455071da
   FirebaseCore: 3227e35f4197a924206fbcdc0349325baf4f5de4
@@ -1617,12 +1630,17 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 9347e719c3d52d8d7b9074b2c32407dd027305e9
   FirebaseMessaging: 00ece041b71ddb52a2862ffdee73fb6e9824bd0c
 <<<<<<< HEAD
+<<<<<<< HEAD
   FirebaseMessagingInterop: b7acc94b0b65ce2df02a795b5488f698ac7d5c52
   FirebaseSharedSwift: a45efd84d60ebbfdcdbaebc66948af3630459e62
 =======
   FirebaseMessagingInterop: 75220a5ee806720951fd8df07c359266a54c1980
   FirebaseSharedSwift: 672954eac7b141d6954fab9a32d45d6b1d922df8
 >>>>>>> d743458 (Set the cloud functions)
+=======
+  FirebaseMessagingInterop: b7acc94b0b65ce2df02a795b5488f698ac7d5c52
+  FirebaseSharedSwift: a45efd84d60ebbfdcdbaebc66948af3630459e62
+>>>>>>> 0f6084e (Update Google services configuration and dependencies for improved authentication and push notifications)
   FirebaseStorage: d35da127dd49edcbd07b8c07cf651a70161558b2
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_local_notifications: ad39620c743ea4c15127860f4b5641649a988100

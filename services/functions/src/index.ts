@@ -27,6 +27,7 @@ import { calculateTotalYTD, calculateYTD } from "./callable/ytd";
 
 // Expose Firestore triggers
 <<<<<<< HEAD
+<<<<<<< HEAD
 export { handleActivity, onActivityWrite, onAssetUpdate, onConnectedUsersChange };
 
 // Expose scheduled tasks
@@ -39,12 +40,15 @@ export const f_handleActivity = handleActivity;
 export const f_onActivityWrite = onActivityWrite;
 export const f_onAssetUpdate = onAssetUpdate;
 export const f_onConnectedUsersChange = onConnectedUsersChange;
+=======
+export { handleActivity, onActivityWrite, onAssetUpdate, onConnectedUsersChange };
+>>>>>>> 0f6084e (Update Google services configuration and dependencies for improved authentication and push notifications)
 
 // Expose scheduled tasks
-export const f_scheduledYTDReset = scheduledYTDReset;
-export const f_processScheduledActivities = processScheduledActivities;
+export { scheduledYTDReset, processScheduledActivities };
 
 // Expose callable functions
+<<<<<<< HEAD
 export const f_linkNewUser = linkNewUser;
 export const f_checkDocumentExists = checkDocumentExists;
 export const f_checkDocumentLinked = checkDocumentLinked;
@@ -59,3 +63,6 @@ import { f_isUIDLinked, f_checkDocumentExists, f_checkDocumentLinked } from "./c
 import { f_unlinkUser } from "./callable/unlinkUser";
 import { f_calculateTotalYTD, f_calculateYTD } from "./callable/ytd";
 >>>>>>> d743458 (Set the cloud functions)
+=======
+export { linkNewUser, checkDocumentExists, checkDocumentLinked, unlinkUser, isUIDLinked, calculateTotalYTD, calculateYTD };
+>>>>>>> 0f6084e (Update Google services configuration and dependencies for improved authentication and push notifications)
