@@ -101,6 +101,9 @@ class PushNotificationService {
     }
   }
 
+
+  
+
   Future<void> _showNotification(RemoteNotification notification) async {
     log('Showing notification with title: ${notification.title} and body: ${notification.body}');
 
