@@ -25,20 +25,10 @@ import { unlinkUser } from "./callable/unlinkUser";
 import { calculateTotalYTD, calculateYTD } from "./callable/ytd";
 
 // Expose Firestore triggers
-export const f_handleActivity = handleActivity;
-export const f_onActivityWrite = onActivityWrite;
-export const f_onAssetUpdate = onAssetUpdate;
-export const f_onConnectedUsersChange = onConnectedUsersChange;
+export { handleActivity, onActivityWrite, onAssetUpdate, onConnectedUsersChange };
 
 // Expose scheduled tasks
-export const f_scheduledYTDReset = scheduledYTDReset;
-export const f_processScheduledActivities = processScheduledActivities;
+export { scheduledYTDReset, processScheduledActivities };
 
 // Expose callable functions
-export const f_linkNewUser = linkNewUser;
-export const f_checkDocumentExists = checkDocumentExists;
-export const f_checkDocumentLinked = checkDocumentLinked;
-export const f_unlinkUser = unlinkUser;
-export const f_isUIDLinked = isUIDLinked;
-export const f_calculateTotalYTD = calculateTotalYTD;
-export const f_calculateYTD = calculateYTD;
+export { linkNewUser, checkDocumentExists, checkDocumentLinked, unlinkUser, isUIDLinked, calculateTotalYTD, calculateYTD };

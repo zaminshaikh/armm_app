@@ -23,7 +23,7 @@ class PushNotificationService {
   
         // Initialize local notifications
         notifications.AndroidInitializationSettings initializationSettingsAndroid =
-            notifications.AndroidInitializationSettings('@mipmap/team_shaikh_app_icon');
+            notifications.AndroidInitializationSettings('@mipmap/ic_launcher');
         notifications.DarwinInitializationSettings initializationSettingsIOS =
             notifications.DarwinInitializationSettings();
         notifications.InitializationSettings initializationSettings = notifications.InitializationSettings(
@@ -139,3 +139,4 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   log('Handling a background message: ${message.messageId}');
 }
+
