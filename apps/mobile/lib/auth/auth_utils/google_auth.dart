@@ -2,10 +2,19 @@
 
 
 import 'package:armm_app/auth/login/login.dart';
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+=======
+import 'package:armm_app/client_info.dart';
+import 'package:armm_app/database/auth_helper.dart';
+import 'package:armm_app/database/database.dart';
+import 'package:armm_app/signup_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+>>>>>>> b41e58d (Added google auth functions)
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart'; // For Navigator
 
@@ -59,7 +68,11 @@ class GoogleAuthService {
         showAlert = true;
         await Navigator.pushReplacement(
           context,
+<<<<<<< HEAD
           MaterialPageRoute(builder: (context) => const LoginPage()),
+=======
+          MaterialPageRoute(builder: (context) => LoginPage(signUpData: SignUpData())),
+>>>>>>> b41e58d (Added google auth functions)
         );
         return null;
       }
@@ -69,7 +82,11 @@ class GoogleAuthService {
       // Navigate to Dashboard
       await Navigator.pushReplacement(
         context,
+<<<<<<< HEAD
         MaterialPageRoute(builder: (context) => const DashboardPage()),
+=======
+        MaterialPageRoute(builder: (context) => const ClientInfoPage(cid: '12345678',)),
+>>>>>>> b41e58d (Added google auth functions)
       );
 
       return userCredential;
@@ -198,9 +215,15 @@ class GoogleAuthService {
         // Check if the user exists in Firestore by fetching the CID
         final DatabaseService db = DatabaseService.withCID(user.uid, cid);
 
+<<<<<<< HEAD
         bool uidLinked = await db.isUIDLinked(user.uid);
         bool docExists = await db.checkDocumentExists(cid);
         bool docLinked = await db.checkDocumentLinked(cid);
+=======
+        bool uidLinked = await db.f_isUIDLinked(user.uid);
+        bool docExists = await db.f_checkDocumentExists(cid);
+        bool docLinked = await db.f_checkDocumentLinked(cid);
+>>>>>>> b41e58d (Added google auth functions)
 
         // Check if CID exists and is not linked.
         if (uidLinked && docExists && !docLinked) {
@@ -223,7 +246,11 @@ class GoogleAuthService {
         try {
           // Add the new user to Firestore with the provided CID
           debugPrint('cid: $cid');
+<<<<<<< HEAD
           await db.linkNewUser(user.email!);
+=======
+          await db.f_linkNewUser(user.email!);
+>>>>>>> b41e58d (Added google auth functions)
           await updateFirebaseMessagingToken(user, context);
 
         } catch (e) {
@@ -240,7 +267,11 @@ class GoogleAuthService {
         showAlert = true;
         await Navigator.pushReplacement(
           context,
+<<<<<<< HEAD
           MaterialPageRoute(builder: (context) =>  const LoginPage()),
+=======
+          MaterialPageRoute(builder: (context) =>  LoginPage(signUpData: SignUpData())),
+>>>>>>> b41e58d (Added google auth functions)
         );
         return null;
       }
@@ -250,7 +281,11 @@ class GoogleAuthService {
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
+<<<<<<< HEAD
               const DashboardPage(),
+=======
+              ClientInfoPage(cid: cid),
+>>>>>>> b41e58d (Added google auth functions)
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               child,
         ),

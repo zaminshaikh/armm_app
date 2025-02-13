@@ -2,6 +2,9 @@ import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b41e58d (Added google auth functions)
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
 =======
@@ -59,10 +62,14 @@ class LoginSocial extends StatelessWidget {
           borderColor: primaryColor,
           onPressed: () {
 <<<<<<< HEAD
+<<<<<<< HEAD
             GoogleAuthService().signInWithGoogle(context);
 =======
             // TODO: Handle Google sign-in
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+            GoogleAuthService().signInWithGoogle(context);
+>>>>>>> b41e58d (Added google auth functions)
           },
         ),
         const SizedBox(height: 32),
