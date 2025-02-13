@@ -17,8 +17,8 @@ import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
-import 'package:armm_app/auth/signup/client_id_page_header.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -103,12 +103,16 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   const SizedBox(height: 72),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
                   // Center illustration
                   Center(
                     child: SvgPicture.asset(
                       'assets/icons/client_id.svg',
                       height: 180,
                     ),
+<<<<<<< HEAD
                   ),
                   const SizedBox(height: 30),
 
@@ -165,6 +169,55 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   ),
                   const SizedBox(height: 32),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Title text: "First, enter your CID"
+                  Center(
+                    child: Text(
+                      'First, enter your CID',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Subtitle text
+                  const Center(
+                    child: Text(
+                      'This will help us confirm your identity\n'
+                      'to protect your data securely',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // "What is my Client ID?" (You could make this a clickable text or info button)
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.info_outline_rounded,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          'What is my Client ID?',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
 
                   // Client ID Text Field
                   AuthTextField(
@@ -172,10 +225,14 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     controller: _cidController,
                   ),
 <<<<<<< HEAD
+<<<<<<< HEAD
                   const SizedBox(height: 12),
 =======
                   const SizedBox(height: 24),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                  const SizedBox(height: 12),
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
 
                   // Continue Button
                   AuthButton(
@@ -262,6 +319,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     primaryColor: ARMM_Blue,
                     onSignUpPressed: () {
 <<<<<<< HEAD
+<<<<<<< HEAD
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -271,6 +329,14 @@ class _ClientIDPageState extends State<ClientIDPage> {
 =======
                       // Implement navigation to Log in
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                        ),
+                      );
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
                     },
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
@@ -281,6 +347,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
             ),
           ),
 <<<<<<< HEAD
+<<<<<<< HEAD
           if (isLoading)
             Container(
               color: Colors.black54,
@@ -289,6 +356,13 @@ class _ClientIDPageState extends State<ClientIDPage> {
 =======
           AuthBack(onBackPressed: () => Navigator.pop(context)),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+          Positioned(
+            top: 0,
+            left: 0,
+            child: AuthBack(onBackPressed: () => Navigator.pop(context)),
+          ),
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
         ],
       ),
     );

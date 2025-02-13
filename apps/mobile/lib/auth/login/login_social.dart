@@ -1,10 +1,14 @@
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
 =======
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+import 'package:armm_app/auth/signup/client_id_page.dart';
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -67,6 +71,7 @@ class LoginSocial extends StatelessWidget {
           primaryColor: primaryColor,
           onSignUpPressed: () {
 <<<<<<< HEAD
+<<<<<<< HEAD
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -76,6 +81,14 @@ class LoginSocial extends StatelessWidget {
 =======
             // TODO: Navigate to Sign Up screen
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ClientIDPage(),
+              ),
+            );
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
           },
           questionText: 'Don\'t have an account?',
           buttonText: 'Sign Up',

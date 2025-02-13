@@ -9,6 +9,7 @@ import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +22,9 @@ class EmailPage extends StatefulWidget {
 
   EmailPage({super.key, required this.cid});
 =======
+=======
+import 'package:armm_app/auth/login/login.dart';
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
@@ -161,10 +165,14 @@ class _EmailPageState extends State<EmailPage> {
                     textAlign: TextAlign.center,
                   ),
 <<<<<<< HEAD
+<<<<<<< HEAD
                   const SizedBox(height: 32),
 =======
                   const SizedBox(height: 16),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                  const SizedBox(height: 32),
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
 
                   // Email Text Field
                   AuthTextField(
@@ -209,6 +217,7 @@ class _EmailPageState extends State<EmailPage> {
                     primaryColor: ARMM_Blue,
                     onSignUpPressed: () {
 <<<<<<< HEAD
+<<<<<<< HEAD
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -218,10 +227,20 @@ class _EmailPageState extends State<EmailPage> {
 =======
                       // Navigate to login
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                        ),
+                      );
+>>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
                     },
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
                   ),
+                  
+                  
                   const SizedBox(height: 24),
                 ],
               ),
