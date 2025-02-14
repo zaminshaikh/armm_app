@@ -37,6 +37,7 @@ const ARMM_Blue = Color(0xFF1C32A4);
 class _ClientIDPageState extends State<ClientIDPage> {
   final TextEditingController _cidController = TextEditingController();
 <<<<<<< HEAD
+<<<<<<< HEAD
   bool isLoading = false;
 
   Future<bool> isValidCID(String cid) async {
@@ -89,6 +90,10 @@ class _ClientIDPageState extends State<ClientIDPage> {
   }
 =======
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+    bool isLoading = false;
+
+>>>>>>> 52a4b49 (Add URL schemes and loading state management for Google sign-up)
 
   @override
   Widget build(BuildContext context) {
@@ -298,6 +303,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     ),
                     foregroundColor: ARMM_Blue,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 52a4b49 (Add URL schemes and loading state management for Google sign-up)
                     onPressed: () async {
                       // Dismiss the keyboard
                       FocusScope.of(context).unfocus();
@@ -307,6 +315,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       } finally {
                         setState(() => isLoading = false);
                       }
+<<<<<<< HEAD
 =======
                     onPressed: () {
 <<<<<<< HEAD
@@ -315,6 +324,8 @@ class _ClientIDPageState extends State<ClientIDPage> {
 =======
                       GoogleAuthService().signUpWithGoogle(context, _cidController.text);
 >>>>>>> b41e58d (Added google auth functions)
+=======
+>>>>>>> 52a4b49 (Add URL schemes and loading state management for Google sign-up)
                     },
                   ),
                   const SizedBox(height: 24),
