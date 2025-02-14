@@ -177,8 +177,10 @@ class _PasswordPageState extends State<PasswordPage> {
         isLoading = false;
       });
 
-      await Navigator.of(context)
-          .pushNamedAndRemoveUntil('/dashboard', (route) => false);
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ClientInfoPage( cid: '12345678',)),
+        );
 
       return true;
     } else {
