@@ -12,3 +12,6 @@ key.properties
 # Environment files
 .env
 .env.*
+
+node_modules
+pakcage-lock.json
