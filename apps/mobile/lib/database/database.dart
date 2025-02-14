@@ -385,10 +385,10 @@ class DatabaseService {
   /// ```
   ///
   /// Returns a [Future] that completes when the document is successfully set in the database.
-  Future<void> f_linkNewUser(String email) async {
+  Future<void> linkNewUser(String email) async {
     try {
       HttpsCallable callable =
-          FirebaseFunctions.instance.httpsCallable('f_linkNewUser');
+          FirebaseFunctions.instance.httpsCallable('linkNewUser');
       final result = await callable.call({
         'email': email,
         'cid': cid,
@@ -408,7 +408,7 @@ class DatabaseService {
 
   /// Checks if a document exists in the Firestore 'users' collection.
   ///
-  /// This function invokes a callable Cloud Function named 'f_checkDocumentExists' and passes it
+  /// This function invokes a callable Cloud Function named 'checkDocumentExists' and passes it
   /// a document ID ('cid') to check for existence in the Firestore database. This is useful
   /// for client-side checks against database conditions without exposing direct database access.
   ///
@@ -420,19 +420,19 @@ class DatabaseService {
   ///
   /// Usage:
   /// ```dart
-  /// bool exists = await f_checkDocumentExists('some-document-id');
+  /// bool exists = await checkDocumentExists('some-document-id');
   /// ```
-    Future<bool> f_checkDocumentExists(String cid) async {
-      debugPrint('f_checkDocumentExists: Called with cid: $cid');
+    Future<bool> checkDocumentExists(String cid) async {
+      debugPrint('checkDocumentExists: Called with cid: $cid');
       
       // Retrieve the collection ID from config.
       final String usersCollectionID = "users";
-      debugPrint('f_checkDocumentExists: Using usersCollectionID from config: $usersCollectionID');
+      debugPrint('checkDocumentExists: Using usersCollectionID from config: $usersCollectionID');
       
       try {
         // Create an instance of the callable Cloud Function.
         final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
-          'f_checkDocumentExists',
+          'checkDocumentExists',
           options: HttpsCallableOptions(timeout: const Duration(seconds: 30)),
         );
         
@@ -441,24 +441,24 @@ class DatabaseService {
           'cid': cid,
           'usersCollectionID': usersCollectionID,
         };
-        debugPrint('f_checkDocumentExists: Calling Cloud Function with parameters: $params');
+        debugPrint('checkDocumentExists: Calling Cloud Function with parameters: $params');
     
         // Call the function and await its response.
         final HttpsCallableResult result = await callable.call(params);
-        debugPrint('f_checkDocumentExists: Cloud Function response: ${result.data}');
+        debugPrint('checkDocumentExists: Cloud Function response: ${result.data}');
     
         // Check for the expected response format and extract "exists".
         if (result.data is Map<String, dynamic> && result.data.containsKey('exists')) {
           final bool exists = result.data['exists'] as bool;
-          debugPrint('f_checkDocumentExists: Document existence returned: $exists');
+          debugPrint('checkDocumentExists: Document existence returned: $exists');
           return exists;
         } else {
-          debugPrint('f_checkDocumentExists: Unexpected response format: ${result.data}');
+          debugPrint('checkDocumentExists: Unexpected response format: ${result.data}');
           return false;
         }
       } catch (error, stackTrace) {
-        debugPrint('f_checkDocumentExists: Error encountered: $error');
-        debugPrint('f_checkDocumentExists: Stack trace: $stackTrace');
+        debugPrint('checkDocumentExists: Error encountered: $error');
+        debugPrint('checkDocumentExists: Stack trace: $stackTrace');
         return false;
       }
     }
@@ -469,7 +469,7 @@ class DatabaseService {
 
   /// Checks if a document with a specific ID is linked to a user.
   ///
-  /// This function makes a call to a Firebase Cloud Function named 'f_checkDocumentLinked'
+  /// This function makes a call to a Firebase Cloud Function named 'checkDocumentLinked'
   /// to determine if the document in the Firestore 'users' collection has a non-empty
   /// 'uid' field, indicating it is linked to a user.
   ///
@@ -484,13 +484,13 @@ class DatabaseService {
   ///
   /// Example usage:
   /// ```dart
-  /// bool isLinked = await f_checkDocumentLinked('documentId123');
+  /// bool isLinked = await checkDocumentLinked('documentId123');
   /// ```
-  Future<bool> f_checkDocumentLinked(String cid) async {
+  Future<bool> checkDocumentLinked(String cid) async {
     try {
-      // Create an instance of the callable function 'f_checkDocumentLinked' from Firebase Functions
+      // Create an instance of the callable function 'checkDocumentLinked' from Firebase Functions
       HttpsCallable callable =
-          FirebaseFunctions.instance.httpsCallable('f_checkDocumentLinked');
+          FirebaseFunctions.instance.httpsCallable('checkDocumentLinked');
 
       // Call the function with 'cid' as the parameter
       final result = await callable.call({'cid': cid, 'usersCollectionID': Config.get('FIRESTORE_ACTIVE_USERS_COLLECTION')});
@@ -506,12 +506,12 @@ class DatabaseService {
     }
   }
 
-  /// Calls the Cloud Function `f_isUIDLinked` to check if a UID is linked.
-  Future<bool> f_isUIDLinked(String uid) async {
+  /// Calls the Cloud Function `isUIDLinked` to check if a UID is linked.
+  Future<bool> isUIDLinked(String uid) async {
     try {
       // Initialize the callable function
       final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
-        'f_isUIDLinked',
+        'isUIDLinked',
         options: HttpsCallableOptions(
           timeout: const Duration(seconds: 30),
         ),
@@ -534,7 +534,7 @@ class DatabaseService {
       return false;
     } catch (e) {
       // Handle other errors
-      print('Unknown error occurred while calling f_isUIDLinked: $e');
+      print('Unknown error occurred while calling isUIDLinked: $e');
       return false;
     }
   }

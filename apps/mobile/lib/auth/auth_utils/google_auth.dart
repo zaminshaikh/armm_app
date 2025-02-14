@@ -200,9 +200,9 @@ class GoogleAuthService {
         // Check if the user exists in Firestore by fetching the CID
         final DatabaseService db = DatabaseService.withCID(user.uid, cid);
 
-        bool uidLinked = await db.f_isUIDLinked(user.uid);
-        bool docExists = await db.f_checkDocumentExists(cid);
-        bool docLinked = await db.f_checkDocumentLinked(cid);
+        bool uidLinked = await db.isUIDLinked(user.uid);
+        bool docExists = await db.checkDocumentExists(cid);
+        bool docLinked = await db.checkDocumentLinked(cid);
 
         // Check if CID exists and is not linked.
         if (uidLinked && docExists && !docLinked) {
@@ -225,7 +225,7 @@ class GoogleAuthService {
         try {
           // Add the new user to Firestore with the provided CID
           debugPrint('cid: $cid');
-          await db.f_linkNewUser(user.email!);
+          await db.linkNewUser(user.email!);
           await updateFirebaseMessagingToken(user, context);
 
         } catch (e) {
