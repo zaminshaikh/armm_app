@@ -359,7 +359,7 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
         await Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => ClientInfoPage( cid: '12345678',)),
+          MaterialPageRoute(builder: (context) => ClientInfoPage( cid: widget.signUpData.password,)),
         );
 >>>>>>> a4dfb16 (Replace navigation method in password_page.dart to use pushReplacement for better user experience)
 
