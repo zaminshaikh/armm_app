@@ -179,7 +179,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
         await Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => ClientInfoPage( cid: '12345678',)),
+          MaterialPageRoute(builder: (context) => ClientInfoPage( cid: widget.signUpData.password,)),
         );
 
       return true;
