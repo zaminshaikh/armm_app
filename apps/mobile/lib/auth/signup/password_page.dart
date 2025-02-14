@@ -347,6 +347,7 @@ class _PasswordPageState extends State<PasswordPage> {
       });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardPage()),
@@ -355,6 +356,12 @@ class _PasswordPageState extends State<PasswordPage> {
       await Navigator.of(context)
           .pushNamedAndRemoveUntil('/dashboard', (route) => false);
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ClientInfoPage( cid: '12345678',)),
+        );
+>>>>>>> a4dfb16 (Replace navigation method in password_page.dart to use pushReplacement for better user experience)
 
       return true;
     } else {
