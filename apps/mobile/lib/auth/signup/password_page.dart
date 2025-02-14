@@ -172,7 +172,7 @@ class _PasswordPageState extends State<PasswordPage> {
         },
       );
       if (!mounted) return true;
-      appState = Provider.of<AuthState>(context, listen: false) as AuthService;
+      // appState = Provider.of<AuthService>(context, listen: false);
       setState(() {
         isLoading = false;
       });
