@@ -146,7 +146,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
     DatabaseService db = DatabaseService(uid);
 
-    bool isLinked = await db.f_isUIDLinked(uid);
+    bool isLinked = await db.isUIDLinked(uid);
 
     return isLinked;
   }
@@ -184,11 +184,11 @@ class _PasswordPageState extends State<PasswordPage> {
       db = DatabaseService.withCID(userCredential.user!.uid, widget.signUpData.cid);
 
       // Check if CID exists and is not linked.
-      if (!(await db.f_checkDocumentExists(widget.signUpData.cid))) {
+      if (!(await db.checkDocumentExists(widget.signUpData.cid))) {
         await _showErrorAndDeleteUser(
             'There is no record of the Client ID $widget.signUpData.cid in the database. Please contact support or re-enter your Client ID.');
         return;
-      } else if (await db.f_checkDocumentLinked(widget.signUpData.cid)) {
+      } else if (await db.checkDocumentLinked(widget.signUpData.cid)) {
         await _showErrorAndDeleteUser(
             'User already exists for given Client ID $widget.signUpData.cid. Please log in instead.');
         return;
@@ -302,10 +302,14 @@ class _PasswordPageState extends State<PasswordPage> {
     if (user != null && user.emailVerified) {
       String uid = user.uid;
 <<<<<<< HEAD
+<<<<<<< HEAD
       await db.linkNewUser(user.email!);
       log('User $uid connected to Client ID ${widget.cid}');
 =======
       await db.f_linkNewUser(user.email!);
+=======
+      await db.linkNewUser(user.email!);
+>>>>>>> b8aafa4 (Refactor authentication utility methods to remove 'f_' prefix for consistency)
       log('User $uid connected to Client ID $widget.signUpData.cid');
 >>>>>>> 07991de (Fixed UI of all Auth pages)
 

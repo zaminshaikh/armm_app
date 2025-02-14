@@ -216,6 +216,7 @@ class GoogleAuthService {
         final DatabaseService db = DatabaseService.withCID(user.uid, cid);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         bool uidLinked = await db.isUIDLinked(user.uid);
         bool docExists = await db.checkDocumentExists(cid);
         bool docLinked = await db.checkDocumentLinked(cid);
@@ -224,6 +225,11 @@ class GoogleAuthService {
         bool docExists = await db.f_checkDocumentExists(cid);
         bool docLinked = await db.f_checkDocumentLinked(cid);
 >>>>>>> b41e58d (Added google auth functions)
+=======
+        bool uidLinked = await db.isUIDLinked(user.uid);
+        bool docExists = await db.checkDocumentExists(cid);
+        bool docLinked = await db.checkDocumentLinked(cid);
+>>>>>>> b8aafa4 (Refactor authentication utility methods to remove 'f_' prefix for consistency)
 
         // Check if CID exists and is not linked.
         if (uidLinked && docExists && !docLinked) {
@@ -247,10 +253,14 @@ class GoogleAuthService {
           // Add the new user to Firestore with the provided CID
           debugPrint('cid: $cid');
 <<<<<<< HEAD
+<<<<<<< HEAD
           await db.linkNewUser(user.email!);
 =======
           await db.f_linkNewUser(user.email!);
 >>>>>>> b41e58d (Added google auth functions)
+=======
+          await db.linkNewUser(user.email!);
+>>>>>>> b8aafa4 (Refactor authentication utility methods to remove 'f_' prefix for consistency)
           await updateFirebaseMessagingToken(user, context);
 
         } catch (e) {
