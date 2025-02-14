@@ -335,9 +335,13 @@ class _PasswordPageState extends State<PasswordPage> {
       );
       if (!mounted) return true;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       appState = Provider.of<AuthState>(context, listen: false) as AuthService;
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+      // appState = Provider.of<AuthService>(context, listen: false);
+>>>>>>> 2fa08e3 (Remove unused appState assignment in password_page.dart causing exception.)
       setState(() {
         isLoading = false;
       });
