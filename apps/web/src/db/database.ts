@@ -237,12 +237,12 @@ import {
   
     /** Unlinks a client’s user account via a Cloud Function */
     async unlinkClient(client: Client): Promise<void> {
-      const f_unlinkUser = httpsCallable<{ cid: string; uid: string; usersCollectionID: string }, { success: boolean }>(
+      const unlinkUser = httpsCallable<{ cid: string; uid: string; usersCollectionID: string }, { success: boolean }>(
         functions,
-        'f_unlinkUser'
+        'unlinkUser'
       );
       try {
-        const result = await f_unlinkUser({
+        const result = await unlinkUser({
           cid: client.cid,
           uid: client.uid,
           usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION,
@@ -264,12 +264,12 @@ import {
   
     /** Retrieves YTD value via a Cloud Function */
     async getYTD(cid: string): Promise<number> {
-      const f_calculateYTD = httpsCallable<{ cid: string; usersCollectionID: string }, { ytd: number }>(
+      const calculateYTD = httpsCallable<{ cid: string; usersCollectionID: string }, { ytd: number }>(
         functions,
-        'f_calculateYTD'
+        'calculateYTD'
       );
       try {
-        const result = await f_calculateYTD({ cid, usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION });
+        const result = await calculateYTD({ cid, usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION });
         console.log('YTD Total:', result.data.ytd);
         return result.data.ytd;
       } catch (error) {
@@ -280,12 +280,12 @@ import {
   
     /** Retrieves Total YTD value via a Cloud Function */
     async getTotalYTD(cid: string): Promise<number> {
-      const f_calculateYTD = httpsCallable<{ cid: string; usersCollectionID: string }, { ytdTotal: number }>(
+      const calculateYTD = httpsCallable<{ cid: string; usersCollectionID: string }, { ytdTotal: number }>(
         functions,
-        'f_calculateTotalYTD'
+        'calculateTotalYTD'
       );
       try {
-        const result = await f_calculateYTD({ cid, usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION });
+        const result = await calculateYTD({ cid, usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION });
         console.log('Total YTD:', result.data.ytdTotal);
         return result.data.ytdTotal;
       } catch (error) {
