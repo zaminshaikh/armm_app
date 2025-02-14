@@ -20,6 +20,8 @@ const ARMM_Blue = Color(0xFF1C32A4);
 
 class _ClientIDPageState extends State<ClientIDPage> {
   final TextEditingController _cidController = TextEditingController();
+    bool isLoading = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -136,8 +138,15 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       height: 24,
                     ),
                     foregroundColor: ARMM_Blue,
-                    onPressed: () {
-                      GoogleAuthService().signUpWithGoogle(context, _cidController.text);
+                    onPressed: () async {
+                      // Dismiss the keyboard
+                      FocusScope.of(context).unfocus();
+                      try {
+                        setState(() => isLoading = true);
+                        await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
+                      } finally {
+                        setState(() => isLoading = false);
+                      }
                     },
                   ),
                   const SizedBox(height: 24),
