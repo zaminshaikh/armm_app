@@ -146,7 +146,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.blue,
-        fontFamily: 'MADE Tommy Soft',
+        fontFamily: 'Inter',
       ),
       home: const ForgotPasswordPage(),
     );

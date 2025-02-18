@@ -107,36 +107,11 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: MADE Tommy Soft
+    - family: Inter
       fonts:
-        - asset: assets/fonts/MADE Tommy Soft Thin.otf
-          weight: 100
-        - asset: assets/fonts/MADE Tommy Soft Thin Outline.otf
-          weight: 100
-        - asset: assets/fonts/MADE Tommy Soft Light.otf
-          weight: 300
-        - asset: assets/fonts/MADE Tommy Soft Light Outline.otf
-          weight: 300
-        - asset: assets/fonts/MADE Tommy Soft Regular.otf
-          weight: 400
-        - asset: assets/fonts/MADE Tommy Soft Regular Outline.otf
-          weight: 400
-        - asset: assets/fonts/MADE Tommy Soft Medium.otf
-          weight: 500
-        - asset: assets/fonts/MADE Tommy Soft Medium Outline.otf
-          weight: 500
-        - asset: assets/fonts/MADE Tommy Soft Bold.otf
-          weight: 700
-        - asset: assets/fonts/MADE Tommy Soft Bold Outline.otf
-          weight: 700
-        - asset: assets/fonts/MADE Tommy Soft ExtraBold.otf
-          weight: 800
-        - asset: assets/fonts/MADE Tommy Soft ExtraBold Outline.otf
-          weight: 800
-        - asset: assets/fonts/MADE Tommy Soft Black.otf
-          weight: 900
-        - asset: assets/fonts/MADE Tommy Soft Black Outline.otf
-          weight: 900
+        - asset: fonts/Inter.ttf
+        - asset: fonts/Inter-Italic.ttf
+          style: italic
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
