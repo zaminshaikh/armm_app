@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'faq_section.dart';
@@ -138,14 +139,19 @@ class SupportPage extends StatelessWidget {
   }
 }
 =======
+=======
+import 'package:armm_app/utils/app_bar.dart';
+>>>>>>> 547db41 (All Pages Use the Custom App Bar)
 import 'package:flutter/material.dart';
 
 class SupportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Support'),
+      appBar: CustomAppBar(
+        title: 'Support',
+        implyLeading: true,
+        showNotificationButton: false,
       ),
       body: Center(
         child: Text('Support Page'),

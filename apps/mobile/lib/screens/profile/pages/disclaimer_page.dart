@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/utils/app_bar.dart';
 =======
 >>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
+=======
+import 'package:armm_app/utils/app_bar.dart';
+>>>>>>> 547db41 (All Pages Use the Custom App Bar)
 
 class DisclaimerPage extends StatelessWidget {
   @override
@@ -22,8 +26,10 @@ class DisclaimerPage extends StatelessWidget {
         ),
 =======
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Disclaimer'),
+      appBar: CustomAppBar(
+        title: 'Disclaimer',
+        implyLeading: true,
+        showNotificationButton: false,
       ),
       body: Center(
         child: Text('Disclaimer Page'),
