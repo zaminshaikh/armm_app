@@ -12,7 +12,7 @@ import 'package:armm_app/screens/forgot_password/forgot_password.dart';
 import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
-import 'package:armm_app/client_info.dart';
+import 'package:armm_app/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/forgot_password/forgot_password.dart';
@@ -72,10 +72,14 @@ class LoginForm extends StatelessWidget {
       Navigator.push(
         context,
 <<<<<<< HEAD
+<<<<<<< HEAD
         MaterialPageRoute(builder: (_) => const ProfilePage()),
 =======
         MaterialPageRoute(builder: (_) => ClientInfoPage(cid: "")),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+        MaterialPageRoute(builder: (_) => ProfilePage(cid: "")),
+>>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
       );
 
       return true;

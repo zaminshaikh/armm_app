@@ -3,12 +3,16 @@
 
 import 'package:armm_app/auth/login/login.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 =======
 import 'package:armm_app/client_info.dart';
+=======
+import 'package:armm_app/profile.dart';
+>>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/signup_data.dart';
@@ -83,10 +87,14 @@ class GoogleAuthService {
       await Navigator.pushReplacement(
         context,
 <<<<<<< HEAD
+<<<<<<< HEAD
         MaterialPageRoute(builder: (context) => const DashboardPage()),
 =======
         MaterialPageRoute(builder: (context) => const ClientInfoPage(cid: '12345678',)),
 >>>>>>> b41e58d (Added google auth functions)
+=======
+        MaterialPageRoute(builder: (context) => const ProfilePage(cid: '12345678',)),
+>>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
       );
 
       return userCredential;
@@ -292,10 +300,14 @@ class GoogleAuthService {
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
 <<<<<<< HEAD
+<<<<<<< HEAD
               const DashboardPage(),
 =======
               ClientInfoPage(cid: cid),
 >>>>>>> b41e58d (Added google auth functions)
+=======
+              ProfilePage(cid: cid),
+>>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               child,
         ),

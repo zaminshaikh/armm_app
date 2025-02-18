@@ -13,6 +13,7 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
 import 'package:armm_app/auth/login/login.dart';
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
@@ -31,6 +32,9 @@ class PasswordPage extends StatefulWidget {
 import 'package:armm_app/auth/login/login.dart';
 >>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
 import 'package:armm_app/client_info.dart';
+=======
+import 'package:armm_app/profile.dart';
+>>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/dashboard/home_page.dart';
@@ -359,7 +363,7 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
         await Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => ClientInfoPage( cid: widget.signUpData.password,)),
+          MaterialPageRoute(builder: (context) => ProfilePage( cid: widget.signUpData.password,)),
         );
 >>>>>>> a4dfb16 (Replace navigation method in password_page.dart to use pushReplacement for better user experience)
 
