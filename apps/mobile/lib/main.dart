@@ -12,8 +12,12 @@ import 'package:armm_app/signup_data.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-
-
+import 'screens/profile/pages/support_page.dart';
+import 'screens/profile/pages/documents_page.dart';
+import 'screens/profile/pages/settings_page.dart';
+import 'screens/profile/pages/my_profiles_page.dart';
+import 'screens/profile/pages/authentication_page.dart';
+import 'screens/profile/pages/disclaimer_page.dart';
 
 /// Initialize third-party services and configurations
 Future<void> _initializeServices() async {
@@ -47,8 +51,6 @@ Future<void> _resetFirestore() async {
   );
 }
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -68,13 +70,6 @@ void main() async {
     ),
   );
 }
-
-
-
-
-
-
-
 
 /// Stateful Version
 class MyApp extends StatefulWidget {
@@ -104,6 +99,14 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Inter',
       ),
       home: OnboardingPage(signUpData: signUpData),
+      routes: {
+        '/support': (context) => SupportPage(),
+        '/documents': (context) => DocumentsPage(),
+        '/settings': (context) => SettingsPage(),
+        '/my_profiles': (context) => MyProfilesPage(),
+        '/authentication': (context) => AuthenticationPage(),
+        '/disclaimer': (context) => DisclaimerPage(),
+      },
     );
   }
 }
