@@ -1,4 +1,4 @@
-import 'package:armm_app/client_info.dart';
+import 'package:armm_app/profile.dart';
 import 'package:armm_app/auth/forgot_password/forgot_password.dart';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/utils/app_state.dart';

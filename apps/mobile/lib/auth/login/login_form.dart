@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
-import 'package:armm_app/client_info.dart';
+import 'package:armm_app/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/forgot_password/forgot_password.dart';
@@ -52,7 +52,7 @@ class LoginForm extends StatelessWidget {
       // Navigate to the dashboard
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => ClientInfoPage(cid: "")),
+        MaterialPageRoute(builder: (_) => ProfilePage(cid: "")),
       );
 
       return true;
