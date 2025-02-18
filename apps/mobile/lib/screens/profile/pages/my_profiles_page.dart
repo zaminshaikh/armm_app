@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously, duplicate_ignore, prefer_expression_function_bodies, unused_catch_clause, empty_catches
 
 import 'package:armm_app/database/models/client_model.dart';
@@ -181,4 +182,20 @@ class _MyProfilesPageState extends State<MyProfilesPage> {
     );
   }
 
+=======
+import 'package:flutter/material.dart';
+
+class MyProfilesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('My Profiles'),
+      ),
+      body: Center(
+        child: Text('My Profiles Page'),
+      ),
+    );
+  }
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
 }

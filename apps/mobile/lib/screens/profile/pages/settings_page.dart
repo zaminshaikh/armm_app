@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:app_settings/app_settings.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -804,3 +805,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
 }
 
+=======
+import 'package:flutter/material.dart';
+
+class SettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings'),
+      ),
+      body: Center(
+        child: Text('Settings Page'),
+      ),
+    );
+  }
+}
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)

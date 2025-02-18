@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously, duplicate_ignore, prefer_expression_function_bodies, unused_catch_clause, empty_catches, library_private_types_in_public_api
 
 import 'package:armm_app/database/database.dart';
@@ -245,3 +246,20 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     );
   }
 }
+=======
+import 'package:flutter/material.dart';
+
+class AuthenticationPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Authentication'),
+      ),
+      body: Center(
+        child: Text('Authentication Page'),
+      ),
+    );
+  }
+}
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously, duplicate_ignore, prefer_expression_function_bodies, unused_catch_clause, empty_catches
 
 import 'dart:io';
@@ -560,3 +561,20 @@ class _DocumentsPageState extends State<DocumentsPage> {
         ),
       );
 }
+=======
+import 'package:flutter/material.dart';
+
+class DocumentsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Documents'),
+      ),
+      body: Center(
+        child: Text('Documents Page'),
+      ),
+    );
+  }
+}
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)

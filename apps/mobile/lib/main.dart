@@ -37,6 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+<<<<<<< HEAD
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/push_notification.dart';
 import 'package:armm_app/utils/utilities.dart';
@@ -44,6 +45,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/auth/auth_utils/faceid.dart';
 import 'package:armm_app/auth/auth_utils/initial_face_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+=======
+import 'package:provider/provider.dart';
+import 'screens/profile/pages/support_page.dart';
+import 'screens/profile/pages/documents_page.dart';
+import 'screens/profile/pages/settings_page.dart';
+import 'screens/profile/pages/my_profiles_page.dart';
+import 'screens/profile/pages/authentication_page.dart';
+import 'screens/profile/pages/disclaimer_page.dart';
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
 
 /// Initialize third-party services and configurations
 Future<void> _initializeServices() async {
@@ -60,6 +70,7 @@ Future<void> _resetFirestore() async {
   FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: false);
 }
 
+<<<<<<< HEAD
 /// Stream that provides Client data based on authentication state
 Stream<Client?> getClientStream(BuildContext context) =>
     FirebaseAuth.instance.userChanges().asyncExpand((User? user) async* {
@@ -90,6 +101,8 @@ Future<void> requestNotificationPermission() async {
 }
 >>>>>>> d743458 (Set the cloud functions)
 
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 <<<<<<< HEAD
@@ -126,6 +139,10 @@ void main() async {
 >>>>>>> d743458 (Set the cloud functions)
 }
 
+<<<<<<< HEAD
+=======
+/// Stateful Version
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
@@ -148,7 +165,19 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         primarySwatch: Colors.blue,
         fontFamily: 'Inter',
       ),
+<<<<<<< HEAD
       home: const ForgotPasswordPage(),
+=======
+      home: OnboardingPage(signUpData: signUpData),
+      routes: {
+        '/support': (context) => SupportPage(),
+        '/documents': (context) => DocumentsPage(),
+        '/settings': (context) => SettingsPage(),
+        '/my_profiles': (context) => MyProfilesPage(),
+        '/authentication': (context) => AuthenticationPage(),
+        '/disclaimer': (context) => DisclaimerPage(),
+      },
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
     );
   }
 }

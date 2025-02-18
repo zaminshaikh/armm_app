@@ -20,6 +20,9 @@ class ProfileButtons extends StatelessWidget {
       children: [
         // Support Button
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
         GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, '/support');
@@ -33,6 +36,7 @@ class ProfileButtons extends StatelessWidget {
                 color: Colors.grey.shade300,
                 width: 1,
               ),
+<<<<<<< HEAD
             ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             child: Row(
@@ -64,29 +68,36 @@ class ProfileButtons extends StatelessWidget {
             border: Border.all(
               color: Colors.grey.shade300,
               width: 1,
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
             ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(
-                'assets/icons/support.svg',
-                width: 24,
-                height: 24,
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'Support',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/support.svg',
+                  width: 24,
+                  height: 24,
                 ),
+<<<<<<< HEAD
               ),
             ],
 >>>>>>> 8938814 (Changed File Structure of the Profile Page and its Components)
+=======
+                const SizedBox(width: 12),
+                const Text(
+                  'Support',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
           ),
         ),
         const SizedBox(height: 12),
@@ -95,6 +106,9 @@ class ProfileButtons extends StatelessWidget {
           children: [
             Expanded(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/documents');
@@ -107,6 +121,7 @@ class ProfileButtons extends StatelessWidget {
                       color: Colors.grey.shade300,
                       width: 1,
                     ),
+<<<<<<< HEAD
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   child: Row(
@@ -136,34 +151,44 @@ class ProfileButtons extends StatelessWidget {
                   border: Border.all(
                     color: Colors.grey.shade300,
                     width: 1,
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                   ),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/docs.svg',
-                      width: 24,
-                      height: 24,
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'Documents',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/docs.svg',
+                        width: 24,
+                        height: 24,
                       ),
+<<<<<<< HEAD
                     ),
                   ],
 >>>>>>> 8938814 (Changed File Structure of the Profile Page and its Components)
+=======
+                      const SizedBox(width: 12),
+                      const Text(
+                        'Documents',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                 ),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/settings');
@@ -176,6 +201,7 @@ class ProfileButtons extends StatelessWidget {
                       color: Colors.grey.shade300,
                       width: 1,
                     ),
+<<<<<<< HEAD
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   child: Row(
@@ -205,28 +231,35 @@ class ProfileButtons extends StatelessWidget {
                   border: Border.all(
                     color: Colors.grey.shade300,
                     width: 1,
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                   ),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/settings.svg',
-                      width: 24,
-                      height: 24,
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'Settings',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/settings.svg',
+                        width: 24,
+                        height: 24,
                       ),
+<<<<<<< HEAD
                     ),
                   ],
 >>>>>>> 8938814 (Changed File Structure of the Profile Page and its Components)
+=======
+                      const SizedBox(width: 12),
+                      const Text(
+                        'Settings',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                 ),
               ),
             ),
@@ -238,6 +271,9 @@ class ProfileButtons extends StatelessWidget {
           children: [
             Expanded(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/my_profiles');
@@ -250,6 +286,7 @@ class ProfileButtons extends StatelessWidget {
                       color: Colors.grey.shade300,
                       width: 1,
                     ),
+<<<<<<< HEAD
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   child: Row(
@@ -279,34 +316,44 @@ class ProfileButtons extends StatelessWidget {
                   border: Border.all(
                     color: Colors.grey.shade300,
                     width: 1,
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                   ),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/profile.svg',
-                      width: 20,
-                      height: 20,
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'My Profiles',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/profile.svg',
+                        width: 20,
+                        height: 20,
                       ),
+<<<<<<< HEAD
                     ),
                   ],
 >>>>>>> 8938814 (Changed File Structure of the Profile Page and its Components)
+=======
+                      const SizedBox(width: 12),
+                      const Text(
+                        'My Profiles',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                 ),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/authentication');
@@ -319,6 +366,7 @@ class ProfileButtons extends StatelessWidget {
                       color: Colors.grey.shade300,
                       width: 1,
                     ),
+<<<<<<< HEAD
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   child: Row(
@@ -348,28 +396,35 @@ class ProfileButtons extends StatelessWidget {
                   border: Border.all(
                     color: Colors.grey.shade300,
                     width: 1,
+=======
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                   ),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/auth.svg',
-                      width: 20,
-                      height: 20,
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'Authentication',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/auth.svg',
+                        width: 20,
+                        height: 20,
                       ),
+<<<<<<< HEAD
                     ),
                   ],
 >>>>>>> 8938814 (Changed File Structure of the Profile Page and its Components)
+=======
+                      const SizedBox(width: 12),
+                      const Text(
+                        'Authentication',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                 ),
               ),
             ),
@@ -407,10 +462,14 @@ class ProfileButtons extends StatelessWidget {
               GestureDetector(
                 onTap: () {
 <<<<<<< HEAD
+<<<<<<< HEAD
                   Navigator.pushNamed(context, '/disclaimer');
 =======
                   // Navigate to Real Full Disclaimer
 >>>>>>> 8938814 (Changed File Structure of the Profile Page and its Components)
+=======
+                  Navigator.pushNamed(context, '/disclaimer');
+>>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
