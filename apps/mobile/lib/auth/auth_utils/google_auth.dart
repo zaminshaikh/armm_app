@@ -2,7 +2,7 @@
 
 
 import 'package:armm_app/auth/login/login.dart';
-import 'package:armm_app/profile.dart';
+import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/signup_data.dart';
