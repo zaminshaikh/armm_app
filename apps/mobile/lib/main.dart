@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.blue,
-        fontFamily: 'MADE Tommy Soft',
+        fontFamily: 'Inter',
       ),
       home: OnboardingPage(signUpData: signUpData),
     );
