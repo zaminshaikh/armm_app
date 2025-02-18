@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:armm_app/utils/app_bar.dart';
 
 class MyProfilesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('My Profiles'),
+      appBar: CustomAppBar(
+        title: 'My Profiles',
+        implyLeading: true,
+        showNotificationButton: false,
       ),
       body: Center(
         child: Text('My Profiles Page'),

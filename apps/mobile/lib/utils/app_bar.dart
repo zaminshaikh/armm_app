@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onNotificationTap;
+  final bool implyLeading;
+  final bool showNotificationButton;
 
   const CustomAppBar({
     Key? key,
     required this.title,
     this.onNotificationTap,
+    this.implyLeading = false,
+    this.showNotificationButton = true,
   }) : super(key: key);
 
   @override
@@ -16,7 +20,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      iconTheme: const IconThemeData(color: Colors.white),
+      automaticallyImplyLeading: implyLeading,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(30),
@@ -33,19 +38,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       backgroundColor: const Color(0xFF2B41B8),
       centerTitle: true,
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 20.0),
-          child: IconButton(
-            icon: const Icon(
-              Icons.notifications_none,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: onNotificationTap ?? () {},
-          ),
-        ),
-      ],
+      actions: showNotificationButton
+          ? [
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.notifications_none,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  onPressed: onNotificationTap ?? () {},
+                ),
+              ),
+            ]
+          : null,
     );
   }
 }
