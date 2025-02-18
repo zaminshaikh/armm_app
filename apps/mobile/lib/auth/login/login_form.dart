@@ -12,7 +12,7 @@ import 'package:armm_app/screens/forgot_password/forgot_password.dart';
 import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
-import 'package:armm_app/profile.dart';
+import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/forgot_password/forgot_password.dart';

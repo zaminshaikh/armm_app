@@ -14,6 +14,7 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 <<<<<<< HEAD
 import 'package:armm_app/auth/login/login.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
@@ -35,6 +36,9 @@ import 'package:armm_app/client_info.dart';
 =======
 import 'package:armm_app/profile.dart';
 >>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
+=======
+import 'package:armm_app/screens/profile/profile.dart';
+>>>>>>> 0d00a21 (Modulated Profile Page for Simpler File Structure)
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/dashboard/home_page.dart';
