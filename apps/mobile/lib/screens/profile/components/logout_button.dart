@@ -7,6 +7,9 @@ class LogoutButton extends StatelessWidget {
   const LogoutButton({Key? key, this.onLogout}) : super(key: key);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0449d9d (Add confirmation dialog for logout action in LogoutButton)
   Future<void> _confirmLogout(BuildContext context) async {
     final shouldLogout = await showDialog<bool>(
       context: context,
@@ -37,8 +40,11 @@ class LogoutButton extends StatelessWidget {
     }
   }
 
+<<<<<<< HEAD
 =======
 >>>>>>> ab28c91 (Settings Page Complete)
+=======
+>>>>>>> 0449d9d (Add confirmation dialog for logout action in LogoutButton)
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -53,10 +59,14 @@ class LogoutButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
         ),
 <<<<<<< HEAD
+<<<<<<< HEAD
         onPressed: () => _confirmLogout(context),
 =======
         onPressed: onLogout ?? () {},
 >>>>>>> ab28c91 (Settings Page Complete)
+=======
+        onPressed: () => _confirmLogout(context),
+>>>>>>> 0449d9d (Add confirmation dialog for logout action in LogoutButton)
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -82,7 +92,11 @@ class LogoutButton extends StatelessWidget {
     );
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
 }
 >>>>>>> ab28c91 (Settings Page Complete)
+=======
+}
+>>>>>>> 0449d9d (Add confirmation dialog for logout action in LogoutButton)
