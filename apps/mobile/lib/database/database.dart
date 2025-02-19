@@ -51,42 +51,49 @@ class DatabaseService {
   /// Each user in Firestore has a document with a unique [uid] field. If the [uid] is found, the method fetches the [cid] and connected users from the document.
   
   static Future<DatabaseService?> fetchCID(String uid, BuildContext context) async {
+    print('fetchCID: Starting fetch for UID: $uid');
+    
+    // Create a new instance of DatabaseService using the provided uid.
     DatabaseService db = DatabaseService(uid);
-  
+    print('fetchCID: Created DatabaseService instance for UID: $uid');
+    
     // Access Firestore and get the document
-    QuerySnapshot querySnapshot =
-        await usersCollection.where('uid', isEqualTo: uid).get();
-  
+    QuerySnapshot querySnapshot = await usersCollection.where('uid', isEqualTo: uid).get();
+    print('fetchCID: Firestore query completed for UID: $uid');
+    
     if (querySnapshot.size > 0) {
-      log('database.dart: UID $uid found in Firestore.');
-  
+      print('fetchCID: UID $uid found in Firestore.');
+      
       // Document found, access the 'cid' field
       QueryDocumentSnapshot snapshot = querySnapshot.docs.first;
       db.cid = snapshot.id;
-  
+      print('fetchCID: Document found. CID set to: ${db.cid}');
+      
       // Cast snapshot.data() to Map<String, dynamic>
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-  
+      print('fetchCID: Document data cast to Map<String, dynamic>');
+      
       // Check if 'connectedUsers' field exists before trying to access it
       if (data.containsKey('connectedUsers')) {
         db.connectedUsersCIDs = data['connectedUsers'] ?? [];
+        print('fetchCID: connectedUsers field exists. Value: ${db.connectedUsersCIDs}');
       } else {
-        log('database.dart: Field "connectedUsers" does not exist in document.');
+        print('fetchCID: Field "connectedUsers" does not exist in document.');
         db.connectedUsersCIDs = []; // Or handle this case as needed
       }
-  
+      
       setSubCollections(db);
+      print('fetchCID: Sub-collections set for CID: ${db.cid}');
     } else {
-      log('database.dart: Document with UID $uid not found in Firestore.');
+      print('fetchCID: Document with UID $uid not found in Firestore.');
       // log('database.dart: User signed out.');
       // await FirebaseAuth.instance.signOut();
       return null;
     }
-  
+    
+    print('fetchCID: Returning DatabaseService instance for UID: $uid');
     return db;
   }
-
-
 
 
   /// Sets the sub-collections for the given [DatabaseService] instance.
