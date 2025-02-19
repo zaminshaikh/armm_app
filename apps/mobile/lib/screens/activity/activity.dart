@@ -266,11 +266,18 @@ class _ActivityPageState extends State<ActivityPage> {
     if (allClients.length == 1) {
       return const SizedBox(height: 0);
     }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     return SliverToBoxAdapter(
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
 =======
+=======
+  
+    // Define ARMM Blue color (update the hex value as needed)
+    const Color armmBlue = Color(0xFF2B41B8);
+  
+>>>>>>> 735f99e (Fixed Parent Name Row Buttons)
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
 >>>>>>> 1a0bccc (Made Custom Activity App Bar)
@@ -290,6 +297,7 @@ class _ActivityPageState extends State<ActivityPage> {
               padding: const EdgeInsets.only(right: 8.0),
               child: ElevatedButton.icon(
                 icon: SvgPicture.asset(
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -332,26 +340,31 @@ class _ActivityPageState extends State<ActivityPage> {
 >>>>>>> 1a0bccc (Made Custom Activity App Bar)
                   colorFilter: const ColorFilter.mode(
                     Colors.black,
+=======
+                  'assets/icons/group.svg',
+                  colorFilter: ColorFilter.mode(
+                    _allSelected ? Colors.white : Colors.grey,
+>>>>>>> 735f99e (Fixed Parent Name Row Buttons)
                     BlendMode.srcIn,
                   ),
-                  height: 18,
-                  width: 18,
+                  height: 24,
+                  width: 24,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      _allSelected ? Colors.white : const Color.fromARGB(255, 17, 24, 39),
+                  backgroundColor: _allSelected ? armmBlue : Colors.transparent,
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
-                      color: Colors.black,
-                      width: _allSelected ? 0 : 1,
+                      color: _allSelected ? armmBlue : Colors.grey,
+                      width: 1,
                     ),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
+                  elevation: 0,
                 ),
-                label: const Text(
+                label: Text(
                   'All',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: _allSelected ? Colors.white : Colors.grey,
                     fontSize: 15,
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -391,13 +404,18 @@ class _ActivityPageState extends State<ActivityPage> {
             // Individual Parent Buttons
             ...allClients.map((parentName) {
               bool isSelected = _clientsFilter.contains(parentName);
-
+  
               final rowChildren = <Widget>[
                 SvgPicture.asset(
                   'assets/icons/profile.svg',
+<<<<<<< HEAD
                   colorFilter: const ColorFilter.mode(
                     Colors.white,
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                  colorFilter: ColorFilter.mode(
+                    isSelected ? Colors.white : Colors.grey,
+>>>>>>> 735f99e (Fixed Parent Name Row Buttons)
                     BlendMode.srcIn,
                   ),
                   height: 18,
@@ -407,6 +425,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 Text(
                   parentName,
 <<<<<<< HEAD
+<<<<<<< HEAD
                   style: TextStyle(
                     color: isSelected ? Colors.white : Colors.grey,
                     fontSize: 16,
@@ -414,6 +433,10 @@ class _ActivityPageState extends State<ActivityPage> {
 =======
                   style: const TextStyle(
                     color: Colors.white,
+=======
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.grey,
+>>>>>>> 735f99e (Fixed Parent Name Row Buttons)
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
 <<<<<<< HEAD
@@ -432,6 +455,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   SvgPicture.asset(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     'assets/icons/x.svg',
 =======
                     'assets/icons/x_icon.svg',
@@ -439,10 +463,14 @@ class _ActivityPageState extends State<ActivityPage> {
 =======
                     'assets/icons/sort.svg',
 >>>>>>> a440029 (Removed All Font Issues)
+=======
+                    'assets/icons/x.svg',
+>>>>>>> 735f99e (Fixed Parent Name Row Buttons)
                     colorFilter: const ColorFilter.mode(
                       Colors.white,
                       BlendMode.srcIn,
                     ),
+<<<<<<< HEAD
 <<<<<<< HEAD
                     height: 20,
                     width: 20,
@@ -458,10 +486,19 @@ class _ActivityPageState extends State<ActivityPage> {
               ];
 
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                    height: 20,
+                    width: 20,
+                  ),
+                ],
+              ];
+  
+>>>>>>> 735f99e (Fixed Parent Name Row Buttons)
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                     backgroundColor:
@@ -485,14 +522,21 @@ class _ActivityPageState extends State<ActivityPage> {
 =======
                     backgroundColor: isSelected ? Colors.white : const Color.fromARGB(255, 17, 24, 39),
 >>>>>>> 1a0bccc (Made Custom Activity App Bar)
+=======
+                    backgroundColor: isSelected ? armmBlue : Colors.transparent,
+>>>>>>> 735f99e (Fixed Parent Name Row Buttons)
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: isSelected ? Colors.black : Colors.white,
-                        width: isSelected ? 0 : 1,
+                        color: isSelected ? armmBlue : Colors.grey,
+                        width: 1,
                       ),
                       borderRadius: BorderRadius.circular(20.0),
                     ),
+<<<<<<< HEAD
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                    elevation: 0,
+>>>>>>> 735f99e (Fixed Parent Name Row Buttons)
                   ),
                   onPressed: () {
                     setState(() {
