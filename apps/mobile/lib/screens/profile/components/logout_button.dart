@@ -6,6 +6,36 @@ class LogoutButton extends StatelessWidget {
   
   const LogoutButton({Key? key, this.onLogout}) : super(key: key);
 
+  Future<void> _confirmLogout(BuildContext context) async {
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text("Confirm Logout"),
+          content: const Text("Are you sure you want to log out?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(false);
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+              },
+              child: const Text("Log out"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldLogout == true && onLogout != null) {
+      onLogout!();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -19,7 +49,7 @@ class LogoutButton extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
         ),
-        onPressed: onLogout ?? () {},
+        onPressed: () => _confirmLogout(context),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
