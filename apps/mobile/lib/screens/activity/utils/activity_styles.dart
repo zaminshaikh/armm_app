@@ -78,14 +78,14 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
   switch (type) {
     case 'deposit':
       return SvgPicture.asset(
-        'assets/icons/deposit.svg',
+        'assets/icons/docs.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
       );
     case 'withdrawal':
       return SvgPicture.asset(
-        'assets/icons/withdrawal.svg',
+        'assets/icons/docs.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
@@ -93,10 +93,14 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
     case 'pending':
       return SvgPicture.asset(
 <<<<<<< HEAD
+<<<<<<< HEAD
         'assets/icons/profit.svg',
 =======
         'assets/icons/pending_withdrawal.svg',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+        'assets/icons/docs.svg',
+>>>>>>> a440029 (Removed All Font Issues)
         color: getActivityColor(type),
         height: size,
         width: size,
@@ -108,8 +112,12 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
         'assets/icons/profit.svg',
 =======
         
+<<<<<<< HEAD
         'assets/icons/variable_income.svg',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+        'assets/icons/docs.svg',
+>>>>>>> a440029 (Removed All Font Issues)
         color: getActivityColor(type),
         height: size,
         width: size,

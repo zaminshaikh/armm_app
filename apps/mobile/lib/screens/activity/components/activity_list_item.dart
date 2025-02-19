@@ -108,8 +108,12 @@ class ActivityListItem extends StatelessWidget {
             fontSize: 18,
             color: Colors.white,
             fontWeight: FontWeight.w600,
+<<<<<<< HEAD
             fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            
+>>>>>>> a440029 (Removed All Font Issues)
           ),
         ),
         const SizedBox(height: 5),
@@ -126,8 +130,12 @@ class ActivityListItem extends StatelessWidget {
             fontSize: 15,
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
+<<<<<<< HEAD
             fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            
+>>>>>>> a440029 (Removed All Font Issues)
           ),
         ),
       ],
@@ -152,10 +160,14 @@ class ActivityListItem extends StatelessWidget {
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
 <<<<<<< HEAD
+<<<<<<< HEAD
             
 =======
             fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            
+>>>>>>> a440029 (Removed All Font Issues)
           ),
         ),
       ),
@@ -177,11 +189,11 @@ class ActivityListItem extends StatelessWidget {
             style: const TextStyle(
               fontSize: 13,
               color: Colors.white,
-              fontFamily: 'Titillium Web',
+              
             ),
           ),
           SvgPicture.asset(
-            'assets/icons/line.svg',
+            'assets/icons/docs.svg',
             color: Colors.white,
             height: 15,
           ),
@@ -191,7 +203,7 @@ class ActivityListItem extends StatelessWidget {
               fontSize: 13,
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontFamily: 'Titillium Web',
+              
             ),
           ),
         ],

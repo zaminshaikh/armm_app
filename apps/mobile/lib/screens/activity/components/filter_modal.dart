@@ -135,9 +135,13 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                             fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                            
+>>>>>>> a440029 (Removed All Font Issues)
                           ),
                         ),
                       ),
@@ -223,9 +227,13 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                
+>>>>>>> a440029 (Removed All Font Issues)
               ),
             ),
           ),
@@ -255,9 +263,13 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               color: Colors.white,
               fontWeight: FontWeight.w600,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
               fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+              
+>>>>>>> a440029 (Removed All Font Issues)
             ),
           ),
           iconColor: Colors.white,
@@ -289,9 +301,13 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
             fontSize: 16.0,
             color: Colors.white,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            
+>>>>>>> a440029 (Removed All Font Issues)
           ),
         ),
         activeColor: Colors.black,
@@ -361,11 +377,15 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
 <<<<<<< HEAD
+<<<<<<< HEAD
                   ),
                 ),
                 onPressed: () {
 =======
                     fontFamily: 'Titillium Web',
+=======
+                    
+>>>>>>> a440029 (Removed All Font Issues)
                   ),
                 ),
                 onPressed: () {
@@ -408,9 +428,13 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                         fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                        
+>>>>>>> a440029 (Removed All Font Issues)
                       ),
                     ),
                   ],

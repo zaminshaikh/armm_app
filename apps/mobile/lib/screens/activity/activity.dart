@@ -263,6 +263,7 @@ class _ActivityPageState extends State<ActivityPage> {
               child: ElevatedButton.icon(
                 icon: SvgPicture.asset(
 <<<<<<< HEAD
+<<<<<<< HEAD
                   'assets/icons/group.svg',
                   colorFilter: ColorFilter.mode(
                     _allSelected ? Colors.white : Colors.grey,
@@ -294,6 +295,9 @@ class _ActivityPageState extends State<ActivityPage> {
                     fontSize: 15,
 =======
                   'assets/icons/group_people.svg',
+=======
+                  'assets/icons/sort.svg',
+>>>>>>> a440029 (Removed All Font Issues)
                   colorFilter: const ColorFilter.mode(
                     Colors.white,
                     BlendMode.srcIn,
@@ -318,8 +322,12 @@ class _ActivityPageState extends State<ActivityPage> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
+<<<<<<< HEAD
                     fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                    
+>>>>>>> a440029 (Removed All Font Issues)
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -349,7 +357,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
               final rowChildren = <Widget>[
                 SvgPicture.asset(
-                  'assets/icons/single_person.svg',
+                  'assets/icons/profile.svg',
                   colorFilter: const ColorFilter.mode(
                     Colors.white,
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
@@ -371,18 +379,26 @@ class _ActivityPageState extends State<ActivityPage> {
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+<<<<<<< HEAD
                     fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                    
+>>>>>>> a440029 (Removed All Font Issues)
                   ),
                 ),
                 if (isSelected) ...[
                   const SizedBox(width: 15),
                   SvgPicture.asset(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     'assets/icons/x.svg',
 =======
                     'assets/icons/x_icon.svg',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                    'assets/icons/sort.svg',
+>>>>>>> a440029 (Removed All Font Issues)
                     colorFilter: const ColorFilter.mode(
                       Colors.white,
                       BlendMode.srcIn,
@@ -505,7 +521,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 fontSize: 20,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Titillium Web',
+                
               ),
             ),
           ),

@@ -120,7 +120,7 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
                         fontSize: 27,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Titillium Web',
+                        
                       ),
                     ),
                     Spacer(),
@@ -157,7 +157,7 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
   /// Builds the Filter button. You can style it however you wish.
   Widget _buildFilterButton() => ElevatedButton.icon(
         icon: SvgPicture.asset(
-          'assets/icons/filter.svg',
+          'assets/icons/sort.svg',
           colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
           height: 22,
@@ -192,8 +192,12 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
             color: Colors.black,
             fontWeight: FontWeight.bold,
             fontSize: 18,
+<<<<<<< HEAD
             fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            
+>>>>>>> a440029 (Removed All Font Issues)
           ),
         ),
         onPressed: widget.onFilterPressed,
@@ -239,8 +243,12 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
             color: Colors.black,
             fontWeight: FontWeight.bold,
             fontSize: 18,
+<<<<<<< HEAD
             fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            
+>>>>>>> a440029 (Removed All Font Issues)
           ),
         ),
         onPressed: widget.onSortPressed,

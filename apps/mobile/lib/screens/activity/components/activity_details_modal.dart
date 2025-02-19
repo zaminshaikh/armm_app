@@ -97,8 +97,12 @@ class ActivityDetailsModal extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 25.0),
               child: SvgPicture.asset(
+<<<<<<< HEAD
                 'assets/icons/agq_logo.svg',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                'assets/icons/ARMM_Logo.svg',
+>>>>>>> a440029 (Removed All Font Issues)
                 width: 40,
                 height: 40,
               ),
@@ -113,8 +117,12 @@ class ActivityDetailsModal extends StatelessWidget {
               
 =======
               color: Colors.white,
+<<<<<<< HEAD
               fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+              
+>>>>>>> a440029 (Removed All Font Issues)
             ),
           ),
         ],
@@ -131,10 +139,14 @@ class ActivityDetailsModal extends StatelessWidget {
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
 <<<<<<< HEAD
+<<<<<<< HEAD
             
 =======
             fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            
+>>>>>>> a440029 (Removed All Font Issues)
           ),
         ),
         const SizedBox(height: 15),
@@ -150,8 +162,12 @@ class ActivityDetailsModal extends StatelessWidget {
               
 =======
               color: Colors.white,
+<<<<<<< HEAD
               fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+              
+>>>>>>> a440029 (Removed All Font Issues)
             ),
           ),
         ),
@@ -169,10 +185,14 @@ class ActivityDetailsModal extends StatelessWidget {
                   color: getActivityColor(activity.type),
                   fontWeight: FontWeight.bold,
 <<<<<<< HEAD
+<<<<<<< HEAD
                   
 =======
                   fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                  
+>>>>>>> a440029 (Removed All Font Issues)
                 ),
               ),
             ],
@@ -182,10 +202,14 @@ class ActivityDetailsModal extends StatelessWidget {
         _buildModalDetailSection(
           icon: SvgPicture.asset(
 <<<<<<< HEAD
+<<<<<<< HEAD
             'assets/icons/docs.svg',
 =======
             'assets/icons/activity_description.svg',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            'assets/icons/docs.svg',
+>>>>>>> a440029 (Removed All Font Issues)
             color: getActivityColor(activity.type),
           ),
           title: 'Description',
@@ -202,8 +226,12 @@ class ActivityDetailsModal extends StatelessWidget {
         const Divider(color: Colors.white, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
+<<<<<<< HEAD
             'assets/icons/activity_date.svg',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            'assets/icons/docs.svg',
+>>>>>>> a440029 (Removed All Font Issues)
             color: getActivityColor(activity.type),
           ),
           title: 'Date',
@@ -220,8 +248,12 @@ class ActivityDetailsModal extends StatelessWidget {
         const Divider(color: Colors.white, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
+<<<<<<< HEAD
             'assets/icons/activity_user.svg',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+            'assets/icons/docs.svg',
+>>>>>>> a440029 (Removed All Font Issues)
             color: getActivityColor(activity.type),
           ),
           title: 'Recipient',
@@ -282,8 +314,12 @@ class ActivityDetailsModal extends StatelessWidget {
 =======
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
+<<<<<<< HEAD
                       fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                      
+>>>>>>> a440029 (Removed All Font Issues)
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -296,8 +332,12 @@ class ActivityDetailsModal extends StatelessWidget {
                       
 =======
                       color: Colors.white,
+<<<<<<< HEAD
                       fontFamily: 'Titillium Web',
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                      
+>>>>>>> a440029 (Removed All Font Issues)
                     ),
                   ),
                 ],

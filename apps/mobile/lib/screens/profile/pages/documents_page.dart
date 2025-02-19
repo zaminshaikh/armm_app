@@ -855,7 +855,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
               placeholder: 'Search PDF files',
               style: const TextStyle(
                 color: Colors.black,
-                fontFamily: 'Titillium Web',
+                
               ),
             ),
           ),
@@ -983,7 +983,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                     'There are no documents available.',
                     style: TextStyle(
                       color: Colors.black,
-                      fontFamily: 'Titillium Web',
+                      
                       fontSize: 20,
                     ),
                   ),
@@ -1019,7 +1019,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                               filteredPdfFiles[index].name,
                                               style: const TextStyle(
                                                 color: Colors.black,
-                                                fontFamily: 'Titillium Web',
+                                                
                                               ),
                                             ),
                                             subtitle: const Text('Loading...'),
@@ -1030,7 +1030,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                               filteredPdfFiles[index].name,
                                               style: const TextStyle(
                                                 color: Colors.black,
-                                                fontFamily: 'Titillium Web',
+                                                
                                               ),
                                             ),
                                             subtitle: const Text('Error loading metadata'),
@@ -1044,7 +1044,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                               filteredPdfFiles[index].name,
                                               style: const TextStyle(
                                                 color: Colors.black,
-                                                fontFamily: 'Titillium Web',
+                                                
                                               ),
                                             ),
                                             subtitle: Text(
@@ -1053,7 +1053,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                                   : 'Date not available',
                                               style: const TextStyle(
                                                 color: Colors.black,
-                                                fontFamily: 'Titillium Web',
+                                                
                                               ),
                                             ),
                                             onTap: () async {
@@ -1126,7 +1126,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                     fontSize: 27,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Titillium Web',
+                    
                   ),
                 ),
               ],

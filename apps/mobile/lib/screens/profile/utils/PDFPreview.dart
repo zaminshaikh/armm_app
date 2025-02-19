@@ -17,10 +17,14 @@ class PDFScreen extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
 <<<<<<< HEAD
+<<<<<<< HEAD
             
 =======
             fontFamily: 'Titillium Web',
 >>>>>>> d161894 (Documents Are Pulling Properly)
+=======
+            
+>>>>>>> a440029 (Removed All Font Issues)
           ),
         ),
       ),
