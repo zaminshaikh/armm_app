@@ -1,3 +1,4 @@
+import 'package:armm_app/screens/activity/activity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,8 +24,16 @@ class BottomNavBar extends StatelessWidget {
         isSelected ? iconAsset.replaceAll('_hollow', '') : iconAsset;
     return GestureDetector(
       onTap: () {
-        // Do nothing if it's already the current page.
-        if (!isSelected) onItemTapped(index);
+        // For Activities icon, navigate to the Activity Page.
+        if (index == 2) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ActivityPage(),
+            ),
+          );
+        } else if (!isSelected) {
+          onItemTapped(index);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -99,7 +108,7 @@ class BottomNavBar extends StatelessWidget {
               _buildNavItem(
                 context: context,
                 index: 3,
-                iconAsset: 'assets/icons/profile_hollow.svg', // adjust if necessary
+                iconAsset: 'assets/icons/profile_hollow.svg',
                 label: 'Profile',
               ),
             ],
