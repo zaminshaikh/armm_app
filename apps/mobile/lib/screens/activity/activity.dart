@@ -163,9 +163,11 @@ class _ActivityPageState extends State<ActivityPage> {
         return null;
       }
       final activity = activities[activityIndex];
-      return _buildActivityWithDayHeader(activity, activityIndex);
+      return _buildActivity(activity, true);
     }
   }
+
+
 
   /// Builds a horizontal scrollable row of buttons for each parent name.
   Widget _buildParentNameButtons() {
@@ -314,17 +316,6 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
-
-
-
-
-
-
-
-  /// Builds an activity item without day headers.
-  Widget _buildActivityWithDayHeader(Activity activity, int index) {
-    return _buildActivity(activity, true);
-  }
 
   /// Builds an individual activity item.
   Widget _buildActivity(Activity activity, bool showBorder) => Container(
