@@ -73,6 +73,7 @@ class LoginForm extends StatelessWidget {
         context,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         MaterialPageRoute(builder: (_) => const ProfilePage()),
 =======
         MaterialPageRoute(builder: (_) => ClientInfoPage(cid: "")),
@@ -80,6 +81,9 @@ class LoginForm extends StatelessWidget {
 =======
         MaterialPageRoute(builder: (_) => ProfilePage(cid: "")),
 >>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
+=======
+        MaterialPageRoute(builder: (_) => ProfilePage()),
+>>>>>>> 1a0bccc (Made Custom Activity App Bar)
       );
 
       return true;

@@ -92,6 +92,7 @@ class GoogleAuthService {
         context,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         MaterialPageRoute(builder: (context) => const DashboardPage()),
 =======
         MaterialPageRoute(builder: (context) => const ClientInfoPage(cid: '12345678',)),
@@ -99,6 +100,9 @@ class GoogleAuthService {
 =======
         MaterialPageRoute(builder: (context) => const ProfilePage(cid: '12345678',)),
 >>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
+=======
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
+>>>>>>> 1a0bccc (Made Custom Activity App Bar)
       );
 
       return userCredential;
@@ -305,6 +309,7 @@ class GoogleAuthService {
           pageBuilder: (context, animation, secondaryAnimation) =>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
               const DashboardPage(),
 =======
               ClientInfoPage(cid: cid),
@@ -312,6 +317,9 @@ class GoogleAuthService {
 =======
               ProfilePage(cid: cid),
 >>>>>>> 05a2cb1 (Profile Page UI Elements Have Been Added)
+=======
+              ProfilePage(),
+>>>>>>> 1a0bccc (Made Custom Activity App Bar)
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               child,
         ),

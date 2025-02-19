@@ -222,7 +222,7 @@ class _MyAppState extends State<MyApp> {
               theme: _buildAppTheme(), // your app theme function
               home: OnboardingPage(signUpData: signUpData),
               routes: {
-                '/profile': (context) => ProfilePage(cid: signUpData.cid,),
+                '/profile': (context) => ProfilePage(),
                 '/support': (context) => SupportPage(),
                 '/documents': (context) => DocumentsPage(),
                 '/settings': (context) => SettingsPage(),
