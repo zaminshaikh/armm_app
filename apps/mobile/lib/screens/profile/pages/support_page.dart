@@ -130,12 +130,6 @@ class SupportPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: FAQSection(),
             ),
-            const Center(
-              child: Text(
-                'Support Page',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
           ],
         ),
       ),
