@@ -8,6 +8,7 @@ import 'package:armm_app/screens/activity/components/no_activities_body.dart';
 import 'package:armm_app/screens/activity/components/sort_modal.dart';
 import 'package:armm_app/screens/activity/utils/filter_activities.dart';
 import 'package:armm_app/screens/activity/utils/sort_activities.dart';
+import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +25,7 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
+  int _selectedIndex = 2;
   Client? client;
   List<Activity> activities = [];
   List<String> allRecipients = [];
@@ -67,6 +69,13 @@ class _ActivityPageState extends State<ActivityPage> {
     }
   }
 
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -76,7 +85,7 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     }
 
     // Retrieve activities and recipients
@@ -87,37 +96,35 @@ class _ActivityPageState extends State<ActivityPage> {
         selectedDates);
     sortActivities(activities, _order);
 
+    // Build list children manually (replacing slivers)
+    List<Widget> listChildren = [];
+    listChildren.add(const SizedBox(height: 10));
+    listChildren.add(_buildParentNameButtons());
+    // Build each list item using _buildListContent
+    final int childCount = activities.isEmpty ? 2 : activities.length + 1;
+    for (int index = 0; index < childCount; index++) {
+      final widgetItem = _buildListContent(context, index);
+      if (widgetItem != null) {
+        listChildren.add(widgetItem);
+      }
+    }
+    listChildren.add(const SizedBox(height: 150));
+
     return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: <Widget>[
-              // Pass the callbacks for Filter & Sort to the AppBar
-              ActivityAppBar(
-                client: client!,
-                onFilterPressed: () => _showFilterModal(context),
-                onSortPressed: () => _showSortModal(context),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 10)),
-              _buildParentNameButtons(),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => _buildListContent(context, index),
-                  // Notice we no longer build the filter/sort row in the list:
-                  // the childCount changes accordingly
-                  childCount: activities.isEmpty ? 2 : activities.length + 1,
-                ),
-              ),
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 150.0),
-              ),
-            ],
-          ),
-        ],
+      appBar: ActivityAppBar(
+        client: client!,
+        onFilterPressed: () => _showFilterModal(context),
+        onSortPressed: () => _showSortModal(context),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.only(top: 0),
+        children: listChildren,
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentItem: NavigationItem.activity,
       ),
     );
   }
-  
 
   /// Retrieves activities and recipients from the client and connected users.
   void _retrieveActivitiesAndRecipients() {
@@ -143,13 +150,11 @@ class _ActivityPageState extends State<ActivityPage> {
         .toSet()
         // convert back to a list
         .toList();
-
   }
 
   /// Builds the content of the list based on the index.
   Widget? _buildListContent(BuildContext context, int index) {
-    // We removed the index == 0 filter/sort row check 
-    // because it is now in the AppBar
+    // With the filter/sort row removed from the list (it's now in the AppBar)
     if (activities.isEmpty && index == 0) {
       return buildNoActivityMessage();
     } else {
@@ -165,35 +170,34 @@ class _ActivityPageState extends State<ActivityPage> {
   /// Builds a horizontal scrollable row of buttons for each parent name.
   Widget _buildParentNameButtons() {
     if (allClients.length == 1) {
-      return const SliverToBoxAdapter(child: SizedBox(height: 0));
+      return const SizedBox(height: 0);
     }
 
-    return SliverToBoxAdapter(
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            const SizedBox(width: 20),
             // "All" Button
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: ElevatedButton.icon(
                 icon: SvgPicture.asset(
-                  'assets/icons/sort.svg',
+                  'assets/icons/filter.svg',
                   colorFilter: const ColorFilter.mode(
-                    Colors.white,
+                    Colors.black,
                     BlendMode.srcIn,
                   ),
                   height: 18,
                   width: 18,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _allSelected
-                      ? Colors.white
-                      : const Color.fromARGB(255, 17, 24, 39),
+                  backgroundColor:
+                      _allSelected ? Colors.white : const Color.fromARGB(255, 17, 24, 39),
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
-                      color: Colors.white,
+                      color: Colors.black,
                       width: _allSelected ? 0 : 1,
                     ),
                     borderRadius: BorderRadius.circular(20.0),
@@ -202,9 +206,8 @@ class _ActivityPageState extends State<ActivityPage> {
                 label: const Text(
                   'All',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 15,
-                    
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -216,7 +219,6 @@ class _ActivityPageState extends State<ActivityPage> {
                 },
               ),
             ),
-
             // Individual Parent Buttons
             ...allClients.map((parentName) {
               bool isSelected = _clientsFilter.contains(parentName);
@@ -238,7 +240,6 @@ class _ActivityPageState extends State<ActivityPage> {
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    
                   ),
                 ),
                 if (isSelected) ...[
@@ -259,14 +260,10 @@ class _ActivityPageState extends State<ActivityPage> {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isSelected
-                        ? Colors.white
-                        : const Color.fromARGB(255, 17, 24, 39),
+                    backgroundColor: isSelected ? Colors.white : const Color.fromARGB(255, 17, 24, 39),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: isSelected
-                            ? Colors.black
-                            : Colors.white,
+                        color: isSelected ? Colors.black : Colors.white,
                         width: isSelected ? 0 : 1,
                       ),
                       borderRadius: BorderRadius.circular(20.0),
@@ -303,66 +300,25 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
-
-
-  /// Builds an activity item with a day header if necessary.
+  /// Builds an activity item without day headers.
   Widget _buildActivityWithDayHeader(Activity activity, int index) {
-    final activityDate = activity.time;
-    final previousActivityDate = index > 0 ? activities[index - 1].time : null;
-    final nextActivityDate =
-        index < activities.length - 1 ? activities[index + 1].time : null;
-
-    bool isLastActivityForTheDay =
-        nextActivityDate == null || !isSameDay(activityDate, nextActivityDate);
-
-    bool isFirstVisibleActivityOfTheDay = previousActivityDate == null ||
-        !isSameDay(activityDate, previousActivityDate);
-
-    List<Widget> widgets = [];
-
-    if (isFirstVisibleActivityOfTheDay) {
-      widgets.add(
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 25.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              dayHeaderFormat.format(activityDate),
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    widgets.add(_buildActivity(activity, !isLastActivityForTheDay));
-
-    return Column(
-      children: widgets,
-    );
+    return _buildActivity(activity, true);
   }
 
   /// Builds an individual activity item.
-  Widget _buildActivity(Activity activity, bool showDivider) => Column(
-        children: [
-          ActivityListItem(
-            activity: activity,
-            onTap: () => _showActivityDetailsModal(context, activity),
+  Widget _buildActivity(Activity activity, bool showBorder) => Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: const Color.fromARGB(255, 132, 132, 132),
+              width: showBorder ? 1.0 : 0.0,
+            ),
           ),
-          if (showDivider)
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              child: Divider(
-                color: Color.fromARGB(255, 132, 132, 132),
-                thickness: 0.2,
-              ),
-            )
-        ],
+        ),
+        child: ActivityListItem(
+          activity: activity,
+          onTap: () => _showActivityDetailsModal(context, activity),
+        ),
       );
 
   /// Shows the activity details modal.
@@ -376,7 +332,6 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
-  
   /// Shows the filter modal.
   void _showFilterModal(BuildContext context) {
     showModalBottomSheet(
@@ -412,7 +367,6 @@ class _ActivityPageState extends State<ActivityPage> {
               _allSelected = _clientsFilter.isEmpty;
             }
           });
-          
           // Re-apply filtering as needed
           filterActivities(activities, _typeFilter, _recipientsFilter,
               _clientsFilter, selectedDates);

@@ -1,40 +1,55 @@
 import 'package:armm_app/screens/activity/activity.dart';
+import 'package:armm_app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+enum NavigationItem { dashboard, analytics, activity, profile }
+
 class BottomNavBar extends StatelessWidget {
-  final int selectedIndex; // current page index
-  final Function(int) onItemTapped;
+  final NavigationItem currentItem;
 
   const BottomNavBar({
     Key? key,
-    required this.selectedIndex,
-    required this.onItemTapped,
+    required this.currentItem,
   }) : super(key: key);
+
+  void _onItemTapped(BuildContext context, NavigationItem item) {
+    if (item == currentItem) return;
+    Widget page;
+    switch (item) {
+      case NavigationItem.dashboard:
+        page = const ActivityPage();
+        break;
+      case NavigationItem.analytics:
+        page = const ActivityPage();
+        break;
+      case NavigationItem.activity:
+        page = const ActivityPage();
+        break;
+      case NavigationItem.profile:
+        page = const ProfilePage();
+        break;
+    }
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
+      ),
+    );
+  }
 
   Widget _buildNavItem({
     required BuildContext context,
-    required int index,
+    required NavigationItem item,
     required String iconAsset, // pass the hollow version, e.g. "assets/icons/dashboard_hollow.svg"
     required String label,
   }) {
-    final bool isSelected = selectedIndex == index;
-    // Use filled version when selected: remove "_hollow" from the file name.
+    final bool isSelected = currentItem == item;
     final String displayedIconAsset =
         isSelected ? iconAsset.replaceAll('_hollow', '') : iconAsset;
     return GestureDetector(
-      onTap: () {
-        // For Activities icon, navigate to the Activity Page.
-        if (index == 2) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ActivityPage(),
-            ),
-          );
-        } else if (!isSelected) {
-          onItemTapped(index);
-        }
-      },
+      onTap: () => _onItemTapped(context, item),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
@@ -89,25 +104,25 @@ class BottomNavBar extends StatelessWidget {
             children: [
               _buildNavItem(
                 context: context,
-                index: 0,
+                item: NavigationItem.dashboard,
                 iconAsset: 'assets/icons/dashboard_hollow.svg',
                 label: 'Dashboard',
               ),
               _buildNavItem(
                 context: context,
-                index: 1,
+                item: NavigationItem.analytics,
                 iconAsset: 'assets/icons/analytics_hollow.svg',
                 label: 'Analytics',
               ),
               _buildNavItem(
                 context: context,
-                index: 2,
+                item: NavigationItem.activity,
                 iconAsset: 'assets/icons/activities_hollow.svg',
                 label: 'Activities',
               ),
               _buildNavItem(
                 context: context,
-                index: 3,
+                item: NavigationItem.profile,
                 iconAsset: 'assets/icons/profile_hollow.svg',
                 label: 'Profile',
               ),

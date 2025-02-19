@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:armm_app/client_model.dart';
+import 'package:provider/provider.dart';
+import 'package:armm_app/database/models/client_model.dart';
 
 class NameAndCID extends StatelessWidget {
-  final Client client;
-  final String cid;
-
-  const NameAndCID({
-    Key? key,
-    required this.client,
-    required this.cid,
-  }) : super(key: key);
+  const NameAndCID({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final client = Provider.of<Client?>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -21,7 +16,7 @@ class NameAndCID extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${client.firstName} ${client.lastName}",
+              "${client?.firstName} ${client?.lastName}",
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -29,8 +24,8 @@ class NameAndCID extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Client ID: $cid',
-              style: TextStyle(
+              'Client ID: ${client?.cid}',
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
