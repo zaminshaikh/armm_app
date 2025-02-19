@@ -142,12 +142,17 @@ class Client {
       cid: data['cid'] ?? cid ?? '',
       uid: data['uid'] ?? '',
 <<<<<<< HEAD
+<<<<<<< HEAD
       firstName: data['firstName'] ?? '', 
       lastName: data['lastName'] ?? '',   
 =======
       firstName: data['name']?['first'] ?? '',
       lastName: data['name']?['last'] ?? '',
 >>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
+=======
+      firstName: data['firstName'] ?? '', 
+      lastName: data['lastName'] ?? '',   
+>>>>>>> 9c4cce8 (Updated Client Model and Completed Profiles Page)
       companyName: data['name']?['company'] ?? '',
       address: data['address'] ?? '',
       dob: (data['dob'] as Timestamp?)?.toDate(),
