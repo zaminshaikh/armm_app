@@ -109,8 +109,8 @@ flutter:
   fonts:
     - family: Inter
       fonts:
-        - asset: fonts/Inter.ttf
-        - asset: fonts/Inter-Italic.ttf
+        - asset: assets/fonts/Inter.ttf
+        - asset: assets/fonts/Inter-Italic.ttf
           style: italic
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
