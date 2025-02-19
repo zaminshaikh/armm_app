@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'logout_button.dart'; // import the new logout button
 =======
 >>>>>>> 8938814 (Changed File Structure of the Profile Page and its Components)
+=======
+import 'logout_button.dart'; // import the new logout button
+>>>>>>> ab28c91 (Settings Page Complete)
 
 class ProfileButtons extends StatelessWidget {
   final VoidCallback onLogout;
@@ -497,6 +501,7 @@ class ProfileButtons extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 <<<<<<< HEAD
+<<<<<<< HEAD
         // Log out button now uses the custom LogoutButton widget
         LogoutButton(onLogout: onLogout),
 =======
@@ -537,6 +542,10 @@ class ProfileButtons extends StatelessWidget {
           ),
         ),
 >>>>>>> 8938814 (Changed File Structure of the Profile Page and its Components)
+=======
+        // Log out button now uses the custom LogoutButton widget
+        LogoutButton(onLogout: onLogout),
+>>>>>>> ab28c91 (Settings Page Complete)
       ],
     );
   }
