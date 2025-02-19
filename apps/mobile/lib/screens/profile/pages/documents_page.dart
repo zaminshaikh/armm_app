@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/profile/utils/PDFPreview.dart';
 import 'package:armm_app/screens/profile/utils/downloadmethod.dart';
+import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart'; // Added for CupertinoSearchTextField
@@ -186,8 +187,6 @@ class _DocumentsPageState extends State<DocumentsPage> {
     print('Connected users PDF files listed.');
   }
 
-
-
   void printCombinedPdfFiles() {
     // Combine the lists of PDF files from the current user and connected users
     final combinedPdfFiles = allFiles.map((file) => file.name).toList();
@@ -249,25 +248,18 @@ class _DocumentsPageState extends State<DocumentsPage> {
 
   Scaffold buildDocumentsPage() {
     return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: <Widget>[
-              _buildAppBar(context),
-              SliverPadding(
-                padding: const EdgeInsets.all(0.0),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      _buildSearchAndSortBar(context),
-                      _documents(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'Documents',
+        implyLeading: true,
+        showNotificationButton: false,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildSearchAndSortBar(context),
+            _documents(),
+          ],
+        ),
       ),
     );
   }
@@ -287,7 +279,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
               },
               placeholder: 'Search PDF files',
               style: const TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontFamily: 'Titillium Web',
               ),
             ),
@@ -300,25 +292,25 @@ class _DocumentsPageState extends State<DocumentsPage> {
   }
 
   Widget _buildSortButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         _showSortOptions(context);
       },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        splashFactory: NoSplash.splashFactory,
-      ),
-      child: SvgPicture.asset(
-        'assets/icons/docs.svg',
-        color: Colors.white,
-        width: 24.0,
-        height: 24.0,
+        child: SvgPicture.asset(
+          'assets/icons/sort.svg',
+          color: Color(0xFF2B41B8),
+          width: 35.0,
+          height: 35.0,
+        ),
       ),
     );
   }
+
 
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
@@ -343,7 +335,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                   ],
@@ -361,7 +353,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                         SizedBox(width: 8.0),
                         Text(
                           'New to Old',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ],
                     ),
@@ -383,7 +375,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                         SizedBox(width: 8.0),
                         Text(
                           'Old to New',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ],
                     ),
@@ -415,7 +407,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                   child: Text(
                     'There are no documents available.',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontFamily: 'Titillium Web',
                       fontSize: 20,
                     ),
@@ -451,7 +443,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                             title: Text(
                                               filteredPdfFiles[index].name,
                                               style: const TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 fontFamily: 'Titillium Web',
                                               ),
                                             ),
@@ -462,7 +454,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                             title: Text(
                                               filteredPdfFiles[index].name,
                                               style: const TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 fontFamily: 'Titillium Web',
                                               ),
                                             ),
@@ -476,7 +468,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                             title: Text(
                                               filteredPdfFiles[index].name,
                                               style: const TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 fontFamily: 'Titillium Web',
                                               ),
                                             ),
@@ -485,7 +477,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                                   ? 'Added on: ${DateFormat('MMMM dd, yyyy').format(dateAdded.toLocal())}'
                                                   : 'Date not available',
                                               style: const TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 fontFamily: 'Titillium Web',
                                               ),
                                             ),
@@ -501,10 +493,10 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                             },
                                             trailing: IconButton(
                                               icon: SvgPicture.asset(
-                                                'assets/icons/docs.svg',
-                                                width: 24,
-                                                height: 24,
-                                                color: Colors.blue
+                                                'assets/icons/download.svg',
+                                                width: 30,
+                                                height: 30,
+                                                color: Colors.grey
                                               ),
                                               onPressed: () {
                                                 shareFile(context, client!.cid, filteredPdfFiles[index].name);
