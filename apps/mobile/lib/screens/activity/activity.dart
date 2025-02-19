@@ -196,7 +196,8 @@ class _ActivityPageState extends State<ActivityPage> {
                   width: 24,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _allSelected ? armmBlue : Colors.transparent,
+                  backgroundColor:
+                      _allSelected ? armmBlue : Colors.transparent,
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
                       color: _allSelected ? armmBlue : Colors.grey,
@@ -205,6 +206,10 @@ class _ActivityPageState extends State<ActivityPage> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   elevation: 0,
+                ).copyWith(
+                  splashFactory: NoSplash.splashFactory,
+                  overlayColor:
+                      MaterialStateProperty.all(Colors.transparent),
                 ),
                 label: Text(
                   'All',
@@ -263,7 +268,8 @@ class _ActivityPageState extends State<ActivityPage> {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isSelected ? armmBlue : Colors.transparent,
+                    backgroundColor:
+                        isSelected ? armmBlue : Colors.transparent,
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
                         color: isSelected ? armmBlue : Colors.grey,
@@ -272,6 +278,10 @@ class _ActivityPageState extends State<ActivityPage> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     elevation: 0,
+                  ).copyWith(
+                    splashFactory: NoSplash.splashFactory,
+                    overlayColor:
+                        MaterialStateProperty.all(Colors.transparent),
                   ),
                   onPressed: () {
                     setState(() {
@@ -303,6 +313,13 @@ class _ActivityPageState extends State<ActivityPage> {
       ),
     );
   }
+
+
+
+
+
+
+
 
   /// Builds an activity item without day headers.
   Widget _buildActivityWithDayHeader(Activity activity, int index) {
