@@ -172,7 +172,10 @@ class _ActivityPageState extends State<ActivityPage> {
     if (allClients.length == 1) {
       return const SizedBox(height: 0);
     }
-
+  
+    // Define ARMM Blue color (update the hex value as needed)
+    const Color armmBlue = Color(0xFF2B41B8);
+  
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
       child: SingleChildScrollView(
@@ -184,29 +187,29 @@ class _ActivityPageState extends State<ActivityPage> {
               padding: const EdgeInsets.only(right: 8.0),
               child: ElevatedButton.icon(
                 icon: SvgPicture.asset(
-                  'assets/icons/filter.svg',
-                  colorFilter: const ColorFilter.mode(
-                    Colors.black,
+                  'assets/icons/group.svg',
+                  colorFilter: ColorFilter.mode(
+                    _allSelected ? Colors.white : Colors.grey,
                     BlendMode.srcIn,
                   ),
-                  height: 18,
-                  width: 18,
+                  height: 24,
+                  width: 24,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      _allSelected ? Colors.white : const Color.fromARGB(255, 17, 24, 39),
+                  backgroundColor: _allSelected ? armmBlue : Colors.transparent,
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
-                      color: Colors.black,
-                      width: _allSelected ? 0 : 1,
+                      color: _allSelected ? armmBlue : Colors.grey,
+                      width: 1,
                     ),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
+                  elevation: 0,
                 ),
-                label: const Text(
+                label: Text(
                   'All',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: _allSelected ? Colors.white : Colors.grey,
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
@@ -222,12 +225,12 @@ class _ActivityPageState extends State<ActivityPage> {
             // Individual Parent Buttons
             ...allClients.map((parentName) {
               bool isSelected = _clientsFilter.contains(parentName);
-
+  
               final rowChildren = <Widget>[
                 SvgPicture.asset(
                   'assets/icons/profile.svg',
-                  colorFilter: const ColorFilter.mode(
-                    Colors.white,
+                  colorFilter: ColorFilter.mode(
+                    isSelected ? Colors.white : Colors.grey,
                     BlendMode.srcIn,
                   ),
                   height: 18,
@@ -236,8 +239,8 @@ class _ActivityPageState extends State<ActivityPage> {
                 const SizedBox(width: 12),
                 Text(
                   parentName,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -245,29 +248,30 @@ class _ActivityPageState extends State<ActivityPage> {
                 if (isSelected) ...[
                   const SizedBox(width: 15),
                   SvgPicture.asset(
-                    'assets/icons/sort.svg',
+                    'assets/icons/x.svg',
                     colorFilter: const ColorFilter.mode(
                       Colors.white,
                       BlendMode.srcIn,
                     ),
-                    height: 28,
-                    width: 28,
+                    height: 20,
+                    width: 20,
                   ),
                 ],
               ];
-
+  
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isSelected ? Colors.white : const Color.fromARGB(255, 17, 24, 39),
+                    backgroundColor: isSelected ? armmBlue : Colors.transparent,
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: isSelected ? Colors.black : Colors.white,
-                        width: isSelected ? 0 : 1,
+                        color: isSelected ? armmBlue : Colors.grey,
+                        width: 1,
                       ),
                       borderRadius: BorderRadius.circular(20.0),
                     ),
+                    elevation: 0,
                   ),
                   onPressed: () {
                     setState(() {
