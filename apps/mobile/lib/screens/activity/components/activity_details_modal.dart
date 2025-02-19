@@ -63,7 +63,7 @@ class ActivityDetailsModal extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 25.0),
               child: SvgPicture.asset(
-                'assets/icons/agq_logo.svg',
+                'assets/icons/ARMM_Logo.svg',
                 width: 40,
                 height: 40,
               ),
@@ -74,7 +74,7 @@ class ActivityDetailsModal extends StatelessWidget {
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              fontFamily: 'Titillium Web',
+              
             ),
           ),
         ],
@@ -90,7 +90,7 @@ class ActivityDetailsModal extends StatelessWidget {
             fontSize: 30,
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
-            fontFamily: 'Titillium Web',
+            
           ),
         ),
         const SizedBox(height: 15),
@@ -102,7 +102,7 @@ class ActivityDetailsModal extends StatelessWidget {
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              fontFamily: 'Titillium Web',
+              
             ),
           ),
         ),
@@ -119,7 +119,7 @@ class ActivityDetailsModal extends StatelessWidget {
                   fontSize: 16,
                   color: getActivityColor(activity.type),
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Titillium Web',
+                  
                 ),
               ),
             ],
@@ -128,7 +128,7 @@ class ActivityDetailsModal extends StatelessWidget {
         const SizedBox(height: 25),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
-            'assets/icons/activity_description.svg',
+            'assets/icons/docs.svg',
             color: getActivityColor(activity.type),
           ),
           title: 'Description',
@@ -138,7 +138,7 @@ class ActivityDetailsModal extends StatelessWidget {
         const Divider(color: Colors.white, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
-            'assets/icons/activity_date.svg',
+            'assets/icons/docs.svg',
             color: getActivityColor(activity.type),
           ),
           title: 'Date',
@@ -148,7 +148,7 @@ class ActivityDetailsModal extends StatelessWidget {
         const Divider(color: Colors.white, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
-            'assets/icons/activity_user.svg',
+            'assets/icons/docs.svg',
             color: getActivityColor(activity.type),
           ),
           title: 'Recipient',
@@ -195,7 +195,7 @@ class ActivityDetailsModal extends StatelessWidget {
                       fontSize: 18,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
-                      fontFamily: 'Titillium Web',
+                      
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -204,7 +204,7 @@ class ActivityDetailsModal extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
-                      fontFamily: 'Titillium Web',
+                      
                     ),
                   ),
                 ],

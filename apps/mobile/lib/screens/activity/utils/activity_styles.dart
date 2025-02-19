@@ -59,21 +59,21 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
   switch (type) {
     case 'deposit':
       return SvgPicture.asset(
-        'assets/icons/deposit.svg',
+        'assets/icons/docs.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
       );
     case 'withdrawal':
       return SvgPicture.asset(
-        'assets/icons/withdrawal.svg',
+        'assets/icons/docs.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
       );
     case 'pending':
       return SvgPicture.asset(
-        'assets/icons/pending_withdrawal.svg',
+        'assets/icons/docs.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
@@ -82,7 +82,7 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
     case 'profit':
       return SvgPicture.asset(
         
-        'assets/icons/variable_income.svg',
+        'assets/icons/docs.svg',
         color: getActivityColor(type),
         height: size,
         width: size,

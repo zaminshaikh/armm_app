@@ -179,7 +179,7 @@ class _ActivityPageState extends State<ActivityPage> {
               padding: const EdgeInsets.only(right: 8.0),
               child: ElevatedButton.icon(
                 icon: SvgPicture.asset(
-                  'assets/icons/group_people.svg',
+                  'assets/icons/sort.svg',
                   colorFilter: const ColorFilter.mode(
                     Colors.white,
                     BlendMode.srcIn,
@@ -204,7 +204,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
-                    fontFamily: 'Titillium Web',
+                    
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -223,7 +223,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
               final rowChildren = <Widget>[
                 SvgPicture.asset(
-                  'assets/icons/single_person.svg',
+                  'assets/icons/profile.svg',
                   colorFilter: const ColorFilter.mode(
                     Colors.white,
                     BlendMode.srcIn,
@@ -238,13 +238,13 @@ class _ActivityPageState extends State<ActivityPage> {
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    fontFamily: 'Titillium Web',
+                    
                   ),
                 ),
                 if (isSelected) ...[
                   const SizedBox(width: 15),
                   SvgPicture.asset(
-                    'assets/icons/x_icon.svg',
+                    'assets/icons/sort.svg',
                     colorFilter: const ColorFilter.mode(
                       Colors.white,
                       BlendMode.srcIn,
@@ -332,7 +332,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 fontSize: 20,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Titillium Web',
+                
               ),
             ),
           ),

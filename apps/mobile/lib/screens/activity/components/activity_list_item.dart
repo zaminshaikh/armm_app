@@ -63,7 +63,7 @@ class ActivityListItem extends StatelessWidget {
             fontSize: 18,
             color: Colors.white,
             fontWeight: FontWeight.w600,
-            fontFamily: 'Titillium Web',
+            
           ),
         ),
         const SizedBox(height: 5),
@@ -73,7 +73,7 @@ class ActivityListItem extends StatelessWidget {
             fontSize: 15,
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
-            fontFamily: 'Titillium Web',
+            
           ),
         ),
       ],
@@ -90,7 +90,7 @@ class ActivityListItem extends StatelessWidget {
             fontSize: 18,
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
-            fontFamily: 'Titillium Web',
+            
           ),
         ),
       ),
@@ -102,11 +102,11 @@ class ActivityListItem extends StatelessWidget {
             style: const TextStyle(
               fontSize: 13,
               color: Colors.white,
-              fontFamily: 'Titillium Web',
+              
             ),
           ),
           SvgPicture.asset(
-            'assets/icons/line.svg',
+            'assets/icons/docs.svg',
             color: Colors.white,
             height: 15,
           ),
@@ -116,7 +116,7 @@ class ActivityListItem extends StatelessWidget {
               fontSize: 13,
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontFamily: 'Titillium Web',
+              
             ),
           ),
         ],

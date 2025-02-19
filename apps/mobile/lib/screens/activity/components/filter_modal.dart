@@ -94,7 +94,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Titillium Web',
+                            
                           ),
                         ),
                       ),
@@ -172,7 +172,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
-                fontFamily: 'Titillium Web',
+                
               ),
             ),
           ),
@@ -198,7 +198,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
-              fontFamily: 'Titillium Web',
+              
             ),
           ),
           iconColor: Colors.white,
@@ -229,7 +229,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
           style: const TextStyle(
             fontSize: 16.0,
             color: Colors.white,
-            fontFamily: 'Titillium Web',
+            
           ),
         ),
         activeColor: Colors.black,
@@ -288,7 +288,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Titillium Web',
+                    
                   ),
                 ),
                 onPressed: () {
@@ -323,7 +323,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Titillium Web',
+                        
                       ),
                     ),
                   ],
