@@ -2,6 +2,7 @@
 
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/profile/components/name_cid.dart';
+import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,34 +25,31 @@ class _MyProfilesPageState extends State<MyProfilesPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: <Widget>[
-              _buildAppBar(context),
-              SliverPadding(
-                padding: const EdgeInsets.all(0.0),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      _profilesForUser(),
-                      if (client!.connectedUsers != null &&
-                          client!.connectedUsers!.isNotEmpty)
-                        _profilesForConnectedUser()
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'My Profiles',
+        implyLeading: true,
+        showNotificationButton: false,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _profilesForUser(),
+            if (client!.connectedUsers != null &&
+                client!.connectedUsers!.isNotEmpty)
+              _profilesForConnectedUser(),
+          ],
+        ),
       ),
     );
   }
+
+
+
+
 
 // This is the Profiless section
   Container _profilesForUser() => Container(
@@ -183,41 +181,4 @@ class _MyProfilesPageState extends State<MyProfilesPage> {
     );
   }
 
-  // This is the app bar
-  SliverAppBar _buildAppBar(context) => SliverAppBar(
-        backgroundColor: const Color.fromARGB(255, 30, 41, 59),
-        automaticallyImplyLeading: false,
-        toolbarHeight: 80,
-        expandedHeight: 0,
-        snap: false,
-        floating: true,
-        pinned: true,
-        leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        flexibleSpace: const SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(left: 60.0, right: 20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Profiles',
-                  style: TextStyle(
-                    fontSize: 27,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
 }
