@@ -312,6 +312,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       _allSelected ? armmBlue : Colors.transparent,
+<<<<<<< HEAD
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
                       color: _allSelected ? armmBlue : Colors.grey,
@@ -352,6 +353,8 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _allSelected ? armmBlue : Colors.transparent,
+=======
+>>>>>>> d1f6656 (Removed Splash From the Parent Buttons)
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
                       color: _allSelected ? armmBlue : Colors.grey,
@@ -360,6 +363,10 @@ class _ActivityPageState extends State<ActivityPage> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   elevation: 0,
+                ).copyWith(
+                  splashFactory: NoSplash.splashFactory,
+                  overlayColor:
+                      MaterialStateProperty.all(Colors.transparent),
                 ),
                 label: Text(
                   'All',
@@ -501,6 +508,9 @@ class _ActivityPageState extends State<ActivityPage> {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d1f6656 (Removed Splash From the Parent Buttons)
                     backgroundColor:
                         isSelected ? armmBlue : Colors.transparent,
                     shape: RoundedRectangleBorder(
@@ -515,6 +525,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     splashFactory: NoSplash.splashFactory,
                     overlayColor:
                         MaterialStateProperty.all(Colors.transparent),
+<<<<<<< HEAD
 =======
                     backgroundColor: isSelected
                         ? Colors.white
@@ -537,6 +548,8 @@ class _ActivityPageState extends State<ActivityPage> {
 =======
                     elevation: 0,
 >>>>>>> 735f99e (Fixed Parent Name Row Buttons)
+=======
+>>>>>>> d1f6656 (Removed Splash From the Parent Buttons)
                   ),
                   onPressed: () {
                     setState(() {
@@ -570,6 +583,7 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
   /// Builds an individual activity item.
@@ -583,6 +597,15 @@ class _ActivityPageState extends State<ActivityPage> {
 
   /// Builds an activity item with a day header if necessary.
 =======
+=======
+
+
+
+
+
+
+
+>>>>>>> d1f6656 (Removed Splash From the Parent Buttons)
   /// Builds an activity item without day headers.
 >>>>>>> 1a0bccc (Made Custom Activity App Bar)
   Widget _buildActivityWithDayHeader(Activity activity, int index) {
