@@ -239,7 +239,11 @@ class _ActivityPageState extends State<ActivityPage> {
       }
       final activity = activities[activityIndex];
 <<<<<<< HEAD
+<<<<<<< HEAD
       return _buildActivity(activity);
+=======
+      return _buildActivity(activity, true);
+>>>>>>> 23dfc09 (Got rid of _buildActivityWithDayHeader)
     }
   }
 
@@ -599,6 +603,7 @@ class _ActivityPageState extends State<ActivityPage> {
 =======
 =======
 
+<<<<<<< HEAD
 
 
 
@@ -612,6 +617,8 @@ class _ActivityPageState extends State<ActivityPage> {
     return _buildActivity(activity, true);
   }
 
+=======
+>>>>>>> 23dfc09 (Got rid of _buildActivityWithDayHeader)
   /// Builds an individual activity item.
   Widget _buildActivity(Activity activity, bool showBorder) => Container(
         decoration: BoxDecoration(
