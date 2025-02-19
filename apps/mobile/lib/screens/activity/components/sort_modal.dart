@@ -34,7 +34,11 @@ class ActivitySortModal extends StatelessWidget {
                         fontSize: 22.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
+<<<<<<< HEAD
                         ),
+=======
+                        fontFamily: 'Titillium Web'),
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                   ),
                 ),
               ),
@@ -69,7 +73,11 @@ class ActivitySortModal extends StatelessWidget {
               color: Colors.white,
               fontWeight: FontWeight.w600,
               fontSize: 18,
+<<<<<<< HEAD
               ),
+=======
+              fontFamily: 'Titillium Web'),
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
         ),
       ),
       onTap: () {

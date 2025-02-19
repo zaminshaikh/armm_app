@@ -1,12 +1,21 @@
+<<<<<<< HEAD
+=======
+// activity_filter_modal.dart
+
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 
 /// A modal widget for filtering activities.
 class ActivityFilterModal extends StatefulWidget {
+<<<<<<< HEAD
   /// The currently selected type filters.
   final List<String> typeFilter;
   /// The complete list of type options.
   final List<String> allTypes;
+=======
+  final List<String> typeFilter;
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
   final List<String> recipientsFilter;
   final List<String> allRecipients;
 
@@ -16,7 +25,11 @@ class ActivityFilterModal extends StatefulWidget {
 
   final DateTimeRange selectedDates;
 
+<<<<<<< HEAD
   /// Updated: onApply now must return clientsFilter as well
+=======
+  // Updated: onApply now must return clientsFilter as well
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
   final Function(
     List<String> typeFilter,
     List<String> recipientsFilter,
@@ -27,12 +40,22 @@ class ActivityFilterModal extends StatefulWidget {
   const ActivityFilterModal({
     Key? key,
     required this.typeFilter,
+<<<<<<< HEAD
     required this.allTypes,
     required this.recipientsFilter,
     required this.allRecipients,
     // NEW:
     required this.clientsFilter,
     required this.allClients,
+=======
+    required this.recipientsFilter,
+    required this.allRecipients,
+
+    // NEW
+    required this.clientsFilter,
+    required this.allClients,
+
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
     required this.selectedDates,
     required this.onApply,
   }) : super(key: key);
@@ -42,6 +65,7 @@ class ActivityFilterModal extends StatefulWidget {
 }
 
 class _ActivityFilterModalState extends State<ActivityFilterModal> {
+<<<<<<< HEAD
   // Use a separate state variable for the currently selected types.
   late List<String> _selectedTypes;
   late List<String> _recipientsFilter;
@@ -50,13 +74,28 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
 
   // This flag is used for handling the "All" logic in clients filter.
   bool _allSelected = false;
+=======
+  late List<String> _typeFilter;
+  late List<String> _recipientsFilter;
+
+  // NEW
+  late List<String> _clientsFilter;
+
+  late DateTimeRange _selectedDates;
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
 
   @override
   void initState() {
     super.initState();
+<<<<<<< HEAD
     _selectedTypes = List.from(widget.typeFilter);
     _recipientsFilter = List.from(widget.recipientsFilter);
     // Initialize clientsFilter with allClients if no clients are pre-selected.
+=======
+    _typeFilter = List.from(widget.typeFilter);
+    _recipientsFilter = List.from(widget.recipientsFilter);
+    // Initialize clientsFilter with allclients if 'All' is selected
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
     _clientsFilter = widget.clientsFilter.isEmpty
         ? List.from(widget.allClients)
         : List.from(widget.clientsFilter);
@@ -95,6 +134,10 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
+<<<<<<< HEAD
+=======
+                            fontFamily: 'Titillium Web',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                           ),
                         ),
                       ),
@@ -104,10 +147,29 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                         controller: controller,
                         children: [
                           _buildTimePeriodFilter(),
+<<<<<<< HEAD
                           // Use the complete list of types (widget.allTypes) here.
                           _buildFilter('Type', widget.allTypes, _selectedTypes),
                           _buildFilter('Recipients', widget.allRecipients, _recipientsFilter),
                           _buildFilter('Clients', widget.allClients, _clientsFilter),
+=======
+                          _buildFilter(
+                            'Type',
+                            widget.typeFilter,
+                            _typeFilter,
+                          ),
+                          _buildFilter(
+                            'Recipients',
+                            widget.allRecipients,
+                            _recipientsFilter,
+                          ),
+                          // NEW: Parent Name Filter Section
+                          _buildFilter(
+                            'Clients',
+                            widget.allClients,
+                            _clientsFilter,
+                          ),
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                         ],
                       ),
                     ),
@@ -160,12 +222,24 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
+<<<<<<< HEAD
+=======
+                fontFamily: 'Titillium Web',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
               ),
             ),
           ),
         ),
       );
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
   /// Builds a filter section with checkboxes.
   Widget _buildFilter(
     String title,
@@ -180,6 +254,10 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
+<<<<<<< HEAD
+=======
+              fontFamily: 'Titillium Web',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
             ),
           ),
           iconColor: Colors.white,
@@ -210,6 +288,10 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
           style: const TextStyle(
             fontSize: 16.0,
             color: Colors.white,
+<<<<<<< HEAD
+=======
+            fontFamily: 'Titillium Web',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
           ),
         ),
         activeColor: Colors.black,
@@ -218,9 +300,17 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
           setState(() {
             isChecked = value ?? false;
             if (isChecked) {
+<<<<<<< HEAD
               // Special case: if filterKey is 'profit', also ensure 'income' is added.
               if (filterKey == 'profit' && !filterList.contains('income')) {
                 filterList.add('income');
+=======
+              // Special case if filterKey is 'profit'
+              if (filterKey == 'profit') {
+                if (!filterList.contains('income')) {
+                  filterList.add('income');
+                }
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
               }
               if (!filterList.contains(filterKey)) {
                 filterList.add(filterKey);
@@ -232,7 +322,11 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               filterList.remove(filterKey);
             }
 
+<<<<<<< HEAD
             // Update _allSelected if all clients are selected or none.
+=======
+            // Update _allSelected if all clients are selected or none
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
             if (widget.allClients.length == filterList.length) {
               _allSelected = true;
               _clientsFilter = [];
@@ -266,17 +360,31 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+<<<<<<< HEAD
                   ),
                 ),
                 onPressed: () {
+=======
+                    fontFamily: 'Titillium Web',
+                  ),
+                ),
+                onPressed: () {
+                  // If all clients are selected, clear _clientsFilter to indicate "All" is selected
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                   if (_clientsFilter.length == widget.allClients.length) {
                     _clientsFilter.clear();
                   }
                   Navigator.pop(context);
                   widget.onApply(
+<<<<<<< HEAD
                     _selectedTypes,
                     _recipientsFilter,
                     _clientsFilter,
+=======
+                    _typeFilter,
+                    _recipientsFilter,
+                    _clientsFilter,  // NEW
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                     _selectedDates,
                   );
                 },
@@ -299,6 +407,10 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+<<<<<<< HEAD
+=======
+                        fontFamily: 'Titillium Web',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                       ),
                     ),
                   ],
@@ -307,11 +419,22 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
             ),
             onTap: () {
               setState(() {
+<<<<<<< HEAD
                 // Reset selected filters to default (all available options).
                 _selectedTypes = List.from(widget.allTypes);
                 _recipientsFilter = List.from(widget.allRecipients);
                 _clientsFilter = List.from(widget.allClients);
                 _allSelected = true;
+=======
+                // Reset everything to defaults
+                _typeFilter = ['income', 'profit', 'deposit', 'withdrawal'];
+                _recipientsFilter = List.from(widget.allRecipients);
+
+                // NEW: reset the clients filter to all
+                _clientsFilter = List.from(widget.allClients);
+                _allSelected = true;
+
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                 _selectedDates = DateTimeRange(
                   start: DateTime(1900),
                   end: DateTime.now().add(const Duration(days: 30)),
@@ -319,13 +442,24 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               });
               Navigator.pop(context);
               widget.onApply(
+<<<<<<< HEAD
                 _selectedTypes,
                 _recipientsFilter,
                 _clientsFilter,
+=======
+                _typeFilter,
+                _recipientsFilter,
+                _clientsFilter, 
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                 _selectedDates,
               );
             },
           ),
         ],
       );
+<<<<<<< HEAD
+=======
+
+  bool _allSelected = false; // Add this state variable
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
 }

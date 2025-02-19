@@ -23,6 +23,7 @@ class ActivityListItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
+<<<<<<< HEAD
       padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
       child: Container(
         decoration: BoxDecoration(
@@ -46,10 +47,26 @@ class ActivityListItem extends StatelessWidget {
         ),
       ),
       ),
+=======
+        padding: const EdgeInsets.fromLTRB(30.0, 5.0, 15.0, 5.0),
+        child: Container(
+          color: Colors.transparent,
+          child: Row(
+            children: [
+              _buildActivityIcon(),
+              _buildActivityDetails(),
+              const Spacer(),
+              _buildActivityAmountAndTime(time),
+            ],
+          ),
+        ),
+      ),
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
     );
   }
 
   Widget _buildActivityIcon() => Padding(
+<<<<<<< HEAD
     padding: const EdgeInsets.only(right: 20),
     child: getActivityIcon(activity.type, size: 40), // Directly use the widget from getActivityIcon
   );
@@ -67,23 +84,63 @@ class ActivityListItem extends StatelessWidget {
             fontSize: 18,
             color: Colors.black,
             fontWeight: FontWeight.bold,
+=======
+      padding: const EdgeInsets.only(right: 20),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Icon(
+            Icons.circle,
+            color: getUnderlayColor(activity.type),
+            size: 50,
+          ),
+          getActivityIcon(activity.type),
+        ],
+      ),
+    );
+
+  Widget _buildActivityDetails() => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          activity.fund,
+          style: const TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Titillium Web',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
           ),
         ),
         const SizedBox(height: 5),
         Text(
+<<<<<<< HEAD
           formattedTime,
           style: const TextStyle(
             fontSize: 13,
             color: Color.fromARGB(255, 102, 102, 102),
             fontWeight: FontWeight.bold,
+=======
+          getActivityType(activity),
+          style: TextStyle(
+            fontSize: 15,
+            color: getActivityColor(activity.type),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Titillium Web',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
           ),
         ),
       ],
     );
+<<<<<<< HEAD
   }
 
 
   Widget _buildActivityAmountAndName(String time) => Column(
+=======
+
+  Widget _buildActivityAmountAndTime(String time) => Column(
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
     crossAxisAlignment: CrossAxisAlignment.end,
     children: [
       Align(
@@ -94,11 +151,16 @@ class ActivityListItem extends StatelessWidget {
             fontSize: 18,
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
+<<<<<<< HEAD
             
+=======
+            fontFamily: 'Titillium Web',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
           ),
         ),
       ),
       const SizedBox(height: 5),
+<<<<<<< HEAD
       Text(
         _getShortenedName(activity.recipient),
         style: const TextStyle(
@@ -107,6 +169,33 @@ class ActivityListItem extends StatelessWidget {
           fontWeight: FontWeight.bold,
           
         ),
+=======
+      Row(
+        children: [
+          Text(
+            time,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+              fontFamily: 'Titillium Web',
+            ),
+          ),
+          SvgPicture.asset(
+            'assets/icons/line.svg',
+            color: Colors.white,
+            height: 15,
+          ),
+          Text(
+            _getShortenedName(activity.recipient),
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Titillium Web',
+            ),
+          ),
+        ],
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
       ),
     ],
   );

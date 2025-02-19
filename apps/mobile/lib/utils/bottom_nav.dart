@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/screens/activity/activity.dart';
 import 'package:armm_app/screens/analytics/analytics.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
@@ -80,6 +81,9 @@ class BottomNavBar extends StatelessWidget {
             ],
           ),
 =======
+=======
+import 'package:armm_app/screens/activity/activity.dart';
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -105,8 +109,16 @@ class BottomNavBar extends StatelessWidget {
         isSelected ? iconAsset.replaceAll('_hollow', '') : iconAsset;
     return GestureDetector(
       onTap: () {
-        // Do nothing if it's already the current page.
-        if (!isSelected) onItemTapped(index);
+        // For Activities icon, navigate to the Activity Page.
+        if (index == 2) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ActivityPage(),
+            ),
+          );
+        } else if (!isSelected) {
+          onItemTapped(index);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -198,8 +210,12 @@ class BottomNavBar extends StatelessWidget {
                 iconAsset: 'assets/icons/profile_hollow.svg',
 =======
                 index: 3,
+<<<<<<< HEAD
                 iconAsset: 'assets/icons/profile_hollow.svg', // adjust if necessary
 >>>>>>> 0d00a21 (Modulated Profile Page for Simpler File Structure)
+=======
+                iconAsset: 'assets/icons/profile_hollow.svg',
+>>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
                 label: 'Profile',
               ),
             ],
