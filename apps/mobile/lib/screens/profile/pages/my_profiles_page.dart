@@ -7,9 +7,13 @@
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/profile/components/name_cid.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/utils/app_bar.dart';
 =======
 >>>>>>> 9c4cce8 (Updated Client Model and Completed Profiles Page)
+=======
+import 'package:armm_app/utils/app_bar.dart';
+>>>>>>> 7327848 (Authentication Page Complete)
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -198,37 +202,34 @@ import 'package:armm_app/utils/app_bar.dart';
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: <Widget>[
-              _buildAppBar(context),
-              SliverPadding(
-                padding: const EdgeInsets.all(0.0),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      _profilesForUser(),
-                      if (client!.connectedUsers != null &&
-                          client!.connectedUsers!.isNotEmpty)
-                        _profilesForConnectedUser()
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'My Profiles',
+        implyLeading: true,
+        showNotificationButton: false,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _profilesForUser(),
+            if (client!.connectedUsers != null &&
+                client!.connectedUsers!.isNotEmpty)
+              _profilesForConnectedUser(),
+          ],
+        ),
       ),
     );
   }
 <<<<<<< HEAD
 >>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
 =======
+
+
+
+
 
 // This is the Profiless section
   Container _profilesForUser() => Container(
@@ -360,6 +361,7 @@ import 'package:armm_app/utils/app_bar.dart';
     );
   }
 
+<<<<<<< HEAD
   // This is the app bar
   SliverAppBar _buildAppBar(context) => SliverAppBar(
         backgroundColor: const Color.fromARGB(255, 30, 41, 59),
@@ -398,4 +400,6 @@ import 'package:armm_app/utils/app_bar.dart';
         ),
       );
 >>>>>>> 9c4cce8 (Updated Client Model and Completed Profiles Page)
+=======
+>>>>>>> 7327848 (Authentication Page Complete)
 }
