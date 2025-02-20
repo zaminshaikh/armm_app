@@ -23,63 +23,67 @@ class ActivityListItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(30.0, 5.0, 15.0, 5.0),
-        child: Container(
-          color: Colors.transparent,
+      padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+      child: Container(
+        decoration: BoxDecoration(
+        color: Colors.transparent, 
+        border: Border.all(
+          color: Colors.black, // Border color
+          width: 1.0, // Border width
+        ),
+        borderRadius: BorderRadius.circular(8.0), // Optional: Border radius
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: Row(
-            children: [
-              _buildActivityIcon(),
-              _buildActivityDetails(),
-              const Spacer(),
-              _buildActivityAmountAndTime(time),
-            ],
+          children: [
+            _buildActivityIcon(),
+            _buildActivityDetails(),
+            const Spacer(),
+            _buildActivityAmountAndName(time),
+          ],
           ),
         ),
+      ),
       ),
     );
   }
 
   Widget _buildActivityIcon() => Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Icon(
-            Icons.circle,
-            color: getUnderlayColor(activity.type),
-            size: 50,
-          ),
-          getActivityIcon(activity.type),
-        ],
-      ),
-    );
+    padding: const EdgeInsets.only(right: 20),
+    child: getActivityIcon(activity.type, size: 40), // Directly use the widget from getActivityIcon
+  );
 
-  Widget _buildActivityDetails() => Column(
+  Widget _buildActivityDetails() {
+    final DateFormat dateTimeFormat = DateFormat("MMM d, yyyy 'at' h:mm a");
+    String formattedTime = dateTimeFormat.format(activity.time);
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          activity.fund,
-          style: const TextStyle(
+          getActivityType(activity),
+          style: TextStyle(
             fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 5),
         Text(
-          getActivityType(activity),
-          style: TextStyle(
-            fontSize: 15,
-            color: getActivityColor(activity.type),
+          formattedTime,
+          style: const TextStyle(
+            fontSize: 13,
+            color: Color.fromARGB(255, 102, 102, 102),
             fontWeight: FontWeight.bold,
-            
           ),
         ),
       ],
     );
+  }
 
-  Widget _buildActivityAmountAndTime(String time) => Column(
+
+  Widget _buildActivityAmountAndName(String time) => Column(
     crossAxisAlignment: CrossAxisAlignment.end,
     children: [
       Align(
@@ -95,31 +99,14 @@ class ActivityListItem extends StatelessWidget {
         ),
       ),
       const SizedBox(height: 5),
-      Row(
-        children: [
-          Text(
-            time,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Colors.white,
-              
-            ),
-          ),
-          SvgPicture.asset(
-            'assets/icons/docs.svg',
-            color: Colors.white,
-            height: 15,
-          ),
-          Text(
-            _getShortenedName(activity.recipient),
-            style: const TextStyle(
-              fontSize: 13,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              
-            ),
-          ),
-        ],
+      Text(
+        _getShortenedName(activity.recipient),
+        style: const TextStyle(
+          fontSize: 13,
+          color: Color.fromARGB(255, 102, 102, 102),
+          fontWeight: FontWeight.bold,
+          
+        ),
       ),
     ],
   );

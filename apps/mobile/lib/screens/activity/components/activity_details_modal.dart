@@ -1,3 +1,4 @@
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +12,11 @@ final DateFormat dayHeaderFormat = DateFormat('MMMM d, yyyy');
 
 class ActivityDetailsModal extends StatelessWidget {
   final Activity activity;
-  final bool isFromAGQ; // make it final
 
-  // The constructor no longer accepts isFromAGQ
-  ActivityDetailsModal({
-    required this.activity,
+  const ActivityDetailsModal({
     Key? key,
-  })  : isFromAGQ = (activity.fund == 'AGQ'),  // automatically sets based on fund
-        super(key: key);
+    required this.activity,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +28,11 @@ class ActivityDetailsModal extends StatelessWidget {
           topRight: Radius.circular(30.0),
         ),
         child: Container(
-          color: Colors.black,
+          color: const Color.fromARGB(255, 232, 232, 232),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                _buildModalHeader(context, isFromAGQ),
+                _buildModalHeader(context, ),
                 _buildModalBody(activity),
               ],
             ),
@@ -44,7 +42,7 @@ class ActivityDetailsModal extends StatelessWidget {
     );
   }
 
-  Widget _buildModalHeader(BuildContext context, bool isFromAGQ) => Column(
+  Widget _buildModalHeader(BuildContext context) => Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -53,13 +51,12 @@ class ActivityDetailsModal extends StatelessWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.close_rounded,
-                      color: Color.fromARGB(171, 255, 255, 255)),
+                      color: Colors.black),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
             ),
           ),
-          if (isFromAGQ)
             Padding(
               padding: const EdgeInsets.only(bottom: 25.0),
               child: SvgPicture.asset(
@@ -73,7 +70,7 @@ class ActivityDetailsModal extends StatelessWidget {
             style: TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.black,
               
             ),
           ),
@@ -101,7 +98,7 @@ class ActivityDetailsModal extends StatelessWidget {
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: Colors.black,
               
             ),
           ),
@@ -133,9 +130,8 @@ class ActivityDetailsModal extends StatelessWidget {
           ),
           title: 'Description',
           content: getActivityDescription(activity),
-          underlayColor: getUnderlayColor(activity.type),
         ),
-        const Divider(color: Colors.white, thickness: 0.2),
+        const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
             'assets/icons/docs.svg',
@@ -143,9 +139,8 @@ class ActivityDetailsModal extends StatelessWidget {
           ),
           title: 'Date',
           content: date,
-          underlayColor: getUnderlayColor(activity.type),
         ),
-        const Divider(color: Colors.white, thickness: 0.2),
+        const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
             'assets/icons/docs.svg',
@@ -153,7 +148,6 @@ class ActivityDetailsModal extends StatelessWidget {
           ),
           title: 'Recipient',
           content: activity.recipient,
-          underlayColor: getUnderlayColor(activity.type),
         ),
       ],
     );
@@ -163,27 +157,11 @@ class ActivityDetailsModal extends StatelessWidget {
     required Widget icon,
     required String title,
     required String content,
-    required Color underlayColor,
   }) =>
       Padding(
         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
         child: Row(
           children: [
-            Stack(
-              children: [
-                Icon(
-                  Icons.circle,
-                  color: underlayColor,
-                  size: 50,
-                ),
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: icon,
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -193,7 +171,7 @@ class ActivityDetailsModal extends StatelessWidget {
                     title,
                     style: const TextStyle(
                       fontSize: 18,
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w600,
                       
                     ),
@@ -203,7 +181,7 @@ class ActivityDetailsModal extends StatelessWidget {
                     content,
                     style: const TextStyle(
                       fontSize: 14,
-                      color: Colors.white,
+                      color: Colors.black,
                       
                     ),
                   ),
@@ -213,33 +191,4 @@ class ActivityDetailsModal extends StatelessWidget {
           ],
         ),
       );
-
-  // Activity details modal
-  void _showActivityDetailsModal(BuildContext context, Activity activity, bool isFromAGQ) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) => ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-        child: FractionallySizedBox(
-          heightFactor: 0.67,
-          child: Container(
-            color: Colors.black,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  _buildModalHeader(context, isFromAGQ),
-                  _buildModalBody(activity),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

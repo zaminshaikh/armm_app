@@ -96,7 +96,6 @@ class _ActivityPageState extends State<ActivityPage> {
         selectedDates);
     sortActivities(activities, _order);
 
-    // Build list children manually (replacing slivers)
     List<Widget> listChildren = [];
     listChildren.add(const SizedBox(height: 10));
     listChildren.add(_buildParentNameButtons());
@@ -163,7 +162,7 @@ class _ActivityPageState extends State<ActivityPage> {
         return null;
       }
       final activity = activities[activityIndex];
-      return _buildActivity(activity, true);
+      return _buildActivity(activity);
     }
   }
 
@@ -318,20 +317,12 @@ class _ActivityPageState extends State<ActivityPage> {
 
 
   /// Builds an individual activity item.
-  Widget _buildActivity(Activity activity, bool showBorder) => Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: const Color.fromARGB(255, 132, 132, 132),
-              width: showBorder ? 1.0 : 0.0,
-            ),
-          ),
-        ),
-        child: ActivityListItem(
-          activity: activity,
-          onTap: () => _showActivityDetailsModal(context, activity),
-        ),
-      );
+  Widget _buildActivity(Activity activity,) => Container(
+    child: ActivityListItem(
+      activity: activity,
+      onTap: () => _showActivityDetailsModal(context, activity),
+    ),
+  );
 
   /// Shows the activity details modal.
   void _showActivityDetailsModal(BuildContext context, Activity activity) {

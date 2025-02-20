@@ -1,3 +1,4 @@
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/screens/activity/utils/sort_activities.dart';
 import 'package:armm_app/utils/utilities.dart';
@@ -25,55 +26,40 @@ String getActivityType(Activity activity) {
 Color getActivityColor(String type) {
   switch (type) {
     case 'deposit':
-      return Colors.black;
+      return const Color(0xFF32B64B);
     case 'withdrawal':
-      return Colors.black;
+      return const Color(0xFFE62C2D);
     case 'pending':
       return Colors.black;
     case 'income':
     case 'profit':
-      return Colors.black;
+      return ARMM_Blue;
     default:
-      return Colors.white;
+      return Colors.black;
   }
 }
 
-// Get underlay color based on activity type
-Color getUnderlayColor(String type) {
-  switch (type) {
-    case 'deposit':
-      return const Color.fromARGB(255, 21, 52, 57);
-    case 'withdrawal':
-      return const Color.fromARGB(255, 41, 25, 28);
-    case 'pending':
-    case 'income':
-    case 'profit':
-      return const Color.fromARGB(255, 24, 46, 68);
-    default:
-      return Colors.white;
-  }
-}
 
 // Get the icon for each activity type
 Widget getActivityIcon(String type, {double size = 50.0}) {
   switch (type) {
     case 'deposit':
       return SvgPicture.asset(
-        'assets/icons/docs.svg',
+        'assets/icons/deposit.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
       );
     case 'withdrawal':
       return SvgPicture.asset(
-        'assets/icons/docs.svg',
+        'assets/icons/withdrawal.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
       );
     case 'pending':
       return SvgPicture.asset(
-        'assets/icons/docs.svg',
+        'assets/icons/profit.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
@@ -81,8 +67,7 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
     case 'income':
     case 'profit':
       return SvgPicture.asset(
-        
-        'assets/icons/docs.svg',
+        'assets/icons/profit.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
