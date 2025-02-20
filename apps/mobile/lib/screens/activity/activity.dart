@@ -129,9 +129,12 @@ class _ActivityPageState extends State<ActivityPage> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     // Build list children manually (replacing slivers)
 >>>>>>> 1a0bccc (Made Custom Activity App Bar)
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
     List<Widget> listChildren = [];
     listChildren.add(const SizedBox(height: 10));
     listChildren.add(_buildParentNameButtons());
@@ -240,10 +243,14 @@ class _ActivityPageState extends State<ActivityPage> {
       final activity = activities[activityIndex];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       return _buildActivity(activity);
 =======
       return _buildActivity(activity, true);
 >>>>>>> 23dfc09 (Got rid of _buildActivityWithDayHeader)
+=======
+      return _buildActivity(activity);
+>>>>>>> 1e012e0 (Activity Cards Complete)
     }
   }
 
@@ -620,6 +627,7 @@ class _ActivityPageState extends State<ActivityPage> {
 =======
 >>>>>>> 23dfc09 (Got rid of _buildActivityWithDayHeader)
   /// Builds an individual activity item.
+<<<<<<< HEAD
   Widget _buildActivity(Activity activity, bool showBorder) => Container(
         decoration: BoxDecoration(
           border: Border(
@@ -635,6 +643,14 @@ class _ActivityPageState extends State<ActivityPage> {
         ),
       );
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+  Widget _buildActivity(Activity activity,) => Container(
+    child: ActivityListItem(
+      activity: activity,
+      onTap: () => _showActivityDetailsModal(context, activity),
+    ),
+  );
+>>>>>>> 1e012e0 (Activity Cards Complete)
 
   /// Shows the activity details modal.
   void _showActivityDetailsModal(BuildContext context, Activity activity) {

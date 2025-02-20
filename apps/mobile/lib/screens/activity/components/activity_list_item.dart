@@ -24,6 +24,9 @@ class ActivityListItem extends StatelessWidget {
       onTap: onTap,
       child: Padding(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
       padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
       child: Container(
         decoration: BoxDecoration(
@@ -36,6 +39,7 @@ class ActivityListItem extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+<<<<<<< HEAD
           child: Row(
           children: [
             _buildActivityIcon(),
@@ -51,21 +55,28 @@ class ActivityListItem extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(30.0, 5.0, 15.0, 5.0),
         child: Container(
           color: Colors.transparent,
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
           child: Row(
-            children: [
-              _buildActivityIcon(),
-              _buildActivityDetails(),
-              const Spacer(),
-              _buildActivityAmountAndTime(time),
-            ],
+          children: [
+            _buildActivityIcon(),
+            _buildActivityDetails(),
+            const Spacer(),
+            _buildActivityAmountAndName(time),
+          ],
           ),
         ),
       ),
+<<<<<<< HEAD
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+      ),
+>>>>>>> 1e012e0 (Activity Cards Complete)
     );
   }
 
   Widget _buildActivityIcon() => Padding(
+<<<<<<< HEAD
 <<<<<<< HEAD
     padding: const EdgeInsets.only(right: 20),
     child: getActivityIcon(activity.type, size: 40), // Directly use the widget from getActivityIcon
@@ -98,14 +109,24 @@ class ActivityListItem extends StatelessWidget {
         ],
       ),
     );
+=======
+    padding: const EdgeInsets.only(right: 20),
+    child: getActivityIcon(activity.type, size: 40), // Directly use the widget from getActivityIcon
+  );
+>>>>>>> 1e012e0 (Activity Cards Complete)
 
-  Widget _buildActivityDetails() => Column(
+  Widget _buildActivityDetails() {
+    final DateFormat dateTimeFormat = DateFormat("MMM d, yyyy 'at' h:mm a");
+    String formattedTime = dateTimeFormat.format(activity.time);
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          activity.fund,
-          style: const TextStyle(
+          getActivityType(activity),
+          style: TextStyle(
             fontSize: 18,
+<<<<<<< HEAD
             color: Colors.white,
             fontWeight: FontWeight.w600,
 <<<<<<< HEAD
@@ -114,15 +135,23 @@ class ActivityListItem extends StatelessWidget {
 =======
             
 >>>>>>> a440029 (Removed All Font Issues)
+=======
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+>>>>>>> 1e012e0 (Activity Cards Complete)
           ),
         ),
         const SizedBox(height: 5),
         Text(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
           formattedTime,
           style: const TextStyle(
             fontSize: 13,
             color: Color.fromARGB(255, 102, 102, 102),
+<<<<<<< HEAD
             fontWeight: FontWeight.bold,
 =======
           getActivityType(activity),
@@ -136,10 +165,14 @@ class ActivityListItem extends StatelessWidget {
 =======
             
 >>>>>>> a440029 (Removed All Font Issues)
+=======
+            fontWeight: FontWeight.bold,
+>>>>>>> 1e012e0 (Activity Cards Complete)
           ),
         ),
       ],
     );
+<<<<<<< HEAD
 <<<<<<< HEAD
   }
 
@@ -149,6 +182,12 @@ class ActivityListItem extends StatelessWidget {
 
   Widget _buildActivityAmountAndTime(String time) => Column(
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+  }
+
+
+  Widget _buildActivityAmountAndName(String time) => Column(
+>>>>>>> 1e012e0 (Activity Cards Complete)
     crossAxisAlignment: CrossAxisAlignment.end,
     children: [
       Align(
@@ -173,6 +212,9 @@ class ActivityListItem extends StatelessWidget {
       ),
       const SizedBox(height: 5),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
       Text(
         _getShortenedName(activity.recipient),
         style: const TextStyle(
@@ -181,6 +223,7 @@ class ActivityListItem extends StatelessWidget {
           fontWeight: FontWeight.bold,
           
         ),
+<<<<<<< HEAD
 =======
       Row(
         children: [
@@ -208,6 +251,8 @@ class ActivityListItem extends StatelessWidget {
           ),
         ],
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
       ),
     ],
   );

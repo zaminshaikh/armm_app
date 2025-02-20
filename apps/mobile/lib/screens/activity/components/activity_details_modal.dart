@@ -1,7 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 =======
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
+>>>>>>> 1e012e0 (Activity Cards Complete)
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +20,7 @@ final DateFormat dayHeaderFormat = DateFormat('MMMM d, yyyy');
 class ActivityDetailsModal extends StatelessWidget {
   final Activity activity;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   const ActivityDetailsModal({
     Key? key,
@@ -23,14 +28,19 @@ class ActivityDetailsModal extends StatelessWidget {
   }) : super(key: key);
 =======
   final bool isFromAGQ; // make it final
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
 
-  // The constructor no longer accepts isFromAGQ
-  ActivityDetailsModal({
-    required this.activity,
+  const ActivityDetailsModal({
     Key? key,
+<<<<<<< HEAD
   })  : isFromAGQ = (activity.fund == 'AGQ'),  // automatically sets based on fund
         super(key: key);
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+    required this.activity,
+  }) : super(key: key);
+>>>>>>> 1e012e0 (Activity Cards Complete)
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +52,7 @@ class ActivityDetailsModal extends StatelessWidget {
           topRight: Radius.circular(30.0),
         ),
         child: Container(
+<<<<<<< HEAD
 <<<<<<< HEAD
           color: const Color.fromARGB(255, 232, 232, 232),
           child: SingleChildScrollView(
@@ -55,6 +66,13 @@ class ActivityDetailsModal extends StatelessWidget {
               children: [
                 _buildModalHeader(context, isFromAGQ),
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+          color: const Color.fromARGB(255, 232, 232, 232),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildModalHeader(context, ),
+>>>>>>> 1e012e0 (Activity Cards Complete)
                 _buildModalBody(activity),
               ],
             ),
@@ -65,10 +83,14 @@ class ActivityDetailsModal extends StatelessWidget {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   Widget _buildModalHeader(BuildContext context) => Column(
 =======
   Widget _buildModalHeader(BuildContext context, bool isFromAGQ) => Column(
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+  Widget _buildModalHeader(BuildContext context) => Column(
+>>>>>>> 1e012e0 (Activity Cards Complete)
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -78,16 +100,23 @@ class ActivityDetailsModal extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.close_rounded,
 <<<<<<< HEAD
+<<<<<<< HEAD
                       color: Colors.black),
 =======
                       color: Color.fromARGB(171, 255, 255, 255)),
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+                      color: Colors.black),
+>>>>>>> 1e012e0 (Activity Cards Complete)
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
             ),
           ),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
             Padding(
               padding: const EdgeInsets.only(bottom: 25.0),
               child: SvgPicture.asset(
@@ -113,6 +142,9 @@ class ActivityDetailsModal extends StatelessWidget {
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
               color: Colors.black,
               
 =======
@@ -158,6 +190,9 @@ class ActivityDetailsModal extends StatelessWidget {
               fontSize: 15,
               fontWeight: FontWeight.w600,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
               color: Colors.black,
               
 =======
@@ -215,6 +250,7 @@ class ActivityDetailsModal extends StatelessWidget {
           title: 'Description',
           content: getActivityDescription(activity),
 <<<<<<< HEAD
+<<<<<<< HEAD
         ),
         const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
@@ -222,8 +258,10 @@ class ActivityDetailsModal extends StatelessWidget {
             'assets/icons/docs.svg',
 =======
           underlayColor: getUnderlayColor(activity.type),
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
         ),
-        const Divider(color: Colors.white, thickness: 0.2),
+        const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
 <<<<<<< HEAD
@@ -237,6 +275,7 @@ class ActivityDetailsModal extends StatelessWidget {
           title: 'Date',
           content: date,
 <<<<<<< HEAD
+<<<<<<< HEAD
         ),
         const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
@@ -244,8 +283,10 @@ class ActivityDetailsModal extends StatelessWidget {
             'assets/icons/docs.svg',
 =======
           underlayColor: getUnderlayColor(activity.type),
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
         ),
-        const Divider(color: Colors.white, thickness: 0.2),
+        const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
 <<<<<<< HEAD
@@ -259,9 +300,12 @@ class ActivityDetailsModal extends StatelessWidget {
           title: 'Recipient',
           content: activity.recipient,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
           underlayColor: getUnderlayColor(activity.type),
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
         ),
       ],
     );
@@ -272,14 +316,18 @@ class ActivityDetailsModal extends StatelessWidget {
     required String title,
     required String content,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     required Color underlayColor,
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
   }) =>
       Padding(
         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
         child: Row(
           children: [
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
             Stack(
@@ -298,6 +346,8 @@ class ActivityDetailsModal extends StatelessWidget {
               ],
             ),
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -308,6 +358,9 @@ class ActivityDetailsModal extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 18,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
                       
@@ -328,6 +381,9 @@ class ActivityDetailsModal extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 14,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
                       color: Colors.black,
                       
 =======
@@ -346,6 +402,7 @@ class ActivityDetailsModal extends StatelessWidget {
           ],
         ),
       );
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -378,4 +435,6 @@ class ActivityDetailsModal extends StatelessWidget {
     );
   }
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
 }

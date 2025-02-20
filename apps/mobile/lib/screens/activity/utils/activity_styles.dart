@@ -1,7 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 =======
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
+>>>>>>> 1e012e0 (Activity Cards Complete)
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/screens/activity/utils/sort_activities.dart';
 import 'package:armm_app/utils/utilities.dart';
@@ -30,6 +34,7 @@ Color getActivityColor(String type) {
   switch (type) {
     case 'deposit':
 <<<<<<< HEAD
+<<<<<<< HEAD
       return const Color(0xFF32B64B);
     case 'withdrawal':
       return const Color(0xFFE62C2D);
@@ -38,10 +43,16 @@ Color getActivityColor(String type) {
     case 'withdrawal':
       return Colors.black;
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+      return const Color(0xFF32B64B);
+    case 'withdrawal':
+      return const Color(0xFFE62C2D);
+>>>>>>> 1e012e0 (Activity Cards Complete)
     case 'pending':
       return Colors.black;
     case 'income':
     case 'profit':
+<<<<<<< HEAD
 <<<<<<< HEAD
       return ARMM_Blue;
     default:
@@ -51,11 +62,15 @@ Color getActivityColor(String type) {
 
 =======
       return Colors.black;
+=======
+      return ARMM_Blue;
+>>>>>>> 1e012e0 (Activity Cards Complete)
     default:
-      return Colors.white;
+      return Colors.black;
   }
 }
 
+<<<<<<< HEAD
 // Get underlay color based on activity type
 Color getUnderlayColor(String type) {
   switch (type) {
@@ -72,26 +87,29 @@ Color getUnderlayColor(String type) {
   }
 }
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+>>>>>>> 1e012e0 (Activity Cards Complete)
 
 // Get the icon for each activity type
 Widget getActivityIcon(String type, {double size = 50.0}) {
   switch (type) {
     case 'deposit':
       return SvgPicture.asset(
-        'assets/icons/docs.svg',
+        'assets/icons/deposit.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
       );
     case 'withdrawal':
       return SvgPicture.asset(
-        'assets/icons/docs.svg',
+        'assets/icons/withdrawal.svg',
         color: getActivityColor(type),
         height: size,
         width: size,
       );
     case 'pending':
       return SvgPicture.asset(
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         'assets/icons/profit.svg',
@@ -101,6 +119,9 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
 =======
         'assets/icons/docs.svg',
 >>>>>>> a440029 (Removed All Font Issues)
+=======
+        'assets/icons/profit.svg',
+>>>>>>> 1e012e0 (Activity Cards Complete)
         color: getActivityColor(type),
         height: size,
         width: size,
@@ -108,6 +129,7 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
     case 'income':
     case 'profit':
       return SvgPicture.asset(
+<<<<<<< HEAD
 <<<<<<< HEAD
         'assets/icons/profit.svg',
 =======
@@ -118,6 +140,9 @@ Widget getActivityIcon(String type, {double size = 50.0}) {
 =======
         'assets/icons/docs.svg',
 >>>>>>> a440029 (Removed All Font Issues)
+=======
+        'assets/icons/profit.svg',
+>>>>>>> 1e012e0 (Activity Cards Complete)
         color: getActivityColor(type),
         height: size,
         width: size,
