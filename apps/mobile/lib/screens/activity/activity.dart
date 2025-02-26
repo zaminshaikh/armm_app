@@ -337,6 +337,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
   /// Shows the filter modal.
   void _showFilterModal(BuildContext context) {
+    var allTypes = ['income', 'profit', 'deposit', 'withdrawal'];
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -345,9 +346,9 @@ class _ActivityPageState extends State<ActivityPage> {
       backgroundColor: Colors.transparent,
       builder: (context) => ActivityFilterModal(
         typeFilter: _typeFilter,
+        allTypes: allTypes, 
         recipientsFilter: _recipientsFilter,
         allRecipients: allRecipients,
-        // Pass allParents if _allSelected is true to reflect all checkboxes as selected
         clientsFilter: _allSelected ? List.from(allClients) : List.from(_clientsFilter),
         allClients: allClients,
         selectedDates: selectedDates,
@@ -370,9 +371,8 @@ class _ActivityPageState extends State<ActivityPage> {
               _allSelected = _clientsFilter.isEmpty;
             }
           });
-          // Re-apply filtering as needed
-          filterActivities(activities, _typeFilter, _recipientsFilter,
-              _clientsFilter, selectedDates);
+          // Re-apply filtering as needed.
+          filterActivities(activities, _typeFilter, _recipientsFilter, _clientsFilter, selectedDates);
         },
       ),
     );

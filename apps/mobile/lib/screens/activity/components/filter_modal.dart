@@ -1,11 +1,12 @@
-// activity_filter_modal.dart
-
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 
 /// A modal widget for filtering activities.
 class ActivityFilterModal extends StatefulWidget {
+  /// The currently selected type filters.
   final List<String> typeFilter;
+  /// The complete list of type options.
+  final List<String> allTypes;
   final List<String> recipientsFilter;
   final List<String> allRecipients;
 
@@ -15,7 +16,7 @@ class ActivityFilterModal extends StatefulWidget {
 
   final DateTimeRange selectedDates;
 
-  // Updated: onApply now must return clientsFilter as well
+  /// Updated: onApply now must return clientsFilter as well
   final Function(
     List<String> typeFilter,
     List<String> recipientsFilter,
@@ -26,13 +27,12 @@ class ActivityFilterModal extends StatefulWidget {
   const ActivityFilterModal({
     Key? key,
     required this.typeFilter,
+    required this.allTypes,
     required this.recipientsFilter,
     required this.allRecipients,
-
-    // NEW
+    // NEW:
     required this.clientsFilter,
     required this.allClients,
-
     required this.selectedDates,
     required this.onApply,
   }) : super(key: key);
@@ -42,20 +42,21 @@ class ActivityFilterModal extends StatefulWidget {
 }
 
 class _ActivityFilterModalState extends State<ActivityFilterModal> {
-  late List<String> _typeFilter;
+  // Use a separate state variable for the currently selected types.
+  late List<String> _selectedTypes;
   late List<String> _recipientsFilter;
-
-  // NEW
   late List<String> _clientsFilter;
-
   late DateTimeRange _selectedDates;
+
+  // This flag is used for handling the "All" logic in clients filter.
+  bool _allSelected = false;
 
   @override
   void initState() {
     super.initState();
-    _typeFilter = List.from(widget.typeFilter);
+    _selectedTypes = List.from(widget.typeFilter);
     _recipientsFilter = List.from(widget.recipientsFilter);
-    // Initialize clientsFilter with allclients if 'All' is selected
+    // Initialize clientsFilter with allClients if no clients are pre-selected.
     _clientsFilter = widget.clientsFilter.isEmpty
         ? List.from(widget.allClients)
         : List.from(widget.clientsFilter);
@@ -94,7 +95,6 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            
                           ),
                         ),
                       ),
@@ -104,22 +104,10 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                         controller: controller,
                         children: [
                           _buildTimePeriodFilter(),
-                          _buildFilter(
-                            'Type',
-                            widget.typeFilter,
-                            _typeFilter,
-                          ),
-                          _buildFilter(
-                            'Recipients',
-                            widget.allRecipients,
-                            _recipientsFilter,
-                          ),
-                          // NEW: Parent Name Filter Section
-                          _buildFilter(
-                            'Clients',
-                            widget.allClients,
-                            _clientsFilter,
-                          ),
+                          // Use the complete list of types (widget.allTypes) here.
+                          _buildFilter('Type', widget.allTypes, _selectedTypes),
+                          _buildFilter('Recipients', widget.allRecipients, _recipientsFilter),
+                          _buildFilter('Clients', widget.allClients, _clientsFilter),
                         ],
                       ),
                     ),
@@ -172,17 +160,11 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
-                
               ),
             ),
           ),
         ),
       );
-
-
-
-
-
 
   /// Builds a filter section with checkboxes.
   Widget _buildFilter(
@@ -198,7 +180,6 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
-              
             ),
           ),
           iconColor: Colors.white,
@@ -229,7 +210,6 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
           style: const TextStyle(
             fontSize: 16.0,
             color: Colors.white,
-            
           ),
         ),
         activeColor: Colors.black,
@@ -238,11 +218,9 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
           setState(() {
             isChecked = value ?? false;
             if (isChecked) {
-              // Special case if filterKey is 'profit'
-              if (filterKey == 'profit') {
-                if (!filterList.contains('income')) {
-                  filterList.add('income');
-                }
+              // Special case: if filterKey is 'profit', also ensure 'income' is added.
+              if (filterKey == 'profit' && !filterList.contains('income')) {
+                filterList.add('income');
               }
               if (!filterList.contains(filterKey)) {
                 filterList.add(filterKey);
@@ -254,7 +232,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               filterList.remove(filterKey);
             }
 
-            // Update _allSelected if all clients are selected or none
+            // Update _allSelected if all clients are selected or none.
             if (widget.allClients.length == filterList.length) {
               _allSelected = true;
               _clientsFilter = [];
@@ -288,19 +266,17 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    
                   ),
                 ),
                 onPressed: () {
-                  // If all clients are selected, clear _clientsFilter to indicate "All" is selected
                   if (_clientsFilter.length == widget.allClients.length) {
                     _clientsFilter.clear();
                   }
                   Navigator.pop(context);
                   widget.onApply(
-                    _typeFilter,
+                    _selectedTypes,
                     _recipientsFilter,
-                    _clientsFilter,  // NEW
+                    _clientsFilter,
                     _selectedDates,
                   );
                 },
@@ -323,7 +299,6 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        
                       ),
                     ),
                   ],
@@ -332,14 +307,11 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
             ),
             onTap: () {
               setState(() {
-                // Reset everything to defaults
-                _typeFilter = ['income', 'profit', 'deposit', 'withdrawal'];
+                // Reset selected filters to default (all available options).
+                _selectedTypes = List.from(widget.allTypes);
                 _recipientsFilter = List.from(widget.allRecipients);
-
-                // NEW: reset the clients filter to all
                 _clientsFilter = List.from(widget.allClients);
                 _allSelected = true;
-
                 _selectedDates = DateTimeRange(
                   start: DateTime(1900),
                   end: DateTime.now().add(const Duration(days: 30)),
@@ -347,15 +319,13 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               });
               Navigator.pop(context);
               widget.onApply(
-                _typeFilter,
+                _selectedTypes,
                 _recipientsFilter,
-                _clientsFilter, 
+                _clientsFilter,
                 _selectedDates,
               );
             },
           ),
         ],
       );
-
-  bool _allSelected = false; // Add this state variable
 }
