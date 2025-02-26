@@ -44,6 +44,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
   final TextEditingController _cidController = TextEditingController();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   bool isLoading = false;
 
   Future<bool> isValidCID(String cid) async {
@@ -100,47 +101,58 @@ class _ClientIDPageState extends State<ClientIDPage> {
     bool isLoading = false;
 
 >>>>>>> 52a4b49 (Add URL schemes and loading state management for Google sign-up)
+=======
+  bool isLoading = false;
+>>>>>>> d9e3f7e (Optimize CID validation by running database checks in parallel and add loading indicator)
 
   Future<bool> isValidCID(String cid) async {
-    DatabaseService db = DatabaseService.withCID('', cid);
-    // Check if CID exists and is not linked.
-    if (!(await db.checkDocumentExists(cid))) {
-      if (!mounted) return false;
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Invalid CID'),
-          content: const Text('The CID you entered does not exist. Please try again.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-      return false;
-    } else if (await db.checkDocumentLinked(cid)) {
-      if (!mounted) return false;
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('CID Already Linked'),
-          content: const Text('The CID you entered is already linked to an account. Please try again.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-      return false;
-    }
-    // If CID is valid and not linked, return true
-    return true;
-  }
+  DatabaseService db = DatabaseService.withCID('', cid);
 
+  // Run both database checks in parallel
+  final results = await Future.wait([
+    db.checkDocumentExists(cid),
+    db.checkDocumentLinked(cid),
+  ]);
+
+  final bool exists = results[0];
+  final bool linked = results[1];
+
+  if (!exists) {
+    if (!mounted) return false;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Invalid CID'),
+        content: const Text('The CID you entered does not exist. Please try again.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+    return false;
+  } else if (linked) {
+    if (!mounted) return false;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('CID Already Linked'),
+        content: const Text('The CID you entered is already linked to an account. Please try again.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+    return false;
+  }
+  
+  return true;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -251,16 +263,16 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   const SizedBox(height: 16),
 
                   // "What is my Client ID?" (You could make this a clickable text or info button)
-                  Center(
+                  const Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.info_outline_rounded,
                           color: Colors.grey,
                         ),
-                        const SizedBox(width: 12),
-                        const Text(
+                        SizedBox(width: 12),
+                        Text(
                           'What is my Client ID?',
                           style: TextStyle(
                             color: Colors.grey,
@@ -311,10 +323,11 @@ class _ClientIDPageState extends State<ClientIDPage> {
 =======
                     onPressed: () async {
                       log('client_id_page.dart: Checking CID: ${_cidController.text}');
+                      setState(() => isLoading = true);
+                      final bool valid = await isValidCID(_cidController.text);
+                      setState(() => isLoading = false);
 
-                      if (await isValidCID(_cidController.text)) {
-                        log('client_id_page.dart: CID is valid');
-                      } else {
+                      if (!valid) {
                         return;
                       }
 >>>>>>> d8216f8 (Add CID validation logic in client_id_page.dart with user feedback dialogs)
@@ -335,12 +348,17 @@ class _ClientIDPageState extends State<ClientIDPage> {
 
                   // OR Divider
 <<<<<<< HEAD
+<<<<<<< HEAD
                   const Row(
                     children: [
 =======
                   Row(
                     children: const [
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                  const Row(
+                    children: [
+>>>>>>> d9e3f7e (Optimize CID validation by running database checks in parallel and add loading indicator)
                       Expanded(child: Divider()),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -436,7 +454,15 @@ class _ClientIDPageState extends State<ClientIDPage> {
             left: 0,
             child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
+<<<<<<< HEAD
 >>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
+=======
+          if (isLoading)
+            Container(
+              color: Colors.black54,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+>>>>>>> d9e3f7e (Optimize CID validation by running database checks in parallel and add loading indicator)
         ],
       ),
     );
