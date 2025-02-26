@@ -668,6 +668,7 @@ class _ActivityPageState extends State<ActivityPage> {
   /// Shows the filter modal.
   void _showFilterModal(BuildContext context) {
     var allTypes = ['income', 'profit', 'deposit', 'withdrawal'];
+<<<<<<< HEAD
 =======
   
 =======
@@ -675,6 +676,8 @@ class _ActivityPageState extends State<ActivityPage> {
   /// Shows the filter modal.
   void _showFilterModal(BuildContext context) {
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+>>>>>>> 6a85faf (Fixed type options bug in the activity filter modal)
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -684,6 +687,7 @@ class _ActivityPageState extends State<ActivityPage> {
       builder: (context) => ActivityFilterModal(
         typeFilter: _typeFilter,
 <<<<<<< HEAD
+<<<<<<< HEAD
         allTypes: allTypes, 
         recipientsFilter: _recipientsFilter,
         allRecipients: allRecipients,
@@ -692,6 +696,11 @@ class _ActivityPageState extends State<ActivityPage> {
         allRecipients: allRecipients,
         // Pass allParents if _allSelected is true to reflect all checkboxes as selected
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+        allTypes: allTypes, 
+        recipientsFilter: _recipientsFilter,
+        allRecipients: allRecipients,
+>>>>>>> 6a85faf (Fixed type options bug in the activity filter modal)
         clientsFilter: _allSelected ? List.from(allClients) : List.from(_clientsFilter),
         allClients: allClients,
         selectedDates: selectedDates,
@@ -716,6 +725,7 @@ class _ActivityPageState extends State<ActivityPage> {
           });
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           // Re-apply filtering as needed.
           filterActivities(activities, _typeFilter, _recipientsFilter, _clientsFilter, selectedDates);
 =======
@@ -726,6 +736,10 @@ class _ActivityPageState extends State<ActivityPage> {
           filterActivities(activities, _typeFilter, _recipientsFilter,
               _clientsFilter, selectedDates);
 >>>>>>> 6e77a0f (Migrated all Activity Page Helpers)
+=======
+          // Re-apply filtering as needed.
+          filterActivities(activities, _typeFilter, _recipientsFilter, _clientsFilter, selectedDates);
+>>>>>>> 6a85faf (Fixed type options bug in the activity filter modal)
         },
       ),
     );
