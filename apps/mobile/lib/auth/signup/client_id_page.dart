@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'dart:developer';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
@@ -13,12 +14,17 @@ import 'package:armm_app/auth/auth_utils/google_auth.dart';
 class ClientIDPage extends StatefulWidget {
 
 =======
+=======
+import 'dart:developer';
+
+>>>>>>> d8216f8 (Add CID validation logic in client_id_page.dart with user feedback dialogs)
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
+import 'package:armm_app/database/database.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -94,6 +100,47 @@ class _ClientIDPageState extends State<ClientIDPage> {
     bool isLoading = false;
 
 >>>>>>> 52a4b49 (Add URL schemes and loading state management for Google sign-up)
+
+  Future<bool> isValidCID(String cid) async {
+    DatabaseService db = DatabaseService.withCID('', cid);
+    // Check if CID exists and is not linked.
+    if (!(await db.checkDocumentExists(cid))) {
+      if (!mounted) return false;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Invalid CID'),
+          content: const Text('The CID you entered does not exist. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    } else if (await db.checkDocumentLinked(cid)) {
+      if (!mounted) return false;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('CID Already Linked'),
+          content: const Text('The CID you entered is already linked to an account. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    }
+    // If CID is valid and not linked, return true
+    return true;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -244,6 +291,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   AuthButton(
                     label: 'Continue',
 <<<<<<< HEAD
+<<<<<<< HEAD
                     onPressed: () async {
                       log('client_id_page.dart: Checking CID: ${_cidController.text}');
                       setState(() => isLoading = true);
@@ -260,6 +308,16 @@ class _ClientIDPageState extends State<ClientIDPage> {
 =======
                     onPressed: () {
                       print(_cidController.text);
+=======
+                    onPressed: () async {
+                      log('client_id_page.dart: Checking CID: ${_cidController.text}');
+
+                      if (await isValidCID(_cidController.text)) {
+                        log('client_id_page.dart: CID is valid');
+                      } else {
+                        return;
+                      }
+>>>>>>> d8216f8 (Add CID validation logic in client_id_page.dart with user feedback dialogs)
                       // Pass data to the next screen
                       SignUpData signUpData = SignUpData(cid: _cidController.text);
                       Navigator.push(
