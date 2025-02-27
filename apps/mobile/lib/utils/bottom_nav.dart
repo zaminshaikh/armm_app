@@ -1,4 +1,5 @@
 import 'package:armm_app/screens/activity/activity.dart';
+import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,7 +19,7 @@ class BottomNavBar extends StatelessWidget {
     Widget page;
     switch (item) {
       case NavigationItem.dashboard:
-        page = const ActivityPage();
+        page = const DashboardPage();
         break;
       case NavigationItem.analytics:
         page = const ActivityPage();
