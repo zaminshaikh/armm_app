@@ -21,6 +21,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/push_notification.dart';
 import 'package:armm_app/utils/utilities.dart';
+import 'package:armm_app/screens/font_test_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Initialize third-party services and configurations
 Future<void> _initializeServices() async {
@@ -107,6 +109,7 @@ class _MyAppState extends State<MyApp> {
                 '/my_profiles': (context) => MyProfilesPage(),
                 '/authentication': (context) => AuthenticationPage(),
                 '/disclaimer': (context) => DisclaimerPage(),
+                '/font_test': (context) => const FontTestScreen(),
               },
             ),
           );
@@ -117,21 +120,22 @@ class _MyAppState extends State<MyApp> {
     return ThemeData(
       scaffoldBackgroundColor: Colors.white,
       primarySwatch: Colors.blue,
-      fontFamily: 'Inter',
-      textTheme: const TextTheme(
-        bodyLarge: TextStyle(letterSpacing: -0.5),
-        bodyMedium: TextStyle(letterSpacing: -0.5),
-        displayLarge: TextStyle(letterSpacing: -0.5),
-        displayMedium: TextStyle(letterSpacing: -0.5),
-        displaySmall: TextStyle(letterSpacing: -0.5),
-        headlineMedium: TextStyle(letterSpacing: -0.5),
-        headlineSmall: TextStyle(letterSpacing: -0.5),
-        titleLarge: TextStyle(letterSpacing: -0.5),
-        titleMedium: TextStyle(letterSpacing: -0.5),
-        titleSmall: TextStyle(letterSpacing: -0.5),
-        bodySmall: TextStyle(letterSpacing: -0.5),
-        labelLarge: TextStyle(letterSpacing: -0.5),
-        labelSmall: TextStyle(letterSpacing: -0.5),
+      textTheme: GoogleFonts.interTextTheme(
+        const TextTheme(
+          bodyLarge: TextStyle(letterSpacing: -0.5),
+          bodyMedium: TextStyle(letterSpacing: -0.5),
+          displayLarge: TextStyle(letterSpacing: -0.5),
+          displayMedium: TextStyle(letterSpacing: -0.5),
+          displaySmall: TextStyle(letterSpacing: -0.5),
+          headlineMedium: TextStyle(letterSpacing: -0.5),
+          headlineSmall: TextStyle(letterSpacing: -0.5),
+          titleLarge: TextStyle(letterSpacing: -0.5),
+          titleMedium: TextStyle(letterSpacing: -0.5),
+          titleSmall: TextStyle(letterSpacing: -0.5),
+          bodySmall: TextStyle(letterSpacing: -0.5),
+          labelLarge: TextStyle(letterSpacing: -0.5),
+          labelSmall: TextStyle(letterSpacing: -0.5),
+        ),
       ),
     );
   }

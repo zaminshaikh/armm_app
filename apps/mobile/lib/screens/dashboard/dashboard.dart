@@ -12,6 +12,7 @@ import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -180,6 +181,12 @@ class _DashboardPageState extends State<DashboardPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/font_test');
+              },
+              child: const Text('Test Fonts'),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -223,11 +230,10 @@ class _DashboardPageState extends State<DashboardPage>
           padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
           child: Text(
             'Recent Transactions',
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.black,
-              fontFamily: 'Titillium Web',
             ),
           ),
         ),
@@ -242,23 +248,21 @@ class _DashboardPageState extends State<DashboardPage>
           const SizedBox(height: 40),
           Row(
             children: [
-              const Text(
+              Text(
                 'Connected Users',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  fontFamily: 'Titillium Web',
                 ),
               ),
               const Spacer(),
               Text(
                 '(${client!.connectedUsers?.length})',
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  fontFamily: 'Titillium Web',
                 ),
               ),
             ],
