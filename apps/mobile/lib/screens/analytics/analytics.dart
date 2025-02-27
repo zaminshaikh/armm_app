@@ -1,8 +1,12 @@
 import 'package:armm_app/utils/app_bar.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/utils/bottom_nav.dart';
 =======
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+import 'package:armm_app/utils/bottom_nav.dart';
+>>>>>>> 133d30b (Add BottomNavBar to AnalyticsPage for improved navigation)
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:armm_app/components/assets_structure_section.dart';
@@ -98,9 +102,13 @@ class AnalyticsPageState extends State<AnalyticsPage> {
         ),
       ),
 <<<<<<< HEAD
+<<<<<<< HEAD
       bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.analytics),
 =======
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+      bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.analytics),
+>>>>>>> 133d30b (Add BottomNavBar to AnalyticsPage for improved navigation)
     );
   }
 
