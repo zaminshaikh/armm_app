@@ -69,12 +69,17 @@ class _PasswordPageState extends State<PasswordPage> {
   late AuthService appState;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   final bool _obscurePassword = true;
   final bool _obscureConfirmPassword = true;
 =======
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+  final bool _obscurePassword = true;
+  final bool _obscureConfirmPassword = true;
+>>>>>>> c425425 (Remove unnecessary error handling logic for checking document existence and linkage on password page. Set sign up data password when password is changed on password page.)
 
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasCapitalLetter => _passwordController.text.contains(RegExp(r'[A-Z]'));
@@ -191,6 +196,7 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
       db = DatabaseService.withCID(userCredential.user!.uid, widget.signUpData.cid);
 
+<<<<<<< HEAD
       // Check if CID exists and is not linked.
       if (!(await db.checkDocumentExists(widget.signUpData.cid))) {
         await _showErrorAndDeleteUser(
@@ -203,6 +209,8 @@ class _PasswordPageState extends State<PasswordPage> {
       }
 >>>>>>> 07991de (Fixed UI of all Auth pages)
 
+=======
+>>>>>>> c425425 (Remove unnecessary error handling logic for checking document existence and linkage on password page. Set sign up data password when password is changed on password page.)
       // Send email verification.
       User? user = FirebaseAuth.instance.currentUser;
       
@@ -418,6 +426,7 @@ class _PasswordPageState extends State<PasswordPage> {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   @override
   Widget build(BuildContext context) {
 =======
@@ -445,6 +454,8 @@ class _PasswordPageState extends State<PasswordPage> {
     log('Error: $message');
   }
 
+=======
+>>>>>>> c425425 (Remove unnecessary error handling logic for checking document existence and linkage on password page. Set sign up data password when password is changed on password page.)
   @override
   Widget build(BuildContext context) {
     print("Client ID received in PasswordPage: ${widget.signUpData.cid}"); // DEBUG PRINT
@@ -573,10 +584,14 @@ class _PasswordPageState extends State<PasswordPage> {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
 <<<<<<< HEAD
+<<<<<<< HEAD
                     onChanged: (_) => setState(() {widget.password = _passwordController.text;}),
 =======
                     onChanged: (_) => setState(() {}),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                    onChanged: (_) => setState(() {widget.signUpData.password = _passwordController.text;}),
+>>>>>>> c425425 (Remove unnecessary error handling logic for checking document existence and linkage on password page. Set sign up data password when password is changed on password page.)
                   ),
 
                   // Confirm Password
