@@ -441,6 +441,9 @@ packages:
     source: hosted
     version: "10.8.0"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
   google_fonts:
     dependency: "direct main"
     description:
@@ -449,8 +452,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.1"
+<<<<<<< HEAD
 =======
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
   google_identity_services_web:
     dependency: transitive
     description:

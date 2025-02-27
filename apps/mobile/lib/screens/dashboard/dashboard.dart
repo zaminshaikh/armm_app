@@ -20,9 +20,13 @@ import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
 =======
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+import 'package:google_fonts/google_fonts.dart';
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -208,6 +212,12 @@ class _DashboardPageState extends State<DashboardPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/font_test');
+              },
+              child: const Text('Test Fonts'),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -267,6 +277,7 @@ class _DashboardPageState extends State<DashboardPage>
           child: Text(
             'Recent Transactions',
 <<<<<<< HEAD
+<<<<<<< HEAD
             style: GoogleFonts.inter(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -278,6 +289,12 @@ class _DashboardPageState extends State<DashboardPage>
               color: Colors.black,
               fontFamily: 'Titillium Web',
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+            style: GoogleFonts.inter(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
             ),
           ),
         ),
@@ -293,6 +310,7 @@ class _DashboardPageState extends State<DashboardPage>
           Row(
             children: [
 <<<<<<< HEAD
+<<<<<<< HEAD
               Text(
                 'Connected Users',
                 style: GoogleFonts.inter(
@@ -301,18 +319,25 @@ class _DashboardPageState extends State<DashboardPage>
                   color: Colors.black,
 =======
               const Text(
+=======
+              Text(
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
                 'Connected Users',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
+<<<<<<< HEAD
                   fontFamily: 'Titillium Web',
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
                 ),
               ),
               const Spacer(),
               Text(
                 '(${client!.connectedUsers?.length})',
+<<<<<<< HEAD
 <<<<<<< HEAD
                 style: GoogleFonts.inter(
                   fontSize: 20,
@@ -325,6 +350,12 @@ class _DashboardPageState extends State<DashboardPage>
                   color: Colors.black,
                   fontFamily: 'Titillium Web',
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+                style: GoogleFonts.inter(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
                 ),
               ),
             ],

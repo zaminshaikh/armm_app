@@ -64,6 +64,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/push_notification.dart';
 import 'package:armm_app/utils/utilities.dart';
+<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/auth/auth_utils/faceid.dart';
 import 'package:armm_app/auth/auth_utils/initial_face_id.dart';
@@ -79,6 +80,10 @@ import 'screens/profile/pages/disclaimer_page.dart';
 >>>>>>> 74eb99f (Made Dummy Sub-Pages For the Profile Page)
 =======
 >>>>>>> d161894 (Documents Are Pulling Properly)
+=======
+import 'package:armm_app/screens/font_test_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
 
 /// Initialize third-party services and configurations
 Future<void> _initializeServices() async {
@@ -202,6 +207,7 @@ class _MyAppState extends State<MyApp> {
 >>>>>>> d161894 (Documents Are Pulling Properly)
   @override
   Widget build(BuildContext context) => StreamBuilder<User?>(
+<<<<<<< HEAD
     stream: FirebaseAuth.instance.userChanges(),
     builder: (context, authSnapshot) {
       final user = authSnapshot.data;
@@ -212,6 +218,35 @@ class _MyAppState extends State<MyApp> {
         catchError: (context, error) {
           log('main.dart: Error in fetching client stream: $error');
           return null;
+=======
+        stream: FirebaseAuth.instance.userChanges(),
+        builder: (context, authSnapshot) {
+          final user = authSnapshot.data;
+          return StreamProvider<Client?>(
+            key: ValueKey(user?.uid),
+            create: (_) => getClientStream(context),
+            initialData: null,
+            catchError: (context, error) {
+              log('main.dart: Error in fetching client stream: $error');
+              return null;
+            },
+            child: MaterialApp(
+              title: 'ARMM App',
+              theme: _buildAppTheme(), // your app theme function
+              home: OnboardingPage(signUpData: signUpData),
+              routes: {
+                '/profile': (context) => ProfilePage(),
+                '/support': (context) => SupportPage(),
+                '/documents': (context) => DocumentsPage(),
+                '/settings': (context) => SettingsPage(),
+                '/my_profiles': (context) => MyProfilesPage(),
+                '/authentication': (context) => AuthenticationPage(),
+                '/disclaimer': (context) => DisclaimerPage(),
+                '/font_test': (context) => const FontTestScreen(),
+              },
+            ),
+          );
+>>>>>>> 5502a8a (Completed Dashboard App Bar)
         },
         child: MaterialApp(
           navigatorKey: navigatorKey,
@@ -244,21 +279,22 @@ class _MyAppState extends State<MyApp> {
     return ThemeData(
       scaffoldBackgroundColor: Colors.white,
       primarySwatch: Colors.blue,
-      fontFamily: 'Inter',
-      textTheme: const TextTheme(
-        bodyLarge: TextStyle(letterSpacing: -0.5),
-        bodyMedium: TextStyle(letterSpacing: -0.5),
-        displayLarge: TextStyle(letterSpacing: -0.5),
-        displayMedium: TextStyle(letterSpacing: -0.5),
-        displaySmall: TextStyle(letterSpacing: -0.5),
-        headlineMedium: TextStyle(letterSpacing: -0.5),
-        headlineSmall: TextStyle(letterSpacing: -0.5),
-        titleLarge: TextStyle(letterSpacing: -0.5),
-        titleMedium: TextStyle(letterSpacing: -0.5),
-        titleSmall: TextStyle(letterSpacing: -0.5),
-        bodySmall: TextStyle(letterSpacing: -0.5),
-        labelLarge: TextStyle(letterSpacing: -0.5),
-        labelSmall: TextStyle(letterSpacing: -0.5),
+      textTheme: GoogleFonts.interTextTheme(
+        const TextTheme(
+          bodyLarge: TextStyle(letterSpacing: -0.5),
+          bodyMedium: TextStyle(letterSpacing: -0.5),
+          displayLarge: TextStyle(letterSpacing: -0.5),
+          displayMedium: TextStyle(letterSpacing: -0.5),
+          displaySmall: TextStyle(letterSpacing: -0.5),
+          headlineMedium: TextStyle(letterSpacing: -0.5),
+          headlineSmall: TextStyle(letterSpacing: -0.5),
+          titleLarge: TextStyle(letterSpacing: -0.5),
+          titleMedium: TextStyle(letterSpacing: -0.5),
+          titleSmall: TextStyle(letterSpacing: -0.5),
+          bodySmall: TextStyle(letterSpacing: -0.5),
+          labelLarge: TextStyle(letterSpacing: -0.5),
+          labelSmall: TextStyle(letterSpacing: -0.5),
+        ),
       ),
 <<<<<<< HEAD
 <<<<<<< HEAD
