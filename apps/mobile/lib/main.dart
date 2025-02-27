@@ -98,8 +98,8 @@ class _MyAppState extends State<MyApp> {
             child: MaterialApp(
               title: 'ARMM App',
               theme: _buildAppTheme(), // your app theme function
-              home: OnboardingPage(signUpData: signUpData),
               routes: {
+                '/': (context) => OnboardingPage(signUpData: SignUpData()),
                 '/profile': (context) => const ProfilePage(),
                 '/support': (context) => const SupportPage(),
                 '/documents': (context) => const DocumentsPage(),
