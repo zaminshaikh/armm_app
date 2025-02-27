@@ -9,7 +9,6 @@ import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
-import 'package:armm_app/screens/dashboard/home_page.dart';
 import 'package:armm_app/signup_data.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
