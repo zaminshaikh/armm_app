@@ -145,8 +145,13 @@ class _LineChartSectionState extends State<LineChartSection> {
               (client) {
                 setState(() {
                   selectedClient = client;
-                  selectedGraph = client.graphs?.first;
-                  selectedAccount = selectedGraph?.account;
+                  if (client.graphs != null && client.graphs!.isNotEmpty) {
+                    selectedGraph = client.graphs!.first;
+                    selectedAccount = selectedGraph?.account;
+                  } else {
+                    selectedGraph = null;
+                    selectedAccount = null;
+                  }
                   _prepareGraphPoints();
                 });
               },
