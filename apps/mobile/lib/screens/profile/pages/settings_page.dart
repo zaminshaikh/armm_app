@@ -1148,166 +1148,178 @@ class _SettingsPageState extends State<SettingsPage> {
           context: context,
           builder: (BuildContext context) {
             TextEditingController emailController = TextEditingController();
+  
             Widget buildCloseButton(BuildContext context) {
               return Align(
                 alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.close, color: Colors.black),
+                child: IconButton(
+                  icon: Icon(Icons.close, color: Colors.grey[700]),
+                  onPressed: () => Navigator.pop(context),
                 ),
               );
             }
-            Widget buildIconArt() {
-              return SvgPicture.asset(
-                '',
-              );
-            }
-            Widget buildEmailInputSection(TextEditingController emailController) {
+  
+            Widget buildEmailInputSection(TextEditingController controller) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     'Change Email',
                     style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        ),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'You are changing the email associated with your account.',
+                    'Update the email associated with your account.',
                     style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                        ),
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   const Text(
                     'Email',
                     style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        ),
+                      fontSize: 16,
+                      color: Colors.black87,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    controller: emailController,
+                    controller: controller,
                     keyboardType: TextInputType.emailAddress,
                     style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        ),
+                      fontSize: 16,
+                      color: Colors.black87,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter your new email',
-                      hintStyle: TextStyle(
-                          color: Colors.grey[400],
-                          ),
+                      hintStyle: TextStyle(color: Colors.grey[500]),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(11)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(11),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
-                            color: Colors.blue, width: 2),
+                          color: Color(0xFF2B41B8),
+                          width: 2,
+                        ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
-                          vertical: 14, horizontal: 14),
+                        vertical: 14,
+                        horizontal: 14,
+                      ),
                     ),
                   ),
                 ],
               );
             }
-            Widget buildContinueButton(BuildContext context, TextEditingController emailController) {
-              return ElevatedButton(
-                onPressed: () async {
-                  try {
-                    String newEmail = emailController.text.trim();
-                    var user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      await user.updateEmail(newEmail);
-                      await user.sendEmailVerification();
+  
+            Widget buildContinueButton(
+                BuildContext context, TextEditingController controller) {
+              return SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      String newEmail = controller.text.trim();
+                      var user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        // Send the verification email
+                        await user.verifyBeforeUpdateEmail(newEmail);
+                        // Dismiss the current dialog
+                        Navigator.of(context).pop();
+                        // Show the success dialog
                         showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Email Change Requested'),
+                              content: const Text(
+                                'We have sent a verification email to your new email address. Please verify it to complete the update.',
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    } catch (e, stackTrace) {
+                      log('settings_page.dart: Error updating email: $e');
+                      log(stackTrace.toString());
+                      showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                          title: const Text('Email Change Requested'),
-                          content: const Text('Please check your email for a verification link. You need to verify the new email address before it takes effect.'),
-                          actions: <Widget>[
-                            TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            ),
-                          ],
+                            title: const Text('Error'),
+                            content: Text('Error updating email: $e'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
                           );
                         },
-                        );
-                    }
-                  } catch (e) {
-                    log('settings.dart: Error updating email: $e');
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Error'),
-                        content: Text('Error updating email: $e'),
-                        actions: <Widget>[
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                          Navigator.of(context).pop();
-                          },
-                        ),
-                        ],
                       );
-                      },
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 30, 75, 137),
-                  splashFactory: NoSplash.splashFactory,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2B41B8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                ),
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      ),
-                ),
-              );
-            }
-            AlertDialog buildsettingsDialog(BuildContext context, TextEditingController emailController) {
-              return AlertDialog(
-                backgroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      buildCloseButton(context),
-                      const SizedBox(height: 20),
-                      buildIconArt(),
-                      const SizedBox(height: 30),
-                      buildEmailInputSection(emailController),
-                      const SizedBox(height: 20),
-                      buildContinueButton(context, emailController),
-                    ],
+                    ),
                   ),
                 ),
               );
             }
-            return buildsettingsDialog(context, emailController);
+
+
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    buildCloseButton(context),
+                    const SizedBox(height: 16),
+                    buildEmailInputSection(emailController),
+                    const SizedBox(height: 24),
+                    buildContinueButton(context, emailController),
+                  ],
+                ),
+              ),
+            );
           },
         );
       },
+      
+      
+      
+      
       child: Container(
         height: 45,
         decoration: BoxDecoration(
