@@ -35,8 +35,8 @@ class _PasswordPageState extends State<PasswordPage> {
   late DatabaseService db;
   late AuthService appState;
 
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  final bool _obscurePassword = true;
+  final bool _obscureConfirmPassword = true;
 
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasCapitalLetter => _passwordController.text.contains(RegExp(r'[A-Z]'));
@@ -82,17 +82,6 @@ class _PasswordPageState extends State<PasswordPage> {
 
       // Initialize database service with CID.
       db = DatabaseService.withCID(userCredential.user!.uid, widget.signUpData.cid);
-
-      // Check if CID exists and is not linked.
-      if (!(await db.checkDocumentExists(widget.signUpData.cid))) {
-        await _showErrorAndDeleteUser(
-            'There is no record of the Client ID $widget.signUpData.cid in the database. Please contact support or re-enter your Client ID.');
-        return;
-      } else if (await db.checkDocumentLinked(widget.signUpData.cid)) {
-        await _showErrorAndDeleteUser(
-            'User already exists for given Client ID $widget.signUpData.cid. Please log in instead.');
-        return;
-      }
 
       // Send email verification.
       User? user = FirebaseAuth.instance.currentUser;
@@ -210,30 +199,6 @@ class _PasswordPageState extends State<PasswordPage> {
       }
       return false;
     }
-  }
-
-  /// Shows an error dialog and deletes the current user.
-  Future<void> _showErrorAndDeleteUser(String message) async {
-    if (!mounted) return;
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-    await FirebaseAuth.instance.currentUser?.delete();
-    log('Error: $message');
   }
 
   @override
@@ -358,7 +323,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     hintText: 'Password',
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    onChanged: (_) => setState(() {}),
+                    onChanged: (_) => setState(() {widget.signUpData.password = _passwordController.text;}),
                   ),
 
                   // Confirm Password
