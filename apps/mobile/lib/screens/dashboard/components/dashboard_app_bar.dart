@@ -58,11 +58,11 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundColor: Colors.white,
+                  backgroundColor: const Color.fromARGB(54, 255, 255, 255),
                   child: Text(
                     '${client.firstName[0]}${client.lastName[0]}',
                     style: GoogleFonts.inter(
-                      color: const Color(0xFF2B41B8),
+                      color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                     ),
