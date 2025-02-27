@@ -4,14 +4,14 @@ import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class EmailPage extends StatefulWidget {
-  final SignUpData signUpData;
+  final String cid;
+  String email = '';
 
-  const EmailPage({Key? key, required this.signUpData}) : super(key: key);
+  EmailPage({super.key, required this.cid});
 
   @override
   _EmailPageState createState() => _EmailPageState();
@@ -24,7 +24,7 @@ class _EmailPageState extends State<EmailPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Client ID received in EmailPage: ${widget.signUpData.cid}"); // DEBUG PRINT
+    print("Client ID received in EmailPage: ${widget.cid}"); // DEBUG PRINT
     return Scaffold(
       body: Stack(
         children: [
@@ -72,11 +72,11 @@ class _EmailPageState extends State<EmailPage> {
                   AuthButton(
                     label: 'Continue',
                     onPressed: () {
-                      widget.signUpData.email = _emailController.text;
+                      widget.email = _emailController.text;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PasswordPage(signUpData: widget.signUpData),
+                          builder: (context) => PasswordPage(cid: widget.cid, email: widget.email),
                         ),
                       );
                     },
@@ -92,7 +92,7 @@ class _EmailPageState extends State<EmailPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                          builder: (context) => LoginPage(),
                         ),
                       );
                     },

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'onboarding_top_section.dart';
 import 'onboarding_buttons.dart';
-import 'package:armm_app/signup_data.dart';
 
 class OnboardingPage extends StatefulWidget {
-  final SignUpData signUpData;
 
-  const OnboardingPage({super.key, required this.signUpData});
+  const OnboardingPage({super.key});
 
   @override
   _OnboardingPageState createState() => _OnboardingPageState();
@@ -33,7 +31,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
               const Spacer(),
               // The bottom portion with Sign Up & Log In buttons
-              AuthButtons(signUpData: widget.signUpData),
+              const AuthButtons(),
             ],
           ),
         ),

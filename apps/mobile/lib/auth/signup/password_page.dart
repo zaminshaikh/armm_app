@@ -9,18 +9,17 @@ import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
-import 'package:armm_app/screens/dashboard/home_page.dart';
-import 'package:armm_app/signup_data.dart';
-import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 class PasswordPage extends StatefulWidget {
-  final SignUpData signUpData;
 
-  const PasswordPage({Key? key, required this.signUpData}) : super(key: key);
+  final String cid;
+  final String email;
+  String password = '';
+
+  PasswordPage({super.key, required this.cid, required this.email});
 
   @override
   _PasswordPageState createState() => _PasswordPageState();
@@ -70,7 +69,7 @@ class _PasswordPageState extends State<PasswordPage> {
       // Create a new user with email and password.
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: widget.signUpData.email,
+        email: widget.email,
         password: _passwordController.text,
       );
 
@@ -81,15 +80,15 @@ class _PasswordPageState extends State<PasswordPage> {
       log('UserCredential created: ${userCredential.user!.uid}. In buffer.');
 
       // Initialize database service with CID.
-      db = DatabaseService.withCID(userCredential.user!.uid, widget.signUpData.cid);
+      db = DatabaseService.withCID(userCredential.user!.uid, widget.cid);
 
       // Send email verification.
       User? user = FirebaseAuth.instance.currentUser;
       
       if (user == null) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: widget.signUpData.email,
-          password: widget.signUpData.password,
+          email: widget.email,
+          password: widget.password,
         );
       }
 
@@ -119,7 +118,7 @@ class _PasswordPageState extends State<PasswordPage> {
       );
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-      await handleFirebaseAuthException(context, e, widget.signUpData.email);
+      await handleFirebaseAuthException(context, e, widget.email);
     } catch (e) {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
       await FirebaseAuth.instance.currentUser?.delete();
@@ -203,7 +202,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Client ID received in PasswordPage: ${widget.signUpData.cid}"); // DEBUG PRINT
+    print("Client ID received in PasswordPage: ${widget.cid}"); // DEBUG PRINT
     return Scaffold(
       body: Stack(
         children: [
@@ -323,7 +322,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     hintText: 'Password',
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    onChanged: (_) => setState(() {widget.signUpData.password = _passwordController.text;}),
+                    onChanged: (_) => setState(() {widget.password = _passwordController.text;}),
                   ),
 
                   // Confirm Password
@@ -354,7 +353,7 @@ class _PasswordPageState extends State<PasswordPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                          builder: (context) => LoginPage(),
                         ),
                       );
                     },

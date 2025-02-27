@@ -1,7 +1,4 @@
-import 'package:armm_app/auth/auth_utils/auth_functions.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // Import your separate widgets
 import 'login_header.dart';
@@ -10,9 +7,8 @@ import 'login_social.dart';
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 
 class LoginPage extends StatefulWidget {
-  final SignUpData signUpData;
 
-  const LoginPage({Key? key, required this.signUpData}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -67,7 +63,6 @@ class _LoginPageState extends State<LoginPage> {
                         _obscurePassword = !_obscurePassword;
                       });
                     },
-                    signUpData: widget.signUpData,
                   ),
                   const SizedBox(height: 12),
                   // The divider & social login buttons & sign-up link

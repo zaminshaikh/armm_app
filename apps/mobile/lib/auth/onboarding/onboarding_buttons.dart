@@ -1,13 +1,11 @@
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 
 /// Stateless version
 class AuthButtons extends StatelessWidget {
-  final SignUpData signUpData;
 
-  const AuthButtons({Key? key, required this.signUpData}) : super(key: key);
+  const AuthButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +51,7 @@ class AuthButtons extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginPage(signUpData: signUpData)),
+                MaterialPageRoute(builder: (context) => LoginPage()),
               );
             },
             child: const Text(
@@ -70,9 +68,8 @@ class AuthButtons extends StatelessWidget {
 
 /// Stateful version
 class AuthButtonsStateful extends StatefulWidget {
-  final SignUpData signUpData;
 
-  const AuthButtonsStateful({Key? key, required this.signUpData}) : super(key: key);
+  const AuthButtonsStateful({Key? key}) : super(key: key);
 
   @override
   _AuthButtonsStatefulState createState() => _AuthButtonsStatefulState();
@@ -123,7 +120,7 @@ class _AuthButtonsStatefulState extends State<AuthButtonsStateful> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginPage(signUpData: widget.signUpData)),
+                MaterialPageRoute(builder: (context) => LoginPage()),
               );
             },
             child: const Text(

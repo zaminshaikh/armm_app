@@ -1,19 +1,17 @@
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/login/login.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 
 /// Stateless version
 class HomePage extends StatelessWidget {
-  final SignUpData signUpData;
 
-  const HomePage({Key? key, required this.signUpData}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   Future<void> _signOut(BuildContext context) async {
     await AuthService().signOut();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage(signUpData: signUpData)),
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 
@@ -43,9 +41,8 @@ class HomePage extends StatelessWidget {
 
 /// Stateful version
 class HomePageStateful extends StatefulWidget {
-  final SignUpData signUpData;
 
-  const HomePageStateful({Key? key, required this.signUpData}) : super(key: key);
+  const HomePageStateful({Key? key}) : super(key: key);
 
   @override
   _HomePageStatefulState createState() => _HomePageStatefulState();
@@ -58,7 +55,7 @@ class _HomePageStatefulState extends State<HomePageStateful> {
     await _authService.signOut();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage(signUpData: widget.signUpData)),
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 

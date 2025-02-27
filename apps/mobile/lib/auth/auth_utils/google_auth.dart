@@ -5,7 +5,6 @@ import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -61,7 +60,7 @@ class GoogleAuthService {
         showAlert = true;
         await Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginPage(signUpData: SignUpData())),
+          MaterialPageRoute(builder: (context) => const LoginPage()),
         );
         return null;
       }
@@ -242,7 +241,7 @@ class GoogleAuthService {
         showAlert = true;
         await Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  LoginPage(signUpData: SignUpData())),
+          MaterialPageRoute(builder: (context) =>  const LoginPage()),
         );
         return null;
       }

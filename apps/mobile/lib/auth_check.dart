@@ -1,7 +1,6 @@
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/profile/profile.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -68,15 +67,15 @@ class _AuthCheckState extends State<AuthCheck> {
               return const ProfilePage();
             } else {
               // User is not authenticated, email not verified, or not linked
-              return OnboardingPage(signUpData: SignUpData());
+              return const OnboardingPage();
             }
           });
         } else {
           // User is not signed in
-          return OnboardingPage(signUpData: SignUpData());
+          return const OnboardingPage();
         }
       } else {
-        return OnboardingPage(signUpData: SignUpData());
+        return const OnboardingPage();
       }
     },
   );

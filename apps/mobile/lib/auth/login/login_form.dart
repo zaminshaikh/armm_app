@@ -7,7 +7,6 @@ import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/forgot_password/forgot_password.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class LoginForm extends StatelessWidget {
   final bool obscurePassword;
   final Color primaryColor;
   final VoidCallback onTogglePassword;
-  final SignUpData signUpData;
 
   const LoginForm({
     Key? key,
@@ -28,7 +26,6 @@ class LoginForm extends StatelessWidget {
     required this.obscurePassword,
     required this.primaryColor,
     required this.onTogglePassword,
-    required this.signUpData,
   }) : super(key: key);
 
   // Sign user in method
@@ -93,7 +90,6 @@ class LoginForm extends StatelessWidget {
       return false;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

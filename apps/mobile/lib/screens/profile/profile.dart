@@ -1,7 +1,6 @@
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/screens/profile/components/name_cid.dart';
 import 'package:armm_app/screens/profile/components/profile_buttons.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:armm_app/client_model.dart';
@@ -41,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
     await AuthService().signOut();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage(signUpData: SignUpData())),
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 
