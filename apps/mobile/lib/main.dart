@@ -206,34 +206,35 @@ class _MyAppState extends State<MyApp> {
 >>>>>>> d161894 (Documents Are Pulling Properly)
   @override
   Widget build(BuildContext context) => StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.userChanges(),
-        builder: (context, authSnapshot) {
-          final user = authSnapshot.data;
-          return StreamProvider<Client?>(
-            key: ValueKey(user?.uid),
-            create: (_) => getClientStream(context),
-            initialData: null,
-            catchError: (context, error) {
-              log('main.dart: Error in fetching client stream: $error');
-              return null;
-            },
-            child: MaterialApp(
-              title: 'ARMM App',
-              theme: _buildAppTheme(), // your app theme function
-              routes: {
-                '/': (context) => OnboardingPage(signUpData: SignUpData()),
-                '/profile': (context) => const ProfilePage(),
-                '/support': (context) => const SupportPage(),
-                '/documents': (context) => const DocumentsPage(),
-                '/settings': (context) => const SettingsPage(),
-                '/my_profiles': (context) => const MyProfilesPage(),
-                '/authentication': (context) => const AuthenticationPage(),
-                '/disclaimer': (context) => DisclaimerPage(),
-              },
-            ),
-          );
+    stream: FirebaseAuth.instance.userChanges(),
+    builder: (context, authSnapshot) {
+      final user = authSnapshot.data;
+      return StreamProvider<Client?>(
+        key: ValueKey(user?.uid),
+        create: (_) => getClientStream(context),
+        initialData: null,
+        catchError: (context, error) {
+          log('main.dart: Error in fetching client stream: $error');
+          return null;
         },
+        child: MaterialApp(
+          initialRoute: '/',
+          title: 'ARMM',
+          theme: _buildAppTheme(), // your app theme function
+          routes: {
+            '/': (context) => OnboardingPage(signUpData: SignUpData()),
+            '/profile': (context) => const ProfilePage(),
+            '/support': (context) => const SupportPage(),
+            '/documents': (context) => const DocumentsPage(),
+            '/settings': (context) => const SettingsPage(),
+            '/my_profiles': (context) => const MyProfilesPage(),
+            '/authentication': (context) => const AuthenticationPage(),
+            '/disclaimer': (context) => DisclaimerPage(),
+          },
+        ),
       );
+    },
+  );
 
   ThemeData _buildAppTheme() {
     return ThemeData(
