@@ -2,7 +2,10 @@
 <<<<<<< HEAD
 import 'package:armm_app/screens/activity/activity.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/screens/analytics/analytics.dart';
+=======
+>>>>>>> 0d5bc67 (Update BottomNavBar to navigate to DashboardPage instead of ActivityPage)
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +27,7 @@ class BottomNavBar extends StatelessWidget {
     switch (item) {
       case NavigationItem.dashboard:
         page = const DashboardPage();
+<<<<<<< HEAD
         break;
       case NavigationItem.analytics:
         page = const AnalyticsPage();
@@ -107,6 +111,8 @@ class BottomNavBar extends StatelessWidget {
     switch (item) {
       case NavigationItem.dashboard:
         page = const ActivityPage();
+=======
+>>>>>>> 0d5bc67 (Update BottomNavBar to navigate to DashboardPage instead of ActivityPage)
         break;
       case NavigationItem.analytics:
         page = const ActivityPage();
