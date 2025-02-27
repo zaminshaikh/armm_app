@@ -35,7 +35,7 @@ class _LineChartSectionState extends State<LineChartSection> {
   Client? selectedClient;
 
   // BRAND COLOR: replace with your actual brand color
-  final Color brandBlue = const Color(0xFF2B41B8);
+  final Color ARMMBlue = const Color(0xFF2B41B8);
 
   @override
   void initState() {
@@ -400,10 +400,10 @@ class _LineChartSectionState extends State<LineChartSection> {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   // **Changed** brand color fill if selected
-                  color: isSelected ? brandBlue : Colors.black,
+                  color: isSelected ? ARMMBlue : Colors.transparent,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
-                    color: isSelected ? brandBlue : Colors.black,
+                    color: isSelected ? ARMMBlue : const Color.fromARGB(255, 165, 165, 165),
                     width: 1,
                   ),
                 ),
@@ -413,13 +413,13 @@ class _LineChartSectionState extends State<LineChartSection> {
                       'assets/icons/profile.svg',
                       width: 16,
                       height: 16,
-                      color: Colors.white,
+                      color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
                     ),
                     const SizedBox(width: 12),
                     Text(
                       displayName.length > 20 ? getInitials(displayName) : displayName,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
                         fontSize: 16,
                         fontWeight: isSelected ? FontWeight.w700 : FontWeight.w300,
                       ),
@@ -632,7 +632,7 @@ class _LineChartSectionState extends State<LineChartSection> {
         isStepLineChart: true,
         lineChartStepData: const LineChartStepData(stepDirection: 0),
         barWidth: 3,
-        color: brandBlue, // **Changed** line color to brand color
+        color: ARMMBlue, // **Changed** line color to brand color
         isStrokeCapRound: true,
         dotData: FlDotData(
           show: false,
@@ -650,7 +650,7 @@ class _LineChartSectionState extends State<LineChartSection> {
             if (selectedGraph != null && selectedGraph!.graphPoints.isNotEmpty) {
               return FlDotCirclePainter(
                 radius: 4,
-                color: brandBlue,
+                color: ARMMBlue,
                 strokeWidth: 2,
                 strokeColor: Colors.white,
               );
@@ -671,7 +671,7 @@ class _LineChartSectionState extends State<LineChartSection> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              brandBlue.withOpacity(0.4),
+              ARMMBlue.withOpacity(0.4),
               Colors.transparent,
             ],
           ),
@@ -714,7 +714,7 @@ class _LineChartSectionState extends State<LineChartSection> {
           }
           return TouchedSpotIndicatorData(
             // **Changed** indicator color to brand color
-            FlLine(color: brandBlue, strokeWidth: 2),
+            FlLine(color: ARMMBlue, strokeWidth: 2),
             const FlDotData(show: false),
           );
         }).toList(),

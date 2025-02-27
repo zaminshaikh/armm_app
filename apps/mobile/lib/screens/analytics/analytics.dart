@@ -67,7 +67,7 @@ class AnalyticsPageState extends State<AnalyticsPage> {
       appBar: CustomAppBar(
         title: 'Analytics',
         implyLeading: false,
-        showNotificationButton: false,
+        showNotificationButton: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -78,7 +78,6 @@ class AnalyticsPageState extends State<AnalyticsPage> {
               LineChartSection(client: client!),
               // Display the fund-based pie charts
               ...fundCharts,
-              const SizedBox(height: 120),
             ],
           ),
         ),
