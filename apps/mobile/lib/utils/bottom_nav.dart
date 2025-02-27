@@ -1,4 +1,6 @@
 import 'package:armm_app/screens/activity/activity.dart';
+import 'package:armm_app/screens/analytics/analytics.dart';
+import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,10 +20,10 @@ class BottomNavBar extends StatelessWidget {
     Widget page;
     switch (item) {
       case NavigationItem.dashboard:
-        page = const ActivityPage();
+        page = const DashboardPage();
         break;
       case NavigationItem.analytics:
-        page = const ActivityPage();
+        page = const AnalyticsPage();
         break;
       case NavigationItem.activity:
         page = const ActivityPage();
@@ -50,28 +52,32 @@ class BottomNavBar extends StatelessWidget {
         isSelected ? iconAsset.replaceAll('_hollow', '') : iconAsset;
     return GestureDetector(
       onTap: () => _onItemTapped(context, item),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(
-              displayedIconAsset,
-              color: isSelected ? const Color(0xFF2B41B8) : const Color(0xFFB0BAC9),
-            ),
-            const SizedBox(width: 8),
-            if (isSelected) ...[
-              const SizedBox(width: 4),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF2B41B8),
-                ),
+      child: Container(
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                displayedIconAsset,
+                height: 24,
+                color: isSelected ? const Color(0xFF2B41B8) : const Color(0xFFB0BAC9),
               ),
+              const SizedBox(width: 8),
+              if (isSelected) ...[
+                const SizedBox(width: 4),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF2B41B8),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

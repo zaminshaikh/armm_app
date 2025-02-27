@@ -30,15 +30,30 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
 
   @override
   Widget build(BuildContext context) => AppBar(
-        backgroundColor: ARMM_blue,
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
-        ), // Drooping effect added
+        ),
         toolbarHeight: kToolbarHeight,
-        title: const Padding(
-          padding: EdgeInsets.only(top: 20.0), // Adjust this value as needed
-          child: Text(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF2B41B8),
+                Color.fromARGB(255, 116, 122, 151),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
+            ),
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 20.0), // Adjust this value as needed
+          child: const Text(
             'Activity',
             style: TextStyle(
               fontSize: 25,
