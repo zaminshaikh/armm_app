@@ -41,19 +41,22 @@ import 'package:armm_app/screens/profile/profile.dart';
 >>>>>>> 0d00a21 (Modulated Profile Page for Simpler File Structure)
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
-import 'package:armm_app/screens/dashboard/home_page.dart';
-import 'package:armm_app/signup_data.dart';
-import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 class PasswordPage extends StatefulWidget {
-  final SignUpData signUpData;
 
+<<<<<<< HEAD
   const PasswordPage({Key? key, required this.signUpData}) : super(key: key);
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+  final String cid;
+  final String email;
+  String password = '';
+
+  PasswordPage({super.key, required this.cid, required this.email});
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
   @override
   _PasswordPageState createState() => _PasswordPageState();
@@ -179,8 +182,12 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
+<<<<<<< HEAD
         email: widget.signUpData.email,
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+        email: widget.email,
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
         password: _passwordController.text,
       );
 
@@ -192,9 +199,13 @@ class _PasswordPageState extends State<PasswordPage> {
 
       // Initialize database service with CID.
 <<<<<<< HEAD
+<<<<<<< HEAD
       db = DatabaseService.withCID(userCredential.user!.uid, widget.cid);
 =======
       db = DatabaseService.withCID(userCredential.user!.uid, widget.signUpData.cid);
+=======
+      db = DatabaseService.withCID(userCredential.user!.uid, widget.cid);
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
 <<<<<<< HEAD
       // Check if CID exists and is not linked.
@@ -242,8 +253,8 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
       if (user == null) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: widget.signUpData.email,
-          password: widget.signUpData.password,
+          email: widget.email,
+          password: widget.password,
         );
       }
 
@@ -275,6 +286,7 @@ class _PasswordPageState extends State<PasswordPage> {
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
 <<<<<<< HEAD
+<<<<<<< HEAD
       await handleFirebaseAuthException(context, e, widget.email);
     } catch (e) {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
@@ -299,6 +311,9 @@ class _PasswordPageState extends State<PasswordPage> {
       if (mounted) setState(() { isLoading = false; });
 =======
       await handleFirebaseAuthException(context, e, widget.signUpData.email);
+=======
+      await handleFirebaseAuthException(context, e, widget.email);
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
     } catch (e) {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
       await FirebaseAuth.instance.currentUser?.delete();
@@ -458,8 +473,12 @@ class _PasswordPageState extends State<PasswordPage> {
 >>>>>>> c425425 (Remove unnecessary error handling logic for checking document existence and linkage on password page. Set sign up data password when password is changed on password page.)
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     print("Client ID received in PasswordPage: ${widget.signUpData.cid}"); // DEBUG PRINT
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+    print("Client ID received in PasswordPage: ${widget.cid}"); // DEBUG PRINT
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
     return Scaffold(
       body: Stack(
         children: [
@@ -585,6 +604,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     obscureText: _obscurePassword,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     onChanged: (_) => setState(() {widget.password = _passwordController.text;}),
 =======
                     onChanged: (_) => setState(() {}),
@@ -592,6 +612,9 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
                     onChanged: (_) => setState(() {widget.signUpData.password = _passwordController.text;}),
 >>>>>>> c425425 (Remove unnecessary error handling logic for checking document existence and linkage on password page. Set sign up data password when password is changed on password page.)
+=======
+                    onChanged: (_) => setState(() {widget.password = _passwordController.text;}),
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
                   ),
 
                   // Confirm Password
@@ -647,7 +670,7 @@ class _PasswordPageState extends State<PasswordPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                          builder: (context) => LoginPage(),
                         ),
                       );
 >>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)

@@ -12,6 +12,7 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 <<<<<<< HEAD
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
+<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,14 +28,21 @@ import 'package:armm_app/auth/login/login.dart';
 >>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/signup_data.dart';
+=======
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class EmailPage extends StatefulWidget {
-  final SignUpData signUpData;
+  final String cid;
+  String email = '';
 
+<<<<<<< HEAD
   const EmailPage({Key? key, required this.signUpData}) : super(key: key);
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+  EmailPage({super.key, required this.cid});
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
   @override
   _EmailPageState createState() => _EmailPageState();
@@ -128,8 +136,12 @@ class _EmailPageState extends State<EmailPage> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     print("Client ID received in EmailPage: ${widget.signUpData.cid}"); // DEBUG PRINT
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+    print("Client ID received in EmailPage: ${widget.cid}"); // DEBUG PRINT
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
     return Scaffold(
       body: Stack(
         children: [
@@ -198,11 +210,11 @@ class _EmailPageState extends State<EmailPage> {
                   AuthButton(
                     label: 'Continue',
                     onPressed: () {
-                      widget.signUpData.email = _emailController.text;
+                      widget.email = _emailController.text;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PasswordPage(signUpData: widget.signUpData),
+                          builder: (context) => PasswordPage(cid: widget.cid, email: widget.email),
                         ),
                       );
                     },
@@ -231,7 +243,7 @@ class _EmailPageState extends State<EmailPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                          builder: (context) => LoginPage(),
                         ),
                       );
 >>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)

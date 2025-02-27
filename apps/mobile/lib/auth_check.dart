@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/profile/profile.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 >>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
@@ -96,12 +95,17 @@ class _AuthCheckState extends State<AuthCheck> {
               return const ProfilePage();
             } else {
               // User is not authenticated, email not verified, or not linked
+<<<<<<< HEAD
               return OnboardingPage(signUpData: SignUpData());
 >>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
+=======
+              return const OnboardingPage();
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
             }
           });
         } else {
           // User is not signed in
+<<<<<<< HEAD
 <<<<<<< HEAD
           return const OnboardingPage();
         }
@@ -113,6 +117,12 @@ class _AuthCheckState extends State<AuthCheck> {
       } else {
         return OnboardingPage(signUpData: SignUpData());
 >>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
+=======
+          return const OnboardingPage();
+        }
+      } else {
+        return const OnboardingPage();
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
       }
     },
   );

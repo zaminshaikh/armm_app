@@ -120,6 +120,9 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pushReplacement(
       context,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
       MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }

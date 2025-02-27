@@ -41,7 +41,6 @@ import 'package:armm_app/screens/profile/pages/my_profiles_page.dart';
 import 'package:armm_app/screens/profile/pages/settings_page.dart';
 import 'package:armm_app/screens/profile/pages/support_page.dart';
 import 'package:armm_app/screens/profile/profile.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -196,12 +195,6 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     
 =======
 class _MyAppState extends State<MyApp> {
-  late SignUpData signUpData;
-  @override
-  void initState() {
-    super.initState();
-    signUpData = SignUpData();
-  }
 
 >>>>>>> d161894 (Documents Are Pulling Properly)
   @override
@@ -222,7 +215,7 @@ class _MyAppState extends State<MyApp> {
           title: 'ARMM',
           theme: _buildAppTheme(), // your app theme function
           routes: {
-            '/': (context) => OnboardingPage(signUpData: SignUpData()),
+            '/': (context) => OnboardingPage(),
             '/profile': (context) => const ProfilePage(),
             '/support': (context) => const SupportPage(),
             '/documents': (context) => const DocumentsPage(),

@@ -6,10 +6,14 @@ import 'onboarding_buttons.dart';
 class OnboardingPage extends StatefulWidget {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   const OnboardingPage({super.key});
 =======
   const OnboardingPage({super.key, required this.signUpData});
 >>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
+=======
+  const OnboardingPage({super.key});
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
   @override
   _OnboardingPageState createState() => _OnboardingPageState();
@@ -36,10 +40,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
               const Spacer(),
               // The bottom portion with Sign Up & Log In buttons
 <<<<<<< HEAD
+<<<<<<< HEAD
               const AuthButtons(),
 =======
               AuthButtons(signUpData: widget.signUpData),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+              const AuthButtons(),
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
             ],
           ),
         ),

@@ -25,13 +25,16 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
 import 'package:armm_app/database/database.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 
 class ClientIDPage extends StatefulWidget {
+<<<<<<< HEAD
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
   const ClientIDPage({Key? key}) : super(key: key);
 
   @override
@@ -49,6 +52,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
 
   Future<bool> isValidCID(String cid) async {
     DatabaseService db = DatabaseService.withCID('', cid);
+<<<<<<< HEAD
 
     // Run both database checks in parallel
     final results = await Future.wait([
@@ -107,52 +111,54 @@ class _ClientIDPageState extends State<ClientIDPage> {
 
   Future<bool> isValidCID(String cid) async {
   DatabaseService db = DatabaseService.withCID('', cid);
+=======
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
-  // Run both database checks in parallel
-  final results = await Future.wait([
-    db.checkDocumentExists(cid),
-    db.checkDocumentLinked(cid),
-  ]);
+    // Run both database checks in parallel
+    final results = await Future.wait([
+      db.checkDocumentExists(cid),
+      db.checkDocumentLinked(cid),
+    ]);
 
-  final bool exists = results[0];
-  final bool linked = results[1];
+    final bool exists = results[0];
+    final bool linked = results[1];
 
-  if (!exists) {
-    if (!mounted) return false;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Invalid CID'),
-        content: const Text('The CID you entered does not exist. Please try again.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-    return false;
-  } else if (linked) {
-    if (!mounted) return false;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('CID Already Linked'),
-        content: const Text('The CID you entered is already linked to an account. Please try again.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-    return false;
+    if (!exists) {
+      if (!mounted) return false;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Invalid CID'),
+          content: const Text('The CID you entered does not exist. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    } else if (linked) {
+      if (!mounted) return false;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('CID Already Linked'),
+          content: const Text('The CID you entered is already linked to an account. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    }
+    
+    return true;
   }
-  
-  return true;
-}
 
   @override
   Widget build(BuildContext context) {
@@ -313,6 +319,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       if (!valid) {
                         return;
                       }
+<<<<<<< HEAD
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -338,6 +345,12 @@ class _ClientIDPageState extends State<ClientIDPage> {
                         MaterialPageRoute(
                           builder: (context) => EmailPage(signUpData: signUpData),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EmailPage(cid: _cidController.text),
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
                         ),
                       );
                     },
@@ -425,7 +438,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(signUpData: SignUpData()),
+                          builder: (context) => LoginPage(),
                         ),
                       );
 >>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)

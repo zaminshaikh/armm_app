@@ -1,13 +1,17 @@
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import 'package:armm_app/signup_data.dart';
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 import 'package:flutter/material.dart';
 
 /// Stateless version
 class AuthButtons extends StatelessWidget {
+<<<<<<< HEAD
 <<<<<<< HEAD
 
   const AuthButtons({Key? key}) : super(key: key);
@@ -16,6 +20,10 @@ class AuthButtons extends StatelessWidget {
 
   const AuthButtons({Key? key, required this.signUpData}) : super(key: key);
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+
+  const AuthButtons({Key? key}) : super(key: key);
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +87,7 @@ class AuthButtons extends StatelessWidget {
 /// Stateful version
 class AuthButtonsStateful extends StatefulWidget {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   const AuthButtonsStateful({Key? key}) : super(key: key);
 =======
@@ -86,6 +95,10 @@ class AuthButtonsStateful extends StatefulWidget {
 
   const AuthButtonsStateful({Key? key, required this.signUpData}) : super(key: key);
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+
+  const AuthButtonsStateful({Key? key}) : super(key: key);
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
   @override
   _AuthButtonsStatefulState createState() => _AuthButtonsStatefulState();

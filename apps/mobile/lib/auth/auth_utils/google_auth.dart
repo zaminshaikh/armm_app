@@ -19,7 +19,6 @@ import 'package:armm_app/screens/profile/profile.dart';
 >>>>>>> 0d00a21 (Modulated Profile Page for Simpler File Structure)
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
-import 'package:armm_app/signup_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 >>>>>>> b41e58d (Added google auth functions)
@@ -77,10 +76,14 @@ class GoogleAuthService {
         await Navigator.pushReplacement(
           context,
 <<<<<<< HEAD
+<<<<<<< HEAD
           MaterialPageRoute(builder: (context) => const LoginPage()),
 =======
           MaterialPageRoute(builder: (context) => LoginPage(signUpData: SignUpData())),
 >>>>>>> b41e58d (Added google auth functions)
+=======
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
         );
         return null;
       }
@@ -294,10 +297,14 @@ class GoogleAuthService {
         await Navigator.pushReplacement(
           context,
 <<<<<<< HEAD
+<<<<<<< HEAD
           MaterialPageRoute(builder: (context) =>  const LoginPage()),
 =======
           MaterialPageRoute(builder: (context) =>  LoginPage(signUpData: SignUpData())),
 >>>>>>> b41e58d (Added google auth functions)
+=======
+          MaterialPageRoute(builder: (context) =>  const LoginPage()),
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
         );
         return null;
       }

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
 =======
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
@@ -6,6 +7,9 @@ import 'package:armm_app/signup_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+import 'package:flutter/material.dart';
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
 // Import your separate widgets
 import 'login_header.dart';
@@ -20,10 +24,13 @@ class LoginPage extends StatefulWidget {
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 
 class LoginPage extends StatefulWidget {
-  final SignUpData signUpData;
 
+<<<<<<< HEAD
   const LoginPage({Key? key, required this.signUpData}) : super(key: key);
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+  const LoginPage({Key? key}) : super(key: key);
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -79,6 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
                   ),
                   const SizedBox(height: 12),
                   // The divider & social login buttons & sign-up link

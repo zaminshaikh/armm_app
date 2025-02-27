@@ -18,8 +18,11 @@ import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/forgot_password/forgot_password.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
+<<<<<<< HEAD
 import 'package:armm_app/signup_data.dart';
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
 import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -130,10 +133,13 @@ class LoginForm extends StatelessWidget {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively):apps/mobile/lib/screens/auth/login/login_form.dart
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
   @override
   Widget build(BuildContext context) {
     return Column(
