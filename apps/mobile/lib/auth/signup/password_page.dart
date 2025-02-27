@@ -18,6 +18,11 @@ import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
+<<<<<<< HEAD
+=======
+import 'package:armm_app/signup_data.dart';
+import 'package:armm_app/utils/app_state.dart';
+>>>>>>> a46fe2b (Removed unused import for home_page in password_page.dart)
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
