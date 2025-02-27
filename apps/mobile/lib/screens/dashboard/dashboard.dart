@@ -4,9 +4,13 @@ import 'package:armm_app/components/assets_structure_section.dart';
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/database/models/client_model.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 =======
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
+>>>>>>> 431e0b9 (Replace Inter font files with updated versions and adjust pubspec.yaml for new font assets)
 import 'package:armm_app/screens/dashboard/components/three_recent_activities.dart';
 import 'package:armm_app/screens/dashboard/components/total_assets_section.dart';
 import 'package:armm_app/screens/dashboard/components/user_breakdown_section.dart';
@@ -176,7 +180,10 @@ class _DashboardPageState extends State<DashboardPage>
   
     return Scaffold(
 <<<<<<< HEAD
+<<<<<<< HEAD
       backgroundColor: const Color.fromARGB(255, 251, 251, 251),
+=======
+>>>>>>> 431e0b9 (Replace Inter font files with updated versions and adjust pubspec.yaml for new font assets)
       appBar: client != null
       ? DashboardAppBar(
           showNotificationButton: true,
@@ -185,6 +192,7 @@ class _DashboardPageState extends State<DashboardPage>
           },
           client: client!,
         ) : null, // Show nothing if client is null
+<<<<<<< HEAD
 =======
       appBar: CustomAppBar(
         title: 'Dashboard',
@@ -194,6 +202,8 @@ class _DashboardPageState extends State<DashboardPage>
         },
       ),
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+>>>>>>> 431e0b9 (Replace Inter font files with updated versions and adjust pubspec.yaml for new font assets)
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -203,6 +213,7 @@ class _DashboardPageState extends State<DashboardPage>
               child: Column(
                 children: [
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                   // Total assets section
                   SlideTransition(
@@ -211,6 +222,8 @@ class _DashboardPageState extends State<DashboardPage>
                   ),
                   const SizedBox(height: 32),
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+>>>>>>> 431e0b9 (Replace Inter font files with updated versions and adjust pubspec.yaml for new font assets)
                   // User breakdown section
                   SlideTransition(
                     position: _offsetAnimation,
