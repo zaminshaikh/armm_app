@@ -295,8 +295,13 @@ class _PasswordPageState extends State<PasswordPage> {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
       await FirebaseAuth.instance.currentUser?.delete();
     } finally {
+<<<<<<< HEAD
       setState(() { isLoading = false; });
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+
+      if (mounted) setState(() { isLoading = false; });
+>>>>>>> 45d8487 (Fix loading state management in password page to check if widget is mounted)
     }
   }
 
@@ -392,16 +397,22 @@ class _PasswordPageState extends State<PasswordPage> {
         },
       );
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 45d8487 (Fix loading state management in password page to check if widget is mounted)
       if (mounted) {
         setState(() {
           isLoading = false;
         });
       }
+<<<<<<< HEAD
 =======
       setState(() {
         isLoading = false;
       });
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> 45d8487 (Fix loading state management in password page to check if widget is mounted)
       return false;
     }
   }
