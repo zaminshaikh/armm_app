@@ -65,6 +65,7 @@ import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/push_notification.dart';
 import 'package:armm_app/utils/utilities.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/auth/auth_utils/faceid.dart';
 import 'package:armm_app/auth/auth_utils/initial_face_id.dart';
@@ -82,6 +83,8 @@ import 'screens/profile/pages/disclaimer_page.dart';
 >>>>>>> d161894 (Documents Are Pulling Properly)
 =======
 import 'package:armm_app/screens/font_test_screen.dart';
+=======
+>>>>>>> 639e63e (Remove FontTestScreen and its route from the application)
 import 'package:google_fonts/google_fonts.dart';
 >>>>>>> 5502a8a (Completed Dashboard App Bar)
 
@@ -242,7 +245,6 @@ class _MyAppState extends State<MyApp> {
                 '/my_profiles': (context) => MyProfilesPage(),
                 '/authentication': (context) => AuthenticationPage(),
                 '/disclaimer': (context) => DisclaimerPage(),
-                '/font_test': (context) => const FontTestScreen(),
               },
             ),
           );
