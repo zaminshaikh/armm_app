@@ -1,4 +1,5 @@
 import 'package:armm_app/utils/app_bar.dart';
+import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:armm_app/components/assets_structure_section.dart';
@@ -82,6 +83,7 @@ class AnalyticsPageState extends State<AnalyticsPage> {
           ),
         ),
       ),
+      bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.analytics),
     );
   }
 
