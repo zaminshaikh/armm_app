@@ -185,9 +185,13 @@ class _DashboardPageState extends State<DashboardPage>
     return Scaffold(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       backgroundColor: const Color.fromARGB(255, 251, 251, 251),
 =======
 >>>>>>> 431e0b9 (Replace Inter font files with updated versions and adjust pubspec.yaml for new font assets)
+=======
+      backgroundColor: const Color.fromARGB(255, 251, 251, 251),
+>>>>>>> b47751c (Set dashboard background color and remove font test button)
       appBar: client != null
       ? DashboardAppBar(
           showNotificationButton: true,
@@ -212,12 +216,6 @@ class _DashboardPageState extends State<DashboardPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/font_test');
-              },
-              child: const Text('Test Fonts'),
-            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
