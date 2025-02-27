@@ -176,6 +176,9 @@ class _LineChartSectionState extends State<LineChartSection> {
                 setState(() {
                   selectedClient = client;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> cb2c200 (Add null safety checks for client graphs in LineChartSection to prevent errors)
                   if (client.graphs != null && client.graphs!.isNotEmpty) {
                     selectedGraph = client.graphs!.first;
                     selectedAccount = selectedGraph?.account;
@@ -183,10 +186,13 @@ class _LineChartSectionState extends State<LineChartSection> {
                     selectedGraph = null;
                     selectedAccount = null;
                   }
+<<<<<<< HEAD
 =======
                   selectedGraph = client.graphs?.first;
                   selectedAccount = selectedGraph?.account;
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+>>>>>>> cb2c200 (Add null safety checks for client graphs in LineChartSection to prevent errors)
                   _prepareGraphPoints();
                 });
               },
