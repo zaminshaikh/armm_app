@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:armm_app/components/assets_structure_section.dart';
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/database/models/client_model.dart';
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
+=======
+>>>>>>> 7b97856 (Migrated components for dashboard)
 import 'package:armm_app/screens/dashboard/components/three_recent_activities.dart';
 import 'package:armm_app/screens/dashboard/components/total_assets_section.dart';
 import 'package:armm_app/screens/dashboard/components/user_breakdown_section.dart';
@@ -12,7 +15,10 @@ import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
+=======
+>>>>>>> 7b97856 (Migrated components for dashboard)
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -169,6 +175,7 @@ class _DashboardPageState extends State<DashboardPage>
     }
   
     return Scaffold(
+<<<<<<< HEAD
       backgroundColor: const Color.fromARGB(255, 251, 251, 251),
       appBar: client != null
       ? DashboardAppBar(
@@ -178,6 +185,15 @@ class _DashboardPageState extends State<DashboardPage>
           },
           client: client!,
         ) : null, // Show nothing if client is null
+=======
+      appBar: CustomAppBar(
+        title: 'Dashboard',
+        showNotificationButton: true,
+        onNotificationTap: () {
+          Navigator.pushNamed(context, '/notifications');
+        },
+      ),
+>>>>>>> 7b97856 (Migrated components for dashboard)
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -186,6 +202,15 @@ class _DashboardPageState extends State<DashboardPage>
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
+<<<<<<< HEAD
+=======
+                  // Total assets section
+                  SlideTransition(
+                    position: _offsetAnimation,
+                    child: TotalAssetsSection(client: client!),
+                  ),
+                  const SizedBox(height: 32),
+>>>>>>> 7b97856 (Migrated components for dashboard)
                   // User breakdown section
                   SlideTransition(
                     position: _offsetAnimation,
@@ -205,6 +230,10 @@ class _DashboardPageState extends State<DashboardPage>
                   const SizedBox(height: 42),
                   // Assets structure section (pie chart)
                   ...fundCharts,
+<<<<<<< HEAD
+=======
+                  const SizedBox(height: 102),
+>>>>>>> 7b97856 (Migrated components for dashboard)
                 ],
               ),
             ),
@@ -224,10 +253,18 @@ class _DashboardPageState extends State<DashboardPage>
           padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
           child: Text(
             'Recent Transactions',
+<<<<<<< HEAD
             style: GoogleFonts.inter(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.black,
+=======
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontFamily: 'Titillium Web',
+>>>>>>> 7b97856 (Migrated components for dashboard)
             ),
           ),
         ),
@@ -242,21 +279,39 @@ class _DashboardPageState extends State<DashboardPage>
           const SizedBox(height: 40),
           Row(
             children: [
+<<<<<<< HEAD
               Text(
                 'Connected Users',
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
+=======
+              const Text(
+                'Connected Users',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontFamily: 'Titillium Web',
+>>>>>>> 7b97856 (Migrated components for dashboard)
                 ),
               ),
               const Spacer(),
               Text(
                 '(${client!.connectedUsers?.length})',
+<<<<<<< HEAD
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
+=======
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontFamily: 'Titillium Web',
+>>>>>>> 7b97856 (Migrated components for dashboard)
                 ),
               ),
             ],

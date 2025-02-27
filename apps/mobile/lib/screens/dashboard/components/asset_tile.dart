@@ -20,14 +20,25 @@ class AssetTile extends StatelessWidget {
 
     // String sectionName = getSectionName(fieldName, companyName: companyName);
     // title = sectionName;
+<<<<<<< HEAD
 
     return ListTile(
+=======
+    Widget fundIcon = getFundIcon();
+
+    return ListTile(
+      leading: fundIcon,
+>>>>>>> 7b97856 (Migrated components for dashboard)
       title: Text(
         asset.displayTitle,
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
+<<<<<<< HEAD
           color: Colors.black,
+=======
+          color: Colors.white,
+>>>>>>> 7b97856 (Migrated components for dashboard)
           fontFamily: 'Titillium Web',
         ),
       ),
@@ -36,10 +47,22 @@ class AssetTile extends StatelessWidget {
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w700,
+<<<<<<< HEAD
           color: Colors.black,
+=======
+          color: Colors.white,
+>>>>>>> 7b97856 (Migrated components for dashboard)
           fontFamily: 'Titillium Web',
         ),
       ),
     );
   }
+<<<<<<< HEAD
+=======
+
+  Widget getFundIcon() {
+    return const Icon(Icons.account_balance, color: Colors.white);
+  }
+
+>>>>>>> 7b97856 (Migrated components for dashboard)
 }
