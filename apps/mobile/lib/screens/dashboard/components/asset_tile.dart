@@ -21,6 +21,7 @@ class AssetTile extends StatelessWidget {
     // String sectionName = getSectionName(fieldName, companyName: companyName);
     // title = sectionName;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     return ListTile(
 =======
@@ -29,16 +30,24 @@ class AssetTile extends StatelessWidget {
     return ListTile(
       leading: fundIcon,
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+
+    return ListTile(
+>>>>>>> 13ae940 (Update AssetTile component to change text color to black and remove fund icon)
       title: Text(
         asset.displayTitle,
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
 <<<<<<< HEAD
+<<<<<<< HEAD
           color: Colors.black,
 =======
           color: Colors.white,
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+          color: Colors.black,
+>>>>>>> 13ae940 (Update AssetTile component to change text color to black and remove fund icon)
           fontFamily: 'Titillium Web',
         ),
       ),
@@ -48,15 +57,20 @@ class AssetTile extends StatelessWidget {
           fontSize: 16,
           fontWeight: FontWeight.w700,
 <<<<<<< HEAD
+<<<<<<< HEAD
           color: Colors.black,
 =======
           color: Colors.white,
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+          color: Colors.black,
+>>>>>>> 13ae940 (Update AssetTile component to change text color to black and remove fund icon)
           fontFamily: 'Titillium Web',
         ),
       ),
     );
   }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -65,4 +79,6 @@ class AssetTile extends StatelessWidget {
   }
 
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+>>>>>>> 13ae940 (Update AssetTile component to change text color to black and remove fund icon)
 }
