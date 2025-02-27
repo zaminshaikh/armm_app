@@ -88,8 +88,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 12),
                   // The divider & social login buttons & sign-up link
+<<<<<<< HEAD
                   LoginSocial(
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                  const LoginSocial(
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
                     primaryColor: primaryColor,
                   ),
                   const SizedBox(height: 24),

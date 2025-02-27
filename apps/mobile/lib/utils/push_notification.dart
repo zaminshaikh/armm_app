@@ -25,6 +25,7 @@ class PushNotificationService {
         notifications.AndroidInitializationSettings initializationSettingsAndroid =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             const notifications.AndroidInitializationSettings('@mipmap/ic_launcher');
         notifications.DarwinInitializationSettings initializationSettingsIOS =
             const notifications.DarwinInitializationSettings();
@@ -36,6 +37,11 @@ class PushNotificationService {
         notifications.DarwinInitializationSettings initializationSettingsIOS =
             notifications.DarwinInitializationSettings();
 >>>>>>> 164ecb2 (Add models for Graph, GraphPoint, Activity, and Notif; implement configuration loading and utility functions)
+=======
+            const notifications.AndroidInitializationSettings('@mipmap/ic_launcher');
+        notifications.DarwinInitializationSettings initializationSettingsIOS =
+            const notifications.DarwinInitializationSettings();
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
         notifications.InitializationSettings initializationSettings = notifications.InitializationSettings(
           android: initializationSettingsAndroid,
           iOS: initializationSettingsIOS,

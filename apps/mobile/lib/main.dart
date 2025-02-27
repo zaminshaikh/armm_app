@@ -222,12 +222,12 @@ class _MyAppState extends State<MyApp> {
               theme: _buildAppTheme(), // your app theme function
               home: OnboardingPage(signUpData: signUpData),
               routes: {
-                '/profile': (context) => ProfilePage(),
-                '/support': (context) => SupportPage(),
-                '/documents': (context) => DocumentsPage(),
-                '/settings': (context) => SettingsPage(),
-                '/my_profiles': (context) => MyProfilesPage(),
-                '/authentication': (context) => AuthenticationPage(),
+                '/profile': (context) => const ProfilePage(),
+                '/support': (context) => const SupportPage(),
+                '/documents': (context) => const DocumentsPage(),
+                '/settings': (context) => const SettingsPage(),
+                '/my_profiles': (context) => const MyProfilesPage(),
+                '/authentication': (context) => const AuthenticationPage(),
                 '/disclaimer': (context) => DisclaimerPage(),
               },
             ),

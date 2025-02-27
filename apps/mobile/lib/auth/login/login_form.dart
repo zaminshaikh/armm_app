@@ -74,6 +74,7 @@ class LoginForm extends StatelessWidget {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         MaterialPageRoute(builder: (_) => const ProfilePage()),
 =======
         MaterialPageRoute(builder: (_) => ClientInfoPage(cid: "")),
@@ -84,6 +85,9 @@ class LoginForm extends StatelessWidget {
 =======
         MaterialPageRoute(builder: (_) => ProfilePage()),
 >>>>>>> 1a0bccc (Made Custom Activity App Bar)
+=======
+        MaterialPageRoute(builder: (_) => const ProfilePage()),
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
       );
 
       return true;

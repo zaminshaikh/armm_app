@@ -310,6 +310,7 @@ class GoogleAuthService {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
               const DashboardPage(),
 =======
               ClientInfoPage(cid: cid),
@@ -320,6 +321,9 @@ class GoogleAuthService {
 =======
               ProfilePage(),
 >>>>>>> 1a0bccc (Made Custom Activity App Bar)
+=======
+              const ProfilePage(),
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               child,
         ),

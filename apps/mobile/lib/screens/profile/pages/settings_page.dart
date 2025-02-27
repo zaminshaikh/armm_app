@@ -167,6 +167,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           children: [
             const CustomAppBar(
+<<<<<<< HEAD
               title: 'Settings',
               implyLeading: true,
               showNotificationButton: false,
@@ -977,6 +978,8 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           children: [
             CustomAppBar(
+=======
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
               title: 'Settings',
               implyLeading: true,
               showNotificationButton: false,
@@ -1563,17 +1566,17 @@ class _SettingsPageState extends State<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Row with Title and Dividers
-        Row(
+        const Row(
           children: [
             // Left divider
-            const Expanded(
+            Expanded(
               child: Divider(
                 thickness: 1,
                 color: Colors.black,
               ),
             ),
             // Title in the center
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 'Log out',
@@ -1585,7 +1588,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Right divider
-            const Expanded(
+            Expanded(
               child: Divider(
                 thickness: 1,
                 color: Colors.black,

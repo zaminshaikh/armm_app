@@ -53,6 +53,7 @@ class ClientIDPageHeader extends StatelessWidget {
         const SizedBox(height: 16),
         // "What is my Client ID?" (You could make this a clickable text or info button)
 <<<<<<< HEAD
+<<<<<<< HEAD
         const Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -65,16 +66,24 @@ class ClientIDPageHeader extends StatelessWidget {
               Text(
 =======
         Center(
+=======
+        const Center(
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.info_outline_rounded,
                 color: Colors.grey,
               ),
+<<<<<<< HEAD
               const SizedBox(width: 12),
               const Text(
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+              SizedBox(width: 12),
+              Text(
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
                 'What is my Client ID?',
                 style: TextStyle(
                   color: Colors.grey,

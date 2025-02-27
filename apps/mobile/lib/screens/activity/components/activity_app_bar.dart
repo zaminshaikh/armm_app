@@ -119,9 +119,9 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
         ), // Drooping effect added
         toolbarHeight: kToolbarHeight,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 20.0), // Adjust this value as needed
-          child: const Text(
+        title: const Padding(
+          padding: EdgeInsets.only(top: 20.0), // Adjust this value as needed
+          child: Text(
             'Activity',
             style: TextStyle(
               fontSize: 25,

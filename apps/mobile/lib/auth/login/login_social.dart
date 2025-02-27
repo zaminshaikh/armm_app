@@ -29,12 +29,17 @@ class LoginSocial extends StatelessWidget {
       children: [
         // Divider with "or continue with"
 <<<<<<< HEAD
+<<<<<<< HEAD
         const Row(
           children: [
 =======
         Row(
           children: const [
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+        const Row(
+          children: [
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
             Expanded(child: Divider()),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -92,7 +97,7 @@ class LoginSocial extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ClientIDPage(),
+                builder: (context) => const ClientIDPage(),
               ),
             );
 >>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)

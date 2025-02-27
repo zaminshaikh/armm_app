@@ -5,7 +5,11 @@ import 'onboarding_buttons.dart';
 
 class OnboardingPage extends StatefulWidget {
 
+<<<<<<< HEAD
   const OnboardingPage({super.key});
+=======
+  const OnboardingPage({super.key, required this.signUpData});
+>>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
 
   @override
   _OnboardingPageState createState() => _OnboardingPageState();
