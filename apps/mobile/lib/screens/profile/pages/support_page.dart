@@ -17,8 +17,8 @@ class SupportPage extends StatelessWidget {
         ),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+      child: const Padding(
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             Row(
@@ -26,11 +26,11 @@ class SupportPage extends StatelessWidget {
                 CircleAvatar(
                   radius: 35,
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         'John Doe',
                         style: TextStyle(
@@ -48,9 +48,9 @@ class SupportPage extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Row(
-              children: const [
+              children: [
                 Text(
                   'Contact Information:',
                   style: TextStyle(
@@ -60,21 +60,21 @@ class SupportPage extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Row(
-                    children: const [
+                    children: [
                       Icon(Icons.phone),
                       SizedBox(width: 8),
                       Text('+234 123 456 7890'),
                     ],
                   ),
-                  const SizedBox(height: 15),
+                  SizedBox(height: 15),
                   Row(
-                    children: const [
+                    children: [
                       Icon(Icons.email),
                       SizedBox(width: 8),
                       Text('test@email.com'),
@@ -92,7 +92,7 @@ class SupportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Support',
         implyLeading: true,
         showNotificationButton: false,

@@ -164,7 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomAppBar(
+            const CustomAppBar(
               title: 'Settings',
               implyLeading: true,
               showNotificationButton: false,
@@ -751,17 +751,17 @@ class _SettingsPageState extends State<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Row with Title and Dividers
-        Row(
+        const Row(
           children: [
             // Left divider
-            const Expanded(
+            Expanded(
               child: Divider(
                 thickness: 1,
                 color: Colors.black,
               ),
             ),
             // Title in the center
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 'Log out',
@@ -773,7 +773,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Right divider
-            const Expanded(
+            Expanded(
               child: Divider(
                 thickness: 1,
                 color: Colors.black,

@@ -14,7 +14,7 @@ class LinkSentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const double horizontalPadding = 24.0;
 
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(
         child: Column(
           children: [
@@ -22,11 +22,11 @@ class LinkSentPage extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: horizontalPadding,
                   ),
                   child: Column(
-                    children: const [
+                    children: [
                       SizedBox(height: 20),
                       // Header (logo)
                       LinkSentHeader(),
@@ -42,8 +42,8 @@ class LinkSentPage extends StatelessWidget {
               ),
             ),
             // Footer (shared component from Forgot Password)
-            const ForgotPasswordFooter(),
-            const SizedBox(height: 20),
+            ForgotPasswordFooter(),
+            SizedBox(height: 20),
           ],
         ),
       ),

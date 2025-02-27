@@ -7,7 +7,7 @@ import 'package:armm_app/signup_data.dart';
 class OnboardingPage extends StatefulWidget {
   final SignUpData signUpData;
 
-  const OnboardingPage({Key? key, required this.signUpData}) : super(key: key);
+  const OnboardingPage({super.key, required this.signUpData});
 
   @override
   _OnboardingPageState createState() => _OnboardingPageState();

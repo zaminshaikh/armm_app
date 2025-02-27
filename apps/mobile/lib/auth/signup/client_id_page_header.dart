@@ -49,16 +49,16 @@ class ClientIDPageHeader extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         // "What is my Client ID?" (You could make this a clickable text or info button)
-        Center(
+        const Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.info_outline_rounded,
                 color: Colors.grey,
               ),
-              const SizedBox(width: 12),
-              const Text(
+              SizedBox(width: 12),
+              Text(
                 'What is my Client ID?',
                 style: TextStyle(
                   color: Colors.grey,

@@ -11,16 +11,16 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const double horizontalPadding = 30.0;
 
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                  padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                   child: Column(
-                    children: const [
+                    children: [
                       SizedBox(height: 20),
                       // Header (logo, title, subtitle)
                       ForgotPasswordHeader(),
@@ -36,8 +36,8 @@ class ForgotPasswordPage extends StatelessWidget {
               ),
             ),
             // Footer (Back to Sign In)
-            const ForgotPasswordFooter(),
-            const SizedBox(height: 20),
+            ForgotPasswordFooter(),
+            SizedBox(height: 20),
           ],
         ),
       ),

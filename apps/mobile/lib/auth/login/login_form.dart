@@ -52,7 +52,7 @@ class LoginForm extends StatelessWidget {
       // Navigate to the dashboard
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => ProfilePage()),
+        MaterialPageRoute(builder: (_) => const ProfilePage()),
       );
 
       return true;

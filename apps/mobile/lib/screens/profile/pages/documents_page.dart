@@ -248,7 +248,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
 
   Scaffold buildDocumentsPage() {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Documents',
         implyLeading: true,
         showNotificationButton: false,
@@ -284,7 +284,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
               ),
             ),
           ),
-          SizedBox(width: 10.0),
+          const SizedBox(width: 10.0),
           _buildSortButton(context),
         ],
       ),
@@ -303,7 +303,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
         ),
         child: SvgPicture.asset(
           'assets/icons/sort.svg',
-          color: Color(0xFF2B41B8),
+          color: const Color(0xFF2B41B8),
           width: 35.0,
           height: 35.0,
         ),
@@ -315,19 +315,19 @@ class _DocumentsPageState extends State<DocumentsPage> {
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
         return ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20.0)),
           child: Container(
             color: Colors.blue,
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
+                const Row(
                   children: [
                     SizedBox(width: 8.0),
                     Text(
@@ -340,15 +340,15 @@ class _DocumentsPageState extends State<DocumentsPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 ListTile(
                   title: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
                     decoration: BoxDecoration(
                       color: !isSortAscending ? Colors.blue : Colors.transparent,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
                         SizedBox(width: 8.0),
                         Text(
@@ -365,12 +365,12 @@ class _DocumentsPageState extends State<DocumentsPage> {
                 ),
                 ListTile(
                   title: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
                     decoration: BoxDecoration(
                       color: isSortAscending ? Colors.blue : Colors.transparent,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
                         SizedBox(width: 8.0),
                         Text(
@@ -385,7 +385,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                     Navigator.pop(context);
                   },
                 ),
-                SizedBox(height: 40.0),
+                const SizedBox(height: 40.0),
               ],
             ),
           ),

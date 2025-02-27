@@ -23,9 +23,9 @@ class PushNotificationService {
   
         // Initialize local notifications
         notifications.AndroidInitializationSettings initializationSettingsAndroid =
-            notifications.AndroidInitializationSettings('@mipmap/ic_launcher');
+            const notifications.AndroidInitializationSettings('@mipmap/ic_launcher');
         notifications.DarwinInitializationSettings initializationSettingsIOS =
-            notifications.DarwinInitializationSettings();
+            const notifications.DarwinInitializationSettings();
         notifications.InitializationSettings initializationSettings = notifications.InitializationSettings(
           android: initializationSettingsAndroid,
           iOS: initializationSettingsIOS,

@@ -252,7 +252,7 @@ class GoogleAuthService {
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              ProfilePage(),
+              const ProfilePage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               child,
         ),

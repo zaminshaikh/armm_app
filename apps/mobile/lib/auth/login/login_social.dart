@@ -18,8 +18,8 @@ class LoginSocial extends StatelessWidget {
     return Column(
       children: [
         // Divider with "or continue with"
-        Row(
-          children: const [
+        const Row(
+          children: [
             Expanded(child: Divider()),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -57,7 +57,7 @@ class LoginSocial extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ClientIDPage(),
+                builder: (context) => const ClientIDPage(),
               ),
             );
           },

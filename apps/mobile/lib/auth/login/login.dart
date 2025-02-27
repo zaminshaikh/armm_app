@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 12),
                   // The divider & social login buttons & sign-up link
-                  LoginSocial(
+                  const LoginSocial(
                     primaryColor: primaryColor,
                   ),
                   const SizedBox(height: 24),
