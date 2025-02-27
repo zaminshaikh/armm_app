@@ -32,6 +32,7 @@ import 'package:armm_app/auth/forgot_password/forgot_password.dart';
 import 'dart:developer';
 >>>>>>> d161894 (Documents Are Pulling Properly)
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/auth_check.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/profile/pages/authentication_page.dart';
@@ -180,6 +181,7 @@ void main() async {
 =======
 >>>>>>> d161894 (Documents Are Pulling Properly)
 class MyApp extends StatefulWidget {
+  
   const MyApp({Key? key}) : super(key: key);
   @override
   MyAppState createState() => MyAppState();
@@ -195,6 +197,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     
 =======
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 >>>>>>> d161894 (Documents Are Pulling Properly)
   @override
@@ -211,11 +214,19 @@ class _MyAppState extends State<MyApp> {
           return null;
         },
         child: MaterialApp(
-          initialRoute: '/',
+          navigatorKey: navigatorKey,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                boldText: false,
+                textScaler: const TextScaler.linear(1),
+              ),
+              child: child!,
+            ),
           title: 'ARMM',
           theme: _buildAppTheme(), // your app theme function
           routes: {
-            '/': (context) => OnboardingPage(),
+            '/': (context) => const AuthCheck(),
+            '/onboarding': (context) => OnboardingPage(),
             '/profile': (context) => const ProfilePage(),
             '/support': (context) => const SupportPage(),
             '/documents': (context) => const DocumentsPage(),
