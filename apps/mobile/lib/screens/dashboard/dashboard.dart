@@ -169,6 +169,7 @@ class _DashboardPageState extends State<DashboardPage>
     }
   
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 251, 251, 251),
       appBar: client != null
       ? DashboardAppBar(
           showNotificationButton: true,
@@ -181,12 +182,6 @@ class _DashboardPageState extends State<DashboardPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/font_test');
-              },
-              child: const Text('Test Fonts'),
-            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
