@@ -81,8 +81,12 @@ class AnalyticsPageState extends State<AnalyticsPage> {
       appBar: CustomAppBar(
         title: 'Analytics',
         implyLeading: false,
+<<<<<<< HEAD
         showNotificationButton: false,
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+        showNotificationButton: true,
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -94,9 +98,12 @@ class AnalyticsPageState extends State<AnalyticsPage> {
               // Display the fund-based pie charts
               ...fundCharts,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
               const SizedBox(height: 120),
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
             ],
           ),
         ),

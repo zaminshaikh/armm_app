@@ -44,10 +44,14 @@ class _LineChartSectionState extends State<LineChartSection> {
 
   // BRAND COLOR: replace with your actual brand color
 <<<<<<< HEAD
+<<<<<<< HEAD
   final Color ARMMBlue = const Color(0xFF2B41B8);
 =======
   final Color brandBlue = const Color(0xFF2B41B8);
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+  final Color ARMMBlue = const Color(0xFF2B41B8);
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
 
   @override
   void initState() {
@@ -606,6 +610,7 @@ class _LineChartSectionState extends State<LineChartSection> {
                 decoration: BoxDecoration(
                   // **Changed** brand color fill if selected
 <<<<<<< HEAD
+<<<<<<< HEAD
                   color: isSelected ? ARMMBlue : Colors.transparent,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
@@ -616,6 +621,12 @@ class _LineChartSectionState extends State<LineChartSection> {
                   border: Border.all(
                     color: isSelected ? brandBlue : Colors.black,
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                  color: isSelected ? ARMMBlue : Colors.transparent,
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                    color: isSelected ? ARMMBlue : const Color.fromARGB(255, 165, 165, 165),
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
                     width: 1,
                   ),
                 ),
@@ -626,20 +637,28 @@ class _LineChartSectionState extends State<LineChartSection> {
                       width: 16,
                       height: 16,
 <<<<<<< HEAD
+<<<<<<< HEAD
                       color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
 =======
                       color: Colors.white,
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                      color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
                     ),
                     const SizedBox(width: 12),
                     Text(
                       displayName.length > 20 ? getInitials(displayName) : displayName,
                       style: TextStyle(
 <<<<<<< HEAD
+<<<<<<< HEAD
                         color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
 =======
                         color: Colors.white,
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                        color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
                         fontSize: 16,
                         fontWeight: isSelected ? FontWeight.w700 : FontWeight.w300,
                       ),
@@ -938,10 +957,14 @@ class _LineChartSectionState extends State<LineChartSection> {
         lineChartStepData: const LineChartStepData(stepDirection: 0),
         barWidth: 3,
 <<<<<<< HEAD
+<<<<<<< HEAD
         color: ARMMBlue, // **Changed** line color to brand color
 =======
         color: brandBlue, // **Changed** line color to brand color
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+        color: ARMMBlue, // **Changed** line color to brand color
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
         isStrokeCapRound: true,
         dotData: FlDotData(
           show: false,
@@ -960,10 +983,14 @@ class _LineChartSectionState extends State<LineChartSection> {
               return FlDotCirclePainter(
                 radius: 4,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 color: ARMMBlue,
 =======
                 color: brandBlue,
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                color: ARMMBlue,
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
                 strokeWidth: 2,
                 strokeColor: Colors.white,
               );
@@ -985,10 +1012,14 @@ class _LineChartSectionState extends State<LineChartSection> {
             end: Alignment.bottomCenter,
             colors: [
 <<<<<<< HEAD
+<<<<<<< HEAD
               ARMMBlue.withOpacity(0.4),
 =======
               brandBlue.withOpacity(0.4),
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+              ARMMBlue.withOpacity(0.4),
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
               Colors.transparent,
             ],
           ),
@@ -1032,10 +1063,14 @@ class _LineChartSectionState extends State<LineChartSection> {
           return TouchedSpotIndicatorData(
             // **Changed** indicator color to brand color
 <<<<<<< HEAD
+<<<<<<< HEAD
             FlLine(color: ARMMBlue, strokeWidth: 2),
 =======
             FlLine(color: brandBlue, strokeWidth: 2),
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+            FlLine(color: ARMMBlue, strokeWidth: 2),
+>>>>>>> c69b9d5 (Enable notification button on AnalyticsPage and update brand color references in LineChartSection for consistency)
             const FlDotData(show: false),
           );
         }).toList(),
