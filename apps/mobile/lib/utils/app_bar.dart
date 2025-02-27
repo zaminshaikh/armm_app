@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               gradient: LinearGradient(
                 colors: [
                   Color(0xFF2B41B8),
-                  Color.fromARGB(255, 116, 122, 151),
+                  Color.fromARGB(255, 169, 175, 206),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -57,7 +57,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 25,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
             ),
           ),
           actions: showNotificationButton

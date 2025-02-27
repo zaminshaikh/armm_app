@@ -64,6 +64,7 @@ class AnalyticsPageState extends State<AnalyticsPage> {
     });
   
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 241, 241, 241),
       appBar: CustomAppBar(
         title: 'Analytics',
         implyLeading: false,

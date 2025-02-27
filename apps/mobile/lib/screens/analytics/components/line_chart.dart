@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/database/models/graph_model.dart';
 import 'package:armm_app/database/models/graph_point_model.dart';
@@ -7,6 +8,7 @@ import 'package:armm_app/screens/analytics/utils/analytics_utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 /// A widget that displays the line chart section in the Analytics page.
@@ -109,7 +111,7 @@ class _LineChartSectionState extends State<LineChartSection> {
       // No data
       localMinAmount = 0.0;
       localMaxAmount = 100000.0;
-      spots.add(FlSpot(0, 0));
+      spots.add(const FlSpot(0, 0));
       spots.add(FlSpot(maxX(dropdownValue), 0));
     }
 
@@ -152,67 +154,71 @@ class _LineChartSectionState extends State<LineChartSection> {
             ),
             const SizedBox(height: 14),
 
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  // Header with timeline label & time filter
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildAssetTimelineRow(),
-                        const SizedBox(height: 28),
-                        _buildAccountModalButton(),
-                        const SizedBox(height: 15),
-                      ],
+            Material(
+                elevation: 3,
+                borderRadius: BorderRadius.circular(15), 
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    // Header with timeline label & time filter
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildAssetTimelineRow(),
+                          const SizedBox(height: 28),
+                          _buildLatestAssets(),
+                          const SizedBox(height: 15),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Line chart container
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(right: 20, bottom: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: LineChart(
-                          LineChartData(
-                            gridData: _buildGridData(),
-                            titlesData: titlesData,
-                            borderData: FlBorderData(show: false),
-                            // Axis limits
-                            minX: 0,
-                            maxX: maxX(dropdownValue),
-                            minY: calculateDynamicMin(_minAmount),
-                            maxY: calculateDynamicMax(_maxAmount),
-                            // The line(s)
-                            lineBarsData: [_buildLineChartBarData()],
-                            // Touch behavior
-                            lineTouchData: _buildLineTouchData(),
+                    const SizedBox(height: 20),
+              
+                    // Line chart container
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(right: 20, bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: LineChart(
+                            LineChartData(
+                              gridData: _buildGridData(),
+                              titlesData: titlesData,
+                              borderData: FlBorderData(show: false),
+                              // Axis limits
+                              minX: 0,
+                              maxX: maxX(dropdownValue),
+                              minY: calculateDynamicMin(_minAmount),
+                              maxY: calculateDynamicMax(_maxAmount),
+                              // The line(s)
+                              lineBarsData: [_buildLineChartBarData()],
+                              // Touch behavior
+                              lineTouchData: _buildLineTouchData(),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Date range text & possible "No data" message
-                  keyAndLogoRow(),
-                ],
+                    const SizedBox(height: 20),
+                    // Date range text & possible "No data" message
+                    keyAndLogoRow(),
+                  ],
+                ),
               ),
             ),
           ],
@@ -233,14 +239,14 @@ class _LineChartSectionState extends State<LineChartSection> {
         ),
       );
 
-  /// Account modal button
+  /// Account selection pill button
   Widget _buildAccountModalButton() {
     if (selectedClient == null ||
         selectedClient!.graphs == null ||
         selectedClient!.graphs!.isEmpty) {
       return const Text(
         'No accounts',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.black),
       );
     }
 
@@ -267,42 +273,111 @@ class _LineChartSectionState extends State<LineChartSection> {
           ? null
           : () => _showAccountModalSheet(context, graphs),
       child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        // Light background & rounded corners
         decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white30, width: 2),
+          color: const Color.fromARGB(255, 221, 221, 221),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(
+            color: const Color.fromARGB(255, 125, 125, 125),
+            width: 1.5,
+          )
         ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               currentAccountLabel,
               style: const TextStyle(
-                color: Colors.white,
-                fontFamily: 'Titillium Web',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 126, 126, 126),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            const Spacer(),
+            const SizedBox(width: 6),
+            // Show dropdown icon only if there's more than 2 graphs
             if (graphs.length > 2)
-              const RotatedBox(
-                quarterTurns: 3,
-                child: Icon(
-                  Icons.arrow_back_ios_rounded,
-                  color: Colors.white30,
-                  size: 22,
-                ),
+              const Icon(
+                Icons.arrow_drop_down,
+                color: Color(0xFF0D1E3E),
+                size: 22,
               )
             else
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildLatestAssets() {
+      if (selectedClient == null ||
+          selectedClient!.graphs == null ||
+          selectedClient!.graphs!.isEmpty) {
+        return const Text(
+          'No accounts',
+          style: TextStyle(color: Colors.black),
+        );
+      }
+  
+    final DateFormat timeFormat = DateFormat('h:mm a');
+    final DateFormat dateFormat = DateFormat('MMM d, yyyy');
+    String time = timeFormat.format(selectedGraph!.graphPoints.last.time);
+    String date = dateFormat.format(selectedGraph!.graphPoints.last.time);
+
+
+    // Return the container with proper decoration
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        border: Border.all(
+          color: const Color.fromARGB(255, 147, 147, 147),
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(12.0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Assets',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14, // Reduced font size
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4), // Reduced spacing
+              Text(
+                '$date at $time',
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 137, 137, 137),
+                  fontSize: 12, // Smaller font size
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ],
+          ),
+          const Spacer(),
+          Text(
+            NumberFormat.currency(symbol: '\$')
+                .format(selectedGraph!.graphPoints.last.amount),
+            style: GoogleFonts.inter(
+              color: ARMMBlue,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      )
+    );
+  }
+  
+  
   /// Bottom sheet for selecting an account
   void _showAccountModalSheet(BuildContext context, List<Graph> graphs) {
     List<Graph> availableGraphs = List.from(graphs);
@@ -434,44 +509,72 @@ class _LineChartSectionState extends State<LineChartSection> {
     );
   }
 
-  /// Row with "Asset Timeline" label + time filter on the right
-  Widget _buildAssetTimelineRow() => Row(
-        children: [
-          const Text(
-            'Asset Timeline',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
+  /// Row with "Asset Timeline" label and two pill buttons (account & time filter)
+  Widget _buildAssetTimelineRow() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        // "Asset Timeline" title
+        Text(
+          'Asset Timeline',
+            style: GoogleFonts.inter(
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
-          ),
-          const Spacer(),
-          _buildTimeFilter(context),
-        ],
-      );
+        ),
+        const SizedBox(height: 20),
 
-  /// Time filter widget
+        // Row of two pill-shaped buttons side by side
+        Row(
+          children: [
+            // Account Button
+            Expanded(
+              child: _buildAccountModalButton(),
+            ),
+            const SizedBox(width: 12),
+
+            // Time Filter Button
+            Expanded(
+              child: _buildTimeFilter(context),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+
+
+
+
+
+
+  /// Time filter pill button
   Widget _buildTimeFilter(BuildContext context) {
     final selectedText = _getTimeLabel(dropdownValue);
 
     return GestureDetector(
       onTap: () => _showTimeOptionsBottomSheet(context),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-          // **Changed** border color to white
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white, width: 1),
+          color: const Color.fromARGB(255, 221, 221, 221),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(
+            color: const Color.fromARGB(255, 125, 125, 125),
+            width: 1.5,
+          )
         ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               selectedText,
               style: const TextStyle(
-                fontFamily: 'Titillium Web',
-                color: Colors.white, // **Changed** text to white
-                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 126, 126, 126),
                 fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(width: 10),
@@ -479,15 +582,17 @@ class _LineChartSectionState extends State<LineChartSection> {
               quarterTurns: 3,
               child: Icon(
                 Icons.arrow_back_ios_rounded,
-                color: Colors.white, // **Changed** arrow to white
-                size: 16,
+                color: Color.fromARGB(255, 126, 126, 126),
+                size: 18,
               ),
-            ),
+            )
           ],
         ),
       ),
     );
   }
+
+
 
   /// Bottom sheet with time options
   void _showTimeOptionsBottomSheet(BuildContext context) {
@@ -585,7 +690,7 @@ class _LineChartSectionState extends State<LineChartSection> {
   FlGridData _buildGridData() => FlGridData(
         show: true,
         drawVerticalLine: false,
-        getDrawingHorizontalLine: (value) => FlLine(
+        getDrawingHorizontalLine: (value) => const FlLine(
           color: Colors.white38, // **Changed** to semi-transparent white
           strokeWidth: 0.5,
         ),
@@ -608,7 +713,7 @@ class _LineChartSectionState extends State<LineChartSection> {
                 child: Text(
                   abbreviateNumber(value),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white), // White axis label
+                  style: const TextStyle(color: Color.fromARGB(255, 126, 126, 126)), // White axis label
                 ),
               );
             },
@@ -767,7 +872,7 @@ class _LineChartSectionState extends State<LineChartSection> {
         style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.bold,
-          color: Colors.white, // White axis label
+          color: Color.fromARGB(255, 126, 126, 126)
         ),
       ),
     );
@@ -834,9 +939,8 @@ class _LineChartSectionState extends State<LineChartSection> {
               displayText,
               style: const TextStyle(
                 fontSize: 18,
-                color: Colors.white,
+                color: Color.fromARGB(255, 126, 126, 126),
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Titillium Web',
               ),
             ),
             if (spots.isEmpty)
