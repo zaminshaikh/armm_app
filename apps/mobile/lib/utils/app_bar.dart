@@ -49,6 +49,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 colors: [
                   Color(0xFF2B41B8),
 <<<<<<< HEAD
+<<<<<<< HEAD
                   Color.fromARGB(255, 169, 175, 206),
                 ],
                 begin: Alignment.topLeft,
@@ -150,6 +151,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 >>>>>>> 547db41 (All Pages Use the Custom App Bar)
 =======
                   Color.fromARGB(255, 116, 122, 151),
+=======
+                  Color.fromARGB(255, 169, 175, 206),
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -178,7 +182,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 25,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
             ),
           ),
           actions: showNotificationButton

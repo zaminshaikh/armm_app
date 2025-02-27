@@ -1,9 +1,13 @@
 import 'dart:ui';
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 =======
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/database/models/graph_model.dart';
 import 'package:armm_app/database/models/graph_point_model.dart';
@@ -12,9 +16,13 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_svg/svg.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
 =======
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+import 'package:google_fonts/google_fonts.dart';
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
 import 'package:intl/intl.dart';
 
 /// A widget that displays the line chart section in the Analytics page.
@@ -126,10 +134,14 @@ class _LineChartSectionState extends State<LineChartSection> {
       localMinAmount = 0.0;
       localMaxAmount = 100000.0;
 <<<<<<< HEAD
+<<<<<<< HEAD
       spots.add(const FlSpot(0, 0));
 =======
       spots.add(FlSpot(0, 0));
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+      spots.add(const FlSpot(0, 0));
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
       spots.add(FlSpot(maxX(dropdownValue), 0));
     }
 
@@ -183,6 +195,9 @@ class _LineChartSectionState extends State<LineChartSection> {
             const SizedBox(height: 14),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
             Material(
                 elevation: 3,
                 borderRadius: BorderRadius.circular(15), 
@@ -209,6 +224,7 @@ class _LineChartSectionState extends State<LineChartSection> {
                           const SizedBox(height: 15),
                         ],
                       ),
+<<<<<<< HEAD
                     ),
                     const SizedBox(height: 20),
               
@@ -293,16 +309,52 @@ class _LineChartSectionState extends State<LineChartSection> {
                             // Touch behavior
                             lineTouchData: _buildLineTouchData(),
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                    ),
+                    const SizedBox(height: 20),
+              
+                    // Line chart container
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(right: 20, bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: LineChart(
+                            LineChartData(
+                              gridData: _buildGridData(),
+                              titlesData: titlesData,
+                              borderData: FlBorderData(show: false),
+                              // Axis limits
+                              minX: 0,
+                              maxX: maxX(dropdownValue),
+                              minY: calculateDynamicMin(_minAmount),
+                              maxY: calculateDynamicMax(_maxAmount),
+                              // The line(s)
+                              lineBarsData: [_buildLineChartBarData()],
+                              // Touch behavior
+                              lineTouchData: _buildLineTouchData(),
+                            ),
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
                           ),
                         ),
                       ),
                     ),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
                     const SizedBox(height: 20),
                     // Date range text & possible "No data" message
                     keyAndLogoRow(),
                   ],
                 ),
+<<<<<<< HEAD
 =======
                   ),
                   const SizedBox(height: 20),
@@ -310,6 +362,8 @@ class _LineChartSectionState extends State<LineChartSection> {
                   keyAndLogoRow(),
                 ],
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
               ),
             ),
           ],
@@ -331,10 +385,14 @@ class _LineChartSectionState extends State<LineChartSection> {
       );
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   /// Account selection pill button
 =======
   /// Account modal button
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+  /// Account selection pill button
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
   Widget _buildAccountModalButton() {
     if (selectedClient == null ||
         selectedClient!.graphs == null ||
@@ -342,10 +400,14 @@ class _LineChartSectionState extends State<LineChartSection> {
       return const Text(
         'No accounts',
 <<<<<<< HEAD
+<<<<<<< HEAD
         style: TextStyle(color: Colors.black),
 =======
         style: TextStyle(color: Colors.white),
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+        style: TextStyle(color: Colors.black),
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
       );
     }
 
@@ -373,6 +435,7 @@ class _LineChartSectionState extends State<LineChartSection> {
           : () => _showAccountModalSheet(context, graphs),
       child: Container(
 <<<<<<< HEAD
+<<<<<<< HEAD
         // Light background & rounded corners
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 221, 221, 221),
@@ -388,17 +451,29 @@ class _LineChartSectionState extends State<LineChartSection> {
 =======
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+=======
+        // Light background & rounded corners
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
         decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white30, width: 2),
+          color: const Color.fromARGB(255, 221, 221, 221),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(
+            color: const Color.fromARGB(255, 125, 125, 125),
+            width: 1.5,
+          )
         ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
+<<<<<<< HEAD
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+          mainAxisAlignment: MainAxisAlignment.center,
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
           children: [
             Text(
               currentAccountLabel,
               style: const TextStyle(
+<<<<<<< HEAD
 <<<<<<< HEAD
                 color: Color.fromARGB(255, 126, 126, 126),
                 fontSize: 16,
@@ -420,21 +495,28 @@ class _LineChartSectionState extends State<LineChartSection> {
                 fontFamily: 'Titillium Web',
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+=======
+                color: Color.fromARGB(255, 126, 126, 126),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
               ),
             ),
-            const Spacer(),
+            const SizedBox(width: 6),
+            // Show dropdown icon only if there's more than 2 graphs
             if (graphs.length > 2)
-              const RotatedBox(
-                quarterTurns: 3,
-                child: Icon(
-                  Icons.arrow_back_ios_rounded,
-                  color: Colors.white30,
-                  size: 22,
-                ),
+              const Icon(
+                Icons.arrow_drop_down,
+                color: Color(0xFF0D1E3E),
+                size: 22,
               )
             else
+<<<<<<< HEAD
               const SizedBox(width: 10),
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+              const SizedBox(width: 8),
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
           ],
         ),
       ),
@@ -442,6 +524,9 @@ class _LineChartSectionState extends State<LineChartSection> {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
   Widget _buildLatestAssets() {
       if (selectedClient == null ||
           selectedClient!.graphs == null ||
@@ -510,8 +595,11 @@ class _LineChartSectionState extends State<LineChartSection> {
   }
   
   
+<<<<<<< HEAD
 =======
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
   /// Bottom sheet for selecting an account
   void _showAccountModalSheet(BuildContext context, List<Graph> graphs) {
     List<Graph> availableGraphs = List.from(graphs);
@@ -674,6 +762,9 @@ class _LineChartSectionState extends State<LineChartSection> {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
   /// Row with "Asset Timeline" label and two pill buttons (account & time filter)
   Widget _buildAssetTimelineRow() {
     return Column(
@@ -685,6 +776,7 @@ class _LineChartSectionState extends State<LineChartSection> {
           'Asset Timeline',
             style: GoogleFonts.inter(
               fontSize: 18,
+<<<<<<< HEAD
               fontWeight: FontWeight.bold,
             ),
         ),
@@ -725,22 +817,51 @@ class _LineChartSectionState extends State<LineChartSection> {
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
               fontWeight: FontWeight.bold,
             ),
-          ),
-          const Spacer(),
-          _buildTimeFilter(context),
-        ],
-      );
+        ),
+        const SizedBox(height: 20),
 
+<<<<<<< HEAD
   /// Time filter widget
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+        // Row of two pill-shaped buttons side by side
+        Row(
+          children: [
+            // Account Button
+            Expanded(
+              child: _buildAccountModalButton(),
+            ),
+            const SizedBox(width: 12),
+
+            // Time Filter Button
+            Expanded(
+              child: _buildTimeFilter(context),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+
+
+
+
+
+
+  /// Time filter pill button
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
   Widget _buildTimeFilter(BuildContext context) {
     final selectedText = _getTimeLabel(dropdownValue);
 
     return GestureDetector(
       onTap: () => _showTimeOptionsBottomSheet(context),
       child: Container(
+<<<<<<< HEAD
 <<<<<<< HEAD
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 221, 221, 221),
@@ -755,17 +876,28 @@ class _LineChartSectionState extends State<LineChartSection> {
           mainAxisAlignment: MainAxisAlignment.center,
 =======
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
         decoration: BoxDecoration(
-          // **Changed** border color to white
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white, width: 1),
+          color: const Color.fromARGB(255, 221, 221, 221),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(
+            color: const Color.fromARGB(255, 125, 125, 125),
+            width: 1.5,
+          )
         ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
+<<<<<<< HEAD
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+          mainAxisAlignment: MainAxisAlignment.center,
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
           children: [
             Text(
               selectedText,
               style: const TextStyle(
+<<<<<<< HEAD
 <<<<<<< HEAD
                 color: Color.fromARGB(255, 126, 126, 126),
                 fontSize: 16,
@@ -776,6 +908,11 @@ class _LineChartSectionState extends State<LineChartSection> {
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                color: Color.fromARGB(255, 126, 126, 126),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
               ),
             ),
             const SizedBox(width: 10),
@@ -783,6 +920,7 @@ class _LineChartSectionState extends State<LineChartSection> {
               quarterTurns: 3,
               child: Icon(
                 Icons.arrow_back_ios_rounded,
+<<<<<<< HEAD
 <<<<<<< HEAD
                 color: Color.fromARGB(255, 126, 126, 126),
                 size: 18,
@@ -794,6 +932,12 @@ class _LineChartSectionState extends State<LineChartSection> {
               ),
             ),
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                color: Color.fromARGB(255, 126, 126, 126),
+                size: 18,
+              ),
+            )
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
           ],
         ),
       ),
@@ -801,10 +945,15 @@ class _LineChartSectionState extends State<LineChartSection> {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 =======
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+
+
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
   /// Bottom sheet with time options
   void _showTimeOptionsBottomSheet(BuildContext context) {
     var timeOptions = [
@@ -902,10 +1051,14 @@ class _LineChartSectionState extends State<LineChartSection> {
         show: true,
         drawVerticalLine: false,
 <<<<<<< HEAD
+<<<<<<< HEAD
         getDrawingHorizontalLine: (value) => const FlLine(
 =======
         getDrawingHorizontalLine: (value) => FlLine(
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+        getDrawingHorizontalLine: (value) => const FlLine(
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
           color: Colors.white38, // **Changed** to semi-transparent white
           strokeWidth: 0.5,
         ),
@@ -929,10 +1082,14 @@ class _LineChartSectionState extends State<LineChartSection> {
                   abbreviateNumber(value),
                   textAlign: TextAlign.center,
 <<<<<<< HEAD
+<<<<<<< HEAD
                   style: const TextStyle(color: Color.fromARGB(255, 126, 126, 126)), // White axis label
 =======
                   style: const TextStyle(color: Colors.white), // White axis label
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                  style: const TextStyle(color: Color.fromARGB(255, 126, 126, 126)), // White axis label
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
                 ),
               );
             },
@@ -1124,10 +1281,14 @@ class _LineChartSectionState extends State<LineChartSection> {
           fontSize: 12,
           fontWeight: FontWeight.bold,
 <<<<<<< HEAD
+<<<<<<< HEAD
           color: Color.fromARGB(255, 126, 126, 126)
 =======
           color: Colors.white, // White axis label
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+          color: Color.fromARGB(255, 126, 126, 126)
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
         ),
       ),
     );
@@ -1195,6 +1356,7 @@ class _LineChartSectionState extends State<LineChartSection> {
               style: const TextStyle(
                 fontSize: 18,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 color: Color.fromARGB(255, 126, 126, 126),
                 fontWeight: FontWeight.bold,
 =======
@@ -1202,6 +1364,10 @@ class _LineChartSectionState extends State<LineChartSection> {
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Titillium Web',
 >>>>>>> 545307b (All Analytics Widgets migrated)
+=======
+                color: Color.fromARGB(255, 126, 126, 126),
+                fontWeight: FontWeight.bold,
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
               ),
             ),
             if (spots.isEmpty)

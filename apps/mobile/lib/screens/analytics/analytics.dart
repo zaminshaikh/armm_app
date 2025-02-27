@@ -72,6 +72,9 @@ class AnalyticsPageState extends State<AnalyticsPage> {
   
     return Scaffold(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 64c0909 (Update background color on AnalyticsPage and adjust gradient colors in CustomAppBar for improved aesthetics)
       backgroundColor: const Color.fromARGB(255, 241, 241, 241),
       appBar: CustomAppBar(
         title: 'Analytics',
