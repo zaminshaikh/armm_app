@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:armm_app/auth/auth_utils/initial_face_id.dart';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/database/database.dart';
@@ -8,6 +9,14 @@ import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+=======
+import 'package:armm_app/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/database/database.dart';
+import 'package:armm_app/screens/profile/profile.dart';
+import 'package:armm_app/signup_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+>>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({Key? key}) : super(key: key);
@@ -52,8 +61,11 @@ class _AuthCheckState extends State<AuthCheck> {
   Widget build(BuildContext context) => StreamBuilder<User?>(
     stream: FirebaseAuth.instance.userChanges(),
     builder: (BuildContext context,AsyncSnapshot<User?> snapshot) {
+<<<<<<< HEAD
     final appState = Provider.of<AuthState>(context, listen: false);
 
+=======
+>>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Center(child: CircularProgressIndicator());
       } else if (snapshot.hasError) {
@@ -70,6 +82,7 @@ class _AuthCheckState extends State<AuthCheck> {
             } else if (authSnapshot.hasError) {
               return Center(child: Text('Error: ${authSnapshot.error}'));
             } else if (authSnapshot.hasData && authSnapshot.data == true) {
+<<<<<<< HEAD
               if (appState.isAppLockEnabled) {
                 // User is authenticated, email verified, and linked
               return const InitialFaceIdPage();
@@ -78,14 +91,28 @@ class _AuthCheckState extends State<AuthCheck> {
             } else {
               // User is not authenticated, email not verified, or not linked
               return const OnboardingPage();
+=======
+              // User is authenticated, email verified, and linked
+              return const ProfilePage();
+            } else {
+              // User is not authenticated, email not verified, or not linked
+              return OnboardingPage(signUpData: SignUpData());
+>>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
             }
           });
         } else {
           // User is not signed in
+<<<<<<< HEAD
           return const OnboardingPage();
         }
       } else {
         return const OnboardingPage();
+=======
+          return OnboardingPage(signUpData: SignUpData());
+        }
+      } else {
+        return OnboardingPage(signUpData: SignUpData());
+>>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
       }
     },
   );
