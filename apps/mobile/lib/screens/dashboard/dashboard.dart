@@ -273,6 +273,7 @@ class _DashboardPageState extends State<DashboardPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+<<<<<<< HEAD
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
           child: Text(
@@ -300,6 +301,8 @@ class _DashboardPageState extends State<DashboardPage>
           ),
         ),
         const SizedBox(height: 12),
+=======
+>>>>>>> 26828f3 (Refactor ActivityCardItem to streamline layout, enhance readability, and improve transaction details display)
         ActivityTilesSection(activities: activities),
       ],
     );

@@ -3,9 +3,12 @@ import 'package:armm_app/screens/activity/utils/activity_styles.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import 'package:flutter_svg/svg.dart';
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+>>>>>>> 26828f3 (Refactor ActivityCardItem to streamline layout, enhance readability, and improve transaction details display)
 import 'package:intl/intl.dart';
 
 class ActivityCardItem extends StatelessWidget {
@@ -23,6 +26,7 @@ class ActivityCardItem extends StatelessWidget {
     String time = timeFormat.format(activity.time);
     String date = dateFormat.format(activity.time);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0), // Adds spacing between rows
@@ -146,61 +150,77 @@ class ActivityCardItem extends StatelessWidget {
       );
 
   Widget _buildActivityDetails() => Column(
+=======
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0), // Adds spacing between rows
+      child: Row(
+>>>>>>> 26828f3 (Refactor ActivityCardItem to streamline layout, enhance readability, and improve transaction details display)
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            activity.fund,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Titillium Web',
-            ),
-          ),
-          const SizedBox(height: 5),
-          Text(
-            getActivityType(activity),
-            style: TextStyle(
-              fontSize: 15,
-              color: getActivityColor(activity.type),
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Titillium Web',
-            ),
-          ),
-        ],
-      );
 
-  Widget _buildActivityAmountAndRecipient(String time) => Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '${activity.type == 'withdrawal' ? '-' : ''}${currencyFormat(activity.amount.toDouble())}',
-              style: TextStyle(
-                fontSize: 18,
-                color: getActivityColor(activity.type),
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Titillium Web',
-              ),
+          // Transaction Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Transaction Type (Profit, Withdrawal, Deposit, etc.)
+                Text(
+                  getActivityType(activity),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+
+                // Date and Time
+                Text(
+                  '$date at $time',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 5),
-          Row(
+
+          // Transaction Amount & Fund Type
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              // Amount (Positive/Negative)
               Text(
-                _getShortenedName(activity.recipient),
+                '${activity.type == 'withdrawal' ? '-' : '+'}${currencyFormat(activity.amount.toDouble())}',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: getActivityColor(activity.type),
+                ),
+              ),
+
+              // Fund Type (IRA, Roth IRA, etc.)
+              Text(
+                activity.recipient,
                 style: const TextStyle(
+<<<<<<< HEAD
                   fontSize: 13,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Titillium Web',
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+                  fontSize: 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w700
+>>>>>>> 26828f3 (Refactor ActivityCardItem to streamline layout, enhance readability, and improve transaction details display)
                 ),
               ),
             ],
           ),
         ],
+<<<<<<< HEAD
 <<<<<<< HEAD
       ),
     );
@@ -226,4 +246,10 @@ class ActivityCardItem extends StatelessWidget {
     }
   }
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+      ),
+    );
+  }
+
+>>>>>>> 26828f3 (Refactor ActivityCardItem to streamline layout, enhance readability, and improve transaction details display)
 }
