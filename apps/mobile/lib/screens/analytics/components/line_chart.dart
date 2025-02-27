@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+<<<<<<< HEAD
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
+=======
+>>>>>>> 545307b (All Analytics Widgets migrated)
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/database/models/graph_model.dart';
 import 'package:armm_app/database/models/graph_point_model.dart';
@@ -8,7 +11,10 @@ import 'package:armm_app/screens/analytics/utils/analytics_utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_svg/svg.dart';
+<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
+=======
+>>>>>>> 545307b (All Analytics Widgets migrated)
 import 'package:intl/intl.dart';
 
 /// A widget that displays the line chart section in the Analytics page.
@@ -37,7 +43,11 @@ class _LineChartSectionState extends State<LineChartSection> {
   Client? selectedClient;
 
   // BRAND COLOR: replace with your actual brand color
+<<<<<<< HEAD
   final Color ARMMBlue = const Color(0xFF2B41B8);
+=======
+  final Color brandBlue = const Color(0xFF2B41B8);
+>>>>>>> 545307b (All Analytics Widgets migrated)
 
   @override
   void initState() {
@@ -111,7 +121,11 @@ class _LineChartSectionState extends State<LineChartSection> {
       // No data
       localMinAmount = 0.0;
       localMaxAmount = 100000.0;
+<<<<<<< HEAD
       spots.add(const FlSpot(0, 0));
+=======
+      spots.add(FlSpot(0, 0));
+>>>>>>> 545307b (All Analytics Widgets migrated)
       spots.add(FlSpot(maxX(dropdownValue), 0));
     }
 
@@ -145,6 +159,7 @@ class _LineChartSectionState extends State<LineChartSection> {
               (client) {
                 setState(() {
                   selectedClient = client;
+<<<<<<< HEAD
                   if (client.graphs != null && client.graphs!.isNotEmpty) {
                     selectedGraph = client.graphs!.first;
                     selectedAccount = selectedGraph?.account;
@@ -152,6 +167,10 @@ class _LineChartSectionState extends State<LineChartSection> {
                     selectedGraph = null;
                     selectedAccount = null;
                   }
+=======
+                  selectedGraph = client.graphs?.first;
+                  selectedAccount = selectedGraph?.account;
+>>>>>>> 545307b (All Analytics Widgets migrated)
                   _prepareGraphPoints();
                 });
               },
@@ -159,6 +178,7 @@ class _LineChartSectionState extends State<LineChartSection> {
             ),
             const SizedBox(height: 14),
 
+<<<<<<< HEAD
             Material(
                 elevation: 3,
                 borderRadius: BorderRadius.circular(15), 
@@ -215,15 +235,77 @@ class _LineChartSectionState extends State<LineChartSection> {
                               // Touch behavior
                               lineTouchData: _buildLineTouchData(),
                             ),
+=======
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  // Header with timeline label & time filter
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildAssetTimelineRow(),
+                        const SizedBox(height: 28),
+                        _buildAccountModalButton(),
+                        const SizedBox(height: 15),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Line chart container
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(right: 20, bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: LineChart(
+                          LineChartData(
+                            gridData: _buildGridData(),
+                            titlesData: titlesData,
+                            borderData: FlBorderData(show: false),
+                            // Axis limits
+                            minX: 0,
+                            maxX: maxX(dropdownValue),
+                            minY: calculateDynamicMin(_minAmount),
+                            maxY: calculateDynamicMax(_maxAmount),
+                            // The line(s)
+                            lineBarsData: [_buildLineChartBarData()],
+                            // Touch behavior
+                            lineTouchData: _buildLineTouchData(),
+>>>>>>> 545307b (All Analytics Widgets migrated)
                           ),
                         ),
                       ),
                     ),
+<<<<<<< HEAD
                     const SizedBox(height: 20),
                     // Date range text & possible "No data" message
                     keyAndLogoRow(),
                   ],
                 ),
+=======
+                  ),
+                  const SizedBox(height: 20),
+                  // Date range text & possible "No data" message
+                  keyAndLogoRow(),
+                ],
+>>>>>>> 545307b (All Analytics Widgets migrated)
               ),
             ),
           ],
@@ -244,14 +326,22 @@ class _LineChartSectionState extends State<LineChartSection> {
         ),
       );
 
+<<<<<<< HEAD
   /// Account selection pill button
+=======
+  /// Account modal button
+>>>>>>> 545307b (All Analytics Widgets migrated)
   Widget _buildAccountModalButton() {
     if (selectedClient == null ||
         selectedClient!.graphs == null ||
         selectedClient!.graphs!.isEmpty) {
       return const Text(
         'No accounts',
+<<<<<<< HEAD
         style: TextStyle(color: Colors.black),
+=======
+        style: TextStyle(color: Colors.white),
+>>>>>>> 545307b (All Analytics Widgets migrated)
       );
     }
 
@@ -278,6 +368,7 @@ class _LineChartSectionState extends State<LineChartSection> {
           ? null
           : () => _showAccountModalSheet(context, graphs),
       child: Container(
+<<<<<<< HEAD
         // Light background & rounded corners
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 221, 221, 221),
@@ -290,10 +381,21 @@ class _LineChartSectionState extends State<LineChartSection> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+=======
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white30, width: 2),
+        ),
+        child: Row(
+>>>>>>> 545307b (All Analytics Widgets migrated)
           children: [
             Text(
               currentAccountLabel,
               style: const TextStyle(
+<<<<<<< HEAD
                 color: Color.fromARGB(255, 126, 126, 126),
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -309,12 +411,33 @@ class _LineChartSectionState extends State<LineChartSection> {
               )
             else
               const SizedBox(width: 8),
+=======
+                color: Colors.white,
+                fontFamily: 'Titillium Web',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Spacer(),
+            if (graphs.length > 2)
+              const RotatedBox(
+                quarterTurns: 3,
+                child: Icon(
+                  Icons.arrow_back_ios_rounded,
+                  color: Colors.white30,
+                  size: 22,
+                ),
+              )
+            else
+              const SizedBox(width: 10),
+>>>>>>> 545307b (All Analytics Widgets migrated)
           ],
         ),
       ),
     );
   }
 
+<<<<<<< HEAD
   Widget _buildLatestAssets() {
       if (selectedClient == null ||
           selectedClient!.graphs == null ||
@@ -383,6 +506,8 @@ class _LineChartSectionState extends State<LineChartSection> {
   }
   
   
+=======
+>>>>>>> 545307b (All Analytics Widgets migrated)
   /// Bottom sheet for selecting an account
   void _showAccountModalSheet(BuildContext context, List<Graph> graphs) {
     List<Graph> availableGraphs = List.from(graphs);
@@ -480,10 +605,17 @@ class _LineChartSectionState extends State<LineChartSection> {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   // **Changed** brand color fill if selected
+<<<<<<< HEAD
                   color: isSelected ? ARMMBlue : Colors.transparent,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     color: isSelected ? ARMMBlue : const Color.fromARGB(255, 165, 165, 165),
+=======
+                  color: isSelected ? brandBlue : Colors.black,
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                    color: isSelected ? brandBlue : Colors.black,
+>>>>>>> 545307b (All Analytics Widgets migrated)
                     width: 1,
                   ),
                 ),
@@ -493,13 +625,21 @@ class _LineChartSectionState extends State<LineChartSection> {
                       'assets/icons/profile.svg',
                       width: 16,
                       height: 16,
+<<<<<<< HEAD
                       color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
+=======
+                      color: Colors.white,
+>>>>>>> 545307b (All Analytics Widgets migrated)
                     ),
                     const SizedBox(width: 12),
                     Text(
                       displayName.length > 20 ? getInitials(displayName) : displayName,
                       style: TextStyle(
+<<<<<<< HEAD
                         color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
+=======
+                        color: Colors.white,
+>>>>>>> 545307b (All Analytics Widgets migrated)
                         fontSize: 16,
                         fontWeight: isSelected ? FontWeight.w700 : FontWeight.w300,
                       ),
@@ -514,6 +654,7 @@ class _LineChartSectionState extends State<LineChartSection> {
     );
   }
 
+<<<<<<< HEAD
   /// Row with "Asset Timeline" label and two pill buttons (account & time filter)
   Widget _buildAssetTimelineRow() {
     return Column(
@@ -556,12 +697,32 @@ class _LineChartSectionState extends State<LineChartSection> {
 
 
   /// Time filter pill button
+=======
+  /// Row with "Asset Timeline" label + time filter on the right
+  Widget _buildAssetTimelineRow() => Row(
+        children: [
+          const Text(
+            'Asset Timeline',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Spacer(),
+          _buildTimeFilter(context),
+        ],
+      );
+
+  /// Time filter widget
+>>>>>>> 545307b (All Analytics Widgets migrated)
   Widget _buildTimeFilter(BuildContext context) {
     final selectedText = _getTimeLabel(dropdownValue);
 
     return GestureDetector(
       onTap: () => _showTimeOptionsBottomSheet(context),
       child: Container(
+<<<<<<< HEAD
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 221, 221, 221),
           borderRadius: BorderRadius.circular(30),
@@ -573,13 +734,29 @@ class _LineChartSectionState extends State<LineChartSection> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+=======
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        decoration: BoxDecoration(
+          // **Changed** border color to white
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white, width: 1),
+        ),
+        child: Row(
+>>>>>>> 545307b (All Analytics Widgets migrated)
           children: [
             Text(
               selectedText,
               style: const TextStyle(
+<<<<<<< HEAD
                 color: Color.fromARGB(255, 126, 126, 126),
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
+=======
+                fontFamily: 'Titillium Web',
+                color: Colors.white, // **Changed** text to white
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+>>>>>>> 545307b (All Analytics Widgets migrated)
               ),
             ),
             const SizedBox(width: 10),
@@ -587,18 +764,28 @@ class _LineChartSectionState extends State<LineChartSection> {
               quarterTurns: 3,
               child: Icon(
                 Icons.arrow_back_ios_rounded,
+<<<<<<< HEAD
                 color: Color.fromARGB(255, 126, 126, 126),
                 size: 18,
               ),
             )
+=======
+                color: Colors.white, // **Changed** arrow to white
+                size: 16,
+              ),
+            ),
+>>>>>>> 545307b (All Analytics Widgets migrated)
           ],
         ),
       ),
     );
   }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 545307b (All Analytics Widgets migrated)
   /// Bottom sheet with time options
   void _showTimeOptionsBottomSheet(BuildContext context) {
     var timeOptions = [
@@ -695,7 +882,11 @@ class _LineChartSectionState extends State<LineChartSection> {
   FlGridData _buildGridData() => FlGridData(
         show: true,
         drawVerticalLine: false,
+<<<<<<< HEAD
         getDrawingHorizontalLine: (value) => const FlLine(
+=======
+        getDrawingHorizontalLine: (value) => FlLine(
+>>>>>>> 545307b (All Analytics Widgets migrated)
           color: Colors.white38, // **Changed** to semi-transparent white
           strokeWidth: 0.5,
         ),
@@ -718,7 +909,11 @@ class _LineChartSectionState extends State<LineChartSection> {
                 child: Text(
                   abbreviateNumber(value),
                   textAlign: TextAlign.center,
+<<<<<<< HEAD
                   style: const TextStyle(color: Color.fromARGB(255, 126, 126, 126)), // White axis label
+=======
+                  style: const TextStyle(color: Colors.white), // White axis label
+>>>>>>> 545307b (All Analytics Widgets migrated)
                 ),
               );
             },
@@ -742,7 +937,11 @@ class _LineChartSectionState extends State<LineChartSection> {
         isStepLineChart: true,
         lineChartStepData: const LineChartStepData(stepDirection: 0),
         barWidth: 3,
+<<<<<<< HEAD
         color: ARMMBlue, // **Changed** line color to brand color
+=======
+        color: brandBlue, // **Changed** line color to brand color
+>>>>>>> 545307b (All Analytics Widgets migrated)
         isStrokeCapRound: true,
         dotData: FlDotData(
           show: false,
@@ -760,7 +959,11 @@ class _LineChartSectionState extends State<LineChartSection> {
             if (selectedGraph != null && selectedGraph!.graphPoints.isNotEmpty) {
               return FlDotCirclePainter(
                 radius: 4,
+<<<<<<< HEAD
                 color: ARMMBlue,
+=======
+                color: brandBlue,
+>>>>>>> 545307b (All Analytics Widgets migrated)
                 strokeWidth: 2,
                 strokeColor: Colors.white,
               );
@@ -781,7 +984,11 @@ class _LineChartSectionState extends State<LineChartSection> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
+<<<<<<< HEAD
               ARMMBlue.withOpacity(0.4),
+=======
+              brandBlue.withOpacity(0.4),
+>>>>>>> 545307b (All Analytics Widgets migrated)
               Colors.transparent,
             ],
           ),
@@ -824,7 +1031,11 @@ class _LineChartSectionState extends State<LineChartSection> {
           }
           return TouchedSpotIndicatorData(
             // **Changed** indicator color to brand color
+<<<<<<< HEAD
             FlLine(color: ARMMBlue, strokeWidth: 2),
+=======
+            FlLine(color: brandBlue, strokeWidth: 2),
+>>>>>>> 545307b (All Analytics Widgets migrated)
             const FlDotData(show: false),
           );
         }).toList(),
@@ -877,7 +1088,11 @@ class _LineChartSectionState extends State<LineChartSection> {
         style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.bold,
+<<<<<<< HEAD
           color: Color.fromARGB(255, 126, 126, 126)
+=======
+          color: Colors.white, // White axis label
+>>>>>>> 545307b (All Analytics Widgets migrated)
         ),
       ),
     );
@@ -944,8 +1159,14 @@ class _LineChartSectionState extends State<LineChartSection> {
               displayText,
               style: const TextStyle(
                 fontSize: 18,
+<<<<<<< HEAD
                 color: Color.fromARGB(255, 126, 126, 126),
                 fontWeight: FontWeight.bold,
+=======
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Titillium Web',
+>>>>>>> 545307b (All Analytics Widgets migrated)
               ),
             ),
             if (spots.isEmpty)

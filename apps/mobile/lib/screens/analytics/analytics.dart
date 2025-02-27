@@ -1,5 +1,8 @@
 import 'package:armm_app/utils/app_bar.dart';
+<<<<<<< HEAD
 import 'package:armm_app/utils/bottom_nav.dart';
+=======
+>>>>>>> 545307b (All Analytics Widgets migrated)
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:armm_app/components/assets_structure_section.dart';
@@ -64,11 +67,18 @@ class AnalyticsPageState extends State<AnalyticsPage> {
     });
   
     return Scaffold(
+<<<<<<< HEAD
       backgroundColor: const Color.fromARGB(255, 241, 241, 241),
       appBar: CustomAppBar(
         title: 'Analytics',
         implyLeading: false,
         showNotificationButton: true,
+=======
+      appBar: CustomAppBar(
+        title: 'Analytics',
+        implyLeading: false,
+        showNotificationButton: false,
+>>>>>>> 545307b (All Analytics Widgets migrated)
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -79,11 +89,18 @@ class AnalyticsPageState extends State<AnalyticsPage> {
               LineChartSection(client: client!),
               // Display the fund-based pie charts
               ...fundCharts,
+<<<<<<< HEAD
+=======
+              const SizedBox(height: 120),
+>>>>>>> 545307b (All Analytics Widgets migrated)
             ],
           ),
         ),
       ),
+<<<<<<< HEAD
       bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.analytics),
+=======
+>>>>>>> 545307b (All Analytics Widgets migrated)
     );
   }
 
