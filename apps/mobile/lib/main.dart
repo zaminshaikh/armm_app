@@ -1,6 +1,7 @@
 //// filepath: /Users/omarsyed/development/armm_app/apps/mobile/lib/main.dart
 import 'dart:developer';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/auth_check.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/profile/pages/authentication_page.dart';
@@ -68,12 +69,14 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
+  
   const MyApp({Key? key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) => StreamBuilder<User?>(
@@ -89,11 +92,19 @@ class _MyAppState extends State<MyApp> {
           return null;
         },
         child: MaterialApp(
-          initialRoute: '/',
+          navigatorKey: navigatorKey,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                boldText: false,
+                textScaler: const TextScaler.linear(1),
+              ),
+              child: child!,
+            ),
           title: 'ARMM',
           theme: _buildAppTheme(), // your app theme function
           routes: {
-            '/': (context) => OnboardingPage(),
+            '/': (context) => const AuthCheck(),
+            '/onboarding': (context) => OnboardingPage(),
             '/profile': (context) => const ProfilePage(),
             '/support': (context) => const SupportPage(),
             '/documents': (context) => const DocumentsPage(),
