@@ -252,9 +252,12 @@ class _DashboardPageState extends State<DashboardPage>
                   // Assets structure section (pie chart)
                   ...fundCharts,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                   const SizedBox(height: 102),
 >>>>>>> 7b97856 (Migrated components for dashboard)
+=======
+>>>>>>> c0193c9 (Remove unnecessary spacing in dashboard layout)
                 ],
               ),
             ),
