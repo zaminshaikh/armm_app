@@ -141,8 +141,8 @@ class Client {
     return Client(
       cid: data['cid'] ?? cid ?? '',
       uid: data['uid'] ?? '',
-      firstName: data['name']?['first'] ?? '',
-      lastName: data['name']?['last'] ?? '',
+      firstName: data['firstName'] ?? '', 
+      lastName: data['lastName'] ?? '',   
       companyName: data['name']?['company'] ?? '',
       address: data['address'] ?? '',
       dob: (data['dob'] as Timestamp?)?.toDate(),
