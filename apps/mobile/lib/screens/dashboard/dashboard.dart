@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:armm_app/components/assets_structure_section.dart';
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/database/models/client_model.dart';
+import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 import 'package:armm_app/screens/dashboard/components/three_recent_activities.dart';
 import 'package:armm_app/screens/dashboard/components/total_assets_section.dart';
 import 'package:armm_app/screens/dashboard/components/user_breakdown_section.dart';
@@ -167,13 +168,14 @@ class _DashboardPageState extends State<DashboardPage>
     }
   
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Dashboard',
-        showNotificationButton: true,
-        onNotificationTap: () {
-          Navigator.pushNamed(context, '/notifications');
-        },
-      ),
+      appBar: client != null
+      ? DashboardAppBar(
+          showNotificationButton: true,
+          onNotificationTap: () {
+            Navigator.pushNamed(context, '/notifications');
+          },
+          client: client!,
+        ) : null, // Show nothing if client is null
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -182,12 +184,6 @@ class _DashboardPageState extends State<DashboardPage>
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  // Total assets section
-                  SlideTransition(
-                    position: _offsetAnimation,
-                    child: TotalAssetsSection(client: client!),
-                  ),
-                  const SizedBox(height: 32),
                   // User breakdown section
                   SlideTransition(
                     position: _offsetAnimation,
