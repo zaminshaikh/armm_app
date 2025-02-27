@@ -71,7 +71,7 @@ class GoogleAuthService {
       // Navigate to Dashboard
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const ProfilePage(cid: '12345678',)),
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
       );
 
       return userCredential;
@@ -252,7 +252,7 @@ class GoogleAuthService {
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              ProfilePage(cid: cid),
+              ProfilePage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               child,
         ),

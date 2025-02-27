@@ -16,7 +16,7 @@ class PDFScreen extends StatelessWidget {
           'PDF Preview',
           style: TextStyle(
             color: Colors.white,
-            fontFamily: 'Titillium Web',
+            
           ),
         ),
       ),
