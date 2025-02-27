@@ -1140,7 +1140,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-
   Widget _buildChangeEmailSection() {
     return GestureDetector(
       onTap: () {
@@ -1344,6 +1343,10 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+
+
+
+
   Widget _buildChangePasswordSection() {
     return GestureDetector(
       onTap: () {
@@ -1428,23 +1431,26 @@ class _SettingsPageState extends State<SettingsPage> {
                     var user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       await user.updatePassword(newPassword);
-                        showDialog(
+                      // Dismiss the change password dialog first
+                      Navigator.of(context).pop();
+                      // Then show the success dialog
+                      showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                          title: const Text('Password Change Requested'),
-                          content: const Text('Your password has been successfully updated.'),
-                          actions: <Widget>[
-                            TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            ),
-                          ],
+                            title: const Text('Password Change Requested'),
+                            content: const Text('Your password has been successfully updated.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
                           );
                         },
-                        );
+                      );
                     }
                   } catch (e) {
                     log('settings.dart: Error updating password: $e');
@@ -1480,24 +1486,33 @@ class _SettingsPageState extends State<SettingsPage> {
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                       ),
                 ),
               );
             }
             AlertDialog buildsettingsDialog(BuildContext context, TextEditingController passwordController) {
+              const Color ARMM_blue = Color(0xFF2B41B8);
               return AlertDialog(
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
+                  side: const BorderSide(color: ARMM_blue, width: 2),
                 ),
                 content: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      buildCloseButton(context),
-                      const SizedBox(height: 20),
-                      buildIconArt(),
+                      // Updated close button with ARMM blue color
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: ARMM_blue),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ),
                       const SizedBox(height: 30),
+                      // Keep the email/password input section as is
                       buildPasswordInputSection(passwordController),
                       const SizedBox(height: 20),
                       buildContinueButton(context, passwordController),
@@ -1510,6 +1525,8 @@ class _SettingsPageState extends State<SettingsPage> {
           },
         );
       },
+
+      
       child: Container(
         height: 45,
         decoration: BoxDecoration(
@@ -1532,6 +1549,14 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+
+
+
+
+
+
+
+
 
   Widget _buildLogoutSection() {
     return Column(
