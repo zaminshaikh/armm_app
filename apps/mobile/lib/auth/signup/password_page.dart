@@ -135,7 +135,8 @@ class _PasswordPageState extends State<PasswordPage> {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
       await FirebaseAuth.instance.currentUser?.delete();
     } finally {
-      setState(() { isLoading = false; });
+
+      if (mounted) setState(() { isLoading = false; });
     }
   }
 
@@ -202,9 +203,11 @@ class _PasswordPageState extends State<PasswordPage> {
           );
         },
       );
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       return false;
     }
   }
