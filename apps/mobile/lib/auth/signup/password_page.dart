@@ -15,7 +15,13 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/dashboard.dart';
+=======
+import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
+import 'package:armm_app/screens/dashboard/dashboard.dart';
+import 'package:armm_app/screens/profile/profile.dart';
+>>>>>>> 5983801 (Update password page navigation to redirect to DashboardPage instead of ProfilePage)
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 <<<<<<< HEAD
@@ -478,7 +484,7 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
+        MaterialPageRoute(builder: (context) => DashboardPage()),
       );
 >>>>>>> 0febf67 (Password Page moves forward properly)
 
