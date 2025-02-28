@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, must_be_immutable
 
 import 'dart:developer';
 import 'package:armm_app/auth/auth_utils/auth_back.dart';

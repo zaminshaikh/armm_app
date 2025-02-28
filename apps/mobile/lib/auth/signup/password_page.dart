@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api
+
 import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
@@ -6,7 +8,6 @@ import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
-import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
@@ -41,7 +42,6 @@ class _PasswordPageState extends State<PasswordPage> {
   bool get _hasCapitalLetter => _passwordController.text.contains(RegExp(r'[A-Z]'));
   bool get _hasNumber => _passwordController.text.contains(RegExp(r'\d'));
 
-  int _passwordSecurityIndicator = 0;
 
   @override
   void initState() {
@@ -223,7 +223,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
 
       return true;
@@ -407,7 +407,7 @@ class _PasswordPageState extends State<PasswordPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         ),
                       );
                     },

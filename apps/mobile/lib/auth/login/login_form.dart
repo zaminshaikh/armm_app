@@ -1,12 +1,8 @@
 import 'dart:developer';
-
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/screens/profile/profile.dart';
-import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/forgot_password/forgot_password.dart';
-import 'package:armm_app/auth/signup/password_page.dart';
-import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

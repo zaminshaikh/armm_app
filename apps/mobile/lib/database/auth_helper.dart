@@ -25,7 +25,6 @@ Future<void> deleteUserInBuffer() async {
 Future<void> handleFirebaseAuthException(
     BuildContext context, FirebaseAuthException e, String email) async {
   String errorMessage = 'Failed to sign up. Please try again.';
-  String? temp = FirebaseAuth.instance.currentUser?.email;
   switch (e.code) {
     case 'email-already-in-use':
       errorMessage =

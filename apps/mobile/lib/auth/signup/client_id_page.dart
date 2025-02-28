@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
@@ -225,11 +223,6 @@ class _ClientIDPageState extends State<ClientIDPage> {
                 ],
               ),
             ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
           if (isLoading)
             Container(

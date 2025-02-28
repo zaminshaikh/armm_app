@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'login_header.dart';
 import 'login_form.dart';
 import 'login_social.dart';
-import 'package:armm_app/auth/auth_utils/auth_back.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -73,11 +72,6 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
         ],
       ),
