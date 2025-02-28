@@ -1,11 +1,13 @@
+import 'dart:developer';
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class EmailPage extends StatefulWidget {
   final String cid;
@@ -21,10 +23,80 @@ const ARMM_Blue = Color(0xFF1C32A4);
 
 class _EmailPageState extends State<EmailPage> {
   final TextEditingController _emailController = TextEditingController();
+  bool _isLoading = false;
+
+  /// Checks if the email is already registered with Firebase Auth
+  Future<bool> _isEmailAvailable(String email) async {
+    try {
+      List<String> signInMethods = await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(email);
+      
+      return signInMethods.isEmpty; // Email is available if no sign-in methods found
+    } catch (e) {
+      log('Error checking email availability: $e');
+      return false;
+    }
+  }
+
+  /// Handles the continue button press
+  Future<void> _handleContinue() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final email = _emailController.text.trim();
+    widget.email = email;
+
+    try {
+      // Check if the email is valid format
+      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+        throw Exception('Please enter a valid email address');
+      }
+
+      // Check if email is available (not already in use)
+      bool isAvailable = await _isEmailAvailable(email);
+      if (!isAvailable) {
+        throw Exception('This email is already registered. Please log in or use a different email.');
+      }
+
+      // If email is valid and available, proceed to password page
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PasswordPage(
+            cid: widget.cid,
+            email: email,
+          ),
+        ),
+      );
+    } catch (e) {
+      // Handle errors
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: Text('${e.toString()}'),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    print("Client ID received in EmailPage: ${widget.cid}"); // DEBUG PRINT
+    log("Client ID received in EmailPage: ${widget.cid}");
     return Scaffold(
       body: Stack(
         children: [
@@ -68,21 +140,17 @@ class _EmailPageState extends State<EmailPage> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Continue Button
-                  AuthButton(
-                    label: 'Continue',
-                    onPressed: () {
-                      widget.email = _emailController.text;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PasswordPage(cid: widget.cid, email: widget.email),
+                  // Continue Button or CircularProgressIndicator
+                  _isLoading
+                      ? const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(ARMM_Blue),
+                        )
+                      : AuthButton(
+                          label: 'Continue',
+                          onPressed: _handleContinue,
+                          backgroundColor: ARMM_Blue,
+                          foregroundColor: Colors.white,
                         ),
-                      );
-                    },
-                    backgroundColor: ARMM_Blue,
-                    foregroundColor: Colors.white,
-                  ),
                   const SizedBox(height: 24),
 
                   // Already have an account? Log in
@@ -99,8 +167,6 @@ class _EmailPageState extends State<EmailPage> {
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
                   ),
-                  
-                  
                   const SizedBox(height: 24),
                 ],
               ),
