@@ -92,9 +92,9 @@ class _EmailPageState extends State<EmailPage> {
     try {
       List<String> signInMethods = await FirebaseAuth.instance
           .fetchSignInMethodsForEmail(email);
-      // If signInMethods is empty, the email is not registered => return true.
-      // Otherwise, return false.
-      return signInMethods.isEmpty;
+      print('Sign in methods: $signInMethods');
+      print(!signInMethods.isEmpty);
+      return !signInMethods.isEmpty;
     } catch (e) {
 <<<<<<< HEAD
       log('Error checking email availability: $e');
@@ -144,6 +144,7 @@ class _EmailPageState extends State<EmailPage> {
 =======
       // Check if email is already registered
       bool isRegistered = await _isEmailRegistered(email);
+      print('isRegistered: $isRegistered');
       if (isRegistered) {
         throw Exception('This email is already registered. Please log in instead.');
       }
