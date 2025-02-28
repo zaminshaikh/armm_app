@@ -16,6 +16,9 @@ import 'login_header.dart';
 import 'login_form.dart';
 import 'login_social.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ad7de27 (Remove unused imports and clean up code in authentication-related files)
 
 class LoginPage extends StatefulWidget {
 
@@ -112,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
           Positioned(
             top: 0,
@@ -119,6 +123,8 @@ class _LoginPageState extends State<LoginPage> {
             child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> ad7de27 (Remove unused imports and clean up code in authentication-related files)
         ],
       ),
     );

@@ -57,10 +57,13 @@ Future<void> handleFirebaseAuthException(
     BuildContext context, FirebaseAuthException e, String email) async {
   String errorMessage = 'Failed to sign up. Please try again.';
 <<<<<<< HEAD
+<<<<<<< HEAD
   switch (e.code) {
     case 'email-already-in-use':
 =======
   String? temp = FirebaseAuth.instance.currentUser?.email;
+=======
+>>>>>>> ad7de27 (Remove unused imports and clean up code in authentication-related files)
   switch (e.code) {
     case 'email-already-in-use':
 <<<<<<< HEAD

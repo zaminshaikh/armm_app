@@ -10,12 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:armm_app/screens/forgot_password/forgot_password.dart';
 =======
 import 'dart:developer';
-
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/screens/profile/profile.dart';
-import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/forgot_password/forgot_password.dart';
+<<<<<<< HEAD
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 <<<<<<< HEAD
@@ -23,6 +22,8 @@ import 'package:armm_app/signup_data.dart';
 >>>>>>> 07991de (Fixed UI of all Auth pages)
 =======
 >>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
+=======
+>>>>>>> ad7de27 (Remove unused imports and clean up code in authentication-related files)
 import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

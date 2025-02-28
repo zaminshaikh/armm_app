@@ -1,8 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ignore_for_file: must_be_immutable, library_private_types_in_public_api
 
 =======
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api
+
+>>>>>>> ad7de27 (Remove unused imports and clean up code in authentication-related files)
 import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
@@ -16,9 +21,12 @@ import 'package:armm_app/auth/login/login.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 =======
 import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
+=======
+>>>>>>> ad7de27 (Remove unused imports and clean up code in authentication-related files)
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 <<<<<<< HEAD
 import 'package:armm_app/screens/profile/profile.dart';
@@ -106,6 +114,7 @@ class _PasswordPageState extends State<PasswordPage> {
   bool get _hasNumber => _passwordController.text.contains(RegExp(r'\d'));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   @override
   void initState() {
@@ -116,6 +125,8 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
   int _passwordSecurityIndicator = 0;
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> ad7de27 (Remove unused imports and clean up code in authentication-related files)
 
   @override
   void initState() {
@@ -502,7 +513,7 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
 >>>>>>> 0febf67 (Password Page moves forward properly)
 
@@ -788,7 +799,7 @@ class _PasswordPageState extends State<PasswordPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         ),
                       );
 >>>>>>> 3ee0730 (Enhance authentication flow by adding Client ID page routes)

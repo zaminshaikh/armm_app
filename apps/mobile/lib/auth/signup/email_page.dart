@@ -1,10 +1,14 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use, must_be_immutable
 =======
 // ignore_for_file: deprecated_member_use
 >>>>>>> 93eb816 (Refactor email availability check to clarify registration status and improve error handling)
+=======
+// ignore_for_file: deprecated_member_use, must_be_immutable
+>>>>>>> ad7de27 (Remove unused imports and clean up code in authentication-related files)
 
 import 'dart:developer';
 =======
