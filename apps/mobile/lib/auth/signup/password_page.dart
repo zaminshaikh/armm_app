@@ -338,9 +338,11 @@ class _PasswordPageState extends State<PasswordPage> {
       // Show email verification dialog.
       if (!mounted) return;
       await showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+<<<<<<< HEAD
             title: const Text('Verify your email'),
             content: const Text('A verification link has been sent to your email. Please verify your email to continue.'),
             actions: [
@@ -353,6 +355,19 @@ class _PasswordPageState extends State<PasswordPage> {
               ),
             ],
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+        title: const Text('Verify your email'),
+        content: const Text('A verification link has been sent to your email. Please verify your email to continue.'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+          Navigator.of(context).pop();
+          await _verifyEmail();
+            },
+            child: const Text('Continue'),
+          ),
+        ],
+>>>>>>> 575e4ad (Fix email verification dialog to be non-dismissible and improve code formatting)
           );
         },
       );
