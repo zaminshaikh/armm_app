@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class PasswordPage extends StatefulWidget {
-
   final String cid;
   final String email;
   String password = '';
@@ -43,6 +42,13 @@ class _PasswordPageState extends State<PasswordPage> {
 
   int _passwordSecurityIndicator = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    log("Email received in PasswordPage: ${widget.email}");
+    log("CID received in PasswordPage: ${widget.cid}");
+  }
+
   /// Check if the user is authenticated and linked
   Future<bool> isAuthenticated() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -51,24 +57,62 @@ class _PasswordPageState extends State<PasswordPage> {
     }
 
     String uid = user.uid;
-
     DatabaseService db = DatabaseService(uid);
-
     bool isLinked = await db.isUIDLinked(uid);
-
     return isLinked;
+  }
+
+  /// Validate password requirements
+  bool _validatePassword() {
+    if (!_hasMinLength || !_hasCapitalLetter || !_hasNumber) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Password Requirements'),
+          content: const Text('Your password must have at least 8 characters, 1 capital letter, and 1 number.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
+      return false;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Password Mismatch'),
+          content: const Text('Passwords do not match. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
+      return false;
+    }
+
+    return true;
   }
 
   /// Handles the sign-up process.
   void _signUserUp() async {
+    // First validate password requirements
+    if (!_validatePassword()) return;
+
     setState(() { isLoading = true; });
     // Delete any existing user in the buffer.
     await deleteUserInBuffer();
 
     try {
       // Create a new user with email and password.
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: widget.email,
         password: _passwordController.text,
       );
@@ -85,16 +129,11 @@ class _PasswordPageState extends State<PasswordPage> {
       // Send email verification.
       User? user = FirebaseAuth.instance.currentUser;
       
-      if (user == null) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: widget.email,
-          password: widget.password,
-        );
+      if (user != null) {
+        await user.sendEmailVerification();
+      } else {
+        throw FirebaseAuthException(code: 'user-not-found');
       }
-
-      user = FirebaseAuth.instance.currentUser;
-
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
 
       // Show email verification dialog.
       if (!mounted) return;
@@ -122,8 +161,23 @@ class _PasswordPageState extends State<PasswordPage> {
     } catch (e) {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
       await FirebaseAuth.instance.currentUser?.delete();
+      
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Error'),
+            content: Text('An error occurred: ${e.toString()}'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              )
+            ],
+          ),
+        );
+      }
     } finally {
-
       if (mounted) setState(() { isLoading = false; });
     }
   }
@@ -138,7 +192,7 @@ class _PasswordPageState extends State<PasswordPage> {
     if (user != null && user.emailVerified) {
       String uid = user.uid;
       await db.linkNewUser(user.email!);
-      log('User $uid connected to Client ID $widget.signUpData.cid');
+      log('User $uid connected to Client ID ${widget.cid}');
 
       // await updateFirebaseMessagingToken(user, context);
 
@@ -161,15 +215,14 @@ class _PasswordPageState extends State<PasswordPage> {
         },
       );
       if (!mounted) return true;
-      // appState = Provider.of<AuthService>(context, listen: false);
       setState(() {
         isLoading = false;
       });
 
-        await Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProfilePage()),
-        );
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
 
       return true;
     } else {
@@ -202,7 +255,6 @@ class _PasswordPageState extends State<PasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Client ID received in PasswordPage: ${widget.cid}"); // DEBUG PRINT
     return Scaffold(
       body: Stack(
         children: [
@@ -210,7 +262,7 @@ class _PasswordPageState extends State<PasswordPage> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // ...existing code...
                 children: [
                   // Top illustration
                   const SizedBox(height: 72),
@@ -334,17 +386,17 @@ class _PasswordPageState extends State<PasswordPage> {
                   const SizedBox(height: 24),
 
                   // Sign Up Button
-                  AuthButton(
-                    label: 'Sign Up',
-                    onPressed: () async {
-                      _signUserUp();
-                    },
-                    backgroundColor: ARMM_Blue,
-                    foregroundColor: Colors.white,
-                  ),
+                  isLoading
+                      ? const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(ARMM_Blue),
+                        )
+                      : AuthButton(
+                          label: 'Sign Up',
+                          onPressed: _signUserUp,
+                          backgroundColor: ARMM_Blue,
+                          foregroundColor: Colors.white,
+                        ),
                   const SizedBox(height: 24),
-
-
 
                   // Already have an account? Log in
                   AuthFooter(
