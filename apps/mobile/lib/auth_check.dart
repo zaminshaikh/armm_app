@@ -7,6 +7,7 @@ import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/utils/app_state.dart';
+<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,11 @@ import 'package:armm_app/screens/profile/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 >>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
+=======
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+>>>>>>> 64efd30 (App lock enabled deciphers navigation)
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({Key? key}) : super(key: key);
@@ -67,10 +73,15 @@ class _AuthCheckState extends State<AuthCheck> {
     stream: FirebaseAuth.instance.userChanges(),
     builder: (BuildContext context,AsyncSnapshot<User?> snapshot) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     final appState = Provider.of<AuthState>(context, listen: false);
 
 =======
 >>>>>>> 6091d6a (Add AuthCheck file to manage user authentication and verification flow, triggered on Firebase Auth stream)
+=======
+    final appState = Provider.of<AuthState>(context, listen: false);
+
+>>>>>>> 64efd30 (App lock enabled deciphers navigation)
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Center(child: CircularProgressIndicator());
       } else if (snapshot.hasError) {
@@ -88,6 +99,7 @@ class _AuthCheckState extends State<AuthCheck> {
               return Center(child: Text('Error: ${authSnapshot.error}'));
             } else if (authSnapshot.hasData && authSnapshot.data == true) {
 <<<<<<< HEAD
+<<<<<<< HEAD
               if (appState.isAppLockEnabled) {
                 // User is authenticated, email verified, and linked
               return const InitialFaceIdPage();
@@ -98,7 +110,13 @@ class _AuthCheckState extends State<AuthCheck> {
               return const OnboardingPage();
 =======
               // User is authenticated, email verified, and linked
+=======
+              if (appState.isAppLockEnabled) {
+                // User is authenticated, email verified, and linked
+>>>>>>> 64efd30 (App lock enabled deciphers navigation)
               return const InitialFaceIdPage();
+              } else
+              return const DashboardPage();
             } else {
               // User is not authenticated, email not verified, or not linked
 <<<<<<< HEAD
