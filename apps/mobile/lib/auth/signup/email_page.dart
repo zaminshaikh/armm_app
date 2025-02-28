@@ -1,9 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use, must_be_immutable
 
 import 'dart:developer';
 =======
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+import 'dart:developer';
+>>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
@@ -12,6 +16,7 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 <<<<<<< HEAD
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
+<<<<<<< HEAD
 <<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +35,11 @@ import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/signup_data.dart';
 =======
 >>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
+=======
+import 'package:firebase_auth/firebase_auth.dart';
+>>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class EmailPage extends StatefulWidget {
   final String cid;
@@ -53,6 +61,7 @@ const ARMM_Blue = Color(0xFF1C32A4);
 class _EmailPageState extends State<EmailPage> {
   final TextEditingController _emailController = TextEditingController();
 <<<<<<< HEAD
+<<<<<<< HEAD
   bool _isLoading = false;
 
   /// Checks if the email is available (i.e. not registered) in Firebase Auth.
@@ -66,6 +75,19 @@ class _EmailPageState extends State<EmailPage> {
       return !signInMethods.isEmpty;
     } catch (e) {
       log('Error checking email registration: $e');
+=======
+  bool _isLoading = false;
+
+  /// Checks if the email is already registered with Firebase Auth
+  Future<bool> _isEmailAvailable(String email) async {
+    try {
+      List<String> signInMethods = await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(email);
+      
+      return signInMethods.isEmpty; // Email is available if no sign-in methods found
+    } catch (e) {
+      log('Error checking email availability: $e');
+>>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
       return false;
     }
   }
@@ -84,6 +106,7 @@ class _EmailPageState extends State<EmailPage> {
         throw Exception('Please enter a valid email address');
       }
 
+<<<<<<< HEAD
       // Check if email is already registered
       bool isRegistered = await _isEmailRegistered(email);
       print('isRegistered: $isRegistered');
@@ -94,6 +117,15 @@ class _EmailPageState extends State<EmailPage> {
       print('Email is valid and not registered');
 
       // If email is valid and not registered, proceed to password page
+=======
+      // Check if email is available (not already in use)
+      bool isAvailable = await _isEmailAvailable(email);
+      if (!isAvailable) {
+        throw Exception('This email is already registered. Please log in or use a different email.');
+      }
+
+      // If email is valid and available, proceed to password page
+>>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -132,6 +164,7 @@ class _EmailPageState extends State<EmailPage> {
   @override
   Widget build(BuildContext context) {
     log("Client ID received in EmailPage: ${widget.cid}");
+<<<<<<< HEAD
 =======
 
   @override
@@ -142,6 +175,8 @@ class _EmailPageState extends State<EmailPage> {
 =======
     print("Client ID received in EmailPage: ${widget.cid}"); // DEBUG PRINT
 >>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
+=======
+>>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
     return Scaffold(
       body: Stack(
         children: [
@@ -194,6 +229,9 @@ class _EmailPageState extends State<EmailPage> {
                   const SizedBox(height: 24),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
                   // Continue Button or CircularProgressIndicator
                   _isLoading
                       ? const CircularProgressIndicator(
@@ -204,6 +242,7 @@ class _EmailPageState extends State<EmailPage> {
                           onPressed: _handleContinue,
                           backgroundColor: ARMM_Blue,
                           foregroundColor: Colors.white,
+<<<<<<< HEAD
                         ),
 =======
                   // Continue Button
@@ -222,6 +261,9 @@ class _EmailPageState extends State<EmailPage> {
                     foregroundColor: Colors.white,
                   ),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                        ),
+>>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
                   const SizedBox(height: 24),
 
                   // Already have an account? Log in
@@ -251,8 +293,6 @@ class _EmailPageState extends State<EmailPage> {
                     questionText: 'Already have an account?',
                     buttonText: 'Log in',
                   ),
-                  
-                  
                   const SizedBox(height: 24),
                 ],
               ),
