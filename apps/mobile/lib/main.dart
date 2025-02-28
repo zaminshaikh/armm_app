@@ -1,4 +1,5 @@
 //// filepath: /Users/omarsyed/development/armm_app/apps/mobile/lib/main.dart
+import 'dart:async';
 import 'dart:developer';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/auth_check.dart';
@@ -22,6 +23,9 @@ import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/push_notification.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:armm_app/auth/auth_utils/faceid.dart';
+import 'package:armm_app/auth/auth_utils/initial_face_id.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Initialize third-party services and configurations
 Future<void> _initializeServices() async {
@@ -70,14 +74,176 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  
   const MyApp({Key? key}) : super(key: key);
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  String? selectedTimeOption;
+  double selectedTimeInMinutes = 1.0; // Default value
+  Timer? _inactivityTimer;
+  bool _isAppLockEnabled = false;
+    
+  @override
+  void initState() {
+    super.initState();
+
+    // Add this widget as an observer to the WidgetsBinding instance
+    WidgetsBinding.instance.addObserver(this);
+
+    // Reset navigation flags when the app initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final appState = Provider.of<AuthState>(context, listen: false);
+      appState.setHasNavigatedToFaceIDPage(false);
+    });
+
+    // Load the selected time option and app lock state
+    _loadSelectedTimeOption();
+    _loadAppLockState();
+  }
+
+  Future<void> _loadSelectedTimeOption() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedTimeOption = prefs.getString('selectedTimeOption') ?? '1 minute';
+      selectedTimeInMinutes = _getTimeInMinutes(selectedTimeOption!);
+      print('Selected time option: $selectedTimeOption');
+      print('Timer duration in minutes: $selectedTimeInMinutes');
+    });
+  }
+
+  Future<void> _loadAppLockState() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isAppLockEnabled = prefs.getBool('isAppLockEnabled') ?? false;
+      print('Bruh Loaded app lock state: $_isAppLockEnabled');
+    });
+  
+    final appState = Provider.of<AuthState>(context, listen: false);
+    if (!_isAppLockEnabled) {
+      appState.setInitiallyAuthenticated(true);
+      print('App lock is disabled. Setting initiallyAuthenticated to true.');
+      print('initiallyAuthenticated: ${appState.initiallyAuthenticated}');
+    } else {
+      appState.setInitiallyAuthenticated(false);
+      print('App lock is enabled. Setting initiallyAuthenticated to false.');
+    }
+  }
+
+  double _getTimeInMinutes(String timeOption) {
+    switch (timeOption) {
+      case 'Immediately':
+        return 0.0;
+      case '1 minute':
+        return 1.0;
+      case '2 minute':
+        return 2.0;
+      case '5 minute':
+        return 5.0;
+      case '10 minute':
+        return 10.0;
+      default:
+        return 1.0; // Default to 1 minute if none match
+    }
+  }
+
+
+
+  /// Check if the user is authenticated and linked
+  Future<bool> isAuthenticated() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) { return false; }
+
+    String uid = user.uid;
+
+    DatabaseService db = DatabaseService(uid);
+
+    bool isLinked = await db.isUIDLinked(uid);
+
+    return isLinked;
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    final appState = Provider.of<AuthState>(context, listen: false);
+    print('AppLifecycleState changed: $state');
+
+    if (state == AppLifecycleState.resumed) {
+      // Cancel the inactivity timer when the app is resumed.
+      _inactivityTimer?.cancel();
+      print('Timer cancelled on app resume');
+    } else if ((state == AppLifecycleState.paused ||
+                state == AppLifecycleState.inactive ||
+                state == AppLifecycleState.hidden) &&
+            !appState.hasNavigatedToFaceIDPage &&
+            await isAuthenticated() &&
+            appState.initiallyAuthenticated &&
+            appState.isAppLockEnabled) {
+      print('Conditions met: starting timer for Face ID navigation');
+      // Cancel any existing timer
+      _inactivityTimer?.cancel();
+      
+      // Fix for the timer duration - ensure it's at least 1 minute
+      double timeInMinutes = appState.selectedTimeInMinutes;
+      
+      _inactivityTimer = Timer(
+        Duration(minutes: timeInMinutes.toInt()),
+        () {
+          appState.setHasNavigatedToFaceIDPage(true);
+          navigatorKey.currentState?.pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const FaceIdPage(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                  child,
+            ),
+          );
+          print('Navigated to FaceIdPage after inactivity');
+        },
+      );
+      print('Timer started for $timeInMinutes minutes');
+    } else {
+      print('Face ID conditions not met. Checking which conditions failed:');
+      
+      // Check each condition individually and log the results
+      if (!(state == AppLifecycleState.paused || 
+            state == AppLifecycleState.inactive || 
+            state == AppLifecycleState.hidden)) {
+        print('❌ App state condition not met: current state is $state');
+      }
+      
+      if (appState.hasNavigatedToFaceIDPage) {
+        print('❌ Already navigated to FaceID page: ${appState.hasNavigatedToFaceIDPage}');
+      }
+      
+      // Use a safe way to check authentication to avoid potential errors
+      bool isAuth = false;
+      try {
+        isAuth = await isAuthenticated();
+        if (!isAuth) {
+          print('❌ User is not authenticated');
+        }
+      } catch (e) {
+        print('❌ Error checking authentication: $e');
+      }
+      
+      if (!appState.initiallyAuthenticated) {
+        print('❌ User not initially authenticated: initiallyAuthenticated = ${appState.initiallyAuthenticated}');
+      }
+      
+      if (!appState.isAppLockEnabled) {
+        print('❌ App lock is not enabled: isAppLockEnabled = ${appState.isAppLockEnabled}');
+      }
+    }
+
+    if (appState.justAuthenticated) {
+      appState.setHasNavigatedToFaceIDPage(false);
+      appState.setJustAuthenticated(false);
+      print('Reset navigation flags after authentication');
+    }
+  }
 
   @override
   Widget build(BuildContext context) => StreamBuilder<User?>(

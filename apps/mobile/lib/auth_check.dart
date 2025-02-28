@@ -1,5 +1,8 @@
+import 'package:armm_app/auth/auth_utils/initial_face_id.dart';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
+import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +67,7 @@ class _AuthCheckState extends State<AuthCheck> {
               return Center(child: Text('Error: ${authSnapshot.error}'));
             } else if (authSnapshot.hasData && authSnapshot.data == true) {
               // User is authenticated, email verified, and linked
-              return const ProfilePage();
+              return const InitialFaceIdPage();
             } else {
               // User is not authenticated, email not verified, or not linked
               return const OnboardingPage();
