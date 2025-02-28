@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:developer';
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
@@ -25,15 +27,17 @@ class _EmailPageState extends State<EmailPage> {
   final TextEditingController _emailController = TextEditingController();
   bool _isLoading = false;
 
-  /// Checks if the email is already registered with Firebase Auth
-  Future<bool> _isEmailAvailable(String email) async {
+  /// Checks if the email is available (i.e. not registered) in Firebase Auth.
+  /// Returns true if the email is NOT registered (available), false if it is registered.
+  Future<bool> _isEmailRegistered(String email) async {
     try {
       List<String> signInMethods = await FirebaseAuth.instance
           .fetchSignInMethodsForEmail(email);
-      
-      return signInMethods.isEmpty; // Email is available if no sign-in methods found
+      // If signInMethods is empty, the email is not registered => return true.
+      // Otherwise, return false.
+      return signInMethods.isEmpty;
     } catch (e) {
-      log('Error checking email availability: $e');
+      log('Error checking email registration: $e');
       return false;
     }
   }
@@ -52,13 +56,15 @@ class _EmailPageState extends State<EmailPage> {
         throw Exception('Please enter a valid email address');
       }
 
-      // Check if email is available (not already in use)
-      bool isAvailable = await _isEmailAvailable(email);
-      if (!isAvailable) {
-        throw Exception('This email is already registered. Please log in or use a different email.');
+      // Check if email is already registered
+      bool isRegistered = await _isEmailRegistered(email);
+      if (isRegistered) {
+        throw Exception('This email is already registered. Please log in instead.');
       }
 
-      // If email is valid and available, proceed to password page
+      print('Email is valid and not registered');
+
+      // If email is valid and not registered, proceed to password page
       Navigator.push(
         context,
         MaterialPageRoute(
