@@ -274,16 +274,23 @@ class _DashboardPageState extends State<DashboardPage>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6e88b72 (Face ID Auth has been Migrated)
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
           child: Text(
             'Recent Transactions',
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6e88b72 (Face ID Auth has been Migrated)
             style: GoogleFonts.inter(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.black,
+<<<<<<< HEAD
 =======
             style: TextStyle(
               fontSize: 20,
@@ -297,12 +304,17 @@ class _DashboardPageState extends State<DashboardPage>
               fontWeight: FontWeight.bold,
               color: Colors.black,
 >>>>>>> 5502a8a (Completed Dashboard App Bar)
+=======
+>>>>>>> 6e88b72 (Face ID Auth has been Migrated)
             ),
           ),
         ),
         const SizedBox(height: 12),
+<<<<<<< HEAD
 =======
 >>>>>>> 26828f3 (Refactor ActivityCardItem to streamline layout, enhance readability, and improve transaction details display)
+=======
+>>>>>>> 6e88b72 (Face ID Auth has been Migrated)
         ActivityTilesSection(activities: activities),
       ],
     );
