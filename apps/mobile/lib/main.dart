@@ -185,25 +185,42 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // Cancel any existing timer
       _inactivityTimer?.cancel();
       
-      // Fix for the timer duration - ensure it's at least 1 minute
+      // Get the time in minutes from the app state
       double timeInMinutes = appState.selectedTimeInMinutes;
+      print('Using time from app state: $timeInMinutes minutes');
       
-      _inactivityTimer = Timer(
-        Duration(minutes: timeInMinutes.toInt()),
-        () {
-          appState.setHasNavigatedToFaceIDPage(true);
-          navigatorKey.currentState?.pushReplacement(
-            PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  const FaceIdPage(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                  child,
-            ),
-          );
-          print('Navigated to FaceIdPage after inactivity');
-        },
-      );
-      print('Timer started for $timeInMinutes minutes');
+      // Handle 'Immediately' option (0 minutes)
+      if (timeInMinutes <= 0) {
+        print('Immediately option selected - navigating to FaceID page without delay');
+        appState.setHasNavigatedToFaceIDPage(true);
+        navigatorKey.currentState?.pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const FaceIdPage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                child,
+          ),
+        );
+        print('Navigated to FaceIdPage immediately');
+      } else {
+        // For all other time options, set a timer
+        _inactivityTimer = Timer(
+          Duration(minutes: timeInMinutes.toInt()),
+          () {
+            appState.setHasNavigatedToFaceIDPage(true);
+            navigatorKey.currentState?.pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const FaceIdPage(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                    child,
+              ),
+            );
+            print('Navigated to FaceIdPage after inactivity timer of $timeInMinutes minutes');
+          },
+        );
+        print('Timer started for $timeInMinutes minutes');
+      }
     } else {
       print('Face ID conditions not met. Checking which conditions failed:');
       

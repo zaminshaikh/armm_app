@@ -35,33 +35,36 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   // Load the selected time option from SharedPreferences
   Future<void> _loadSelectedTimeOption() async {
     final prefs = await SharedPreferences.getInstance();
-    final timeOption = prefs.getString('selectedTimeOption') ?? 'Immediately'; // Changed default to 'Immediately'
-    context.read<AuthState>().setSelectedTimeOption(timeOption);
-    print('Loaded selected time option: $timeOption');
+    final timeOption = prefs.getString('selectedTimeOption') ?? 'Immediately'; 
+    
+    // Make sure we update the provider
+    final appState = Provider.of<AuthState>(context, listen: false);
+    appState.setSelectedTimeOption(timeOption);
+    print('Authentication page: Loaded selected time option: $timeOption, minutes: ${appState.selectedTimeInMinutes}');
   }
 
   // Save the selected time option to SharedPreferences
   Future<void> _saveSelectedTimeOption(String timeOption) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('selectedTimeOption', timeOption);
-    context.read<AuthState>().setSelectedTimeOption(timeOption);
-    print('Saved selected time option: $timeOption');
+    final appState = Provider.of<AuthState>(context, listen: false);
+    appState.setSelectedTimeOption(timeOption);
+    print('Authentication page: Saved selected time option: $timeOption, minutes: ${appState.selectedTimeInMinutes}');
   }
 
   // Load the app lock state from SharedPreferences
   Future<void> _loadAppLockState() async {
     final prefs = await SharedPreferences.getInstance();
     final isEnabled = prefs.getBool('isAppLockEnabled') ?? false;
-    context.read<AuthState>().setAppLockEnabled(isEnabled);
-    print('Loaded app lock state: $isEnabled');
+    
+    final appState = Provider.of<AuthState>(context, listen: false);
+    appState.setAppLockEnabled(isEnabled);
+    print('Authentication page: Loaded app lock state: $isEnabled');
   }
 
   // Save the app lock state to SharedPreferences
   Future<void> _saveAppLockState(bool isEnabled) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isAppLockEnabled', isEnabled);
-    context.read<AuthState>().setAppLockEnabled(isEnabled);
-    print('Saved app lock state: $isEnabled');
+    final appState = Provider.of<AuthState>(context, listen: false);
+    appState.setAppLockEnabled(isEnabled);
+    print('Authentication page: Saved app lock state: $isEnabled');
   }
 
   @override
