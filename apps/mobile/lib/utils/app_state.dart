@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:shared_preferences/shared_preferences.dart';
 =======
 >>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
+=======
+import 'package:shared_preferences/shared_preferences.dart';
+>>>>>>> 9295e18 (Enhance inactivity timer logic with shared prefs)
 
 class AuthState extends ChangeNotifier {
   bool _hasNavigatedToFaceIDPage = false;
@@ -13,6 +17,9 @@ class AuthState extends ChangeNotifier {
   double _selectedTimeInMinutes = 1.0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9295e18 (Enhance inactivity timer logic with shared prefs)
   // Constructor that loads saved settings
   AuthState() {
     _loadSettings();
@@ -33,6 +40,7 @@ class AuthState extends ChangeNotifier {
   }
 
   // Getters
+<<<<<<< HEAD
   bool get hasNavigatedToFaceIDPage => _hasNavigatedToFaceIDPage;
   bool get justAuthenticated => _justAuthenticated;
   bool get initiallyAuthenticated => _initiallyAuthenticated;
@@ -40,22 +48,19 @@ class AuthState extends ChangeNotifier {
   String get selectedTimeOption => _selectedTimeOption;
 =======
   // Getter for _hasNavigatedToFaceIDPage
+=======
+>>>>>>> 9295e18 (Enhance inactivity timer logic with shared prefs)
   bool get hasNavigatedToFaceIDPage => _hasNavigatedToFaceIDPage;
-
-  // Getter for _justAuthenticated
   bool get justAuthenticated => _justAuthenticated;
-
-  // Getter for _initiallyAuthenticated
   bool get initiallyAuthenticated => _initiallyAuthenticated;
-
-  // Getter for _isAppLockEnabled
   bool get isAppLockEnabled => _isAppLockEnabled;
-
-  // Getter for _selectedTimeOption
   String get selectedTimeOption => _selectedTimeOption;
+<<<<<<< HEAD
 
   // Getter for _selectedTimeInMinutes
 >>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
+=======
+>>>>>>> 9295e18 (Enhance inactivity timer logic with shared prefs)
   double get selectedTimeInMinutes => _selectedTimeInMinutes;
 
   // Setter for _hasNavigatedToFaceIDPage
@@ -77,6 +82,7 @@ class AuthState extends ChangeNotifier {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   // Setter for _isAppLockEnabled - also saves to SharedPreferences
   void setAppLockEnabled(bool value) async {
     _isAppLockEnabled = value;
@@ -97,15 +103,29 @@ class AuthState extends ChangeNotifier {
 =======
   // Setter for _isAppLockEnabled
   void setAppLockEnabled(bool value) {
+=======
+  // Setter for _isAppLockEnabled - also saves to SharedPreferences
+  void setAppLockEnabled(bool value) async {
+>>>>>>> 9295e18 (Enhance inactivity timer logic with shared prefs)
     _isAppLockEnabled = value;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isAppLockEnabled', value);
+    print('AuthState: Saved app lock state: $value');
     notifyListeners();
   }
 
-  // Setter for _selectedTimeOption
-  void setSelectedTimeOption(String timeOption) {
+  // Setter for _selectedTimeOption - also saves to SharedPreferences and updates minutes
+  void setSelectedTimeOption(String timeOption) async {
     _selectedTimeOption = timeOption;
     _selectedTimeInMinutes = _getTimeInMinutes(timeOption);
+<<<<<<< HEAD
 >>>>>>> d518e85 (Migrated all cloud functions and added auth functions respectively)
+=======
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedTimeOption', timeOption);
+    await prefs.setDouble('selectedTimeInMinutes', _selectedTimeInMinutes);
+    print('AuthState: Saved selected time option: $timeOption, minutes: $_selectedTimeInMinutes');
+>>>>>>> 9295e18 (Enhance inactivity timer logic with shared prefs)
     notifyListeners();
   }
 
