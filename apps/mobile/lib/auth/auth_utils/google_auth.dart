@@ -5,6 +5,7 @@ import 'package:armm_app/auth/login/login.dart';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
@@ -22,6 +23,12 @@ import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 >>>>>>> b41e58d (Added google auth functions)
+=======
+import 'package:armm_app/screens/dashboard/dashboard.dart';
+import 'package:armm_app/database/auth_helper.dart';
+import 'package:armm_app/database/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+>>>>>>> 4952f4b (Update navigation to redirect to DashboardPage instead of ProfilePage in GoogleAuthService and password page)
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart'; // For Navigator
 
@@ -96,6 +103,7 @@ class GoogleAuthService {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         MaterialPageRoute(builder: (context) => const DashboardPage()),
 =======
         MaterialPageRoute(builder: (context) => const ClientInfoPage(cid: '12345678',)),
@@ -106,6 +114,9 @@ class GoogleAuthService {
 =======
         MaterialPageRoute(builder: (context) => const ProfilePage()),
 >>>>>>> 1a0bccc (Made Custom Activity App Bar)
+=======
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
+>>>>>>> 4952f4b (Update navigation to redirect to DashboardPage instead of ProfilePage in GoogleAuthService and password page)
       );
 
       return userCredential;
@@ -318,6 +329,7 @@ class GoogleAuthService {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
               const DashboardPage(),
 =======
               ClientInfoPage(cid: cid),
@@ -331,6 +343,9 @@ class GoogleAuthService {
 =======
               const ProfilePage(),
 >>>>>>> b8ff76d (Refactor code to use 'const' constructors for improved performance and consistency)
+=======
+              const DashboardPage(),
+>>>>>>> 4952f4b (Update navigation to redirect to DashboardPage instead of ProfilePage in GoogleAuthService and password page)
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               child,
         ),

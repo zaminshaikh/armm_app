@@ -20,8 +20,11 @@ import 'package:armm_app/screens/dashboard/dashboard.dart';
 =======
 import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
+<<<<<<< HEAD
 import 'package:armm_app/screens/profile/profile.dart';
 >>>>>>> 5983801 (Update password page navigation to redirect to DashboardPage instead of ProfilePage)
+=======
+>>>>>>> 4952f4b (Update navigation to redirect to DashboardPage instead of ProfilePage in GoogleAuthService and password page)
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 <<<<<<< HEAD
