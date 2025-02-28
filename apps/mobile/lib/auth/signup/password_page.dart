@@ -51,11 +51,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class PasswordPage extends StatefulWidget {
+<<<<<<< HEAD
 
 <<<<<<< HEAD
   const PasswordPage({Key? key, required this.signUpData}) : super(key: key);
 >>>>>>> 07991de (Fixed UI of all Auth pages)
 =======
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
   final String cid;
   final String email;
   String password = '';
@@ -105,6 +108,13 @@ class _PasswordPageState extends State<PasswordPage> {
   int _passwordSecurityIndicator = 0;
 >>>>>>> 07991de (Fixed UI of all Auth pages)
 
+  @override
+  void initState() {
+    super.initState();
+    log("Email received in PasswordPage: ${widget.email}");
+    log("CID received in PasswordPage: ${widget.cid}");
+  }
+
   /// Check if the user is authenticated and linked
   Future<bool> isAuthenticated() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -113,6 +123,7 @@ class _PasswordPageState extends State<PasswordPage> {
     }
 
     String uid = user.uid;
+<<<<<<< HEAD
 <<<<<<< HEAD
     DatabaseService db = DatabaseService(uid);
     bool isLinked = await db.isUIDLinked(uid);
@@ -165,22 +176,68 @@ class _PasswordPageState extends State<PasswordPage> {
 
 =======
 
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
     DatabaseService db = DatabaseService(uid);
-
     bool isLinked = await db.isUIDLinked(uid);
-
     return isLinked;
+  }
+
+  /// Validate password requirements
+  bool _validatePassword() {
+    if (!_hasMinLength || !_hasCapitalLetter || !_hasNumber) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Password Requirements'),
+          content: const Text('Your password must have at least 8 characters, 1 capital letter, and 1 number.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
+      return false;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Password Mismatch'),
+          content: const Text('Passwords do not match. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
+      return false;
+    }
+
+    return true;
   }
 
   /// Handles the sign-up process.
   void _signUserUp() async {
+<<<<<<< HEAD
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+    // First validate password requirements
+    if (!_validatePassword()) return;
+
+>>>>>>> 0febf67 (Password Page moves forward properly)
     setState(() { isLoading = true; });
     // Delete any existing user in the buffer.
     await deleteUserInBuffer();
 
     try {
       // Create a new user with email and password.
+<<<<<<< HEAD
 <<<<<<< HEAD
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: widget.email,
@@ -191,6 +248,9 @@ class _PasswordPageState extends State<PasswordPage> {
         email: widget.signUpData.email,
 >>>>>>> 07991de (Fixed UI of all Auth pages)
 =======
+=======
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+>>>>>>> 0febf67 (Password Page moves forward properly)
         email: widget.email,
 >>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
         password: _passwordController.text,
@@ -231,10 +291,14 @@ class _PasswordPageState extends State<PasswordPage> {
       User? user = FirebaseAuth.instance.currentUser;
       
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
       if (user != null) {
         await user.sendEmailVerification();
       } else {
         throw FirebaseAuthException(code: 'user-not-found');
+<<<<<<< HEAD
       }
 
       // Show email verification dialog.
@@ -261,11 +325,9 @@ class _PasswordPageState extends State<PasswordPage> {
           email: widget.email,
           password: widget.password,
         );
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
       }
-
-      user = FirebaseAuth.instance.currentUser;
-
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
 
       // Show email verification dialog.
       if (!mounted) return;
@@ -313,6 +375,7 @@ class _PasswordPageState extends State<PasswordPage> {
         );
       }
     } finally {
+<<<<<<< HEAD
       if (mounted) setState(() { isLoading = false; });
 =======
       await handleFirebaseAuthException(context, e, widget.signUpData.email);
@@ -328,6 +391,8 @@ class _PasswordPageState extends State<PasswordPage> {
 >>>>>>> 07991de (Fixed UI of all Auth pages)
 =======
 
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
       if (mounted) setState(() { isLoading = false; });
 >>>>>>> 45d8487 (Fix loading state management in password page to check if widget is mounted)
     }
@@ -346,6 +411,7 @@ class _PasswordPageState extends State<PasswordPage> {
 <<<<<<< HEAD
       await db.linkNewUser(user.email!);
       log('User $uid connected to Client ID ${widget.cid}');
+<<<<<<< HEAD
 =======
       await db.f_linkNewUser(user.email!);
 =======
@@ -353,6 +419,8 @@ class _PasswordPageState extends State<PasswordPage> {
 >>>>>>> b8aafa4 (Refactor authentication utility methods to remove 'f_' prefix for consistency)
       log('User $uid connected to Client ID $widget.signUpData.cid');
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
 
       // await updateFirebaseMessagingToken(user, context);
 
@@ -377,16 +445,20 @@ class _PasswordPageState extends State<PasswordPage> {
       if (!mounted) return true;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       appState = Provider.of<AuthState>(context, listen: false) as AuthService;
 >>>>>>> 07991de (Fixed UI of all Auth pages)
 =======
       // appState = Provider.of<AuthService>(context, listen: false);
 >>>>>>> 2fa08e3 (Remove unused appState assignment in password_page.dart causing exception.)
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
       setState(() {
         isLoading = false;
       });
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       await Navigator.pushReplacement(
@@ -403,6 +475,12 @@ class _PasswordPageState extends State<PasswordPage> {
           MaterialPageRoute(builder: (context) => ProfilePage()),
         );
 >>>>>>> a4dfb16 (Replace navigation method in password_page.dart to use pushReplacement for better user experience)
+=======
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+>>>>>>> 0febf67 (Password Page moves forward properly)
 
       return true;
     } else {
@@ -449,6 +527,7 @@ class _PasswordPageState extends State<PasswordPage> {
 <<<<<<< HEAD
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
 =======
   /// Shows an error dialog and deletes the current user.
   Future<void> _showErrorAndDeleteUser(String message) async {
@@ -484,6 +563,8 @@ class _PasswordPageState extends State<PasswordPage> {
 =======
     print("Client ID received in PasswordPage: ${widget.cid}"); // DEBUG PRINT
 >>>>>>> dc6fab8 (Remove SignUpData class and update related components to eliminate its usage)
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
     return Scaffold(
       body: Stack(
         children: [
@@ -492,10 +573,14 @@ class _PasswordPageState extends State<PasswordPage> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
 <<<<<<< HEAD
+<<<<<<< HEAD
                 // ...existing code...
 =======
                 mainAxisAlignment: MainAxisAlignment.center,
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+                // ...existing code...
+>>>>>>> 0febf67 (Password Page moves forward properly)
                 children: [
                   // Top illustration
                   const SizedBox(height: 72),
@@ -632,6 +717,9 @@ class _PasswordPageState extends State<PasswordPage> {
 
                   // Sign Up Button
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
                   isLoading
                       ? const CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(ARMM_Blue),
@@ -642,6 +730,7 @@ class _PasswordPageState extends State<PasswordPage> {
                           backgroundColor: ARMM_Blue,
                           foregroundColor: Colors.white,
                         ),
+<<<<<<< HEAD
 =======
                   AuthButton(
                     label: 'Sign Up',
@@ -652,9 +741,9 @@ class _PasswordPageState extends State<PasswordPage> {
                     foregroundColor: Colors.white,
                   ),
 >>>>>>> 07991de (Fixed UI of all Auth pages)
+=======
+>>>>>>> 0febf67 (Password Page moves forward properly)
                   const SizedBox(height: 24),
-
-
 
                   // Already have an account? Log in
                   AuthFooter(
