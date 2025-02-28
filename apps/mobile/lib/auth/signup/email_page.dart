@@ -1,6 +1,10 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use, must_be_immutable
+=======
+// ignore_for_file: deprecated_member_use
+>>>>>>> 93eb816 (Refactor email availability check to clarify registration status and improve error handling)
 
 import 'dart:developer';
 =======
@@ -78,16 +82,22 @@ class _EmailPageState extends State<EmailPage> {
 =======
   bool _isLoading = false;
 
-  /// Checks if the email is already registered with Firebase Auth
-  Future<bool> _isEmailAvailable(String email) async {
+  /// Checks if the email is available (i.e. not registered) in Firebase Auth.
+  /// Returns true if the email is NOT registered (available), false if it is registered.
+  Future<bool> _isEmailRegistered(String email) async {
     try {
       List<String> signInMethods = await FirebaseAuth.instance
           .fetchSignInMethodsForEmail(email);
-      
-      return signInMethods.isEmpty; // Email is available if no sign-in methods found
+      // If signInMethods is empty, the email is not registered => return true.
+      // Otherwise, return false.
+      return signInMethods.isEmpty;
     } catch (e) {
+<<<<<<< HEAD
       log('Error checking email availability: $e');
 >>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
+=======
+      log('Error checking email registration: $e');
+>>>>>>> 93eb816 (Refactor email availability check to clarify registration status and improve error handling)
       return false;
     }
   }
@@ -106,6 +116,7 @@ class _EmailPageState extends State<EmailPage> {
         throw Exception('Please enter a valid email address');
       }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
       // Check if email is already registered
       bool isRegistered = await _isEmailRegistered(email);
@@ -126,6 +137,17 @@ class _EmailPageState extends State<EmailPage> {
 
       // If email is valid and available, proceed to password page
 >>>>>>> 779a203 (Implement email availability check, Passed on email to password page properly)
+=======
+      // Check if email is already registered
+      bool isRegistered = await _isEmailRegistered(email);
+      if (isRegistered) {
+        throw Exception('This email is already registered. Please log in instead.');
+      }
+
+      print('Email is valid and not registered');
+
+      // If email is valid and not registered, proceed to password page
+>>>>>>> 93eb816 (Refactor email availability check to clarify registration status and improve error handling)
       Navigator.push(
         context,
         MaterialPageRoute(
