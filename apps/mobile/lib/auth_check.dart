@@ -4,8 +4,10 @@ import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
+import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({Key? key}) : super(key: key);
@@ -50,6 +52,8 @@ class _AuthCheckState extends State<AuthCheck> {
   Widget build(BuildContext context) => StreamBuilder<User?>(
     stream: FirebaseAuth.instance.userChanges(),
     builder: (BuildContext context,AsyncSnapshot<User?> snapshot) {
+    final appState = Provider.of<AuthState>(context, listen: false);
+
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Center(child: CircularProgressIndicator());
       } else if (snapshot.hasError) {
@@ -66,8 +70,11 @@ class _AuthCheckState extends State<AuthCheck> {
             } else if (authSnapshot.hasError) {
               return Center(child: Text('Error: ${authSnapshot.error}'));
             } else if (authSnapshot.hasData && authSnapshot.data == true) {
-              // User is authenticated, email verified, and linked
+              if (appState.isAppLockEnabled) {
+                // User is authenticated, email verified, and linked
               return const InitialFaceIdPage();
+              } else
+              return const DashboardPage();
             } else {
               // User is not authenticated, email not verified, or not linked
               return const OnboardingPage();
