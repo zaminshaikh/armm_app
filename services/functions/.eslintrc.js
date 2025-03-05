@@ -26,15 +26,8 @@ module.exports = {
     "import",
   ],
   rules: {
+    "quotes": ["error", "double"],
     "import/no-unresolved": 0,
-    "max-len": "off",
-    "object-curly-spacing": "off",
-    "no-trailing-spaces": "off",
-    "camelcase": "off",
-    "eol-last": "off",
-    "quotes": "off",
-    "indent": "off",
-    "brace-style": "off",
-    "valid-jsdoc": "off",
+    "indent": ["error", 2],
   },
 };
