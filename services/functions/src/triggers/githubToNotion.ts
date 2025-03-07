@@ -18,36 +18,41 @@ export const githubToNotion = functions.https.onRequest(
     
     // Function to create a Notion page for an issue
     async function createNotionPage(issue: any) {
-      return notion.pages.create({
-        parent: { "type": "database_id", "database_id": databaseId },
-        properties: {
-          "Task name": {
-            title: [{ text: { content: issue.title } }]
-          },
-          "Github Issue": {
-            url: issue.html_url
-          },
-          "Github Issue #": {
-            number: issue.number
-          }
+      const pageData: any = {
+      parent: { "type": "database_id", "database_id": databaseId },
+      properties: {
+        "Task name": {
+        title: [{ text: { content: issue.title } }]
         },
-        children: [
+        "Github Issue": {
+        url: issue.html_url
+        },
+        "Github Issue #": {
+        number: issue.number
+        }
+      }
+      };
+
+      if (issue.body) {
+      pageData.children = [
+        {
+        object: 'block',
+        type: 'paragraph',
+        paragraph: {
+          rich_text: [
           {
-            object: 'block',
-            type: 'paragraph',
-            paragraph: {
-              rich_text: [
-                {
-                  type: 'text',
-                  text: {
-                    content: issue.body
-                  }
-                }
-              ]
+            type: 'text',
+            text: {
+            content: issue.body
             }
           }
-        ]
-      });
+          ]
+        }
+        }
+      ];
+      }
+
+      return notion.pages.create(pageData);
     }
 
     // Function to find a Notion page for an issue number
@@ -180,6 +185,49 @@ export const githubToNotion = functions.https.onRequest(
         console.error('Error processing webhook:', error);
         const errorMessage = error instanceof Error ? error.message : String(error);
         res.status(500).send(`Error processing webhook: ${errorMessage}`);
+      }
+    } else if (event === 'create') {
+      try {
+        // Check if this is a branch creation (not tag)
+        if (req.body.ref_type === 'branch') {
+          const branchName = req.body.ref;
+          console.log(`Branch created: ${branchName}`);
+          
+          // Extract characters before first '-'
+          const firstDashIndex = branchName.indexOf('-');
+          if (firstDashIndex > 0) {
+            const potentialIssueNumber = branchName.substring(0, firstDashIndex);
+            
+            // Check if it's a valid number
+            const issueNumber = parseInt(potentialIssueNumber);
+            if (!isNaN(issueNumber)) {
+              console.log(`Detected potential issue #${issueNumber} from branch ${branchName}`);
+              
+              // Find corresponding Notion page
+              const notionPage = await findNotionPageForIssue(issueNumber);
+              
+              if (notionPage) {
+                // Update status to "In progress"
+                await notion.pages.update({
+                  page_id: notionPage.id,
+                  properties: {
+                    "Status": {
+                      status: { name: 'In progress' }
+                    }
+                  }
+                });
+                console.log(`Updated status to "In progress" for issue #${issueNumber}`);
+              } else {
+                console.log(`No Notion page found for issue #${issueNumber}`);
+              }
+            }
+          }
+        }
+        res.status(200).send('Branch creation webhook processed');
+      } catch (error) {
+        console.error('Error processing branch creation webhook:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        res.status(500).send(`Error processing branch creation webhook: ${errorMessage}`);
       }
     } else {
       // Not an issue event
