@@ -31,6 +31,22 @@ export const githubToNotion = functions.https.onRequest(
             number: issue.number
           }
         },
+        children: [
+          {
+            object: 'block',
+            type: 'paragraph',
+            paragraph: {
+              rich_text: [
+                {
+                  type: 'text',
+                  text: {
+                    content: issue.body
+                  }
+                }
+              ]
+            }
+          }
+        ]
       });
     }
 
