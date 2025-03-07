@@ -52,6 +52,8 @@ export const githubToNotion = functions.https.onRequest(
 
     // Function to find a Notion page for an issue number
     async function findNotionPageForIssue(issueNumber: number) {
+      const randomDelay = Math.floor(Math.random() * (15000 - 2000 + 1)) + 2000;
+      await new Promise(resolve => setTimeout(resolve, randomDelay));
       const response = await notion.databases.query({
         database_id: databaseId,
         filter: {
@@ -69,7 +71,6 @@ export const githubToNotion = functions.https.onRequest(
       try {
         // Handle issue opened event
         if (action === 'opened') {
-          await new Promise(resolve => setTimeout(resolve, 5000));
           let notionPage = await findNotionPageForIssue(issue.number);
           if (notionPage) {
             console.log('Notion page already exists for issue:', issue.number);
