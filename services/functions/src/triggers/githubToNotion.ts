@@ -36,11 +36,12 @@ export const githubToNotion = functions.https.onRequest(
                 }
               ]
             },
-            // // Optionally add a URL property if your database has one
-            // URL: {
-            //   url: issue.html_url
-            // }
-            // // You can add more properties as needed
+            "Github Issue": {
+              url: issue.html_url
+            },
+            "Github Issue #": {
+              number: issue.number
+            }
           },
         });
       } catch (error) {
