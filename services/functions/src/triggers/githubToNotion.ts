@@ -21,7 +21,7 @@ export const githubToNotion = functions.https.onRequest(
     const event = req.get('X-GitHub-Event');
     
     // Handle only new issue events
-    if (event === 'issues' ) {
+    if (event === 'issues' && req.body.action === 'opened') {
       const issue = req.body.issue;
       try {
         // Create a new page in Notion with properties based on your database schema
