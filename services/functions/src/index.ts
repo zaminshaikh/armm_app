@@ -13,7 +13,7 @@ admin.initializeApp();
 import { handleActivity, onActivityWrite } from "./triggers/activityTriggers";
 import { onAssetUpdate } from "./triggers/assetTriggers";
 import { onConnectedUsersChange } from "./triggers/connectedUsersTriggers";
-import { githubToNotion } from "./triggers/githubIssueTrigger";
+import { githubToNotion } from "./triggers/githubToNotion";
 
 // ======= SCHEDULED =======
 import { scheduledYTDReset } from "./scheduled/scheduledReset";
