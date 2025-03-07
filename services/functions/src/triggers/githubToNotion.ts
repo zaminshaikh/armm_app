@@ -77,28 +77,30 @@ export const githubToNotion = functions.https.onRequest(
           }
           
           // Map GitHub username to Notion user ID
-          const assigneeGithub = issue.assignee.login;
-          let assigneeUserId = null;
-          
-          if (assigneeGithub === 'zaminshaikh') {
-            assigneeUserId = process.env.NOTION_USER_ID_ZAMIN;
-          } else if (assigneeGithub === 'omarsyed4') {
-            assigneeUserId = process.env.NOTION_USER_ID_OMAR;
+          const assignees: any[] = issue.assignees;
+          let notionAssignees = [];
+
+          for (const assignee of assignees){
+            if (assignee.login === 'zaminshaikh') {
+              notionAssignees.push({id: process.env.NOTION_USER_ID_ZAMIN});
+            } else if (assignee.login === 'omarsyed4') {
+              notionAssignees.push({id: process.env.NOTION_USER_ID_OMAR});
+            } 
           }
           
           // Only update if we have a mapping for this user
-          if (assigneeUserId) {
+          if (notionAssignees) {
             await notion.pages.update({
               page_id: notionPage.id,
               properties: {
                 "Assignee": {
-                  people: [{ id: assigneeUserId }]
+                  people: notionAssignees as any
                 }
               }
             });
-            console.log(`Assigned issue ${issue.number} to ${assigneeGithub} in Notion`);
+            console.log(`Assigned issue ${issue.number} to ${notionAssignees} in Notion`);
           } else {
-            console.log(`No Notion user mapping found for GitHub user: ${assigneeGithub}`);
+            console.log(`No Notion user mapping found for GitHub user: ${notionAssignees}`);
           }
         } else if (action === 'closed') {
           console.log('Processing close for issue:', issue.number);
