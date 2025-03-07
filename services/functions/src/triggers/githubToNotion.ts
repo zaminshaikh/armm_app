@@ -130,14 +130,25 @@ export const githubToNotion = functions.https.onRequest(
             return;
           }
 
-          await notion.pages.update({
-            page_id: notionPage.id,
-            properties: {
-              "Status": {
-                status: { name: 'Done' }
+          if (issue.state_reason === 'not_planned' || issue.state_reason === 'duplicate') {
+            await notion.pages.update({
+              page_id: notionPage.id,
+              properties: {
+                "Status": {
+                  status: { name: 'Archived' }
+                }
               }
-            }
-          });
+            });
+          } else {
+            await notion.pages.update({
+              page_id: notionPage.id,
+              properties: {
+                "Status": {
+                  status: { name: 'Done' }
+                }
+              }
+            });
+          }
         } else if (action === 'reopened') {
           console.log('Processing reopen for issue:', issue.number);
           
