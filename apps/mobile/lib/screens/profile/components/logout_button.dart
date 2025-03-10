@@ -1,13 +1,17 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:armm_app/database/auth_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LogoutButton extends StatelessWidget {
-  final VoidCallback? onLogout;
   
-  const LogoutButton({Key? key, this.onLogout}) : super(key: key);
+  const LogoutButton({super.key});
 
   Future<void> _confirmLogout(BuildContext context) async {
-    final shouldLogout = await showDialog<bool>(
+    await showDialog<bool>(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
@@ -30,10 +34,27 @@ class LogoutButton extends StatelessWidget {
         );
       },
     );
+    if (!context.mounted) return;
+    onLogout(context);
+  }
 
-    if (shouldLogout == true && onLogout != null) {
-      onLogout!();
+  void onLogout(BuildContext context) async{
+    log('settings.dart: Signing out...');
+
+    Future<void> handleLogout() async {
+      // Continue sign out asynchronously.
+      await deleteFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
+      await FirebaseAuth.instance.signOut();
+      assert(FirebaseAuth.instance.currentUser == null);
+      log('settings.dart: Successfully signed out');
+      return;
     }
+
+    unawaited(handleLogout());
+    // Immediately navigate away to avoid security rules issues when signed out.
+    await Navigator.of(context).pushNamedAndRemoveUntil('/onboarding', (route) => false);
+
+    return;
   }
 
   @override
