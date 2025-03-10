@@ -747,11 +747,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
   Widget _buildLogoutSection() {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Row with Title and Dividers
-        const Row(
+        Row(
           children: [
             // Left divider
             Expanded(
@@ -781,9 +781,9 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         // Subtitle text
-        const Text(
+        Text(
           'Log out of your account',
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -791,13 +791,9 @@ class _SettingsPageState extends State<SettingsPage> {
             color: Colors.black,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         // Logout button widget
-        LogoutButton(
-          onLogout: () {
-            // ...logout logic...
-          },
-        ),
+        LogoutButton(),
       ],
     );
   }
