@@ -195,6 +195,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 _buildLogoutSection(),
                 const SizedBox(height: 40),
                 _buildDeleteAccountSection(),
+                const SizedBox(height: 60),
               ],
             ),
           ),
