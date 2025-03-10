@@ -2,6 +2,11 @@
   "scripts": {
     "start:web": "cd apps/web && npm start",
     "deploy:functions": "cd services/functions && npm run deploy"
-    
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.16"
   }
 }

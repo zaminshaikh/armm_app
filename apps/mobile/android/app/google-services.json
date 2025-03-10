@@ -12,7 +12,20 @@
           "package_name": "com.armm.investmentportfolio"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "783271592956-ishen1nnu5q3n2dlh2olfgegh41c59u6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.armm.investmentportfolio",
+            "certificate_hash": "14abee813177034fd6a49c17df0d86504f73f08c"
+          }
+        },
+        {
+          "client_id": "783271592956-8do646cl113f38dlqpv65jtk1gijpq00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD1c903Rz_hi5pOtvVWAxjlRUtZ2f2uhs4"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783271592956-8do646cl113f38dlqpv65jtk1gijpq00.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "783271592956-hc85s49ll1f2543d886p10tf0fuanv86.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.armmApp"
+              }
+            }
+          ]
         }
       }
     }
