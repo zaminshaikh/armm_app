@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -115,7 +116,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                 const SizedBox(width: 15),
                 Text(
                   'App Lock',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
                   ),
@@ -135,9 +136,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   const SizedBox(width: 10),
                   Text(
                     context.watch<AuthState>().isAppLockEnabled ? 'On' : 'Off',
-                    style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Colors.grey,
                     ),
                   ),
                   ],
@@ -156,11 +157,11 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               color: const Color.fromARGB(255, 218, 218, 219),
               borderRadius: BorderRadius.circular(12.0),
             ),
-            child: const Text(
+            child: Text(
               'Each time you exit the app, a passcode or biometric authentication such as Face ID will be required to re-enter. '
               'To reduce how often you are prompted, you can set a timer below. '
               'Choose how much time should pass before a passcode or biometric authentication is requested again.',
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 fontSize: 16,
                 color: Colors.black,
               ),
@@ -171,8 +172,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       ],
     );
   }
-
-
 
   Widget _buildSampleCupertinoListSection() {
     return Padding(
@@ -223,8 +222,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       ),
       title: Text(
         timeOption,
-        style: const TextStyle(
-          
+        style: GoogleFonts.inter(
           color: Colors.black,
           fontWeight: FontWeight.w600,
         ),
