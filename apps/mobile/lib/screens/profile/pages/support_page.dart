@@ -1,5 +1,7 @@
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'faq_section.dart';
 
 class SupportPage extends StatelessWidget {
@@ -17,67 +19,83 @@ class SupportPage extends StatelessWidget {
         ),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: const Padding(
-        padding: EdgeInsets.all(16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Row(
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 35,
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'John Doe',
-                        style: TextStyle(
+                        'Mohammed Shaikh',
+                        style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         'Investment Advisor',
-                        style: TextStyle(fontSize: 14),
+                        style: GoogleFonts.inter(fontSize: 14),
                       ),
                     ],
                   ),
                 )
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Text(
                   'Contact Information:',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 16,
                   ),
                 ),
               ],
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.phone),
-                      SizedBox(width: 8),
-                      Text('+234 123 456 7890'),
+                      SvgPicture.asset(
+                        'assets/icons/phone.svg',
+                        width: 24,
+                        height: 24,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '+1 (347) 513-3040',
+                        style: GoogleFonts.inter(),
+                      ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 12),
                   Row(
                     children: [
-                      Icon(Icons.email),
-                      SizedBox(width: 8),
-                      Text('test@email.com'),
+                      SvgPicture.asset(
+                        'assets/icons/mail.svg',
+                        width: 24,
+                        height: 24,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'mohammed@armmgroup.com',
+                        style: GoogleFonts.inter(),
+                      ),
                     ],
                   ),
                 ],
@@ -102,11 +120,11 @@ class SupportPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Point of Contact',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
@@ -115,11 +133,11 @@ class SupportPage extends StatelessWidget {
             const SizedBox(height: 16),
             _buildContactCard(),
             const SizedBox(height: 32),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'FAQ',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
