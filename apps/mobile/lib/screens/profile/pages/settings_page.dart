@@ -1,4 +1,5 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:armm_app/screens/profile/components/delete_account_button.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -192,6 +193,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 _buildSecuritySection(),
                 const SizedBox(height: 40),
                 _buildLogoutSection(),
+                const SizedBox(height: 40),
+                _buildDeleteAccountSection(),
+                const SizedBox(height: 60),
               ],
             ),
           ),
@@ -738,13 +742,57 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-
-
-
-
-
-
-
+  Widget _buildDeleteAccountSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Row with Title and Dividers
+        const Row(
+          children: [
+            // Left divider
+            Expanded(
+              child: Divider(
+                thickness: 1,
+                color: Colors.black,
+              ),
+            ),
+            // Title in the center
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                'Delete Account',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            // Right divider
+            Expanded(
+              child: Divider(
+                thickness: 1,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        // Subtitle text
+        const Text(
+          'Delete your account. This action is irreversible.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Delete account button widget
+        DeleteAccountButton(client: client!), 
+      ],
+    );
+  }
 
   Widget _buildLogoutSection() {
     return Column(
