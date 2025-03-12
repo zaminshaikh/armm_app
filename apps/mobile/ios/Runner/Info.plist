@@ -62,5 +62,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+  <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to your photo library to allow you to select photos for [purpose, e.g., profile images, document uploads, etc.].</string>
 </dict>
 </plist>

@@ -3,11 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'logout_button.dart'; // import the new logout button
 
 class ProfileButtons extends StatelessWidget {
-
+  final VoidCallback onLogout;
 
   const ProfileButtons({
-    super.key,
-  });
+    Key? key,
+    required this.onLogout,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +274,7 @@ class ProfileButtons extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         // Log out button now uses the custom LogoutButton widget
-        const LogoutButton(),
+        LogoutButton(onLogout: onLogout),
       ],
     );
   }

@@ -36,19 +36,27 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  Future<void> _signOut() async {
+    await AuthService().signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(title: 'Profile'),
+      appBar: const CustomAppBar(title: 'Profile'),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            NameAndCID(),
-            SizedBox(height: 24),
-            ProfileButtons(),
+            const NameAndCID(),
+            const SizedBox(height: 24),
+            ProfileButtons(onLogout: _signOut),
           ],
         ),
       ),
