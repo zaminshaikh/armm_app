@@ -13,7 +13,7 @@ class DisclaimerPage extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Text(
-          "ARMM is a Florida limited liability company exempt from the registration requirements of the Investment Company Act of 1940 pursuant to Section 3(c) (1) thereof. Our private offerings are available for up to one hundred (100) accredited investors of which no more than thirty-five (35) may be non-accredited investors and rely on the registration exemption under Rule 506 of Regulation D under the Securities Act of 1933. A Form D claiming such exemption as a safe harbor is on file with the SEC and applicable states. ARMM is domiciled at 195 International Parkway, Suite 103, Lake Mary, Florida 32746 and is under the purview of the State of Florida and United States laws. Please contact ARMM group at management@example.com. Thank you.",
+          "ARMM Group LLC, a New York LLC, is exempt from the Investment Company Act of 1940 under Section 3(c) (1). We offer private placements to up to 100 accredited investors and 35 non-accredited investors under Rule 506 of Regulation D of the Securities Act of 1933, claiming this exemption as a safe harbor. A Form D is filed with the SEC and relevant states. Located at 6800 Jericho Turnpike, Suite 120W, Syosset, NY 11791, we operate under New York and U.S. laws. For inquiries, contact us at info@armmgroup.com. Thank you.",
           style: TextStyle(fontSize: 16),
         ),
       ),
