@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               gradient: LinearGradient(
                 colors: [
                   Color(0xFF2B41B8),
-                  Color.fromARGB(255, 55, 82, 233),
+                  Color.fromARGB(255, 95, 116, 238),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
