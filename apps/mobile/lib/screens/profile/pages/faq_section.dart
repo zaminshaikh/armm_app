@@ -57,7 +57,7 @@ class _FAQSectionState extends State<FAQSection> {
           margin: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(16),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
@@ -68,7 +68,7 @@ class _FAQSectionState extends State<FAQSection> {
                 highlightColor: Colors.transparent,
               ),
               child: ExpansionTile(
-                tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 title: Text(
                   item.question,

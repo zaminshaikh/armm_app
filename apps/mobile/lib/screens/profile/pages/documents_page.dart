@@ -10,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart'; // Added for CupertinoSearchTextField
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -278,9 +279,8 @@ class _DocumentsPageState extends State<DocumentsPage> {
                 _filterPdfFiles(query);
               },
               placeholder: 'Search PDF files',
-              style: const TextStyle(
+              style: GoogleFonts.inter(
                 color: Colors.black,
-                
               ),
             ),
           ),
@@ -327,12 +327,12 @@ class _DocumentsPageState extends State<DocumentsPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     Text(
                       'Sort by',
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -348,12 +348,12 @@ class _DocumentsPageState extends State<DocumentsPage> {
                       color: !isSortAscending ? Colors.blue : Colors.transparent,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        SizedBox(width: 8.0),
+                        const SizedBox(width: 8.0),
                         Text(
                           'New to Old',
-                          style: TextStyle(color: Colors.black),
+                          style: GoogleFonts.inter(color: Colors.black),
                         ),
                       ],
                     ),
@@ -370,12 +370,12 @@ class _DocumentsPageState extends State<DocumentsPage> {
                       color: isSortAscending ? Colors.blue : Colors.transparent,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        SizedBox(width: 8.0),
+                        const SizedBox(width: 8.0),
                         Text(
                           'Old to New',
-                          style: TextStyle(color: Colors.black),
+                          style: GoogleFonts.inter(color: Colors.black),
                         ),
                       ],
                     ),
@@ -401,14 +401,13 @@ class _DocumentsPageState extends State<DocumentsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (filteredPdfFiles.isEmpty && filteredPdfFilesConnectedUsers.isEmpty)
-              const Center(
+              Center(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: const EdgeInsets.only(top: 30),
                   child: Text(
                     'There are no documents available.',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       color: Colors.black,
-                      
                       fontSize: 20,
                     ),
                   ),
@@ -442,23 +441,27 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                           return ListTile(
                                             title: Text(
                                               filteredPdfFiles[index].name,
-                                              style: const TextStyle(
+                                              style: GoogleFonts.inter(
                                                 color: Colors.black,
-                                                
                                               ),
                                             ),
-                                            subtitle: const Text('Loading...'),
+                                            subtitle: Text(
+                                              'Loading...',
+                                              style: GoogleFonts.inter(),
+                                            ),
                                           );
                                         } else if (snapshot.hasError) {
                                           return ListTile(
                                             title: Text(
                                               filteredPdfFiles[index].name,
-                                              style: const TextStyle(
+                                              style: GoogleFonts.inter(
                                                 color: Colors.black,
-                                                
                                               ),
                                             ),
-                                            subtitle: const Text('Error loading metadata'),
+                                            subtitle: Text(
+                                              'Error loading metadata',
+                                              style: GoogleFonts.inter(),
+                                            ),
                                           );
                                         } else {
                                           final metadata = snapshot.data!;
@@ -467,18 +470,16 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                             splashColor: Colors.transparent,
                                             title: Text(
                                               filteredPdfFiles[index].name,
-                                              style: const TextStyle(
+                                              style: GoogleFonts.inter(
                                                 color: Colors.black,
-                                                
                                               ),
                                             ),
                                             subtitle: Text(
                                               dateAdded != null
                                                   ? 'Added on: ${DateFormat('MMMM dd, yyyy').format(dateAdded.toLocal())}'
                                                   : 'Date not available',
-                                              style: const TextStyle(
+                                              style: GoogleFonts.inter(
                                                 color: Colors.black,
-                                                
                                               ),
                                             ),
                                             onTap: () async {
@@ -538,20 +539,19 @@ class _DocumentsPageState extends State<DocumentsPage> {
             Navigator.pop(context);
           },
         ),
-        flexibleSpace: const SafeArea(
+        flexibleSpace: SafeArea(
           child: Padding(
-            padding: EdgeInsets.only(left: 60.0, right: 20.0),
+            padding: const EdgeInsets.only(left: 60.0, right: 20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Documents',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 27,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    
                   ),
                 ),
               ],

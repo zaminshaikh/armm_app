@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:armm_app/screens/profile/components/logout_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -42,9 +43,9 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: const Text(
+          title: Text(
             'Notifications Disabled',
-            style: TextStyle(
+            style: GoogleFonts.inter(
               color: CupertinoColors.darkBackgroundGray,
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -207,7 +208,7 @@ class _SettingsPageState extends State<SettingsPage> {
       // Container decoration replaces Card styling
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(color: const Color.fromARGB(50, 0, 0, 0), width: 1),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -216,9 +217,9 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Title Text
-            const Text(
+            Text(
               'Notifications',
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -226,11 +227,11 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             const SizedBox(height: 8),
             // Description Text
-            const Text(
+            Text(
               'Let me know about new activities and statements within my portfolio.',
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 fontSize: 15,
-                color: Colors.black,
+                color: Color.fromARGB(200, 0, 0, 0),
               ),
               textAlign: TextAlign.center,
             ),
@@ -275,7 +276,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 const SizedBox(width: 8),
                 Text(
                   notifsSwitchValue ? 'On' : 'Off',
-                  style: const TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 14,
                     color: Colors.black,
                   ),
@@ -292,7 +293,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(color: const Color.fromARGB(50, 0, 0, 0), width: 1),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -302,9 +303,9 @@ class _SettingsPageState extends State<SettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Security Title
-            const Text(
+            Text(
               'Security',
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -314,7 +315,7 @@ class _SettingsPageState extends State<SettingsPage> {
             // Display current user email
             Text(
               FirebaseAuth.instance.currentUser?.email ?? '',
-              style: const TextStyle(
+              style: GoogleFonts.inter(
                 fontSize: 15,
                 color: Colors.black,
               ),
@@ -333,6 +334,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildChangeEmailSection() {
+
+    const Color ARMM_blue = Color(0xFF2B41B8);
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -354,26 +357,26 @@ class _SettingsPageState extends State<SettingsPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Change Email',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'Update the email associated with your account.',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 16,
                       color: Colors.black54,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'Email',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 16,
                       color: Colors.black87,
                     ),
@@ -382,7 +385,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   TextField(
                     controller: controller,
                     keyboardType: TextInputType.emailAddress,
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 16,
                       color: Colors.black87,
                     ),
@@ -473,9 +476,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Continue',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -515,19 +518,20 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: ARMM_blue,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Colors.black,
+            color: ARMM_blue,
             width: 1,
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             'Change Email',
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 16,
-              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
@@ -540,6 +544,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
   Widget _buildChangePasswordSection() {
+    const Color ARMM_blue = Color(0xFF2B41B8);
+
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -564,52 +570,57 @@ class _SettingsPageState extends State<SettingsPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Change Password',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        ),
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'You are changing the password associated with your account.',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                        ),
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'Password',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        ),
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
                     controller: passwordController,
                     obscureText: true,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        ),
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter your new password',
                       hintStyle: TextStyle(
-                          color: Colors.grey[400],
-                          ),
+                        color: Colors.grey[400],
+                      ),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(11)),
+                        borderRadius: BorderRadius.circular(11),
+                      ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(11),
                         borderSide: const BorderSide(
-                            color: Colors.blue, width: 2),
+                          color: Colors.blue,
+                          width: 2,
+                        ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
-                          vertical: 14, horizontal: 14),
+                        vertical: 14,
+                        horizontal: 14,
+                      ),
                     ),
                   ),
                 ],
@@ -649,18 +660,18 @@ class _SettingsPageState extends State<SettingsPage> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Error'),
-                        content: Text('Error updating password: $e'),
-                        actions: <Widget>[
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                          Navigator.of(context).pop();
-                          },
-                        ),
-                        ],
-                      );
+                        return AlertDialog(
+                          title: const Text('Error'),
+                          content: Text('Error updating password: $e'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
                       },
                     );
                   }
@@ -673,13 +684,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 ),
-                child: const Text(
+                child: Text(
                   'Continue',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      ),
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               );
             }
@@ -722,19 +733,20 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: ARMM_blue,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Colors.black,
+            color: ARMM_blue,
             width: 1,
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             'Change Password',
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 16,
-              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
@@ -753,7 +765,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Divider(
                 thickness: 1,
-                color: Colors.black,
+                color: Color.fromARGB(50, 0, 0, 0),
               ),
             ),
             // Title in the center
@@ -772,7 +784,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Divider(
                 thickness: 1,
-                color: Colors.black,
+                color: Color.fromARGB(50, 0, 0, 0),
               ),
             ),
           ],
@@ -784,7 +796,7 @@ class _SettingsPageState extends State<SettingsPage> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.black,
+            color: Color.fromARGB(200, 0, 0, 0),
           ),
         ),
         const SizedBox(height: 16),
@@ -805,7 +817,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Divider(
                 thickness: 1,
-                color: Colors.black,
+                color: Color.fromARGB(50, 0, 0, 0),
               ),
             ),
             // Title in the center
@@ -824,7 +836,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Divider(
                 thickness: 1,
-                color: Colors.black,
+                color: Color.fromARGB(50, 0, 0, 0),
               ),
             ),
           ],
@@ -836,15 +848,12 @@ class _SettingsPageState extends State<SettingsPage> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.black,
+            color: Color.fromARGB(200, 0, 0, 0),
           ),
         ),
         const SizedBox(height: 16),
         // Logout button widget
         LogoutButton(
-          onLogout: () {
-            // ...logout logic...
-          },
         ),
       ],
     );
