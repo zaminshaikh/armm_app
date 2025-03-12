@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'logout_button.dart'; // import the new logout button
+import 'package:google_fonts/google_fonts.dart';
+import 'logout_button.dart';
 
 class ProfileButtons extends StatelessWidget {
   final VoidCallback onLogout;
@@ -18,7 +19,7 @@ class ProfileButtons extends StatelessWidget {
         // Support Button
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/support');
+            Navigator.pushNamed(context, '/documents');
           },
           child: Container(
             width: double.infinity,
@@ -36,17 +37,19 @@ class ProfileButtons extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SvgPicture.asset(
-                  'assets/icons/support.svg',
+                  'assets/icons/docs.svg',
                   width: 24,
                   height: 24,
                 ),
                 const SizedBox(width: 12),
-                const Text(
-                  'Support',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
+                Text(
+                  'Documents',
+                  style: GoogleFonts.inter(
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
@@ -60,7 +63,7 @@ class ProfileButtons extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/documents');
+                  Navigator.pushNamed(context, '/support');
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -76,17 +79,19 @@ class ProfileButtons extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SvgPicture.asset(
-                        'assets/icons/docs.svg',
+                        'assets/icons/support.svg',
                         width: 24,
                         height: 24,
                       ),
                       const SizedBox(width: 12),
-                      const Text(
-                        'Documents',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
+                      Text(
+                        'Support',
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -119,12 +124,14 @@ class ProfileButtons extends StatelessWidget {
                         height: 24,
                       ),
                       const SizedBox(width: 12),
-                      const Text(
+                      Text(
                         'Settings',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -162,12 +169,14 @@ class ProfileButtons extends StatelessWidget {
                         height: 20,
                       ),
                       const SizedBox(width: 12),
-                      const Text(
+                      Text(
                         'My Profiles',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -200,12 +209,14 @@ class ProfileButtons extends StatelessWidget {
                         height: 20,
                       ),
                       const SizedBox(width: 12),
-                      const Text(
+                      Text(
                         'Authentication',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -226,49 +237,64 @@ class ProfileButtons extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Disclaimer',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.inter(
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-              const SizedBox(height: 8),
-              const Center(
+              const SizedBox(height: 15),
+              Center(
                 child: Text(
                   'Investment products and services are offered '
                   'through ARMM group Investment, a Florida '
                   'limited liability company.',
-                  style: TextStyle(fontSize: 15),
+                  style: GoogleFonts.inter(
+                    textStyle: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 25),
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/disclaimer');
                 },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
-                      'Real Full Disclaimer',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2B41B8),
-                      ),
+                child: Container(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Real Full Disclaimer',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF2B41B8),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: Color(0xFF2B41B8),
+                          size: 20,
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 12),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: Color(0xFF2B41B8),
-                      size: 20,
-                    ),
-                  ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 8),
             ],
           ),
         ),
