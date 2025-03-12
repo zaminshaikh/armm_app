@@ -75,7 +75,7 @@ class LogoutButton extends StatelessWidget {
               style: GoogleFonts.inter(
                 textStyle: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   color: Colors.red,
                 ),
               ),
