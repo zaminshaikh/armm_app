@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 
 class LogoutButton extends StatelessWidget {
   final VoidCallback? onLogout;
@@ -10,21 +12,28 @@ class LogoutButton extends StatelessWidget {
     final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text("Confirm Logout"),
-          content: const Text("Are you sure you want to log out?"),
+        return CustomAlertDialog(
+          title: "Confirm Logout",
+          message: "Are you sure you want to log out?",
+          icon: const Icon(Icons.logout, color: Colors.red),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop(false);
               },
-              child: const Text("Cancel"),
+              child: Text(
+                "Cancel",
+                style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+              ),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop(true);
               },
-              child: const Text("Log out"),
+              child: Text(
+                "Log out",
+                style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+              ),
             ),
           ],
         );
@@ -45,7 +54,7 @@ class LogoutButton extends StatelessWidget {
           side: const BorderSide(color: Colors.red, width: 1.5),
           backgroundColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32),
+            borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
         ),
@@ -61,12 +70,14 @@ class LogoutButton extends StatelessWidget {
               color: Colors.red,
             ),
             const SizedBox(width: 12),
-            const Text(
+            Text(
               'Log out',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
+              style: GoogleFonts.inter(
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.red,
+                ),
               ),
             ),
           ],
