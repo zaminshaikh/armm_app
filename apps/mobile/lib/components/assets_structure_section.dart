@@ -2,6 +2,7 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AssetsStructureSection extends StatelessWidget {
@@ -48,10 +49,11 @@ class AssetsStructureSection extends StatelessWidget {
     final List<_AccountSlice> sliceData = [];
 
     final colorPalette = <Color>[
-      const Color(0xFF0066FF),
-      const Color(0xFF3A98FC),
-      const Color(0xFF74B8F7),
-      const Color(0xFF9CD7F0),
+      Color(0xFF1C32A4),
+      Color.fromARGB(255, 72, 93, 197),
+      Color.fromARGB(255, 16, 49, 209),
+      Color.fromARGB(255, 129, 147, 239),
+      Color.fromARGB(255, 160, 172, 231),
     ];
 
     int colorIndex = 0;
@@ -92,27 +94,46 @@ class AssetsStructureSection extends StatelessWidget {
           children: [
             SizedBox(height: 10),
             // Title
-            Text(
-              'Investment Allocation',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Investment Allocation',
+                        style: GoogleFonts.inter(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+              
+                      // Subtitle
+                      Text(
+                        'Account distribution',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  SvgPicture.asset(
+                    'assets/icons/ARMM_Logo.svg',
+                    width: 26,
+                    height: 26,
+                  )
+                ],
               ),
             ),
 
-            const SizedBox(height: 4),
 
-            // Subtitle
-            Text(
-              'Account distribution',
-              style: GoogleFonts.inter(
-                fontSize: 14,
-                color: Colors.grey.shade500,
-              ),
-            ),
-
-            const SizedBox(height: 40),
+            const SizedBox(height: 60),
 
             // Pie Chart with Center Label
             SizedBox(
