@@ -61,7 +61,7 @@ class TotalAssetsSection extends StatelessWidget {
                 children: [
                   const SizedBox(height: 10),
                   Text(
-                    'Latest Return (YTD)',
+                    'Latest Return',
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
