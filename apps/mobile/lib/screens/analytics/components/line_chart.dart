@@ -1,43 +1,40 @@
-import 'dart:ui';
-
-import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/database/models/graph_model.dart';
 import 'package:armm_app/database/models/graph_point_model.dart';
 import 'package:armm_app/screens/analytics/utils/analytics_utilities.dart';
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-/// A widget that displays the line chart section in the Analytics page.
+/// Example ARMM blue (adjust to match brand)
+const Color ARMMBlue = Color(0xFF1C32A4);
+/// A light grey color for the dropdown "pills"
+const Color pillColor = Color(0xFFE9EDF8);
+
 class LineChartSection extends StatefulWidget {
   final Client client;
-
-  const LineChartSection({Key? key, required this.client}) : super(key: key);
+  const LineChartSection({super.key, required this.client});
 
   @override
-  _LineChartSectionState createState() => _LineChartSectionState();
+  LineChartSectionState createState() => LineChartSectionState();
 }
 
-class _LineChartSectionState extends State<LineChartSection> {
-  // Line chart data
+class LineChartSectionState extends State<LineChartSection> {
+  // Variables for the line chart data
   List<FlSpot> spots = [];
   double _minAmount = double.maxFinite;
   double _maxAmount = 0.0;
-  String dropdownValue = 'last-2-years';
+  String dropdownValue = 'last-week'; // default: 'last-week'
 
-  // Account selection
+  // Variables for account selection
   String? selectedAccount;
   Graph? selectedGraph;
 
-  // Client selection
+  // Variables for client selection
   late final List<Client> allClients;
   Client? selectedClient;
-
-  // BRAND COLOR: replace with your actual brand color
-  final Color ARMMBlue = const Color(0xFF2B41B8);
 
   @override
   void initState() {
@@ -47,8 +44,6 @@ class _LineChartSectionState extends State<LineChartSection> {
       ...(widget.client.connectedUsers?.whereType<Client>() ?? [])
     ];
     selectedClient = allClients.isNotEmpty ? allClients.first : null;
-
-    // Default to the 'cumulative' graph if available
     if (selectedClient != null && (selectedClient!.graphs?.isNotEmpty ?? false)) {
       selectedGraph = selectedClient!.graphs!.firstWhere(
         (g) => g.account.toLowerCase() == 'cumulative',
@@ -59,10 +54,8 @@ class _LineChartSectionState extends State<LineChartSection> {
     _prepareGraphPoints();
   }
 
-  /// Prepares data points for the line chart
   void _prepareGraphPoints() {
     spots.clear();
-
     double localMinAmount = double.maxFinite;
     double localMaxAmount = 0.0;
 
@@ -70,21 +63,20 @@ class _LineChartSectionState extends State<LineChartSection> {
       for (var point in selectedGraph!.graphPoints) {
         final DateTime dateTime = point.time;
         final double amount = point.amount;
-
         final double xValue = calculateXValue(dateTime, dropdownValue);
+
         if (xValue >= 0) {
           spots.add(FlSpot(xValue, amount));
         }
       }
 
-      // Sort by x-value
+      // Sort by x
       spots.sort((a, b) => a.x.compareTo(b.x));
 
-      // Insert starting spot if needed
+      // Insert a starting spot at x=0 if needed
       if (spots.isNotEmpty && spots.first.x > 0) {
         double firstXValue = spots.first.x;
         double startingY = 0;
-
         for (var point in selectedGraph!.graphPoints.reversed) {
           double xValue = calculateXValue(point.time, dropdownValue);
           if (xValue < firstXValue) {
@@ -95,17 +87,17 @@ class _LineChartSectionState extends State<LineChartSection> {
         spots.insert(0, FlSpot(0, startingY));
       }
 
-      // Insert ending spot if needed
+      // Insert an ending spot if needed
       double maxXValue = maxX(dropdownValue);
       if (spots.isNotEmpty && spots.last.x < maxXValue) {
         FlSpot lastSpot = spots.last;
         spots.add(FlSpot(maxXValue, lastSpot.y));
       } else if (spots.isEmpty) {
-        // No data => add default spots
+        // No data points at all
         GraphPoint mostRecentSpot = selectedGraph!.graphPoints.last;
         spots.add(FlSpot(0, mostRecentSpot.amount));
         spots.add(FlSpot(maxXValue, mostRecentSpot.amount));
-        _maxAmount = mostRecentSpot.amount * 1.5;
+        _maxAmount = (mostRecentSpot.amount) * 1.5;
       }
     } else {
       // No data
@@ -131,475 +123,280 @@ class _LineChartSectionState extends State<LineChartSection> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8),
-            // Row of client buttons
-            buildClientButtonsRow(
-              context,
-              allClients,
-              selectedClient,
-              (client) {
-                setState(() {
-                  selectedClient = client;
-                  if (client.graphs != null && client.graphs!.isNotEmpty) {
-                    selectedGraph = client.graphs!.first;
-                    selectedAccount = selectedGraph?.account;
-                  } else {
-                    selectedGraph = null;
-                    selectedAccount = null;
-                  }
-                  _prepareGraphPoints();
-                });
-              },
-              _getInitials,
-            ),
-            const SizedBox(height: 14),
+  Widget build(BuildContext context) {
+    final dateFormat = DateFormat('MM.dd.yyyy \'at\' hh:mm a');
+    String dateString = '';
+    double amount = 0.0;
 
-            Material(
-                elevation: 3,
-                borderRadius: BorderRadius.circular(15), 
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
+    if (selectedGraph != null && selectedGraph!.graphPoints.isNotEmpty) {
+      final lastPoint = selectedGraph!.graphPoints.last;
+      dateString = dateFormat.format(lastPoint.time);
+      amount = lastPoint.amount;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 32),
+      child: Container(
+        // The white card container
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            // Title: "Asset Timeline" at the top center
+            Text(
+              'Asset Timeline',
+              style: GoogleFonts.inter(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 32),
+    
+            // The row of dropdowns (e.g., "Personal", "Last Week")
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Account selection or "Personal" button
+                Expanded(
+                  child: _buildPersonalDropdown(context),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    // Header with timeline label & time filter
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildAssetTimelineRow(),
-                          const SizedBox(height: 28),
-                          _buildLatestAssets(),
-                          const SizedBox(height: 15),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-              
-                    // Line chart container
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.only(right: 20, bottom: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: LineChart(
-                            LineChartData(
-                              gridData: _buildGridData(),
-                              titlesData: titlesData,
-                              borderData: FlBorderData(show: false),
-                              // Axis limits
-                              minX: 0,
-                              maxX: maxX(dropdownValue),
-                              minY: calculateDynamicMin(_minAmount),
-                              maxY: calculateDynamicMax(_maxAmount),
-                              // The line(s)
-                              lineBarsData: [_buildLineChartBarData()],
-                              // Touch behavior
-                              lineTouchData: _buildLineTouchData(),
-                            ),
-                          ),
+                const SizedBox(width: 8),
+                // Time filter e.g. "Last Week"
+                Expanded(
+                  child: _buildTimeFilterPill(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+    
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Left side: 'Assets' label and date/time
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Assets',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    // Date range text & possible "No data" message
-                    keyAndLogoRow(),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+                      Text(
+                        dateString.isEmpty ? '--' : dateString, // e.g. "01.01.2024 at 3:15 PM"
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
 
-  /// Single row for date range text (bottom)
-  Widget keyAndLogoRow() => Padding(
-        padding: const EdgeInsets.fromLTRB(10.0, 0, 0, 10),
-        child: Center(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildDateRangeText(),
-            ],
-          ),
-        ),
-      );
-
-  /// Account selection pill button
-  Widget _buildAccountModalButton() {
-    if (selectedClient == null ||
-        selectedClient!.graphs == null ||
-        selectedClient!.graphs!.isEmpty) {
-      return const Text(
-        'No accounts',
-        style: TextStyle(color: Colors.black),
-      );
-    }
-
-    final graphs = selectedClient!.graphs!;
-    if (graphs.length == 2) {
-      final nonCumulative = graphs.firstWhere(
-        (graph) => graph.account.toLowerCase() != 'cumulative',
-        orElse: () => graphs.first,
-      );
-      selectedAccount = nonCumulative.account;
-      selectedGraph = nonCumulative;
-    }
-    if (selectedAccount == null) {
-      selectedAccount = graphs.first.account;
-      selectedGraph = graphs.first;
-    }
-
-    final currentAccountLabel = selectedAccount!.length > 20
-        ? _getInitials(selectedAccount!)
-        : selectedAccount!;
-
-    return GestureDetector(
-      onTap: graphs.length == 2
-          ? null
-          : () => _showAccountModalSheet(context, graphs),
-      child: Container(
-        // Light background & rounded corners
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 221, 221, 221),
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: const Color.fromARGB(255, 125, 125, 125),
-            width: 1.5,
-          )
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              currentAccountLabel,
-              style: const TextStyle(
-                color: Color.fromARGB(255, 126, 126, 126),
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(width: 6),
-            // Show dropdown icon only if there's more than 2 graphs
-            if (graphs.length > 2)
-              const Icon(
-                Icons.arrow_drop_down,
-                color: Color(0xFF0D1E3E),
-                size: 22,
-              )
-            else
-              const SizedBox(width: 8),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLatestAssets() {
-      if (selectedClient == null ||
-          selectedClient!.graphs == null ||
-          selectedClient!.graphs!.isEmpty) {
-        return const Text(
-          'No accounts',
-          style: TextStyle(color: Colors.black),
-        );
-      }
-  
-    final DateFormat timeFormat = DateFormat('h:mm a');
-    final DateFormat dateFormat = DateFormat('MMM d, yyyy');
-    String time = timeFormat.format(selectedGraph!.graphPoints.last.time);
-    String date = dateFormat.format(selectedGraph!.graphPoints.last.time);
-
-
-    // Return the container with proper decoration
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        border: Border.all(
-          color: const Color.fromARGB(255, 147, 147, 147),
-          width: 2,
-        ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(12.0),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Assets',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14, // Reduced font size
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4), // Reduced spacing
-              Text(
-                '$date at $time',
-                style: const TextStyle(
-                  color: Color.fromARGB(255, 137, 137, 137),
-                  fontSize: 12, // Smaller font size
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Text(
-            NumberFormat.currency(symbol: '\$')
-                .format(selectedGraph!.graphPoints.last.amount),
-            style: GoogleFonts.inter(
-              color: ARMMBlue,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      )
-    );
-  }
-  
-  
-  /// Bottom sheet for selecting an account
-  void _showAccountModalSheet(BuildContext context, List<Graph> graphs) {
-    List<Graph> availableGraphs = List.from(graphs);
-
-    if (availableGraphs.length == 2) {
-      availableGraphs = availableGraphs
-          .where((g) => g.account.toLowerCase() != 'cumulative')
-          .toList();
-    }
-
-    showModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      backgroundColor: Colors.white, // Light background
-      context: context,
-      builder: (BuildContext ctx) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Container(
-            height: MediaQuery.of(ctx).size.height * 0.5,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              ),
-              color: Colors.black, // Dark background to match theme
-            ),
-            child: ListView.builder(
-              itemCount: availableGraphs.length,
-              itemBuilder: (context, index) {
-                final g = availableGraphs[index];
-                final accountLabel =
-                    g.account.length > 20 ? _getInitials(g.account) : g.account;
-                final isSelected = (selectedAccount == g.account);
-
-                return ListTile(
-                  title: Text(
-                    accountLabel,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.white70,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      fontFamily: 'Titillium Web',
-                      fontSize: 18,
+                  // Right side: amount
+                  Text(
+                    amount == 0.0
+                        ? '\$0.00'
+                        : NumberFormat.currency(symbol: '\$').format(amount),
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: ARMMBlue,
                     ),
                   ),
-                  onTap: () {
-                    setState(() {
-                      selectedAccount = g.account;
-                      selectedGraph = g;
-                      _prepareGraphPoints();
-                    });
-                    Navigator.pop(context);
-                  },
-                );
-              },
+                ],
+              ),
             ),
+
+            const SizedBox(height: 20),
+    
+            // The chart
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(right: 20, bottom: 20),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: LineChart(
+                    LineChartData(
+                      gridData: _buildGridData(),
+                      titlesData: titlesData,
+                      borderData: FlBorderData(show: false),
+                      minX: 0,
+                      maxX: maxX(dropdownValue),
+                      minY: calculateDynamicMin(_minAmount),
+                      maxY: calculateDynamicMax(_maxAmount),
+                      lineBarsData: [_buildLineChartBarData()],
+                      lineTouchData: _buildLineTouchData(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+    
+    
+            const SizedBox(height: 12),
+            _buildDateRangeText(), 
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPersonalDropdown(BuildContext context) {
+    // If no clients, show "Personal" by default
+    if (allClients.isEmpty) {
+      return _pillContainer(child: Text('Personal', style: _pillTextStyle()));
+    }
+
+    // Currently selected client
+    final name =
+        '${selectedClient?.firstName ?? ''} ${selectedClient?.lastName ?? ''}'
+            .trim();
+    final displayName = name.isEmpty ? 'Personal' : name;
+
+    return GestureDetector(
+      onTap: () => _showClientsBottomSheet(context),
+      child: _pillContainer(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        Text(
+          displayName,
+          style: _pillTextStyle(),
+        ),
+        const SizedBox(width: 10), // space between text and icon
+          const RotatedBox(
+            quarterTurns: 3,
+            child: Icon(
+              Icons.arrow_back_ios_rounded,
+              color: Color.fromARGB(255, 102, 102, 102),
+              size: 22,
+            ),
+          )
+        ],
+      ),
+      ),
+    );
+  }
+
+  /// A helper to build the pill background & spacing
+  Widget _pillContainer({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: pillColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color.fromARGB(255, 151, 151, 151)),
+      ),
+      child: child,
+    );
+  }
+
+  TextStyle _pillTextStyle() => GoogleFonts.inter(
+        fontSize: 17,
+        color: const Color.fromARGB(160, 0, 0, 0),
+        fontWeight: FontWeight.w600,
+      );
+
+  /// Shows a bottom sheet with the list of available clients
+  void _showClientsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+      ),
+      context: context,
+      builder: (ctx) {
+        return Container(
+          height: 300,
+          padding: const EdgeInsets.all(16),
+          child: ListView.builder(
+            itemCount: allClients.length,
+            itemBuilder: (context, index) {
+              final client = allClients[index];
+              final fullName = '${client.firstName} ${client.lastName}'.trim();
+              final isSelected = (client == selectedClient);
+              return ListTile(
+                title: Text(
+                  fullName.isEmpty ? 'Personal' : fullName,
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  setState(() {
+                    selectedClient = client;
+                    // Invalidate graphs, etc.
+                    if (selectedClient != null &&
+                        (selectedClient!.graphs?.isNotEmpty ?? false)) {
+                      selectedGraph = selectedClient!.graphs!.first;
+                      selectedAccount = selectedGraph?.account;
+                      _prepareGraphPoints();
+                    }
+                  });
+                },
+              );
+            },
           ),
         );
       },
     );
   }
 
-  /// Horizontal list of client buttons
-  Widget buildClientButtonsRow(
-    BuildContext context,
-    List<Client> allClients,
-    Client? selectedClient,
-    Function(Client) onClientSelected,
-    String Function(String) getInitials,
-  ) {
-    if (allClients.isEmpty) {
-      return const Text(
-        'No clients available',
-        style: TextStyle(color: Colors.white),
-      );
-    }
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: allClients.map((clientItem) {
-          final displayName = '${clientItem.firstName} ${clientItem.lastName}'.trim();
-          final isSelected = (selectedClient == clientItem);
-
-          return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: InkWell(
-              onTap: () => onClientSelected(clientItem),
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  // **Changed** brand color fill if selected
-                  color: isSelected ? ARMMBlue : Colors.transparent,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: isSelected ? ARMMBlue : const Color.fromARGB(255, 165, 165, 165),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/profile.svg',
-                      width: 16,
-                      height: 16,
-                      color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      displayName.length > 20 ? getInitials(displayName) : displayName,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : const Color.fromARGB(255, 165, 165, 165),
-                        fontSize: 16,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w300,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  /// Row with "Asset Timeline" label and two pill buttons (account & time filter)
-  Widget _buildAssetTimelineRow() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        // "Asset Timeline" title
-        Text(
-          'Asset Timeline',
-            style: GoogleFonts.inter(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-        ),
-        const SizedBox(height: 20),
-
-        // Row of two pill-shaped buttons side by side
-        Row(
-          children: [
-            // Account Button
-            Expanded(
-              child: _buildAccountModalButton(),
-            ),
-            const SizedBox(width: 12),
-
-            // Time Filter Button
-            Expanded(
-              child: _buildTimeFilter(context),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-
-
-
-
-
-
-  /// Time filter pill button
-  Widget _buildTimeFilter(BuildContext context) {
+  Widget _buildTimeFilterPill(BuildContext context) {
     final selectedText = _getTimeLabel(dropdownValue);
 
-    return GestureDetector(
+    return InkWell(
       onTap: () => _showTimeOptionsBottomSheet(context),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 221, 221, 221),
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: const Color.fromARGB(255, 125, 125, 125),
-            width: 1.5,
-          )
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              selectedText,
-              style: const TextStyle(
-                color: Color.fromARGB(255, 126, 126, 126),
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(width: 10),
-            const RotatedBox(
-              quarterTurns: 3,
-              child: Icon(
-                Icons.arrow_back_ios_rounded,
-                color: Color.fromARGB(255, 126, 126, 126),
-                size: 18,
-              ),
-            )
-          ],
-        ),
+      child: _pillContainer(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        Text(selectedText, style: _pillTextStyle()),
+        const SizedBox(width: 10),
+        const RotatedBox(
+          quarterTurns: 3,
+          child: Icon(
+          Icons.arrow_back_ios_rounded,
+          color: Color.fromARGB(255, 102, 102, 102),
+          size: 22,
+          ),
+        )
+        ],
+      ),
       ),
     );
   }
 
-
-
-  /// Bottom sheet with time options
   void _showTimeOptionsBottomSheet(BuildContext context) {
     var timeOptions = [
       'last-week',
@@ -608,123 +405,80 @@ class _LineChartSectionState extends State<LineChartSection> {
       'year-to-date',
       'last-2-years'
     ];
-
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
+        borderRadius:
+            BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
-      backgroundColor: Colors.black,
       context: context,
-      isScrollControlled: true,
-      builder: (BuildContext ctx) => SafeArea(
-        top: false,
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-            ),
-          ),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: timeOptions.length,
-            itemBuilder: (context, index) {
-              final option = timeOptions[index];
-              final textLabel = _getTimeLabel(option);
-              final isSelected = (dropdownValue == option);
-
-              return ListTile(
-                title: Text(
-                  textLabel,
-                  style: TextStyle(
-                    fontFamily: 'Titillium Web',
-                    color: isSelected ? Colors.white : Colors.white70,
-                    fontSize: 16,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  ),
+      builder: (ctx) => Container(
+        height: 320,
+        padding: const EdgeInsets.all(16),
+        child: ListView.builder(
+          itemCount: timeOptions.length,
+          itemBuilder: (context, index) {
+            final option = timeOptions[index];
+            final textLabel = _getTimeLabel(option);
+            final isSelected = (dropdownValue == option);
+            return ListTile(
+              title: Text(
+                textLabel,
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  setState(() {
-                    dropdownValue = option;
-                    _prepareGraphPoints();
-                  });
-                },
-              );
-            },
-          ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  dropdownValue = option;
+                  _prepareGraphPoints();
+                });
+              },
+            );
+          },
         ),
       ),
     );
   }
 
-  /// Return a readable label for each time filter
-  String _getTimeLabel(String option) {
-    switch (option) {
-      case 'last-week':
-        return 'Last Week';
-      case 'last-month':
-        return 'Last Month';
-      case 'last-year':
-        return 'Last Year';
-      case 'year-to-date':
-        return 'Year-to-Date';
-      case 'last-2-years':
-        return 'Last 2 Years';
-      default:
-        return 'Unknown';
-    }
-  }
-
-  /// Return initials for a name
-  String _getInitials(String name) {
-    List<String> names = name.split(' ');
-    if (names.length == 1) {
-      return names[0];
-    }
-    String firstName = names.first;
-    String lastInitial = names.length > 1 ? '${names.last[0].toUpperCase()}.' : '';
-    return '$firstName $lastInitial';
-  }
-
-  /// Subtle horizontal grid lines
   FlGridData _buildGridData() => FlGridData(
         show: true,
         drawVerticalLine: false,
-        getDrawingHorizontalLine: (value) => const FlLine(
-          color: Colors.white38, // **Changed** to semi-transparent white
-          strokeWidth: 0.5,
+        getDrawingHorizontalLine: (value) => FlLine(
+          color: Colors.grey.shade300,
+          strokeWidth: 0.6,
         ),
       );
 
-  /// Axis titles: white text
   FlTitlesData get titlesData => FlTitlesData(
-        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 55,
+            reservedSize: 40,
             getTitlesWidget: (value, meta) {
-              // Hide min & max labels
               if (value == meta.min || value == meta.max) {
                 return const SizedBox.shrink();
               }
               return Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(right: 4),
                 child: Text(
                   abbreviateNumber(value),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Color.fromARGB(255, 126, 126, 126)), // White axis label
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: Colors.black87,
+                  ),
                 ),
               );
             },
           ),
         ),
-        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -734,29 +488,26 @@ class _LineChartSectionState extends State<LineChartSection> {
         ),
       );
 
-  /// Single line bar data with brand color
   LineChartBarData _buildLineChartBarData() => LineChartBarData(
         spots: spots,
-        // For a smoother line, set isCurved: true and remove isStepLineChart
         isCurved: false,
         isStepLineChart: true,
         lineChartStepData: const LineChartStepData(stepDirection: 0),
         barWidth: 3,
-        color: ARMMBlue, // **Changed** line color to brand color
+        color: ARMMBlue,
         isStrokeCapRound: true,
         dotData: FlDotData(
           show: false,
           getDotPainter: (spot, percent, barData, index) {
-            // Hide dots at start/end
+            // Hide dots for the first and last “padding” points
             if (spot.x == 0 || spot.x == maxX(dropdownValue)) {
               return FlDotCirclePainter(
                 radius: 0,
                 color: Colors.transparent,
                 strokeWidth: 0,
-                strokeColor: Colors.transparent,
               );
             }
-            // Show small dots for data points
+            // Show dots for real data
             if (selectedGraph != null && selectedGraph!.graphPoints.isNotEmpty) {
               return FlDotCirclePainter(
                 radius: 4,
@@ -769,26 +520,23 @@ class _LineChartSectionState extends State<LineChartSection> {
                 radius: 0,
                 color: Colors.transparent,
                 strokeWidth: 0,
-                strokeColor: Colors.transparent,
               );
             }
           },
         ),
         belowBarData: BarAreaData(
           show: true,
-          // **Changed** gradient to brand color -> transparent
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              ARMMBlue.withOpacity(0.4),
-              Colors.transparent,
+              ARMMBlue.withOpacity(0.2),
+              ARMMBlue.withOpacity(0.05),
             ],
           ),
         ),
       );
 
-  /// Touch behavior + tooltip
   LineTouchData _buildLineTouchData() => LineTouchData(
         touchTooltipData: LineTouchTooltipData(
           tooltipRoundedRadius: 12.0,
@@ -831,17 +579,17 @@ class _LineChartSectionState extends State<LineChartSection> {
         handleBuiltInTouches: true,
       );
 
-  /// Widget for the bottom axis titles
+  // The x-axis label widget
   Widget bottomTitlesWidget(double value, TitleMeta meta) {
     DateTime dateTime = calculateDateTimeFromXValue(value, dropdownValue);
     String text = '';
-
     if (dropdownValue == 'last-year') {
       if (value == 0) {
         text = DateFormat('MMM yyyy').format(dateTime);
       } else if (value == maxX(dropdownValue) / 2) {
         text = DateFormat('MMM yyyy').format(
-            calculateDateTimeFromXValue(maxX(dropdownValue) / 2, dropdownValue));
+          calculateDateTimeFromXValue(maxX(dropdownValue) / 2, dropdownValue),
+        );
       } else if (value == maxX(dropdownValue)) {
         text = DateFormat('MMM yyyy')
             .format(calculateDateTimeFromXValue(maxX(dropdownValue), dropdownValue));
@@ -851,20 +599,23 @@ class _LineChartSectionState extends State<LineChartSection> {
         text = DateFormat('MMM dd').format(dateTime);
       } else if (value == maxX(dropdownValue)) {
         text = DateFormat('MMM dd').format(
-            calculateDateTimeFromXValue(maxX(dropdownValue), dropdownValue));
+          calculateDateTimeFromXValue(maxX(dropdownValue), dropdownValue),
+        );
       }
     } else if (dropdownValue == 'last-2-years') {
       if (value == 0) {
         text = DateFormat('MMM yyyy').format(dateTime);
       } else if (value == maxX(dropdownValue) / 2) {
         text = DateFormat('MMM yyyy').format(
-            calculateDateTimeFromXValue(maxX(dropdownValue) / 2, dropdownValue));
+          calculateDateTimeFromXValue(maxX(dropdownValue) / 2, dropdownValue),
+        );
       } else if (value == maxX(dropdownValue)) {
         text = DateFormat('MMM yyyy').format(
-            calculateDateTimeFromXValue(maxX(dropdownValue), dropdownValue));
+          calculateDateTimeFromXValue(maxX(dropdownValue), dropdownValue),
+        );
       }
     } else {
-      // Default
+      // last-week, last-month, default
       text = DateFormat('MMM dd').format(dateTime);
     }
 
@@ -874,107 +625,72 @@ class _LineChartSectionState extends State<LineChartSection> {
       space: 3,
       child: Text(
         text,
-        style: const TextStyle(
+        style: GoogleFonts.inter(
           fontSize: 12,
           fontWeight: FontWeight.bold,
-          color: Color.fromARGB(255, 126, 126, 126)
+          color: Colors.black87,
         ),
       ),
     );
   }
 
-  /// The date range text below the chart
-  Widget _buildDateRangeText() {
-    String displayText = '';
-    DateTime now = DateTime.now();
-    DateFormat dateFormat = DateFormat('MMM. dd, yy');
-
-    switch (dropdownValue) {
+  // Returns a friendlier label for the time filter
+  String _getTimeLabel(String option) {
+    switch (option) {
       case 'last-week':
-        {
-          DateTime startOfWeek = now.subtract(Duration(days: now.weekday));
-          DateTime endOfWeek = startOfWeek.add(const Duration(days: 6));
-          displayText =
-              '${dateFormat.format(startOfWeek)} - ${dateFormat.format(endOfWeek)}';
-        }
-        break;
+        return 'Last Week';
       case 'last-month':
-        {
-          DateTime startOfLast30Days = now.subtract(const Duration(days: 29));
-          DateTime endOfLast30Days = now;
-          displayText =
-              '${dateFormat.format(startOfLast30Days)} - ${dateFormat.format(endOfLast30Days)}';
-        }
-        break;
+        return 'Last Month';
       case 'last-year':
-        {
-          DateTime startOfLastYear =
-              DateTime(now.year - 1, now.month, now.day);
-          displayText =
-              '${dateFormat.format(startOfLastYear)} - ${dateFormat.format(now)}';
-        }
-        break;
+        return 'Last Year';
       case 'year-to-date':
-        {
-          DateTime startOfThisYear = DateTime(now.year, 1, 1);
-          displayText =
-              '${dateFormat.format(startOfThisYear)} - ${dateFormat.format(now)}';
-        }
-        break;
+        return 'Year-to-Date';
       case 'last-2-years':
-        {
-          DateTime startOfTwoYearsAgo =
-              DateTime(now.year - 2, now.month, now.day);
-          displayText =
-              '${dateFormat.format(startOfTwoYearsAgo)} - ${dateFormat.format(now)}';
-        }
-        break;
+        return 'Last 2 Years';
       default:
-        displayText = 'Unknown';
-        break;
+        return 'Unknown';
     }
+  }
 
-    return Container(
-      color: Colors.transparent,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 20.0),
-        child: Column(
-          children: [
-            Text(
-              displayText,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Color.fromARGB(255, 126, 126, 126),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            if (spots.isEmpty)
-              const Padding(
-                padding: EdgeInsets.only(top: 25),
-                child: Row(
-                  children: [
-                    SizedBox(width: 10),
-                    Icon(
-                      Icons.circle,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'No data available for this time period',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: 'Titillium Web',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-          ],
+  Widget _buildDateRangeText() {
+    final displayText = _calculateRangeLabel(dropdownValue);
+    if (spots.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Text(
+          'No data available for this time period',
+          style: GoogleFonts.inter(fontSize: 14, color: Colors.black54),
         ),
-      ),
+      );
+    }
+    return Text(
+      displayText,
+      style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: const Color.fromARGB(147, 0, 0, 0)),
     );
+  }
+
+  String _calculateRangeLabel(String option) {
+    final now = DateTime.now();
+    final dateFormat = DateFormat('MMM dd, yy');
+    switch (option) {
+      case 'last-week':
+        final startOfWeek = now.subtract(Duration(days: now.weekday));
+        final endOfWeek = startOfWeek.add(const Duration(days: 6));
+        return '${dateFormat.format(startOfWeek)} - ${dateFormat.format(endOfWeek)}';
+      case 'last-month':
+        final startOfLast30Days = now.subtract(const Duration(days: 29));
+        return '${dateFormat.format(startOfLast30Days)} - ${dateFormat.format(now)}';
+      case 'last-year':
+        final startOfLastYear = DateTime(now.year - 1, now.month, now.day);
+        return '${dateFormat.format(startOfLastYear)} - ${dateFormat.format(now)}';
+      case 'year-to-date':
+        final startOfThisYear = DateTime(now.year, 1, 1);
+        return '${dateFormat.format(startOfThisYear)} - ${dateFormat.format(now)}';
+      case 'last-2-years':
+        final startOfTwoYearsAgo = DateTime(now.year - 2, now.month, now.day);
+        return '${dateFormat.format(startOfTwoYearsAgo)} - ${dateFormat.format(now)}';
+      default:
+        return 'Unknown range';
+    }
   }
 }
