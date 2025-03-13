@@ -39,8 +39,8 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: const [
-              Color(0xFF2B41B8),
-              Color.fromARGB(255, 80, 104, 241),
+                  Color(0xFF2B41B8),
+                  Color.fromARGB(255, 95, 116, 238),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
