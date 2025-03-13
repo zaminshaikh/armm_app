@@ -39,7 +39,7 @@ class UserBreakdownSection extends StatelessWidget {
     assetTilesARMM.sort((a, b) => a.asset.index.compareTo(b.asset.index));
 
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 8, bottom: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -59,7 +59,6 @@ class UserBreakdownSection extends StatelessWidget {
         child: ExpansionTile(
           tilePadding: EdgeInsets.zero,
           childrenPadding: const EdgeInsets.only(top: 10),
-          initiallyExpanded: true, // Keeps it open like in the image
           title: Row(
             children: [
               // Profile icon
