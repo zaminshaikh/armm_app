@@ -1,5 +1,7 @@
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/screens/activity/utils/sort_activities.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// A modal widget for selecting sort options.
 class ActivitySortModal extends StatelessWidget {
@@ -20,20 +22,20 @@ class ActivitySortModal extends StatelessWidget {
           topRight: Radius.circular(20.0),
         ),
         child: Container(
-          color: Colors.black,
+          color: Colors.white,
           child: Column(
             children: [
               const SizedBox(height: 20.0),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Sort By',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                         fontSize: 22.0,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                         ),
                   ),
                 ),
@@ -59,14 +61,16 @@ class ActivitySortModal extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: currentOrder == value
-              ? Colors.black
+              ? ARMM_Blue
               : Colors.transparent,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Text(
           title,
-          style: const TextStyle(
-              color: Colors.white,
+          style: GoogleFonts.inter(
+              color: currentOrder == value
+                  ? Colors.white
+                  : const Color.fromARGB(160, 0, 0, 0),
               fontWeight: FontWeight.w600,
               fontSize: 18,
               ),
