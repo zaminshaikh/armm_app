@@ -4,6 +4,7 @@ import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../utils/activity_styles.dart';
 
 final DateFormat timeFormat = DateFormat('h:mm a');
@@ -28,11 +29,11 @@ class ActivityDetailsModal extends StatelessWidget {
           topRight: Radius.circular(30.0),
         ),
         child: Container(
-          color: const Color.fromARGB(255, 232, 232, 232),
+          color: Colors.white,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                _buildModalHeader(context, ),
+                _buildModalHeader(context),
                 _buildModalBody(activity),
               ],
             ),
@@ -65,13 +66,12 @@ class ActivityDetailsModal extends StatelessWidget {
                 height: 40,
               ),
             ),
-          const Text(
+          Text(
             'Activity Details',
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
               color: Colors.black,
-              
             ),
           ),
         ],
@@ -83,11 +83,10 @@ class ActivityDetailsModal extends StatelessWidget {
       children: [
         Text(
           '${activity.type == 'withdrawal' ? '-' : ''}${currencyFormat(activity.amount.toDouble())}',
-          style: TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 30,
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
-            
           ),
         ),
         const SizedBox(height: 15),
@@ -95,11 +94,10 @@ class ActivityDetailsModal extends StatelessWidget {
           child: Text(
             getActivityDescription(activity),
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Colors.black,
-              
             ),
           ),
         ),
@@ -112,11 +110,10 @@ class ActivityDetailsModal extends StatelessWidget {
               const SizedBox(width: 5),
               Text(
                 getActivityType(activity),
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   color: getActivityColor(activity.type),
                   fontWeight: FontWeight.bold,
-                  
                 ),
               ),
             ],
@@ -126,16 +123,17 @@ class ActivityDetailsModal extends StatelessWidget {
         _buildModalDetailSection(
           icon: SvgPicture.asset(
             'assets/icons/docs.svg',
-            color: getActivityColor(activity.type),
+            color: const Color.fromARGB(255, 82, 82, 82),
           ),
           title: 'Description',
           content: getActivityDescription(activity),
         ),
         const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
-          icon: SvgPicture.asset(
-            'assets/icons/docs.svg',
-            color: getActivityColor(activity.type),
+          icon: Icon(
+            Icons.calendar_today_rounded,
+            size: 32,
+            color: const Color.fromARGB(255, 82, 82, 82),
           ),
           title: 'Date',
           content: date,
@@ -143,9 +141,10 @@ class ActivityDetailsModal extends StatelessWidget {
         const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
           icon: SvgPicture.asset(
-            'assets/icons/docs.svg',
-            color: getActivityColor(activity.type),
+            'assets/icons/profile_hollow.svg',
+            color: const Color.fromARGB(255, 82, 82, 82),
           ),
+
           title: 'Recipient',
           content: activity.recipient,
         ),
@@ -162,27 +161,30 @@ class ActivityDetailsModal extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
         child: Row(
           children: [
-            const SizedBox(width: 10),
+            SizedBox(
+              width: 32,
+              height: 32,
+              child: icon,
+            ),// inserted icon widget
+
+            const SizedBox(width: 20),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 18,
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
-                      
                     ),
                   ),
-                  const SizedBox(height: 5),
                   Text(
                     content,
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 14,
                       color: Colors.black,
-                      
                     ),
                   ),
                 ],
