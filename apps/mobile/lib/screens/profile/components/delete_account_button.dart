@@ -41,7 +41,7 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
           side: const BorderSide(color: Colors.red, width: 1.5),
           backgroundColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32),
+            borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
         ),

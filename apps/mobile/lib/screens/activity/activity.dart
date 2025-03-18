@@ -231,17 +231,28 @@ class _ActivityPageState extends State<ActivityPage> {
             // Individual Parent Buttons
             ...allClients.map((parentName) {
               bool isSelected = _clientsFilter.contains(parentName);
-  
+
               final rowChildren = <Widget>[
-                SvgPicture.asset(
-                  'assets/icons/profile.svg',
-                  colorFilter: ColorFilter.mode(
-                    isSelected ? Colors.white : Colors.grey,
-                    BlendMode.srcIn,
+                if (isSelected)
+                  SvgPicture.asset(
+                    'assets/icons/profile.svg',
+                    colorFilter: ColorFilter.mode(
+                      isSelected ? Colors.white : Colors.grey,
+                      BlendMode.srcIn,
+                    ),
+                    height: 18,
+                    width: 18,
+                  )
+                else
+                  SvgPicture.asset(
+                    'assets/icons/profile_hollow.svg',
+                    colorFilter: ColorFilter.mode(
+                      isSelected ? Colors.white : Colors.grey,
+                      BlendMode.srcIn,
+                    ),
+                    height: 18,
+                    width: 18,
                   ),
-                  height: 18,
-                  width: 18,
-                ),
                 const SizedBox(width: 12),
                 Text(
                   parentName,

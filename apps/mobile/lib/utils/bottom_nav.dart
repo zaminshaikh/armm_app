@@ -4,6 +4,7 @@ import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum NavigationItem { dashboard, analytics, activity, profile }
 
@@ -69,10 +70,10 @@ class BottomNavBar extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF2B41B8),
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF2B41B8),
                   ),
                 ),
               ],

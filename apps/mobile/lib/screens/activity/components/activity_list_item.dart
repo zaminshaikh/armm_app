@@ -5,6 +5,7 @@ import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 class ActivityListItem extends StatelessWidget {
@@ -28,10 +29,10 @@ class ActivityListItem extends StatelessWidget {
         decoration: BoxDecoration(
         color: Colors.transparent, 
         border: Border.all(
-          color: Colors.black, // Border color
+          color: const Color.fromARGB(60, 0, 0, 0), // Border color
           width: 1.0, // Border width
         ),
-        borderRadius: BorderRadius.circular(8.0), // Optional: Border radius
+        borderRadius: BorderRadius.circular(16.0), // Optional: Border radius
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -50,8 +51,8 @@ class ActivityListItem extends StatelessWidget {
   }
 
   Widget _buildActivityIcon() => Padding(
-    padding: const EdgeInsets.only(right: 20),
-    child: getActivityIcon(activity.type, size: 40), // Directly use the widget from getActivityIcon
+    padding: const EdgeInsets.only(left: 5, right: 15),
+    child: getActivityIcon(activity.type, size: 25), // Directly use the widget from getActivityIcon
   );
 
   Widget _buildActivityDetails() {
@@ -63,19 +64,18 @@ class ActivityListItem extends StatelessWidget {
       children: [
         Text(
           getActivityType(activity),
-          style: TextStyle(
-            fontSize: 18,
+          style: GoogleFonts.inter(
+            fontSize: 16,
             color: Colors.black,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 5),
         Text(
           formattedTime,
-          style: const TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 13,
-            color: Color.fromARGB(255, 102, 102, 102),
-            fontWeight: FontWeight.bold,
+            color: const Color.fromARGB(255, 102, 102, 102),
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],
@@ -90,21 +90,20 @@ class ActivityListItem extends StatelessWidget {
         alignment: Alignment.centerRight,
         child: Text(
           '${activity.type == 'withdrawal' ? '-' : ''}${currencyFormat(activity.amount.toDouble())}',
-          style: TextStyle(
-            fontSize: 18,
+          style: GoogleFonts.inter(
+            fontSize: 16,
             color: getActivityColor(activity.type),
             fontWeight: FontWeight.bold,
             
           ),
         ),
       ),
-      const SizedBox(height: 5),
       Text(
         _getShortenedName(activity.recipient),
-        style: const TextStyle(
+        style: GoogleFonts.inter(
           fontSize: 13,
-          color: Color.fromARGB(255, 102, 102, 102),
-          fontWeight: FontWeight.bold,
+          color: const Color.fromARGB(255, 102, 102, 102),
+          fontWeight: FontWeight.w500,
           
         ),
       ),

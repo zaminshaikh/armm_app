@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -28,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               gradient: LinearGradient(
                 colors: [
                   Color(0xFF2B41B8),
-                  Color.fromARGB(255, 169, 175, 206),
+                  Color.fromARGB(255, 95, 116, 238),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -52,22 +54,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           toolbarHeight: 100,
           backgroundColor: Colors.transparent, // Allows the gradient to show
           centerTitle: true,
-          title: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-              fontWeight: FontWeight.w700,
+            title: Text(
+              title,
+              style: GoogleFonts.inter(
+                color: Colors.white,
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
           actions: showNotificationButton
               ? [
                   Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
+                    padding: const EdgeInsets.only(right: 10.0),
                     child: IconButton(
-                      icon: const Icon(
-                        Icons.notifications_none,
-                        size: 30,
+                      icon: SvgPicture.asset(
+                        'assets/icons/notification.svg',
+                        width: 30,
+                        height: 30,
                         color: Colors.white,
                       ),
                       onPressed: onNotificationTap ?? () {},

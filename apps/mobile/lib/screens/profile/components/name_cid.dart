@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:armm_app/database/models/client_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NameAndCID extends StatelessWidget {
   const NameAndCID({Key? key}) : super(key: key);
@@ -17,17 +18,20 @@ class NameAndCID extends StatelessWidget {
           children: [
             Text(
               "${client?.firstName} ${client?.lastName}",
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              style: GoogleFonts.inter(
+                textStyle: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            const SizedBox(height: 4),
             Text(
               'Client ID: ${client?.cid}',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
+              style: GoogleFonts.inter(
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
               ),
             ),
           ],
