@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:armm_app/auth/auth_utils/apple_auth.dart';
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
@@ -7,6 +8,7 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
@@ -205,6 +207,23 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       }
                     },
                   ),
+                  const SizedBox(height: 20),
+
+                  AuthButton(
+                    label: 'Sign up with Apple', 
+                    icon: const Icon(Icons.apple), 
+                    foregroundColor: Colors.black, 
+                    borderColor: Colors.black,
+                    onPressed: () async {
+                      try {
+                        setState(() => isLoading = true);
+                        await AppleAuthService().signUpWithApple(context, _cidController.text);
+                      } finally {
+                        setState(() => isLoading = false);
+                      }
+                    }
+                  ),
+
                   const SizedBox(height: 24),
 
                   // Already have an account? Log in
