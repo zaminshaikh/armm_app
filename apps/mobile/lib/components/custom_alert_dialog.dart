@@ -68,4 +68,28 @@ class CustomAlertDialog extends StatelessWidget {
       ),
     );
   }
+
+  static Future<void> showAlertDialog(BuildContext context, String title, String message, {Widget? icon}) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Row(
+            children: [
+              if (icon != null) icon,
+              if (icon != null) const SizedBox(width: 10),
+              Flexible(child: Text(message)),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
