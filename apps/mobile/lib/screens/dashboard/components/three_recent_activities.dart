@@ -2,6 +2,7 @@ import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/screens/activity/activity.dart';
 import 'package:armm_app/screens/dashboard/components/activity_card_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ActivityTilesSection extends StatelessWidget {
@@ -38,9 +39,12 @@ class ActivityTilesSection extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => ActivityPage()),
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) => ActivityPage(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
+                      ),
                     );
                   },
                   child: Row(
@@ -53,11 +57,12 @@ class ActivityTilesSection extends StatelessWidget {
                           color: Color(0xFF1C32A4),
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 14,
+                      const SizedBox(width: 12),
+                      SvgPicture.asset(
+                        'assets/icons/arrow_right.svg',
                         color: Color(0xFF1C32A4),
+                        height: 18,
+                        width: 18,
                       ),
                     ],
                   ),

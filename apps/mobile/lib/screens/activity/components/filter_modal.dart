@@ -1,5 +1,9 @@
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:armm_app/utils/expansion_filter_tile.dart';
 
 /// A modal widget for filtering activities.
 class ActivityFilterModal extends StatefulWidget {
@@ -51,6 +55,9 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
   // This flag is used for handling the "All" logic in clients filter.
   bool _allSelected = false;
 
+  static const ARMM_Blue = Color(0xFF1C32A4);
+
+
   @override
   void initState() {
     super.initState();
@@ -76,7 +83,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               maxChildSize: 0.8,
               builder: (_, controller) => Container(
                 decoration: const BoxDecoration(
-                  color: Colors.black,
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25.0),
                     topRight: Radius.circular(25.0),
@@ -86,13 +93,13 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                   children: [
                     const SizedBox(height: 5),
                     const Icon(Icons.remove, color: Colors.transparent),
-                    const Center(
+                    Center(
                       child: Padding(
-                        padding: EdgeInsets.all(25.0),
+                        padding: const EdgeInsets.all(25.0),
                         child: Text(
-                          'Filter Activity',
-                          style: TextStyle(
-                            color: Colors.white,
+                          'Filter Transactions',
+                          style: GoogleFonts.inter(
+                            color: const Color.fromARGB(200, 0, 0, 0),
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -105,9 +112,27 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                         children: [
                           _buildTimePeriodFilter(),
                           // Use the complete list of types (widget.allTypes) here.
-                          _buildFilter('Type', widget.allTypes, _selectedTypes),
-                          _buildFilter('Recipients', widget.allRecipients, _recipientsFilter),
-                          _buildFilter('Clients', widget.allClients, _clientsFilter),
+                            _buildFilter(
+                            title: 'Type',
+                            iconPath: 'assets/icons/activities.svg',
+                            items: widget.allTypes,
+                            filterList: _selectedTypes,
+                            buildCheckbox: _buildCheckbox,
+                            ),
+                            _buildFilter(
+                            title: 'Recipients',
+                            iconPath: 'assets/icons/profile_hollow.svg',
+                            items: widget.allRecipients,
+                            filterList: _recipientsFilter,
+                            buildCheckbox: _buildCheckbox,
+                            ),
+                            _buildFilter(
+                            title: 'Clients',
+                            iconPath: 'assets/icons/group.svg',
+                            items: widget.allClients,
+                            filterList: _clientsFilter,
+                            buildCheckbox: _buildCheckbox,
+                            ),
                         ],
                       ),
                     ),
@@ -155,46 +180,48 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
           },
           child: Container(
             color: Colors.transparent,
-            child: const Text(
-              'By Time Period',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Row(
+              children: [
+                const Icon(Icons.calendar_today, color: Color.fromARGB(255, 77, 77, 77),),
+                const SizedBox(width: 10),
+                Text(
+                  'By Time Period',
+                  style: GoogleFonts.inter(
+                    color: const Color.fromARGB(255, 77, 77, 77),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       );
 
-  /// Builds a filter section with checkboxes.
-  Widget _buildFilter(
-    String title,
-    List<String> items,
-    List<String> filterList,
-  ) =>
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: ExpansionTile(
-          title: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          iconColor: Colors.white,
-          collapsedIconColor: Colors.white,
-          children: items
-              .map(
-                (item) => _buildCheckbox(
-                  toTitleCase(item),
-                  item,
-                  filterList,
-                ),
-              )
-              .toList(),
-        ),
-      );
+
+Widget _buildFilter({
+  required String title,
+  required String iconPath,
+  required List<String> items,
+  required List<String> filterList,
+  required Widget Function(String, String, List<String>) buildCheckbox,
+}) {
+  return FilterExpansionTile(
+    title: title,
+    iconPath: iconPath, // now passing the iconPath directly
+    items: items,
+    filterList: filterList,
+    buildCheckbox: buildCheckbox,
+  );
+}
+
+/// Helper function to convert e.g. "pending withdrawal" -> "Pending Withdrawal"
+String toTitleCase(String text) {
+  if (text.isEmpty) return text;
+  return text
+      .split(' ')
+      .map((word) => word[0].toUpperCase() + word.substring(1))
+      .join(' ');
+}
 
   /// Builds an individual checkbox for the filter.
   Widget _buildCheckbox(
@@ -205,26 +232,38 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
     bool isChecked = filterList.contains(filterKey);
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => CheckboxListTile(
+        // Move the checkbox to the leading side
+        controlAffinity: ListTileControlAffinity.leading,
+        
+        // Make the checkbox circular with a blue outline
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0), // Adjust the value to control the roundness
+        ),
+        side: BorderSide(color: ARMM_Blue, width: 2.0),
+
+        // Colors when checked
+        activeColor: ARMM_Blue,  // Fill color of circle
+        checkColor: Colors.white,  // Color of the check icon
+
         title: Text(
           title,
-          style: const TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 16.0,
-            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            color: const Color(0xFF4D4D4D),
           ),
         ),
-        activeColor: Colors.black,
+        
         value: isChecked,
         onChanged: (bool? value) {
           setState(() {
             isChecked = value ?? false;
             if (isChecked) {
-              // Special case: if filterKey is 'profit', also ensure 'income' is added.
+              // Special case: if filterKey is 'profit', also add 'income'
               if (filterKey == 'profit' && !filterList.contains('income')) {
                 filterList.add('income');
               }
-              if (!filterList.contains(filterKey)) {
-                filterList.add(filterKey);
-              }
+              filterList.add(filterKey);
             } else {
               if (filterKey == 'profit') {
                 filterList.remove('income');
@@ -232,7 +271,7 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               filterList.remove(filterKey);
             }
 
-            // Update _allSelected if all clients are selected or none.
+            // Update _allSelected if needed
             if (widget.allClients.length == filterList.length) {
               _allSelected = true;
               _clientsFilter = [];
@@ -258,11 +297,11 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: ARMM_Blue,
                 ),
-                child: const Text(
+                child: Text(
                   'Apply',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -286,17 +325,17 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
           GestureDetector(
             child: Container(
               color: Colors.transparent,
-              child: const Padding(
-                padding: EdgeInsets.all(4.0),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(Icons.close, color: Colors.white),
-                    SizedBox(width: 5),
+                    const Icon(Icons.close, color: Color.fromARGB(255, 77, 77, 77)),
+                    const SizedBox(width: 5),
                     Text(
                       'Clear',
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: GoogleFonts.inter(
+                        color: const Color.fromARGB(255, 77, 77, 77),
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),

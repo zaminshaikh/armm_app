@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:armm_app/components/assets_structure_section.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/analytics/components/line_chart.dart';
-
+import 'package:google_fonts/google_fonts.dart'; // Added import
 
 class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({Key? key}) : super(key: key);
@@ -86,7 +86,4 @@ class AnalyticsPageState extends State<AnalyticsPage> {
       bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.analytics),
     );
   }
-
-
-
 }

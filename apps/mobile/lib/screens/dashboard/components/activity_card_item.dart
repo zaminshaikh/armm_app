@@ -3,6 +3,7 @@ import 'package:armm_app/screens/activity/utils/activity_styles.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ActivityCardItem extends StatelessWidget {
   final Activity activity;
@@ -33,7 +34,7 @@ class ActivityCardItem extends StatelessWidget {
                 // Transaction Type (Profit, Withdrawal, Deposit, etc.)
                 Text(
                   getActivityType(activity),
-                  style: const TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -43,7 +44,7 @@ class ActivityCardItem extends StatelessWidget {
                 // Date and Time
                 Text(
                   '$date at $time',
-                  style: const TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey,
@@ -60,7 +61,7 @@ class ActivityCardItem extends StatelessWidget {
               // Amount (Positive/Negative)
               Text(
                 '${activity.type == 'withdrawal' ? '-' : '+'}${currencyFormat(activity.amount.toDouble())}',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: getActivityColor(activity.type),
@@ -70,7 +71,7 @@ class ActivityCardItem extends StatelessWidget {
               // Fund Type (IRA, Roth IRA, etc.)
               Text(
                 activity.recipient,
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 14,
                   color: Colors.grey,
                   fontWeight: FontWeight.w700

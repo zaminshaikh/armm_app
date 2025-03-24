@@ -1,6 +1,7 @@
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ActivityAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Client client;
@@ -8,7 +9,7 @@ class ActivityAppBar extends StatefulWidget implements PreferredSizeWidget {
   // Callbacks the parent (ActivityPage) can pass in
   final VoidCallback onFilterPressed;
   final VoidCallback onSortPressed;
-  final VoidCallback? onNotificationTap; // Added notification callback
+  final VoidCallback? onNotificationTap;
 
   const ActivityAppBar({
     super.key,
@@ -40,8 +41,8 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color(0xFF2B41B8),
-                Color.fromARGB(255, 116, 122, 151),
+                  Color(0xFF2B41B8),
+                  Color.fromARGB(255, 95, 116, 238),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -52,10 +53,10 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
           ),
         ),
         title: Padding(
-          padding: const EdgeInsets.only(top: 20.0), // Adjust this value as needed
-          child: const Text(
-            'Activity',
-            style: TextStyle(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Text(
+            'Transactions',
+            style: GoogleFonts.inter(
               fontSize: 25,
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -64,21 +65,22 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 20.0, top: 20),
+            padding: const EdgeInsets.only(right: 10.0, top: 10.0),
             child: IconButton(
-              icon: const Icon(
-                Icons.notifications_none,
-                size: 30,
+              icon: SvgPicture.asset(
+                'assets/icons/notification.svg',
+                width: 30,
+                height: 30,
                 color: Colors.white,
               ),
-              onPressed: widget.onNotificationTap ?? () {},
+              onPressed: widget.onNotificationTap == null ? null : () => widget.onNotificationTap!(),
             ),
           ),
         ], // Notification icon added
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(95),
+          preferredSize: const Size.fromHeight(70),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            padding: const EdgeInsets.only(right: 30, left: 30,  bottom: 20),
             child: Row(
               children: [
                 Expanded(child: _buildFilterButton()),
@@ -109,7 +111,7 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
         ),
         label: Text(
           'Filter',
-          style: TextStyle(
+          style: GoogleFonts.inter(
             color: ARMM_blue,
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -137,7 +139,7 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
         ),
         label: Text(
           'Sort',
-          style: TextStyle(
+          style: GoogleFonts.inter(
             color: ARMM_blue,
             fontWeight: FontWeight.bold,
             fontSize: 18,
