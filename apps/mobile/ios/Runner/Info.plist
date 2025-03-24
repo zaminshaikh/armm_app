@@ -66,5 +66,6 @@
 		<string>This app requires access to your photo library to allow you to select photos for [purpose, e.g., profile images, document uploads, etc.].</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
+    
 	</dict>
 </plist>

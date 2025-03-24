@@ -4,6 +4,7 @@ import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/auth_check.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/database/models/client_model.dart';
+import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/pages/authentication_page.dart';
 import 'package:armm_app/screens/profile/pages/disclaimer_page.dart';
 import 'package:armm_app/screens/profile/pages/documents_page.dart';
@@ -105,7 +106,8 @@ class _MyAppState extends State<MyApp> {
           theme: _buildAppTheme(), // your app theme function
           routes: {
             '/': (context) => const AuthCheck(),
-            '/onboarding': (context) => OnboardingPage(),
+            '/onboarding': (context) => const OnboardingPage(),
+            '/dashboard': (context) => const DashboardPage(),
             '/profile': (context) => const ProfilePage(),
             '/support': (context) => const SupportPage(),
             '/documents': (context) => const DocumentsPage(),

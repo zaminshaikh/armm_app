@@ -300,7 +300,7 @@ class ProfileButtons extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         // Log out button now uses the custom LogoutButton widget
-        LogoutButton(onLogout: onLogout),
+        const LogoutButton(),
       ],
     );
   }
