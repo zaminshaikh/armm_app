@@ -1,9 +1,11 @@
+import 'package:armm_app/auth/auth_utils/apple_auth.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginSocial extends StatelessWidget {
   final Color primaryColor;
@@ -24,7 +26,7 @@ class LoginSocial extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                'or continue with',
+                'or',
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 14,
@@ -37,7 +39,7 @@ class LoginSocial extends StatelessWidget {
         const SizedBox(height: 16),
         // Google button (you can add more: Face ID, Apple, etc.)
         AuthButton(
-          label: 'Google',
+          label: 'Sign In With Google',
           icon: SvgPicture.asset(
             'assets/icons/google.svg',
             color: primaryColor,
@@ -47,6 +49,16 @@ class LoginSocial extends StatelessWidget {
           borderColor: primaryColor,
           onPressed: () {
             GoogleAuthService().signInWithGoogle(context);
+          },
+        ),
+        const SizedBox(height: 20),
+        AuthButton(
+          label: 'Sign In With Apple',
+          icon: const Icon(FontAwesomeIcons.apple),
+          foregroundColor: Colors.black,
+          borderColor: Colors.black,
+          onPressed: () async {
+            await AppleAuthService().signInWithApple(context);
           },
         ),
         const SizedBox(height: 32),
