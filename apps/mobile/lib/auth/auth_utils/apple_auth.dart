@@ -39,6 +39,9 @@ class AppleAuthService {
 
       // Request credential from Apple
       try {
+        const name = AppleIDAuthorizationScopes.fullName;
+        const email = AppleIDAuthorizationScopes.email;
+        log('Requesting Apple ID credential with scopes: $name, $email');
         final appleCredential = await SignInWithApple.getAppleIDCredential(
           scopes: [
             AppleIDAuthorizationScopes.email,
