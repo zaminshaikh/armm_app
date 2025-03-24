@@ -77,6 +77,13 @@ class _ClientIDPageState extends State<ClientIDPage> {
   }
 
   @override
+  void dispose() {
+    _cidController.dispose();
+    isLoading = false;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -219,7 +226,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
                         setState(() => isLoading = true);
                         await AppleAuthService().signUpWithApple(context, _cidController.text);
                       } finally {
-                        setState(() => isLoading = false);
+                        if (mounted){
+                          setState(() => isLoading = false);
+                        }
                       }
                     }
                   ),
