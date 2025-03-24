@@ -38,9 +38,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _signOut() async {
     await AuthService().signOut();
+    if (!mounted) return;
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
@@ -60,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
+      bottomNavigationBar: const BottomNavBar(
         currentItem: NavigationItem.profile,
       ),
     );
