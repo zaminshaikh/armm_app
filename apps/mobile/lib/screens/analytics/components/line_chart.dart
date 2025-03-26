@@ -124,7 +124,7 @@ class LineChartSectionState extends State<LineChartSection> {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('MM/dd/yyyy \'at\' hh:mm a');
+    final dateFormat = DateFormat('MMM dd, yyyy \'at\' hh:mm a');
     String dateString = '';
     double amount = 0.0;
 
@@ -671,7 +671,7 @@ class LineChartSectionState extends State<LineChartSection> {
 
   String _calculateRangeLabel(String option) {
     final now = DateTime.now();
-    final dateFormat = DateFormat('MMM dd, yy');
+    final dateFormat = DateFormat('MMM dd, yyyy');
     switch (option) {
       case 'last-week':
         final startOfWeek = now.subtract(Duration(days: now.weekday));
