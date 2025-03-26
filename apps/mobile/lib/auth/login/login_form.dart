@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
+import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
@@ -49,7 +50,7 @@ class LoginForm extends StatelessWidget {
       // Navigate to the dashboard
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const ProfilePage()),
+        MaterialPageRoute(builder: (_) => const DashboardPage()),
       );
 
       return true;
