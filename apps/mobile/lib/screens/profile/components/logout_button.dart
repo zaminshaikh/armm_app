@@ -1,12 +1,14 @@
+import 'package:armm_app/auth/auth_utils/auth_functions.dart';
+import 'package:armm_app/auth/login/login.dart';
+import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 
 class LogoutButton extends StatelessWidget {
-  final VoidCallback? onLogout;
   
-  const LogoutButton({Key? key, this.onLogout}) : super(key: key);
+  const LogoutButton({super.key});
 
   Future<void> _confirmLogout(BuildContext context) async {
     final shouldLogout = await showDialog<bool>(
@@ -40,8 +42,13 @@ class LogoutButton extends StatelessWidget {
       },
     );
 
-    if (shouldLogout == true && onLogout != null) {
-      onLogout!();
+    if (shouldLogout == true) {
+      await AuthService().signOut();
+      if (!context.mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const OnboardingPage()),
+      );
     }
   }
 
