@@ -2,6 +2,7 @@
 
 
 import 'package:armm_app/auth/login/login.dart';
+import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
@@ -70,7 +71,7 @@ class GoogleAuthService {
       // Navigate to Dashboard
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const ProfilePage()),
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
 
       return userCredential;
@@ -251,7 +252,7 @@ class GoogleAuthService {
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              const ProfilePage(),
+              const DashboardPage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               child,
         ),
