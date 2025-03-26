@@ -422,6 +422,41 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
+                    // First check how the user is authenticated
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      List<String> providers = [];
+                      for (var info in user.providerData) {
+                        providers.add(info.providerId);
+                      }
+                      
+                      // Check if user is OAuth authenticated
+                      if (providers.contains('apple.com')) {
+                        if (context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Cannot Change Email'),
+                              content: Text('You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.'),
+                              actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                            ),
+                          );
+                        }
+                        return;
+                      } else if (providers.contains('google.com')) {
+                        if (context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Cannot Change Email'),
+                              content: Text('You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.'),
+                              actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                            ),
+                          );
+                        }
+                        return;
+                      }
+                    }
                     // First ask for password to re-authenticate
                     await showDialog(
                       context: context,
