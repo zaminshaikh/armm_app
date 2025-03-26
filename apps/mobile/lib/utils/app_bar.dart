@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -56,10 +55,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           centerTitle: true,
             title: Text(
               title,
-              style: GoogleFonts.inter(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 25,
                 fontWeight: FontWeight.w600,
+                fontFamily: 'Inter',
               ),
             ),
           actions: showNotificationButton
