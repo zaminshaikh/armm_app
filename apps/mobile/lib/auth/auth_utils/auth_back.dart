@@ -22,16 +22,16 @@ class AuthBack extends StatelessWidget {
               color: Colors.grey,
               onPressed: onBackPressed,
             ),
-            TextButton(
-              onPressed: onBackPressed,
-              child: const Text(
-                'Back',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                ),
-              ),
-            ),
+            // TextButton(
+            //   onPressed: onBackPressed,
+            //   child: const Text(
+            //     'Back',
+            //     style: TextStyle(
+            //       color: Colors.grey,
+            //       fontSize: 16,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
