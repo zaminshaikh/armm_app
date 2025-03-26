@@ -250,7 +250,7 @@ class ProfileButtons extends StatelessWidget {
               Center(
                 child: Text(
                   'Investment products and services are offered '
-                  'through ARMM group Investment, a Florida '
+                  'through ARMM group Investment, a New York '
                   'limited liability company.',
                   style: GoogleFonts.inter(
                     textStyle: const TextStyle(
