@@ -124,7 +124,7 @@ class LineChartSectionState extends State<LineChartSection> {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('MM.dd.yyyy \'at\' hh:mm a');
+    final dateFormat = DateFormat('MM/dd/yyyy \'at\' hh:mm a');
     String dateString = '';
     double amount = 0.0;
 

@@ -93,7 +93,7 @@ class _MyProfilesPageState extends State<MyProfilesPage> {
 Widget clientCard(Client c) {
   // Example: formatting the "firstDepositDate" in dd.MM.yyyy at hh:mm a
   // e.g. 01.08.2014 at 08:00 PM
-  final formattedDate = c.firstDepositDate != null ? DateFormat("dd.MM.yyyy 'at' hh:mm a").format(c.firstDepositDate!) : 'N/A';
+  final formattedDate = c.firstDepositDate != null ? DateFormat("dd/MM/yyyy 'at' hh:mm a").format(c.firstDepositDate!) : 'N/A';
 
   return Container(
     width: double.infinity,
