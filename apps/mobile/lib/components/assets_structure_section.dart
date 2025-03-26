@@ -97,10 +97,11 @@ class AssetsStructureSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
-                children: [
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [                  
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         'Investment Allocation',
@@ -120,18 +121,21 @@ class AssetsStructureSection extends StatelessWidget {
                           color: Colors.grey.shade500,
                         ),
                       ),
+
+                      const SizedBox(height: 20),
+
+                      SvgPicture.asset(
+                        'assets/icons/ARMM_Logo.svg',
+                        width: 26,
+                        height: 26,
+                      ),
+
+
                     ],
                   ),
-                  Spacer(),
-                  SvgPicture.asset(
-                    'assets/icons/ARMM_Logo.svg',
-                    width: 26,
-                    height: 26,
-                  )
                 ],
               ),
             ),
-
 
             const SizedBox(height: 60),
 
