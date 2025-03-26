@@ -345,6 +345,7 @@ class _SettingsPageState extends State<SettingsPage> {
   
             Widget buildCloseButton(BuildContext context) {
               return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // This spreads elements to both edges
                 children: [
                   Text(
                     'Change Email',
@@ -354,12 +355,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       color: Colors.black87,
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Icon(Icons.close, color: Colors.grey[700]),
-                      onPressed: () => Navigator.pop(context),
-                    ),
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.grey[700]),
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
               );
@@ -543,9 +541,6 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-
-
-
 
 
   Widget _buildChangePasswordSection() {
