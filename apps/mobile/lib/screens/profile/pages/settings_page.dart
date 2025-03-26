@@ -344,18 +344,7 @@ class _SettingsPageState extends State<SettingsPage> {
             TextEditingController emailController = TextEditingController();
   
             Widget buildCloseButton(BuildContext context) {
-              return Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: Icon(Icons.close, color: Colors.grey[700]),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              );
-            }
-  
-            Widget buildEmailInputSection(TextEditingController controller) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return Row(
                 children: [
                   Text(
                     'Change Email',
@@ -365,6 +354,21 @@ class _SettingsPageState extends State<SettingsPage> {
                       color: Colors.black87,
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: Icon(Icons.close, color: Colors.grey[700]),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                ],
+              );
+            }
+  
+            Widget buildEmailInputSection(TextEditingController controller) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   const SizedBox(height: 8),
                   Text(
                     'Update the email associated with your account.',
@@ -500,10 +504,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     buildCloseButton(context),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 1),
                     buildEmailInputSection(emailController),
                     const SizedBox(height: 24),
                     buildContinueButton(context, emailController),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
