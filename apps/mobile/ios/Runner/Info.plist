@@ -22,17 +22,17 @@
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
-		<key>CFBundleURLTypes</key>
-		<array>
-			<dict>
-				<key>CFBundleTypeRole</key>
-				<string>Editor</string>
-				<key>CFBundleURLSchemes</key>
-				<array>
-					<string>com.googleusercontent.apps.783271592956-hc85s49ll1f2543d886p10tf0fuanv86</string>
-				</array>
-			</dict>
-		</array>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.783271592956-r6ie2kuicbgt1kjr5cg6tar3095arqpu</string>
+        </array>
+      </dict>
+    </array>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
 			<string>com.google</string>
