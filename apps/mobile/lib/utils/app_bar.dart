@@ -1,3 +1,4 @@
+import 'package:armm_app/screens/notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -65,18 +66,35 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           actions: showNotificationButton
               ? [
-                  Padding(
+                    Padding(
                     padding: const EdgeInsets.only(right: 10.0),
-                    child: IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/icons/notification.svg',
-                        width: 30,
-                        height: 30,
-                        color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => const NotificationPage(),
                       ),
-                      onPressed: onNotificationTap ?? () {},
+                      );
+                      },
+                      child: IconButton(
+                      icon: SvgPicture.asset(
+                      'assets/icons/notification.svg',
+                      width: 30,
+                      height: 30,
+                      color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationPage(),
+                        ),
+                        );
+                      },
+                      ),
                     ),
-                  ),
+                    ),
                 ]
               : null,
         ),

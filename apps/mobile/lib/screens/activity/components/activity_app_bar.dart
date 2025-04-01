@@ -1,4 +1,5 @@
 import 'package:armm_app/database/models/client_model.dart';
+import 'package:armm_app/screens/notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -67,7 +68,16 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10.0, top: 10.0),
-            child: IconButton(
+            child: GestureDetector(
+              onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => const NotificationPage(),
+                ),
+              );
+              },
+              child: IconButton(
               icon: SvgPicture.asset(
                 'assets/icons/notification.svg',
                 width: 30,
@@ -75,7 +85,9 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
                 color: Colors.white,
               ),
               onPressed: widget.onNotificationTap == null ? null : () => widget.onNotificationTap!(),
+              ),
             ),
+
           ),
         ], // Notification icon added
         bottom: PreferredSize(
