@@ -226,7 +226,7 @@ import {
     }
   
     /** Deletes a client document */
-    async deleteClient(cid: string): Promise<void> {
+    async deleteClient(cid: string | undefined): Promise<void> {
       if (!cid) {
         console.log('No value provided for CID');
         return;
@@ -334,7 +334,7 @@ import {
     }
   
     /** Updates an activity document */
-    async setActivity(activity: Activity, activityDocId: string | undefined, cid: string): Promise<void> {
+    async setActivity(activity: Activity, {activityDocId}: {activityDocId?: string}, cid: string): Promise<void> {
       const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, cid);
       const activityCollectionRef = collection(clientRef, config.ACTIVITIES_SUBCOLLECTION);
       const activityRef = doc(activityCollectionRef, activityDocId);
