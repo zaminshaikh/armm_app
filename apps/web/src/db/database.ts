@@ -270,8 +270,8 @@ import {
       );
       try {
         const result = await calculateYTD({ cid, usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION });
-        console.log('YTD Total:', result.data.ytd);
-        return result.data.ytd;
+        console.log('YTD Total:', result.data);
+        return result.data as unknown as number;
       } catch (error) {
         console.error('Error updating YTD:', error);
         throw new Error('Failed to update YTD.');
@@ -287,7 +287,7 @@ import {
       try {
         const result = await calculateYTD({ cid, usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION });
         console.log('Total YTD:', result.data.ytdTotal);
-        return result.data.ytdTotal;
+        return result.data as unknown as number;
       } catch (error) {
         console.error('Error updating Total YTD:', error);
         throw new Error('Failed to update Total YTD.');

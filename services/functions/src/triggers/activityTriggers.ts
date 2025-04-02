@@ -76,7 +76,7 @@ export const onActivityWrite = functions.firestore
     const doesAffectYTD = (activity: Activity): boolean => {
       const activityDate = getActivityDate(activity);
       return (
-        activity.fund === "AGQ" &&
+        activity.fund === "ARMM" &&
         ["profit", "income"].includes(activity.type) &&
         activityDate >= startOfYear
       );

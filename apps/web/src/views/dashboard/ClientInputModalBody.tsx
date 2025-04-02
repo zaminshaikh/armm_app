@@ -114,7 +114,7 @@ const exceptions = ["LLC", "Inc", "Ltd"];
                 }
 
                 if (securityNameLower.includes('armm')) {
-                    fund = 'AGQ';
+                    fund = 'ARMM';
                 }
     
                 // Create an activity from each row of the CSV
