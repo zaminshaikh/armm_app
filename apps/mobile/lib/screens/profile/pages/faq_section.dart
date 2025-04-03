@@ -87,7 +87,11 @@ class _FAQSectionState extends State<FAQSection> {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(8),
-                    child: Text(item.answer),
+                    child: Text(
+                      item.answer,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+
                   ),
                 ],
               ),
