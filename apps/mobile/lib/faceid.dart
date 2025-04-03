@@ -3,6 +3,7 @@
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -34,14 +35,17 @@ class _FaceIdPageState extends State<FaceIdPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    // Reset the hasNavigatedToFaceIDPage value to false before disposing
-    if (authenticated && mounted) {
-      // Use stored reference instead of accessing Provider during disposal
-      _authState.setHasNavigatedToFaceIDPage(false);
-    }
-
     // Remove the observer for this widget's lifecycle events
     WidgetsBinding.instance.removeObserver(this);
+    
+    // Schedule state update for when the framework is unlocked
+    if (authenticated) {
+      // Use a microtask to update state after dispose completes
+      Future.microtask(() {
+        _authState.setHasNavigatedToFaceIDPage(false);
+      });
+    }
+    
     super.dispose();
   }
 
@@ -91,8 +95,11 @@ class _FaceIdPageState extends State<FaceIdPage> with WidgetsBindingObserver {
         });
       }
 
-      _authState.setJustAuthenticated(true);
-      _authState.setInitiallyAuthenticated(true);
+      // Schedule state updates for next frame when framework is unlocked
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _authState.setJustAuthenticated(true);
+        _authState.setInitiallyAuthenticated(true);
+      });
 
       if (mounted) {
         await Navigator.pushReplacement(
@@ -107,7 +114,11 @@ class _FaceIdPageState extends State<FaceIdPage> with WidgetsBindingObserver {
       }
     } else {
       if (mounted) {
-        _authState.setHasNavigatedToFaceIDPage(false);
+        // Schedule state update for next frame
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _authState.setHasNavigatedToFaceIDPage(false);
+        });
+        
         setState(() {
           _isAuthenticating = false;
         });
@@ -117,80 +128,68 @@ class _FaceIdPageState extends State<FaceIdPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 80.0),
-                      const SizedBox(height: 20.0),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'ARMM App Locked',
-                          style: TextStyle(
-                            fontSize: 25,
-                          color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Unlock with Face ID to continue',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Add logo image
+                SvgPicture.asset(
+                  'assets/icons/ARMM_Logo.svg',
+                  height: 40,
+                  width: 40,
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 45,
-                    child: ElevatedButton(
-                      onPressed: _isAuthenticating
-                          ? null
-                          : () async {
-                              await _authenticate(context);
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
+                const SizedBox(height: 40.0),
+                const Text(
+                  'ARMM App Locked',
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: Color(0xFF1C32A4),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16.0),
+                const Text(
+                  'Unlock with Face ID to continue',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color(0xFF333333),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 60.0),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _isAuthenticating
+                      ? null
+                      : () async {
+                          await _authenticate(context);
+                        },
+
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1C32A4), // ARMM_Blue
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
-                      child: const Text(
-                        'Use Face ID',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      elevation: 3,
+                    ),
+                    child: const Text(
+                      'Use Face ID',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

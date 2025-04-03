@@ -3,6 +3,7 @@
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
@@ -66,77 +67,65 @@ class _InitialFaceIdPageState extends State<InitialFaceIdPage>
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 80.0),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'ARMM App Locked',
-                          style: TextStyle(
-                            fontSize: 25,
-                          color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Unlock with Face ID to continue',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Add logo image
+                SvgPicture.asset(
+                  'assets/icons/ARMM_Logo.svg',
+                  height: 40,
+                  width: 40,
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 45,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        await _initialAuthenticate(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
+                const SizedBox(height: 40.0),
+                const Text(
+                  'ARMM App Locked',
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: Color(0xFF1C32A4),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16.0),
+                const Text(
+                  'Unlock with Face ID to continue',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color(0xFF333333),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 60.0),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await _initialAuthenticate(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1C32A4), // ARMM_Blue
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
-                      child: const Text(
-                        'Use Face ID',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      elevation: 3,
+                    ),
+                    child: const Text(
+                      'Use Face ID',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
