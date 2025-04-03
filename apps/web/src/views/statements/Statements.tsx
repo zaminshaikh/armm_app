@@ -5,6 +5,7 @@ import { CContainer, CButton } from "@coreui/react-pro";
 import { Routes, Route } from 'react-router-dom';
 import ClientStatementsPage from './components/ClientStatementsPage';
 import AddStatementModal from './components/AddStatementsModal';
+import { DatabaseService } from 'src/db/database';
 
 const Statements: React.FC = () => {
   const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false);
@@ -31,6 +32,7 @@ const Statements: React.FC = () => {
       <div className="d-grid gap-2 py-3">
           <CButton color='primary' onClick={handleOpenModal}>Add Statement +</CButton>
       </div> 
+      
 
 
       {/* Add Statement Modal */}

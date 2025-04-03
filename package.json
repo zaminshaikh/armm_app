@@ -4,9 +4,12 @@
     "deploy:functions": "cd services/functions && npm run deploy"
   },
   "devDependencies": {
+    "@types/pdfmake": "^0.2.11",
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "@notionhq/client": "^2.2.16"
+    "@notionhq/client": "^2.2.16",
+    "all": "^0.0.0",
+    "pdfmake": "^0.2.18"
   }
 }
