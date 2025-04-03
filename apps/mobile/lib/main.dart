@@ -45,9 +45,13 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  // Create and initialize AuthState before providing it to the app
+  final authState = AuthState();
+  await authState.loadSavedSettings();
+
   runApp(
     ChangeNotifierProvider(
-      create: (context) => AuthState(),
+      create: (context) => authState,
       child: const MyApp(),
     ),
   );

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthState extends ChangeNotifier {
   bool _hasNavigatedToFaceIDPage = false;
   bool _justAuthenticated = false;
   bool _initiallyAuthenticated = false;
   bool _isAppLockEnabled = false;
-  String _selectedTimeOption = '1 minute';
-  double _selectedTimeInMinutes = 1.0;
+  String _selectedTimeOption = 'Immediately'; 
+  double _selectedTimeInMinutes = 0.0; 
   bool _forceDashboard = false;
-
 
   // Getter for _hasNavigatedToFaceIDPage
   bool get hasNavigatedToFaceIDPage => _hasNavigatedToFaceIDPage;
@@ -30,6 +30,22 @@ class AuthState extends ChangeNotifier {
 
   // Getter for _forceDashboard
   bool get forceDashboard => _forceDashboard;
+
+  // Load saved settings from SharedPreferences
+  Future<void> loadSavedSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    // Load app lock state
+    final isEnabled = prefs.getBool('isAppLockEnabled') ?? false;
+    _isAppLockEnabled = isEnabled;
+    
+    // Load selected time option
+    final timeOption = prefs.getString('selectedTimeOption') ?? 'Immediately';
+    _selectedTimeOption = timeOption;
+    _selectedTimeInMinutes = _getTimeInMinutes(timeOption);
+    
+    notifyListeners();
+  }
 
   // Setter for _hasNavigatedToFaceIDPage
   void setHasNavigatedToFaceIDPage(bool value) {
@@ -81,7 +97,7 @@ class AuthState extends ChangeNotifier {
       case '10 minute':
         return 10.0;
       default:
-        return 1.0; // Default to 1 minute if none match
+        return 0.0;
     }
   }
 }
