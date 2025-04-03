@@ -525,67 +525,135 @@ export class DatabaseService {
           ],
         };
       },
+      // Replace the content section in your generateStatementPDF method
       content: [
         // Statement Header
         {
           text: 'Account Statement',
           style: 'header',
           alignment: 'center',
+          margin: [0, 0, 0, 15],
         },
+        
+        // Client Information Section
         {
-          text: `${client.firstName} ${client.lastName}`,
-          style: 'subheader',
-          alignment: 'center',
-        },
-        {
-          text: `Statement Period: ${formatDate(startDate)} - ${formatDate(endDate)}`,
-          style: 'small',
-          alignment: 'center',
+          style: 'infoSection',
           margin: [0, 0, 0, 20],
+          layout: {
+            fillColor: function(i: number) { return (i % 2 === 0) ? '#f8f8f8' : null; }
+          },
+          table: {
+            widths: ['50%', '50%'],
+            body: [
+              [
+                { text: 'Investor:', style: 'labelText' }, 
+                { text: `${client.firstName} ${client.lastName}`, style: 'valueText' }
+              ],
+              [
+                { text: 'Client Since:', style: 'labelText' }, 
+                { text: client.firstDepositDate ? formatDate(client.firstDepositDate) : 'N/A', style: 'valueText' }
+              ],
+              [
+                { text: 'Statement Period:', style: 'labelText' }, 
+                { text: `${formatDate(startDate)} - ${formatDate(endDate)}`, style: 'valueText' }
+              ],
+            ]
+          },
         },
-
-        // A simple table of Activities
+        
+        // Statement Summary
+        {
+          text: 'Statement Summary',
+          style: 'subheader',
+          margin: [0, 0, 0, 10],
+        },
+        {
+          style: 'summaryTable',
+          table: {
+            widths: ['70%', '30%'],
+            body: [
+              [
+                { text: 'Investment Account Total Balance:', style: 'labelText' }, 
+                { text: formatCurrency(client.totalAssets || 0), style: 'valueText', alignment: 'right' }
+              ],
+            ]
+          },
+          layout: 'noBorders'
+        },
+        
+        // Activity Table - now with full borders and centered
+        {
+          text: 'Transaction History',
+          style: 'subheader',
+          margin: [0, 20, 0, 10],
+        },
         {
           table: {
-            widths: ['auto', 'auto', 'auto'],
+            headerRows: 1,
+            widths: ['33%', '33%', '34%'],
             body: [
               // Table Header
               [
-                { text: 'Date', style: 'tableHeader' },
-                { text: 'Type', style: 'tableHeader' },
-                { text: 'Amount', style: 'tableHeader', alignment: 'right' },
+                { text: 'Date', style: 'tableHeader', alignment: 'center' },
+                { text: 'Type', style: 'tableHeader', alignment: 'center' },
+                { text: 'Amount', style: 'tableHeader', alignment: 'center' },
               ],
-
               // Table Rows (one per activity)
               ...filteredActivities.map((activity) => [
-                activity.formattedTime ?? '',
-                activity.type ?? '',
-                {
-                  text: activity.amount ? activity.amount.toFixed(2) : '0.00',
+                { text: activity.formattedTime ?? '', alignment: 'center' },
+                { text: activity.type ?? '', alignment: 'center' },
+                { 
+                  text: activity.amount ? formatCurrency(activity.amount) : '$0.00', 
                   alignment: 'right',
+                  margin: [0, 0, 10, 0]
                 },
               ]),
             ],
           },
-          layout: 'lightHorizontalLines',
+          // Full border layout
+          layout: {
+            hLineWidth: function() { return 1; },
+            vLineWidth: function() { return 1; },
+            hLineColor: function() { return '#dddddd'; },
+            vLineColor: function() { return '#dddddd'; },
+          },
+          // Center the table
+          alignment: 'center',
+          margin: [0, 0, 0, 20],
         },
       ],
+
+      // Updated styles
       styles: {
         header: {
-          fontSize: 18,
+          fontSize: 22,
           bold: true,
+          color: '#2B41B8', // You can use ARMM_blue here
         },
         subheader: {
-          fontSize: 14,
-          margin: [0, 0, 0, 10],
+          fontSize: 16,
+          bold: true,
+          margin: [0, 5, 0, 5],
         },
         small: {
           fontSize: 10,
         },
         tableHeader: {
           bold: true,
-          fontSize: 11,
+          fontSize: 12,
           color: 'black',
+          fillColor: '#f8f8f8',
+          margin: [0, 5, 0, 5],
+        },
+        labelText: {
+          bold: true,
+          fontSize: 11,
+        },
+        valueText: {
+          fontSize: 11,
+        },
+        summaryTable: {
+          margin: [0, 0, 0, 10],
         },
       },
     };
