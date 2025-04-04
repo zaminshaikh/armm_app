@@ -145,7 +145,7 @@ const EditActivity: React.FC<EditActivityProps> = ({ showModal, setShowModal, cl
                 alignment="center"
                 onClose={() => setShowModal(false)}>
                 <CModalHeader closeButton>
-                    <CModalTitle>Edit Activity</CModalTitle>
+                    <CModalTitle>Edit Transaction</CModalTitle>
                 </CModalHeader>
                 <ActivityInputModalBody
                     activityState={activityState}

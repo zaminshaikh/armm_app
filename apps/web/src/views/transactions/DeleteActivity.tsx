@@ -57,7 +57,7 @@ const DeleteActivity: React.FC<DeleteActivityProps> = ({showModal, setShowModal,
             onClose={() => setShowModal(false)}>
             <CModalHeader>
                 <CModalTitle style={{fontSize: '2rem'}}>
-                    <FontAwesomeIcon className="me-2" icon={faExclamationTriangle} color="red" /> Delete Activity?
+                    <FontAwesomeIcon className="me-2" icon={faExclamationTriangle} color="red" /> Delete Transaction?
                 </CModalTitle>
             </CModalHeader>
             <CModalBody className="px-5">

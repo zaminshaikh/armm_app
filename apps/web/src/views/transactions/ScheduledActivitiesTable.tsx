@@ -1,13 +1,8 @@
-import { SetStateAction, useEffect, useRef, useState } from "react";
-import { CBadge, CButton, CCol, CContainer, CHeader, CHeaderBrand, CMultiSelect, CRow, CSmartTable, CSpinner, CToaster } from "@coreui/react-pro";
-import { Activity, DatabaseService, Client, formatCurrency, ScheduledActivity } from "src/db/database";
-import { CreateActivity } from "./CreateActivity";
+import { useState } from "react";
+import { CBadge, CButton, CContainer, CSmartTable } from "@coreui/react-pro";
+import { Activity, Client, formatCurrency, ScheduledActivity } from "src/db/database";
 import DeleteActivity from "./DeleteActivity";
 import EditActivity from "./EditActivity";
-import { cilArrowRight, cilReload } from "@coreui/icons";
-import CIcon from "@coreui/icons-react";
-import type { Option } from "@coreui/react-pro/dist/esm/components/multi-select/types";
-import Activities from './Activities';
 
 interface TableProps {
     scheduledActivities: ScheduledActivity[];
@@ -98,7 +93,7 @@ const ScheduledActivitiesTable: React.FC<TableProps> = ({scheduledActivities, se
 
     return (
         <CContainer>
-            <h1 className="pt-5 pb-2">Scheduled Activities</h1>
+            <h1 className="pt-5 pb-2">Scheduled Transactions</h1>
             {showDeleteActivityModal && <DeleteActivity showModal={showDeleteActivityModal} setShowModal={setShowDeleteActivityModal} activity={currentActivity} isScheduled={true} selectedClient={selectedClient} setScheduledActivities={setScheduledActivities}/>}
             {showEditActivityModal && <EditActivity showModal={showEditActivityModal} setShowModal={setShowEditActivityModal} clients={clients} activity={currentActivity} isScheduled={true} selectedClient={selectedClient} setScheduledActivities={setScheduledActivities} />}
             <CSmartTable

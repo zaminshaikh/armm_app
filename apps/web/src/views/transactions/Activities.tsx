@@ -60,7 +60,7 @@ const Activities = () => {
                 setScheduledActivities={setScheduledActivities}
             />}
             <div className="d-grid gap-2 py-3">
-                <CButton color='primary' onClick={() => setShowCreateActivityModal(true)}>Add Activity +</CButton>
+                <CButton color='primary' onClick={() => setShowCreateActivityModal(true)}>Add Transaction +</CButton>
             </div> 
             <ActivitiesTable 
                 allActivities={allActivities}

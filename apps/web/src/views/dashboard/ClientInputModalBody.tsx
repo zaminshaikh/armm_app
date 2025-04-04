@@ -1,9 +1,9 @@
-import { CModalBody, CInputGroup, CInputGroupText, CFormInput, CFormCheck, CMultiSelect, CContainer, CRow, CCol, CButton, CLoadingButton, CTable, CTableHead, CTableHeaderCell, CTableRow, CTableBody, CTableDataCell, CForm, CFormSelect, CFormTextarea } from '@coreui/react-pro';
-import { Activity, DatabaseService, GraphPoint, Client, formatCurrency, emptyActivity } from '../../db/database.ts'
+import { CModalBody, CInputGroup, CInputGroupText, CFormInput, CMultiSelect, CButton, CLoadingButton, CTable, CTableHead, CTableHeaderCell, CTableRow, CTableBody, CTableDataCell, CFormSelect, CFormTextarea } from '@coreui/react-pro';
+import { Activity, DatabaseService, Client, formatCurrency, emptyActivity } from '../../db/database.ts'
 import { Option, OptionsGroup } from '@coreui/react-pro/dist/esm/components/multi-select/types';
 import Papa from 'papaparse';
 import { EditAssetsSection } from "../../components/EditAssetsSection";
-import { isValid, parse, set } from 'date-fns';
+import { isValid, parse } from 'date-fns';
 import { useState, useEffect } from 'react';
 import { formatDate, parseDateWithTwoDigitYear, toTitleCase } from 'src/utils/utilities.ts';
 import countries from '../../utils/countries.json';
@@ -598,7 +598,7 @@ export const ClientInputModalBody: React.FC<ClientInputProps> = ({
             </CInputGroup>
 
             <div className="my-3 ">
-                <h5>Upload Previous Activities</h5>
+                <h5>Upload Previous Transactions</h5>
                 <div  className="mb-3 py-3">
                 <CFormInput type="file" id="formFile" onChange={(event) => handleActivitiesFileChange(event, clientState, setClientState)} disabled={viewOnly}/>
                 </div>

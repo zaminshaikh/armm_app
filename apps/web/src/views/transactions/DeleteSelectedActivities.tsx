@@ -97,10 +97,10 @@ export const DeleteSelectedActivities: React.FC<DeleteSelectedActivitiesProps> =
     <CModal visible={showModal} onClose={() => setShowModal(false)} size="xl" alignment='center' scrollable>
       <CModalHeader>
         <FontAwesomeIcon className="me-3" icon={faExclamationTriangle} color="red" size='xl'/>
-        <CModalTitle style={{fontSize: '2rem'}}>Delete Selected Activities?</CModalTitle></CModalHeader>
+        <CModalTitle style={{fontSize: '2rem'}}>Delete Selected Transactions?</CModalTitle></CModalHeader>
       <CModalBody>
         <div className="mb-3">
-          <strong>Are you sure you want to delete the following activities?</strong>
+          <strong>Are you sure you want to delete the following transactions?</strong>
         </div>
         <CSmartTable
           items={selectedActivities}

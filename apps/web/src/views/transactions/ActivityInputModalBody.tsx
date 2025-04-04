@@ -26,7 +26,7 @@ export const ValidateActivity = (activityState: Activity, setInvalidInputFields:
     let fields: string[] = [];
 
     const fieldValidations: { displayName: string, condition: boolean }[] = [
-        { displayName: 'Activity Amount', condition: activityState.amount <= 0 || isNaN(activityState.amount) },
+        { displayName: 'Transaction Amount', condition: activityState.amount <= 0 || isNaN(activityState.amount) },
         { displayName: 'Fund', condition: activityState.fund === '' },
         { displayName: 'Recipient', condition: activityState.recipient === '' },
         { displayName: 'Time', condition: activityState.time === null },
