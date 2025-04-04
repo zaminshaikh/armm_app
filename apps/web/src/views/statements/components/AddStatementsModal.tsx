@@ -178,11 +178,6 @@ export const AddStatementModal: React.FC<AddStatementModalProps> = ({
         <CButton color="primary" onClick={handleUpload} disabled={uploading}>
           {uploading ? 'Uploading...' : 'Upload'}
         </CButton>
-        <CButton color='secondary' onClick={() =>{
-            const db = new DatabaseService();
-            db.generateStatementPDF(clients[0], new Date(new Date().getFullYear(), 0, 1), new Date());
-          }}>Generate
-        </CButton>
       </CModalFooter>
     </CModal>
   );

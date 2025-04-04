@@ -1,5 +1,6 @@
-import { CModal, CModalHeader, CModalTitle, CModalBody, CMultiSelect, CFormInput, CAlert, CModalFooter, CButton, CDateRangePicker, CInputGroup, CInputGroupText } from '@coreui/react-pro';
+import { CModal, CModalHeader, CModalTitle, CModalBody, CMultiSelect, CFormInput, CAlert, CModalFooter, CButton, CDateRangePicker, CInputGroup, CInputGroupText, CLoadingButton } from '@coreui/react-pro';
 import { Option } from "@coreui/react-pro/dist/esm/components/multi-select/types";
+import { set } from 'date-fns';
 import React from 'react';
 import { Client, DatabaseService } from 'src/db/database';
 
@@ -14,6 +15,7 @@ const GenerateStatementModal: React.FC<GenerateStatementModalProps> = ({showModa
   const [currentClient, setCurrentClient] = React.useState<Client | null>(null);
   const [startDate, setStartDate] = React.useState<Date | null>(null);
   const [endDate, setEndDate] = React.useState<Date | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
   return (
     <CModal visible={showModal} onClose={() => setShowModal(false)} size='lg' alignment="center">
       <CModalHeader closeButton>
@@ -71,19 +73,22 @@ const GenerateStatementModal: React.FC<GenerateStatementModalProps> = ({showModa
         <CButton color="secondary" onClick={() => setShowModal(false)} >
           Cancel
         </CButton>
-        <CButton
+        <CLoadingButton
           color="primary" 
           onClick={
-            () => {
+            async () => {
               const db = new DatabaseService();
-              db.generateStatementPDF(currentClient!, startDate!, endDate!);
+              setIsLoading(true);
+              await db.generateStatementPDF(currentClient!, startDate!, endDate!);
+              setIsLoading(false);
               setShowModal(false);
             }
           }
+          loading={isLoading}
           disabled={!currentClient || !startDate || !endDate || startDate > endDate}  // Disable button if any of the fields are empty
         >
           Generate
-        </CButton>
+        </CLoadingButton>
       </CModalFooter>
     </CModal>
   );
