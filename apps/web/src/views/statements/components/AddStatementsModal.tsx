@@ -135,7 +135,7 @@ export const AddStatementModal: React.FC<AddStatementModalProps> = ({
   };
 
   return (
-    <CModal visible={visible} onClose={onClose}>
+    <CModal visible={visible} onClose={onClose} size='lg' alignment="center">
       <CModalHeader closeButton>
         <CModalTitle>Add Statement</CModalTitle>
       </CModalHeader>
