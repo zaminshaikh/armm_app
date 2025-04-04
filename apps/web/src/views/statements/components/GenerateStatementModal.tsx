@@ -64,7 +64,7 @@ const GenerateStatementModal: React.FC<GenerateStatementModalProps> = ({showModa
             </CInputGroup>
             {startDate && endDate && startDate > endDate && (
               <div className="text-danger mt-2">
-                Start date must be before end date
+                Start date must be before end date.
               </div>
             )}
         </>
