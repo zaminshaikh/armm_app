@@ -41,8 +41,8 @@ export interface Activity {
   notes?: string | number | string[] | undefined;
   parentDocId?: string;
   amount: number;
-  fund: string;
-  recipient: string;
+  fund?: string;
+  recipient?: string;
   time: Date;
   formattedTime?: string;
   type: string;
@@ -52,7 +52,7 @@ export interface Activity {
   isAmortization?: boolean;
   principalPaid?: number;
   profitPaid?: number;
-  parentName: string;
+  parentName?: string;
 }
 
 export interface ScheduledActivity {
@@ -77,8 +77,12 @@ export interface Notification {
 }
 
 export interface GraphPoint {
+  id?: string;
   time: Date | Timestamp | null;
-  amount: number | null;
+  type?: string;
+  amount: number;
+  cashflow: number | null;
+  account?: string;
 }
 
 export interface StatementData {
