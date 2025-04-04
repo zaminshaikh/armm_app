@@ -237,29 +237,32 @@ class ProfileButtons extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
+                Text(
                 'Disclaimer',
                 style: GoogleFonts.inter(
                   textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Color.fromARGB(255, 56, 56, 56),
                   ),
                 ),
-              ),
-              const SizedBox(height: 15),
-              Center(
+                ),
+                const SizedBox(height: 15),
+                Center(
                 child: Text(
                   'Investment products and services are offered '
                   'through ARMM group Investment, a New York '
                   'limited liability company.',
                   style: GoogleFonts.inter(
-                    textStyle: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  textStyle: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 56, 56, 56),
+                  ),
                   ),
                   textAlign: TextAlign.center,
                 ),
+
               ),
               const SizedBox(height: 25),
               GestureDetector(
