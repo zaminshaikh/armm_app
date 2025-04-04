@@ -19,13 +19,14 @@ import {
 import { app } from '../App';
 import config from '../../config.json';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { formatDate } from 'src/utils/utilities';
-import { emptyClient, emptyActivity, Client, Activity, ScheduledActivity, StatementData, AssetDetails } from './models';
+import { formatDate, toSentenceCase } from 'src/utils/utilities';
+import { emptyClient, emptyActivity, Client, Activity, ScheduledActivity, StatementData, AssetDetails, GraphPoint } from './models';
 import { roundToNearestHour, formatCurrency } from './utils';
 
 // With these lines instead:
 import * as pdfMakeModule from 'pdfmake/build/pdfmake';
 import * as pdfFontsModule from 'pdfmake/build/vfs_fonts';
+import { format } from 'path';
 
 // Get the correct reference to pdfMake
 const pdfMake = (pdfMakeModule as any).default || pdfMakeModule as any;
@@ -33,6 +34,16 @@ const pdfMake = (pdfMakeModule as any).default || pdfMakeModule as any;
 pdfMake.vfs = (pdfFontsModule as any).pdfMake?.vfs;
 
 const functions = getFunctions();
+
+// Add this helper function for formatting dates in the PDF
+function formatPDFDate(date: Date | null | undefined): string {
+  if (!date) return 'N/A';
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  }).format(date);
+}
 
 export class DatabaseService {
   private db = getFirestore(app);
@@ -472,6 +483,35 @@ export class DatabaseService {
   }
 
   /**
+   * Retrieves graph points for a specific client
+   */
+  async getClientGraphPoints(cid: string): Promise<GraphPoint[]> {
+    try {
+      const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, cid);
+      const graphPointsCollectionRef = collection(clientRef, config.GRAPHPOINTS_SUBCOLLECTION);
+      const querySnapshot = await getDocs(graphPointsCollectionRef);
+      
+      const graphPoints: GraphPoint[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        graphPoints.push({
+          id: doc.id,
+          time: data.time,
+          amount: data.amount || 0,
+          type: data.type,
+          cashflow: data.cashflow || 0,
+          account: data.account
+        });
+      });
+      
+      return graphPoints;
+    } catch (error) {
+      console.error('Error fetching graph points:', error);
+      return [];
+    }
+  }
+  
+  /**
    * Generates a PDF Statement for a client given a start/end date.
    * The statement includes all activities in the specified date range.
    */
@@ -480,37 +520,78 @@ export class DatabaseService {
     startDate: Date,
     endDate: Date
   ): Promise<void> {
-    // 1. Retrieve all activities for this client within the specified date range
+    // 1. Find starting balance from graph points
+    const graphPoints = await this.getClientGraphPoints(client.cid);
+    
+    // Find the last graph point before startDate with Cumulative account
+    const startingPointArray = graphPoints
+      .filter(point => {
+        const pointDate = point.time instanceof Timestamp ? point.time.toDate() : point.time;
+        return pointDate && 
+               pointDate < startDate && 
+               point.account === 'Cumulative';
+      })
+      .sort((a, b) => {
+        const dateA = a.time instanceof Timestamp ? a.time.toDate() : (a.time || new Date(0));
+        const dateB = b.time instanceof Timestamp ? b.time.toDate() : (b.time || new Date(0));
+        return dateB.getTime() - dateA.getTime(); // Sort descending to get most recent first
+      });
+    
+    // Set starting balance (use the most recent point before startDate, or 0 if none exists)
+    let runningBalance = startingPointArray.length > 0 ? startingPointArray[0].amount : 0;
+    
+    // 2. Get client's activities within the date range
     const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, client.cid);
-    const activityCollectionRef = collection(clientRef, config.ACTIVITIES_SUBCOLLECTION);
-
-    const startTimestamp = Timestamp.fromDate(startDate);
-    const endTimestamp = Timestamp.fromDate(endDate);
-
-    // Query for activities whose 'time' is between startTimestamp and endTimestamp
-    const qActivities = query(
-      activityCollectionRef,
-      where('time', '>=', startTimestamp),
-      where('time', '<=', endTimestamp)
-    );
-
-    const querySnapshot = await getDocs(qActivities);
-    const filteredActivities: Activity[] = [];
-
-    querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data() as Activity;
-      // Convert Firestore Timestamp to JS Date if needed
-      let activityDate = data.time instanceof Timestamp ? data.time.toDate() : data.time;
-
-      filteredActivities.push({
-        ...data,
-        id: docSnap.id,
-        time: activityDate,
-        formattedTime: formatDate(activityDate), // Use your date formatting utility
+    const activitiesCollection = collection(clientRef, config.ACTIVITIES_SUBCOLLECTION);
+    const activitiesSnapshot = await getDocs(activitiesCollection);
+    
+    const activities: Activity[] = [];
+    activitiesSnapshot.forEach(doc => {
+      const data = doc.data();
+      activities.push({
+        id: doc.id,
+        time: data.time,
+        type: data.type,
+        amount: data.amount || 0,
+        parentDocId: client.cid,
       });
     });
-
-    // 2. Build the PDF document definition
+    
+    // Filter activities within date range
+    const filteredActivities = activities.filter(activity => {
+      const activityDate = activity.time instanceof Timestamp ? activity.time.toDate() : activity.time;
+      return activityDate && activityDate >= startDate && activityDate <= endDate;
+    });
+    
+    // Sort activities by date
+    filteredActivities.sort((a, b) => {
+      const dateA = a.time instanceof Timestamp ? a.time.toDate() : (a.time || new Date(0));
+      const dateB = b.time instanceof Timestamp ? b.time.toDate() : (b.time || new Date(0));
+      return dateA.getTime() - dateB.getTime();
+    });
+    
+    // Create formatted activities with running balance
+    const formattedActivities = filteredActivities.map(activity => {
+      const activityDate = activity.time instanceof Timestamp ? activity.time.toDate() : activity.time;
+      const amount = activity.amount || 0;
+      
+      // Update running balance based on activity type
+      runningBalance = runningBalance + (activity.type == 'withdrawal'
+        ? -1
+        : (activity.type == 'profit'
+          ? 0
+          : 1)) * amount;
+      
+      return {
+        date: activityDate ? formatPDFDate(activityDate) : 'N/A',
+        type: activity.type || 'Transaction',
+        amount: amount,
+        formattedCashflow: formatCurrency(amount),
+        balance: runningBalance
+      };
+    });
+  
+    // 3. Build the PDF document definition
     const docDefinition: any = {
       pageSize: 'LETTER',
       pageMargins: [40, 60, 40, 60],
@@ -525,7 +606,6 @@ export class DatabaseService {
           ],
         };
       },
-      // Replace the content section in your generateStatementPDF method
       content: [
         // Statement Header
         {
@@ -551,11 +631,11 @@ export class DatabaseService {
               ],
               [
                 { text: 'Client Since:', style: 'labelText' }, 
-                { text: client.firstDepositDate ? formatDate(client.firstDepositDate) : 'N/A', style: 'valueText' }
+                { text: client.firstDepositDate ? formatPDFDate(client.firstDepositDate) : 'N/A', style: 'valueText' }
               ],
               [
                 { text: 'Statement Period:', style: 'labelText' }, 
-                { text: `${formatDate(startDate)} - ${formatDate(endDate)}`, style: 'valueText' }
+                { text: `${formatPDFDate(startDate)} - ${formatPDFDate(endDate)}`, style: 'valueText' }
               ],
             ]
           },
@@ -581,7 +661,7 @@ export class DatabaseService {
           layout: 'noBorders'
         },
         
-        // Activity Table - now with full borders and centered
+        // Transaction History Table
         {
           text: 'Transaction History',
           style: 'subheader',
@@ -590,22 +670,33 @@ export class DatabaseService {
         {
           table: {
             headerRows: 1,
-            widths: ['33%', '33%', '34%'],
+            widths: ['25%', '25%', '25%', '25%'],
             body: [
               // Table Header
               [
                 { text: 'Date', style: 'tableHeader', alignment: 'center' },
                 { text: 'Type', style: 'tableHeader', alignment: 'center' },
-                { text: 'Amount', style: 'tableHeader', alignment: 'center' },
+                { text: 'Cashflow', style: 'tableHeader', alignment: 'center' },
+                { text: 'Balance', style: 'tableHeader', alignment: 'center' },
               ],
-              // Table Rows (one per activity)
-              ...filteredActivities.map((activity) => [
-                { text: activity.formattedTime ?? '', alignment: 'center' },
-                { text: activity.type ?? '', alignment: 'center' },
+              // Starting Balance Row
+              [
+                { text: 'Starting Balance', alignment: 'center' },
+                { text: '', alignment: 'center' },
+                { text: '', alignment: 'center' },
+                { text: formatCurrency(startingPointArray.length > 0 ? startingPointArray[0].amount : 0), alignment: 'center' },
+              ],
+              // Table Rows
+              ...formattedActivities.map((activity) => [
+                { text: activity.date, alignment: 'center' },
+                { text: toSentenceCase(activity.type), alignment: 'center' },
                 { 
-                  text: activity.amount ? formatCurrency(activity.amount) : '$0.00', 
-                  alignment: 'right',
-                  margin: [0, 0, 10, 0]
+                  text: activity.formattedCashflow, 
+                  alignment: 'center',
+                },
+                { 
+                  text: formatCurrency(activity.balance), 
+                  alignment: 'center',
                 },
               ]),
             ],
@@ -622,13 +713,13 @@ export class DatabaseService {
           margin: [0, 0, 0, 20],
         },
       ],
-
-      // Updated styles
+      
+      // Styles
       styles: {
         header: {
           fontSize: 22,
           bold: true,
-          color: '#2B41B8', // You can use ARMM_blue here
+          color: '#2B41B8',
         },
         subheader: {
           fontSize: 16,
@@ -657,17 +748,12 @@ export class DatabaseService {
         },
       },
     };
-
-    // 3. Generate the PDF and download or open it.
-    // pdfMake supports several ways to output the PDF.
-    // Example: open the PDF in a new browser tab
+  
+    // 4. Generate and open the PDF
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
     pdfDocGenerator.open();
-
-    // Alternatively, you could:
-    // pdfDocGenerator.download(`Statement_${client.cid}_${Date.now()}.pdf`);
-    // or get the PDF as Base64 data, etc.
   }
+
 }
 
 export * from './models';
