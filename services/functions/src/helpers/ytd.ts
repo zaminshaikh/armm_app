@@ -10,7 +10,7 @@ import { Activity } from "../interfaces/activity.interface";
 
 /**
  * Calculates the Year-To-Date (YTD) total for a single user, filtering only certain
- * activity types (e.g., 'profit' or 'income' within the 'AGQ' fund).
+ * activity types (e.g., 'profit' or 'income' within the 'ARMM' fund).
  *
  * @async
  * @function calculateYTDForUser
@@ -30,7 +30,7 @@ export async function calculateYTDForUser(userCid: string, usersCollectionID: st
 
   // Query for relevant activities that fall within YTD range
   const snapshot = await activitiesRef
-    .where("fund", "==", "AGQ")
+    .where("fund", "==", "ARMM")
     .where("type", "in", ["profit", "income"])
     .where("time", ">=", startOfYear)
     .where("time", "<=", endOfYear)
@@ -41,6 +41,8 @@ export async function calculateYTDForUser(userCid: string, usersCollectionID: st
     const activity = doc.data() as Activity;
     ytdTotal += activity.amount;
   });
+
+  console.log('YTD for user:', userCid, 'is:', ytdTotal);
 
   return ytdTotal;
 }
