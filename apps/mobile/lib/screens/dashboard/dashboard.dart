@@ -7,6 +7,7 @@ import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 import 'package:armm_app/screens/dashboard/components/three_recent_activities.dart';
 import 'package:armm_app/screens/dashboard/components/total_assets_section.dart';
 import 'package:armm_app/screens/dashboard/components/user_breakdown_section.dart';
+import 'package:armm_app/screens/notifications/notifications.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/bottom_nav.dart';
@@ -174,10 +175,16 @@ class _DashboardPageState extends State<DashboardPage>
       ? DashboardAppBar(
           showNotificationButton: true,
           onNotificationTap: () {
-            Navigator.pushNamed(context, '/notifications');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const NotificationPage(),
+          ),
+        );
           },
           client: client!,
         ) : null, // Show nothing if client is null
+
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
