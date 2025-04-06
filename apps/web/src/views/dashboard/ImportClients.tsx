@@ -84,7 +84,7 @@ export const ImportClients: React.FC<ShowModalProps> = ({ showModal, setShowModa
             firstDepositDate: row["FIRST DEPOSIT DATE"] ? new Date(row["FIRST DEPOSIT DATE"]) : null,
             beneficiaries: row["BENEFICIARY"] ? [row["BENEFICIARY"]] : [],
             assets: {
-                agq: {
+                armm: {
                     personal: {
                         amount: parseFloat(row["PERSONAL"]) || 0,
                         firstDepositDate: row["FIRST DEPOSIT DATE"] ? new Date(row["FIRST DEPOSIT DATE"]) : null,
@@ -128,19 +128,11 @@ export const ImportClients: React.FC<ShowModalProps> = ({ showModal, setShowModa
                         index: 6,
                     },
                 },
-                ak1: {
-                    personal: {
-                        amount: 0,
-                        firstDepositDate: null,
-                        displayTitle: 'Personal',
-                        index: 0,
-                    }
-                },
             },
             activities: [
                 {
                     amount: parseFloat(row["FIRST DEPOSIT AMOUNT"]), 
-                    fund: 'AGQ', type: 'deposit', 
+                    fund: 'ARMM', type: 'deposit', 
                     time: parseDateWithTwoDigitYear(row["FIRST DEPOSIT DATE"]) ?? new Date(),
                     recipient: row["CLIENT'S FIRST NAME"] + ' ' + row["CLIENT'S LAST NAME"],
                     formattedTime: parseDateWithTwoDigitYear(row["FIRST DEPOSIT DATE"])?.toLocaleDateString(),
@@ -153,8 +145,7 @@ export const ImportClients: React.FC<ShowModalProps> = ({ showModal, setShowModa
         return {
             ...newState,
             assets: {
-                agq: filterAssets(newState.assets.agq),
-                ak1: filterAssets(newState.assets.ak1),
+                armm: filterAssets(newState.assets.armm),
             }
         };
          

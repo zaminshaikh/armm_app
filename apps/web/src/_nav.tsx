@@ -51,8 +51,8 @@ const _nav: NavItem[] = [
   },
   {
     component: CNavItem,
-    name: "Activities",
-    to: '/activities',
+    name: "Transactions",
+    to: '/transactions',
     icon: <CIcon icon={cilLayers} customClassName="nav-icon" />,
   },
   {

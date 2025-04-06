@@ -40,7 +40,7 @@ import {
 
 import type { State } from './../store'
 
-import auth from '../App'
+import { auth } from '../App'
 
 const AppHeader = () => {
   const headerRef = useRef<HTMLDivElement>(null)
@@ -162,7 +162,7 @@ const AppHeader = () => {
                     <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
                 </li> */}
                 {/* <AppHeaderDropdown /> */}
-                <CButton color='danger' variant='outline' size='sm' onClick={async () => await auth.signOut()}>Logout</CButton>
+                <CButton color='danger' variant='outline' size='sm' onClick={() => auth.signOut()}>Logout</CButton>
             </CHeaderNav>
             {/* <CHeaderToggler
             onClick={() => dispatch({ type: 'set', asideShow: !asideShow })}

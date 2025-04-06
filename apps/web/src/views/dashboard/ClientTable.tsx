@@ -123,11 +123,11 @@ const ClientsTable = () => {
 
     const handleSendInvite = () => {
         if (currentClient && currentClient.initEmail) {
-          const subject = encodeURIComponent("AGQ App Invitation");
+          const subject = encodeURIComponent("ARMM App Invitation");
           
           const emailBody = 
             `Dear ${currentClient.firstName},\n\n` +
-            "We hope this message finds you well.  AGQ is excited to launch our new app!\n" +
+            "We hope this message finds you well.  ARMM is excited to launch our new app!\n" +
             "With this app, you can easily access your up-to-date investment information right from your phone.\n\n" +
             "To get started, please follow these steps:\n" +
             "   1. Click the Link:\n" +
@@ -136,7 +136,7 @@ const ClientsTable = () => {
             "       Important note: the app is only available on mobile devices and links must be open on such devices for download.\n\n" +
             `   2. Enter Your Client ID (CID): ${currentClient.cid} (This is a unique 8-digit identifier. Please keep it confidential).\n\n` +
             "   3. Set Up Your Account: Follow the instructions to create your account using your email and CID. This setup is a one-time process; you will not need to remember your CID for future logins.\n\n" +
-            "We’ve designed the platform to be simple and intuitive. If you have questions or need any assistance, our support team is just a click away at management@agqconsulting.com.\n" +
+            "We’ve designed the platform to be simple and intuitive. If you have questions or need any assistance, our support team is just a click away at management@armmgroup.com.\n" +
             "Please note - The login via the website will be phased out in early 2025 so we appreciate your help with this transition.\n\n" +
             "Thank you for your continued trust in our team. We are excited to bring you a more convenient and seamless experience with this new app.\n\n" +
             "Cordially,\n\n" +

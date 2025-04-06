@@ -344,18 +344,8 @@ class _SettingsPageState extends State<SettingsPage> {
             TextEditingController emailController = TextEditingController();
   
             Widget buildCloseButton(BuildContext context) {
-              return Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: Icon(Icons.close, color: Colors.grey[700]),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              );
-            }
-  
-            Widget buildEmailInputSection(TextEditingController controller) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // This spreads elements to both edges
                 children: [
                   Text(
                     'Change Email',
@@ -365,6 +355,18 @@ class _SettingsPageState extends State<SettingsPage> {
                       color: Colors.black87,
                     ),
                   ),
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.grey[700]),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              );
+            }
+  
+            Widget buildEmailInputSection(TextEditingController controller) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   const SizedBox(height: 8),
                   Text(
                     'Update the email associated with your account.',
@@ -412,63 +414,142 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             }
   
-            Widget buildContinueButton(
-                BuildContext context, TextEditingController controller) {
+            Widget buildContinueButton(BuildContext context, TextEditingController emailController) {
+              // Add password controller
+              TextEditingController passwordController = TextEditingController();
+              
               return SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    try {
-                      String newEmail = controller.text.trim();
-                      var user = FirebaseAuth.instance.currentUser;
-                      if (user != null) {
-                        // Send the verification email
-                        await user.verifyBeforeUpdateEmail(newEmail);
-                        // Dismiss the current dialog
-                        Navigator.of(context).pop();
-                        // Show the success dialog
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Email Change Requested'),
-                              content: const Text(
-                                'We have sent a verification email to your new email address. Please verify it to complete the update.',
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                    // First check how the user is authenticated
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      List<String> providers = [];
+                      for (var info in user.providerData) {
+                        providers.add(info.providerId);
                       }
-                    } catch (e, stackTrace) {
-                      log('settings_page.dart: Error updating email: $e');
-                      log(stackTrace.toString());
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Error'),
-                            content: Text('Error updating email: $e'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
+                      
+                      // Check if user is OAuth authenticated
+                      if (providers.contains('apple.com')) {
+                        if (context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Cannot Change Email'),
+                              content: Text('You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.'),
+                              actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                            ),
                           );
-                        },
-                      );
+                        }
+                        return;
+                      } else if (providers.contains('google.com')) {
+                        if (context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Cannot Change Email'),
+                              content: Text('You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.'),
+                              actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                            ),
+                          );
+                        }
+                        return;
+                      }
                     }
+                    // First ask for password to re-authenticate
+                    await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Verification Required'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('Please enter your current password to verify your identity.'),
+                            SizedBox(height: 16),
+                            TextField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText: 'Current password',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: Text('Verify'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF2B41B8),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ).then((confirmed) async {
+                      if (confirmed == true) {
+                        try {
+                          // Get current user
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user != null && user.email != null) {
+                            // Re-authenticate user with current email and provided password
+                            AuthCredential credential = EmailAuthProvider.credential(
+                              email: user.email!, 
+                              password: passwordController.text
+                            );
+                            await user.reauthenticateWithCredential(credential);
+                            
+                            // Now proceed with email change
+                            String newEmail = emailController.text.trim();
+                            await user.verifyBeforeUpdateEmail(newEmail);
+                            
+                            // Show success dialog
+                            if (context.mounted) {
+                              Navigator.of(context).pop(); // Close email change dialog
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Email Change Requested'),
+                                  content: Text('We have sent a verification email to your new email address. Please verify it to complete the update.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          }
+                        } catch (e) {
+                          // Show error dialog
+                          if (context.mounted) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Error'),
+                                content: Text('Authentication failed: ${e.toString()}'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(),
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        }
+                      }
+                    });
                   },
+                  // Rest of the button styling remains the same
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2B41B8),
                     shape: RoundedRectangleBorder(
@@ -487,8 +568,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               );
             }
-
-
             return AlertDialog(
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -500,10 +579,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     buildCloseButton(context),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 1),
                     buildEmailInputSection(emailController),
                     const SizedBox(height: 24),
                     buildContinueButton(context, emailController),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -538,9 +618,6 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-
-
-
 
 
   Widget _buildChangePasswordSection() {

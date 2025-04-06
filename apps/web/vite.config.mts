@@ -30,6 +30,14 @@ export default defineConfig(() => {
           find: 'src/',
           replacement: `${path.resolve(__dirname, 'src')}/`,
         },
+        {
+          find: 'pdfmake/build/pdfmake',
+          replacement: 'pdfmake/build/pdfmake.js'
+        },
+        {
+          find: 'pdfmake/build/vfs_fonts',
+          replacement: 'pdfmake/build/vfs_fonts.js'
+        },
       ],
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.scss'],
     },

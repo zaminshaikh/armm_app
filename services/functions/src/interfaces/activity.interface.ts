@@ -12,7 +12,7 @@ import { Timestamp } from "firebase-admin/firestore";
  * profit distribution, or any manually created transaction.
  * 
  * @property {number} amount - The numeric amount involved in this activity (e.g., deposit/withdrawal sum).
- * @property {string} fund - The name or identifier of the fund associated with this activity (e.g., 'AGQ', 'AK1').
+ * @property {string} fund - The name or identifier of the fund associated with this activity.
  * @property {string} recipient - The display name or identifier of the account that receives (or from which it withdraws) the funds.
  * @property {Date | Timestamp} time - The date/time at which the activity occurred. Can be a JS Date or Firestore Timestamp.
  * @property {string} [formattedTime] - (Optional) A human-readable string representation of the time.
