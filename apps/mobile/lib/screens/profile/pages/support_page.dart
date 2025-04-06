@@ -38,12 +38,17 @@ class SupportPage extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Investment Advisor',
-                        style: GoogleFonts.inter(fontSize: 14),
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                        
                       ),
                     ],
                   ),
@@ -57,6 +62,7 @@ class SupportPage extends StatelessWidget {
                   'Contact Information:',
                   style: GoogleFonts.inter(
                     fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               ],
@@ -78,7 +84,9 @@ class SupportPage extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         '+1 (347) 513-3040',
-                        style: GoogleFonts.inter(),
+                        style: GoogleFonts.inter(
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
@@ -94,7 +102,9 @@ class SupportPage extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         'mohammed@armmgroup.com',
-                        style: GoogleFonts.inter(),
+                        style: GoogleFonts.inter(
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
@@ -127,7 +137,9 @@ class SupportPage extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
+
               ),
             ),
             const SizedBox(height: 16),
@@ -140,6 +152,7 @@ class SupportPage extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
             ),
