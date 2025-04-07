@@ -129,25 +129,61 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // "What is my Client ID?" (You could make this a clickable text or info button)
-                  const Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.info_outline_rounded,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          'What is my Client ID?',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
+        // "What is my Client ID?" (Clickable text to open a dialog)
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                    return AlertDialog(
+                    title: Text(
+                      'What is a Client ID?',
+                      style: TextStyle(color: ARMM_Blue, fontWeight: FontWeight.bold),
+                    ),
+                    content: const Text(
+                      'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
+                      style: TextStyle(color: Colors.black),
+                    ),
+
+                    actions: [
+                      TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: ARMM_Blue,
+                      ),
+                      child: const Text('Close'),
+                      ),
+                    ],
+                    );
+                },
+              );
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'What is my Client ID?',
+                    style: TextStyle(
+                      color: Colors.grey,
                     ),
                   ),
+                ],
+              ),
+            ),
+          ),
+        ),
+                  
+                  
                   const SizedBox(height: 16),
 
                   // Client ID Text Field
