@@ -225,7 +225,11 @@ export class DatabaseService {
         const asset = fundAssets[assetType];
         fundDoc[assetType] = {
           amount: asset.amount,
-          firstDepositDate: asset.firstDepositDate ? Timestamp.fromDate(asset.firstDepositDate) : null,
+          firstDepositDate: asset.firstDepositDate 
+            ? asset.firstDepositDate instanceof Date 
+              ? Timestamp.fromDate(asset.firstDepositDate) 
+              : asset.firstDepositDate 
+            : null,
           displayTitle: asset.displayTitle,
           index: asset.index,
         };
@@ -397,31 +401,49 @@ export class DatabaseService {
   // ============================================
 
   /** Retrieves scheduled activities from Firestore */
-  async getScheduledActivities(): Promise<ScheduledActivity[]> {
-    const scheduledActivitiesCollection = collection(this.db, config.SCHEDULED_ACTIVITIES_COLLECTION);
-    const q = query(
-      scheduledActivitiesCollection,
-      where('usersCollectionID', '==', config.FIRESTORE_ACTIVE_USERS_COLLECTION)
-    );
-    const querySnapshot = await getDocs(q);
-    const scheduledActivities: ScheduledActivity[] = querySnapshot.docs.map((docSnap) => {
-      const data = docSnap.data() as ScheduledActivity;
-      let formattedTime = '';
-      const time = data.activity.time instanceof Timestamp ? data.activity.time.toDate() : data.activity.time;
-      if (time instanceof Date) {
-        formattedTime = formatDate(time);
-      }
-      return {
-        ...data,
-        id: docSnap.id,
-        activity: {
-          ...data.activity,
-          formattedTime,
-          parentDocId: data.cid,
-        },
-      };
-    });
-    return scheduledActivities;
+  getScheduledActivities = async () => {
+      const scheduledActivitiesCollection = collection(this.db, config.SCHEDULED_ACTIVITIES_COLLECTION);
+      // const querySnapshot = await getDocs(scheduledActivitiesCollection);
+      const q = query(scheduledActivitiesCollection, where('usersCollectionID', '==', config.FIRESTORE_ACTIVE_USERS_COLLECTION));
+      const querySnapshot = await getDocs(q)
+
+      const scheduledActivities: ScheduledActivity[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data() as ScheduledActivity;
+
+          // Format the time field
+          let formattedTime = '';
+          const time = data.activity.time instanceof Timestamp ? data.activity.time.toDate() : data.activity.time;
+          if (time instanceof Date) {
+              formattedTime = formatDate(time);
+          }
+
+          // Process changed assets if they exist
+          const processedChangedAssets = data.changedAssets ? { ...data.changedAssets } : null;
+          if (processedChangedAssets) {
+              Object.keys(processedChangedAssets).forEach((fundName) => {
+                  const fund = processedChangedAssets[fundName];
+                  Object.keys(fund).forEach((assetType) => {
+                      if (fund[assetType].firstDepositDate && fund[assetType].firstDepositDate instanceof Timestamp) {
+                          fund[assetType].firstDepositDate = fund[assetType].firstDepositDate.toDate();
+                      }
+                  });
+              });
+          }
+
+          return {
+              ...data,
+              changedAssets: processedChangedAssets,
+              id: doc.id,
+              formattedTime,
+              activity: {
+                  ...data.activity,
+                  formattedTime,
+                  parentDocId: data.cid,
+              },
+          };
+      });
+
+      return scheduledActivities;
   }
 
   /**

@@ -76,7 +76,8 @@ export const getChangedAssets = (initialClientState: Client | null, clientState?
               const initialAsset = initialFund[assetType];
               const currentAsset = currentFund[assetType];
               
-              if (initialAsset.amount !== currentAsset.amount) {
+              // Check if the asset has changed by comparing all properties at once
+              if (!initialAsset || JSON.stringify(initialAsset) !== JSON.stringify(currentAsset)) {
                   fundChanges[assetType] = currentAsset; // Store the current asset details
                   hasChanges = true;
               }

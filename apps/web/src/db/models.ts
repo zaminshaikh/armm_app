@@ -59,7 +59,7 @@ export interface ScheduledActivity {
   id: string;
   cid: string;
   activity: Activity;
-  changedAssets: Client;
+  changedAssets: Assets | null;
   status: string;
   scheduledTime: Date;
   formattedTime: string;
@@ -94,7 +94,7 @@ export interface StatementData {
 
 export interface AssetDetails {
     amount: number;
-    firstDepositDate: Date | null;
+    firstDepositDate: Date | Timestamp | null;
     displayTitle: string;
     index: number;
 }
