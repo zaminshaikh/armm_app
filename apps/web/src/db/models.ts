@@ -59,9 +59,10 @@ export interface ScheduledActivity {
   id: string;
   cid: string;
   activity: Activity;
-  clientState: Client;
+  changedAssets: Client;
   status: string;
   scheduledTime: Date;
+  formattedTime: string;
   usersCollectionID: string;
 }
 
@@ -97,6 +98,13 @@ export interface AssetDetails {
     displayTitle: string;
     index: number;
 }
+
+export interface Assets {
+  [fundKey: string]: {
+    [assetType: string]: AssetDetails;
+  };   
+}
+  
 
 // Default objects
 export const emptyClient: Client = {
