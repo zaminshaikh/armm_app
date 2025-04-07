@@ -204,14 +204,14 @@ class _DashboardPageState extends State<DashboardPage>
                       child: _buildConnectedUsersSection(),
                     ),
                   const SizedBox(height: 12),
+                  // Assets structure section (pie chart)
+                  ...fundCharts,
                   // Recent transactions section
                   SlideTransition(
                     position: _offsetAnimation,
                     child: buildRecentTransactionsSection(context),
                   ),
                   const SizedBox(height: 42),
-                  // Assets structure section (pie chart)
-                  ...fundCharts,
                 ],
               ),
             ),
