@@ -163,23 +163,20 @@ class _SettingsPageState extends State<SettingsPage> {
     }
 
     return Scaffold(
+      appBar: const CustomAppBar(
+      title: 'Settings',
+      implyLeading: true,
+      showNotificationButton: false,
+      ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const CustomAppBar(
-              title: 'Settings',
-              implyLeading: true,
-              showNotificationButton: false,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: _settings(),
-            ),
-          ],
-        ),
+      child: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: _settings(),
+      ),
       ),
     );
-  }
+    }
+
 
   Column _settings() => Column(
         children: [
