@@ -38,15 +38,15 @@ class ProfileButtons extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   'assets/icons/docs.svg',
-                  width: 24,
-                  height: 24,
+                  width: 20,
+                  height: 20,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Text(
                   'Documents',
                   style: GoogleFonts.inter(
                     textStyle: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
                     ),
@@ -74,21 +74,21 @@ class ProfileButtons extends StatelessWidget {
                       width: 1,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SvgPicture.asset(
                         'assets/icons/support.svg',
-                        width: 24,
-                        height: 24,
+                        width: 20,
+                        height: 20,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Text(
                         'Support',
                         style: GoogleFonts.inter(
                           textStyle: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
                           ),
@@ -114,21 +114,21 @@ class ProfileButtons extends StatelessWidget {
                       width: 1,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SvgPicture.asset(
                         'assets/icons/settings.svg',
-                        width: 24,
-                        height: 24,
+                        width: 20,
+                        height: 20,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Text(
                         'Settings',
                         style: GoogleFonts.inter(
                           textStyle: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
                           ),
@@ -159,21 +159,21 @@ class ProfileButtons extends StatelessWidget {
                       width: 1,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SvgPicture.asset(
                         'assets/icons/profile.svg',
-                        width: 20,
-                        height: 20,
+                        width: 18,
+                        height: 18,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Text(
                         'My Profiles',
                         style: GoogleFonts.inter(
                           textStyle: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14.5,
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
                           ),
@@ -199,21 +199,21 @@ class ProfileButtons extends StatelessWidget {
                       width: 1,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SvgPicture.asset(
                         'assets/icons/auth.svg',
-                        width: 20,
-                        height: 20,
+                        width: 18,
+                        height: 18,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Text(
                         'Authentication',
                         style: GoogleFonts.inter(
                           textStyle: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
                           ),
