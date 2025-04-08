@@ -4,7 +4,7 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/database/models/notification_model.dart';
 import 'package:armm_app/screens/notifications/components/mark_all_read_button.dart';
 import 'package:armm_app/screens/notifications/components/notification_card.dart';
-import 'package:armm_app/screens/notifications/components/notifications_app_bar.dart';
+import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,31 +40,21 @@ class _NotificationPageState extends State<NotificationPage> {
     }
     notifications.sort((a, b) => b.time.compareTo(a.time));
     return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: <Widget>[
-              const NotificationsAppBar(),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    // Get the notification data
-                    Notif notification = notifications[index];
-                    // Get the previous notification date
-                    // DateTime previousNotificationDate = index > 0 ? (notifications[index - 1].time): DateTime(0);
-                    // Check if the current notification is on a different day than the previous one
-                    return NotificationCard(notification: notification, client: client!);
-                  },
-                  childCount: notifications.length,
-                ),
-              ),
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 150),
-              ),
-            ],
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'Notifications',
+        implyLeading: true,
+        showNotificationButton: false,
       ),
+      body: notifications.isEmpty
+          ? const Center(child: Text('No notifications'))
+          : ListView.builder(
+              padding: const EdgeInsets.only(bottom: 150.0),
+              itemCount: notifications.length,
+              itemBuilder: (context, index) {
+                Notif notification = notifications[index];
+                return NotificationCard(notification: notification, client: client!);
+              },
+            ),
       floatingActionButton: MarkAllAsReadButton(client: client!, 
         onRefresh: () { setState(() {}); },),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
