@@ -115,133 +115,131 @@ Widget clientCard(Client c) {
       ],
     ),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          children: [
-            // --- Name ---
-            Text(
-              '${c.firstName} ${c.lastName}',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+        // Center align only the name and CID
+        Center(
+          child: Column(
+            children: [
+              // --- Name ---
+              Text(
+                '${c.firstName} ${c.lastName}',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
-            ),
-          // --- Client ID ---
-          Text(
-            'Client ID: ${c.cid}',
-            style: GoogleFonts.inter(
-              fontSize: 14,
-              color: Colors.blue,
-              fontWeight: FontWeight.w600,
-            ),
+              // --- Client ID ---
+              Text(
+                'Client ID: ${c.cid}',
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
           ),
-          const SizedBox(height: 16),
-          ],
         ),
         const SizedBox(height: 4),
+        // Left align all the details below
+        // --- First Deposit Date ---
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- First Deposit Date ---
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'First Deposit Date:',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: const Color.fromARGB(150, 0, 0, 0),
-                  ),
-                ),
-                Text(
-                  formattedDate,
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-              ],
+            Text(
+              'First Deposit Date:',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: const Color.fromARGB(150, 0, 0, 0),
+              ),
             ),
-            const SizedBox(height: 8),
-
-            // --- Communication Email ---
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Communication Email:',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: const Color.fromARGB(150, 0, 0, 0),
-                  ),
-                ),
-                Text(
-                  c.initEmail ?? 'N/A',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 8),
-
-            // --- Phone Number ---
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Phone Number:',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: const Color.fromARGB(150, 0, 0, 0),
-                  ),
-                ),
-                Text(
-                  c.phoneNumber ?? 'N/A',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-
-            // --- Address ---
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Address:',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: const Color.fromARGB(150, 0, 0, 0),
-                  ),
-                ),
-                Text(
-                  c.address ?? 'N/A',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-              ],
+            Text(
+              formattedDate,
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: FontWeight.w600
+              ),
             ),
           ],
         ),
-      
-      
+        const SizedBox(height: 8),
+
+        // --- Communication Email ---
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Communication Email:',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: const Color.fromARGB(150, 0, 0, 0),
+              ),
+            ),
+            Text(
+              c.initEmail ?? 'N/A',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: FontWeight.w600
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 8),
+
+        // --- Phone Number ---
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Phone Number:',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: const Color.fromARGB(150, 0, 0, 0),
+              ),
+            ),
+            Text(
+              c.phoneNumber ?? 'N/A',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: FontWeight.w600
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+
+        // --- Address ---
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Address:',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: const Color.fromARGB(150, 0, 0, 0),
+              ),
+            ),
+            Text(
+              c.address ?? 'N/A',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: FontWeight.w600
+              ),
+            ),
+          ],
+        ),
       ],
     ),
   );
