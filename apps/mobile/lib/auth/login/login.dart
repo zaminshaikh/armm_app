@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 72),
+                  const SizedBox(height: 50),
                   // The illustration, and the "Log in" text
                   LoginHeader(
                     onBackPressed: () => Navigator.of(context).pop(),

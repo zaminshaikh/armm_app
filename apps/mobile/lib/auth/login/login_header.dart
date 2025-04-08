@@ -25,7 +25,7 @@ class LoginHeader extends StatelessWidget {
               // Center illustration
               SvgPicture.asset(
                 illustrationAsset,
-                height: 200,
+                height: 180,
               ),
               const SizedBox(height: 24),
               // Title text: "Log in"

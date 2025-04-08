@@ -16,13 +16,14 @@ class AuthFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           questionText,
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 16,
+            color: Colors.black,
           ),
         ),
         TextButton(

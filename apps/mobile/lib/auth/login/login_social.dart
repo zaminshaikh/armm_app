@@ -1,7 +1,6 @@
 import 'package:armm_app/auth/auth_utils/apple_auth.dart';
-import 'package:armm_app/auth/auth_utils/auth_button.dart';
-import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
+import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ class LoginSocial extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Divider with "or continue with"
+        // Divider with "or"
         const Row(
           children: [
             Expanded(child: Divider()),
@@ -38,37 +37,43 @@ class LoginSocial extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        // Google button (you can add more: Face ID, Apple, etc.)
-        AuthButton(
-          label: 'Sign In With Google',
-          icon: SvgPicture.asset(
-            'assets/icons/google.svg',
-            color: primaryColor,
-            height: 24,
-          ),
-          foregroundColor: primaryColor,
-          borderColor: primaryColor,
-          onPressed: () {
-            GoogleAuthService().signInWithGoogle(context);
-          },
-        ),
-        const SizedBox(height: 20),
-        AuthButton(
-          label: 'Sign In With Apple',
-          icon: const Icon(FontAwesomeIcons.apple),
-          foregroundColor: Colors.black,
-          borderColor: Colors.black,
-          onPressed: () async {
-            if (await AppleAuthService().signInWithApple(context) && context.mounted) {
-              await Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DashboardPage(),
-                ),
-              );
-            }
-
-          },
+        // Social login tiles row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Google login tile
+            _buildSocialTile(
+              context, 
+              icon: SvgPicture.asset(
+                'assets/icons/google.svg',
+                color: primaryColor,
+                height: 24,
+              ),
+              onTap: () {
+                GoogleAuthService().signInWithGoogle(context);
+              }
+            ),
+            const SizedBox(width: 20),
+            // Apple login tile
+            _buildSocialTile(
+              context,
+              icon: const Icon(
+                FontAwesomeIcons.apple,
+                color: Colors.black,
+                size: 30,
+              ),
+              onTap: () async {
+                if (await AppleAuthService().signInWithApple(context) && context.mounted) {
+                  await Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DashboardPage(),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
         ),
         const SizedBox(height: 32),
         // Sign up row
@@ -86,6 +91,26 @@ class LoginSocial extends StatelessWidget {
           buttonText: 'Sign Up',
         ),
       ],
+    );
+  }
+
+  Widget _buildSocialTile(
+    BuildContext context, {
+    required Widget icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: 70,
+        height: 70,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300, width: 1.5),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(child: icon),
+      ),
     );
   }
 }
