@@ -31,6 +31,7 @@ import 'package:armm_app/utils/push_notification.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
 void main() async {
@@ -443,7 +444,10 @@ class _AuthCheckState extends State<AuthCheck> {
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: SpinKitFoldingCube(
+            color: Colors.blue,
+            size: 50.0,
+          ));
         } else if (snapshot.hasError) {
           log('AuthCheck: StreamBuilder error: ${snapshot.error}');
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -464,7 +468,10 @@ class _AuthCheckState extends State<AuthCheck> {
                   log('AuthCheck: User is not authenticated or linked, but has reloaded the app from the no internet screen. Navigating to DashboardPage.');
                   return const DashboardPage();
                 } else {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: SpinKitFoldingCube(
+                    color: Colors.blue,
+                    size: 50.0,
+                  ));
                 }
               } else if (authSnapshot.hasError) {
                 log('AuthCheck: FutureBuilder error: ${authSnapshot.error}');
@@ -476,7 +483,10 @@ class _AuthCheckState extends State<AuthCheck> {
                   builder: (context, appLockSnapshot) {
                     if (appLockSnapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: SpinKitFoldingCube(
+                        color: Colors.blue,
+                        size: 50.0,
+                      ));
                     } else if (appLockSnapshot.hasError) {
                       log('AuthCheck: FutureBuilder error: ${appLockSnapshot.error}');
                       return Center(
