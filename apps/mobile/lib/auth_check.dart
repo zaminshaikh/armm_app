@@ -4,6 +4,7 @@ import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({Key? key}) : super(key: key);
@@ -49,7 +50,10 @@ class _AuthCheckState extends State<AuthCheck> {
     stream: FirebaseAuth.instance.userChanges(),
     builder: (BuildContext context,AsyncSnapshot<User?> snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(child: CircularProgressIndicator());
+        return Center(child: SpinKitFoldingCube(
+          color: Theme.of(context).primaryColor,
+          size: 50.0,
+        ));
       } else if (snapshot.hasError) {
         return Center(child: Text('Error: ${snapshot.error}'));
       } else if (snapshot.hasData) {
@@ -60,7 +64,10 @@ class _AuthCheckState extends State<AuthCheck> {
           future: _isAuthenticatedAndVerifiedFuture,
           builder:  (context, authSnapshot) {
             if (authSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: SpinKitFoldingCube(
+                color: Theme.of(context).primaryColor,
+                size: 50.0,
+              ));
             } else if (authSnapshot.hasError) {
               return Center(child: Text('Error: ${authSnapshot.error}'));
             } else if (authSnapshot.hasData && authSnapshot.data == true) {
