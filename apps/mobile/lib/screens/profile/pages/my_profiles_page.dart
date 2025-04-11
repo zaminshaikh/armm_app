@@ -4,6 +4,7 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/profile/components/name_cid.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ class _MyProfilesPageState extends State<MyProfilesPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: SpinKitFoldingCube(color: Theme.of(context).primaryColor));
     }
 
     return Scaffold(
