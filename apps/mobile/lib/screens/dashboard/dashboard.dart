@@ -166,7 +166,7 @@ class _DashboardPageState extends State<DashboardPage>
   
     if (client == null) {
       return const Scaffold(
-        body: Center(child: SpinKitFoldingCube(color: Colors.blue)),
+        body: Center(child: SpinKitFoldingCube(color: Color(0xFF1C32A4))),
       );
     }
   

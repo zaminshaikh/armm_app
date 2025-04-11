@@ -33,6 +33,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+// Define the ARMM_Blue color at the top of the file, outside any class
+const Color ARMM_Blue = Color(0xFF1C32A4);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -284,6 +286,12 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         return StreamBuilder<User?>(
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, authSnapshot) {
+            if (authSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: SpinKitFoldingCube(
+                color: ARMM_Blue,
+                size: 50.0,
+              ));
+            }
             final user = authSnapshot.data;
             return StreamProvider<Client?>(
               key: ValueKey(user?.uid),
@@ -445,7 +453,7 @@ class _AuthCheckState extends State<AuthCheck> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: SpinKitFoldingCube(
-            color: Colors.blue,
+            color: ARMM_Blue,
             size: 50.0,
           ));
         } else if (snapshot.hasError) {
@@ -469,7 +477,7 @@ class _AuthCheckState extends State<AuthCheck> {
                   return const DashboardPage();
                 } else {
                   return const Center(child: SpinKitFoldingCube(
-                    color: Colors.blue,
+                    color: ARMM_Blue,
                     size: 50.0,
                   ));
                 }
@@ -484,7 +492,7 @@ class _AuthCheckState extends State<AuthCheck> {
                     if (appLockSnapshot.connectionState ==
                         ConnectionState.waiting) {
                       return const Center(child: SpinKitFoldingCube(
-                        color: Colors.blue,
+                        color: ARMM_Blue,
                         size: 50.0,
                       ));
                     } else if (appLockSnapshot.hasError) {

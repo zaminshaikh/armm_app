@@ -58,7 +58,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const SpinKitFoldingCube(color: Color(0xFF2B41B8));
+      return const SpinKitFoldingCube(color: Color(0xFF1C32A4));
     }
   
     return buildDocumentsPage();

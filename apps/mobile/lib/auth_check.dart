@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+const Color ARMM_Blue = Color(0xFF1C32A4);
+
 class AuthCheck extends StatefulWidget {
   const AuthCheck({Key? key}) : super(key: key);
 
@@ -50,8 +52,8 @@ class _AuthCheckState extends State<AuthCheck> {
     stream: FirebaseAuth.instance.userChanges(),
     builder: (BuildContext context,AsyncSnapshot<User?> snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: SpinKitFoldingCube(
-          color: Theme.of(context).primaryColor,
+        return const Center(child: SpinKitFoldingCube(
+          color: ARMM_Blue,
           size: 50.0,
         ));
       } else if (snapshot.hasError) {
@@ -64,8 +66,8 @@ class _AuthCheckState extends State<AuthCheck> {
           future: _isAuthenticatedAndVerifiedFuture,
           builder:  (context, authSnapshot) {
             if (authSnapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: SpinKitFoldingCube(
-                color: Theme.of(context).primaryColor,
+              return const Center(child: SpinKitFoldingCube(
+                color: ARMM_Blue,
                 size: 50.0,
               ));
             } else if (authSnapshot.hasError) {

@@ -28,7 +28,7 @@ class _MyProfilesPageState extends State<MyProfilesPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return Center(child: SpinKitFoldingCube(color: Theme.of(context).primaryColor));
+      return Center(child: SpinKitFoldingCube(color: const Color(0xFF1C32A4)));
     }
 
     return Scaffold(

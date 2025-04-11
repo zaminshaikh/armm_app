@@ -43,7 +43,7 @@ class AnalyticsPageState extends State<AnalyticsPage> {
       return const Scaffold(
         body: Center(
           child: SpinKitFoldingCube(
-            color: Colors.blue, // Use your app's primary color here
+            color: Color(0xFF1C32A4), // Updated to ARMM_Blue color
             size: 50.0,
           ),
         ),

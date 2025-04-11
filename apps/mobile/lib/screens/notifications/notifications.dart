@@ -30,7 +30,7 @@ class _NotificationPageState extends State<NotificationPage> {
     if (client == null) {
       return const Center(
         child: SpinKitFoldingCube(
-          color: Colors.blue,
+          color: Color(0xFF1C32A4),
           size: 50.0,
         ),
       );

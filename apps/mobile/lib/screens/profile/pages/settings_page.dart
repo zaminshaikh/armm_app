@@ -161,7 +161,7 @@ class _SettingsPageState extends State<SettingsPage> {
       return const Scaffold(
         body: Center(
           child: SpinKitFoldingCube(
-            color: Color(0xFF2B41B8),
+            color: Color(0xFF1C32A4),
             size: 50.0,
           ),
         ),
