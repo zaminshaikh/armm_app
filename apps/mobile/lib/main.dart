@@ -287,10 +287,13 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, authSnapshot) {
             if (authSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: SpinKitFoldingCube(
-                color: ARMM_Blue,
-                size: 50.0,
-              ));
+              return Directionality(
+                textDirection: TextDirection.ltr,
+                child: SpinKitFoldingCube(
+                  color: ARMM_Blue,
+                  size: 50.0,
+                ),
+              );
             }
             final user = authSnapshot.data;
             return StreamProvider<Client?>(
