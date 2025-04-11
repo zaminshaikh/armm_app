@@ -8,6 +8,7 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -158,7 +159,12 @@ class _SettingsPageState extends State<SettingsPage> {
   Scaffold buildSettingsPage() {
     if (client == null) {
       return const Scaffold(
-        body: CircularProgressIndicator(),
+        body: Center(
+          child: SpinKitFoldingCube(
+            color: Color(0xFF2B41B8),
+            size: 50.0,
+          ),
+        ),
       );
     }
 
