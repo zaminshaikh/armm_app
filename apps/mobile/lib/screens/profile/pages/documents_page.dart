@@ -14,7 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class DocumentsPage extends StatefulWidget {
   const DocumentsPage({Key? key}) : super(key: key);
@@ -58,7 +58,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const CircularProgressIndicator();
+      return const SpinKitFoldingCube(color: Color(0xFF2B41B8));
     }
   
     return buildDocumentsPage();
