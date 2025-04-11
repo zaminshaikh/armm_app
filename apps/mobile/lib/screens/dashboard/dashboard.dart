@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class DashboardPage extends StatefulWidget {
   final bool fromFaceIdPage;
@@ -165,7 +166,7 @@ class _DashboardPageState extends State<DashboardPage>
   
     if (client == null) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: SpinKitFoldingCube(color: Colors.blue)),
       );
     }
   
