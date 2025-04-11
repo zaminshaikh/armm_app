@@ -14,9 +14,6 @@ class LinkSentIllustration extends StatelessWidget {
           width: 150,
           height: 150,
           semanticsLabel: 'Link Sent Illustration',
-          placeholderBuilder: (BuildContext context) {
-            return const CircularProgressIndicator();
-          },
         ),
       ],
     );
