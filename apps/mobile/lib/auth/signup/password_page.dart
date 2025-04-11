@@ -6,6 +6,7 @@ import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
@@ -102,9 +103,9 @@ class _PasswordPageState extends State<PasswordPage> {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Verify your email'),
-            content: const Text('A verification link has been sent to your email. Please verify your email to continue.'),
+          return CustomAlertDialog(
+            title: 'Verify your email',
+            message: 'A verification link has been sent to your email. Please verify your email to continue.',
             actions: [
               TextButton(
                 onPressed: () async {
@@ -147,9 +148,13 @@ class _PasswordPageState extends State<PasswordPage> {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Email verified successfully.'),
+          return CustomAlertDialog(
+            title: 'Success',
+            message: 'Email verified successfully.',
+            icon: const Icon(
+              Icons.check_circle,
+              color: Colors.green,
+            ),
             actions: [
               TextButton(
                 onPressed: () {
@@ -178,9 +183,13 @@ class _PasswordPageState extends State<PasswordPage> {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Email not verified. Please check your inbox for the verification link.'),
+          return CustomAlertDialog(
+            title: 'Error',
+            message: 'Email not verified. Please check your inbox for the verification link.',
+            icon: const Icon(
+              Icons.error,
+              color: Colors.red,
+            ),
             actions: [
               TextButton(
                 onPressed: () {

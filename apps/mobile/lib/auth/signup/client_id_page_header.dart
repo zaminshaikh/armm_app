@@ -1,4 +1,5 @@
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -55,10 +56,12 @@ class ClientIDPageHeader extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('What is a Client ID?'),
-                    content: const Text(
-                      'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
+                  return CustomAlertDialog(
+                    title: 'What is a Client ID?',
+                    message: 'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
+                    icon: const Icon(
+                      Icons.info_outline_rounded,
+                      color: Colors.blue,
                     ),
                     actions: [
                       TextButton(
