@@ -5,6 +5,7 @@ import 'package:armm_app/auth/forgot_password/forgot_password.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/auth_check.dart';
+import 'package:armm_app/components/no_internet_screen.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/faceid.dart';
@@ -20,6 +21,7 @@ import 'package:armm_app/screens/profile/pages/settings_page.dart';
 import 'package:armm_app/screens/profile/pages/support_page.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -279,7 +281,15 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-
+    return StreamBuilder<ConnectivityResult>(
+      stream: Connectivity().onConnectivityChanged.expand((results) => results),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data == ConnectivityResult.none) {
+          return const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: NoInternetScreen(),
+          );
+        }
         return StreamBuilder<User?>(
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, authSnapshot) {
@@ -325,6 +335,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             );
           },
         );
+      },
+    );
 
       }
 
