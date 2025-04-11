@@ -179,13 +179,6 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
                     'assets/icons/armm.png',
                     width: 120,
                     height: 120,
-                    // If there's no logo asset, use a fallback
-                    errorBuilder: (context, error, stackTrace) => 
-                      Icon(
-                        Icons.account_balance,
-                        size: 80, 
-                        color: ARMMBlue
-                      ),
                   ),
                 ),
                 
