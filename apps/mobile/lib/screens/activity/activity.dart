@@ -12,6 +12,7 @@ import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -85,7 +86,12 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: SpinKitFoldingCube(
+          color: Color(0xFF2B41B8), // ARMM Blue color
+          size: 50.0,
+        ),
+      );
     }
 
     // Retrieve activities and recipients
