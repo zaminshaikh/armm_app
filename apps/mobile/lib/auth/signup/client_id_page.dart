@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ClientIDPage extends StatefulWidget {
 
@@ -298,7 +299,12 @@ class _ClientIDPageState extends State<ClientIDPage> {
           if (isLoading)
             Container(
               color: Colors.black54,
-              child: const Center(child: CircularProgressIndicator()),
+              child: Center(
+                child: SpinKitFoldingCube(
+                  color: ARMM_Blue,
+                  size: 50.0,
+                ),
+              ),
             ),
         ],
       ),
