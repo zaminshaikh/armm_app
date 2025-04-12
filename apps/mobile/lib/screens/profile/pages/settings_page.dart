@@ -9,12 +9,13 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:armm_app/screens/profile/components/logout_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -137,11 +138,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Scaffold buildSettingsPage() {
     if (client == null) {
       return const Scaffold(
-        body: Center(
-          child: SpinKitFoldingCube(
-            color: Color(0xFF1C32A4),
-            size: 50.0,
-          ),
+        body: CustomProgressIndicator(
+          color: Color(0xFF1C32A4),
         ),
       );
     }

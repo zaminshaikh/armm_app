@@ -33,7 +33,8 @@ import 'package:armm_app/utils/push_notification.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 // Define the ARMM_Blue color at the top of the file, outside any class
 const Color ARMM_Blue = Color(0xFF1C32A4);
@@ -297,11 +298,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, authSnapshot) {
             if (authSnapshot.connectionState == ConnectionState.waiting) {
-              return Directionality(
+              return const Directionality(
                 textDirection: TextDirection.ltr,
-                child: SpinKitFoldingCube(
+                child: CustomProgressIndicator(
                   color: ARMM_Blue,
-                  size: 50.0,
                 ),
               );
             }
@@ -467,9 +467,8 @@ class _AuthCheckState extends State<AuthCheck> {
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: SpinKitFoldingCube(
+          return const Center(child: CustomProgressIndicator(
             color: ARMM_Blue,
-            size: 50.0,
           ));
         } else if (snapshot.hasError) {
           log('AuthCheck: StreamBuilder error: ${snapshot.error}');
@@ -491,10 +490,9 @@ class _AuthCheckState extends State<AuthCheck> {
                   log('AuthCheck: User is not authenticated or linked, but has reloaded the app from the no internet screen. Navigating to DashboardPage.');
                   return const DashboardPage();
                 } else {
-                  return const Center(child: SpinKitFoldingCube(
+                  return const CustomProgressIndicator(
                     color: ARMM_Blue,
-                    size: 50.0,
-                  ));
+                  );
                 }
               } else if (authSnapshot.hasError) {
                 log('AuthCheck: FutureBuilder error: ${authSnapshot.error}');
@@ -506,10 +504,9 @@ class _AuthCheckState extends State<AuthCheck> {
                   builder: (context, appLockSnapshot) {
                     if (appLockSnapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return const Center(child: SpinKitFoldingCube(
+                      return const CustomProgressIndicator(
                         color: ARMM_Blue,
-                        size: 50.0,
-                      ));
+                      );
                     } else if (appLockSnapshot.hasError) {
                       log('AuthCheck: FutureBuilder error: ${appLockSnapshot.error}');
                       return Center(

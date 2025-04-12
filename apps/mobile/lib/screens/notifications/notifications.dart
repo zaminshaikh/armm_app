@@ -7,7 +7,8 @@ import 'package:armm_app/screens/notifications/components/notification_card.dart
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -28,11 +29,8 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context){
     if (client == null) {
-      return const Center(
-        child: SpinKitFoldingCube(
-          color: Color(0xFF1C32A4),
-          size: 50.0,
-        ),
+      return const CustomProgressIndicator(
+        color: Color(0xFF1C32A4),
       );
     }
     notifications = List.from(client!.notifications!);

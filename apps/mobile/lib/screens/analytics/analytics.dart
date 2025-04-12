@@ -6,7 +6,8 @@ import 'package:armm_app/components/assets_structure_section.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/analytics/components/line_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart'; // Added import for SpinKit
+ // Added import for SpinKit
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({Key? key}) : super(key: key);
@@ -41,11 +42,8 @@ class AnalyticsPageState extends State<AnalyticsPage> {
   Widget build(BuildContext context) {
     if (client == null) {
       return const Scaffold(
-        body: Center(
-          child: SpinKitFoldingCube(
-            color: Color(0xFF1C32A4), // Updated to ARMM_Blue color
-            size: 50.0,
-          ),
+        body: CustomProgressIndicator(
+          color: Color(0xFF1C32A4), // ARMM_Blue color
         ),
       );
     }
