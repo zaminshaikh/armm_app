@@ -21,7 +21,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-      kToolbarHeight + 200); // Increased height to accommodate the logo
+      kToolbarHeight + 180); // Increased height to accommodate the logo
 
   @override
   Widget build(BuildContext context) {
