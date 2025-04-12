@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:armm_app/components/assets_structure_section.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/analytics/components/line_chart.dart';
-import 'package:google_fonts/google_fonts.dart'; // Added import
+import 'package:google_fonts/google_fonts.dart';
+ // Added import for SpinKit
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({Key? key}) : super(key: key);
@@ -39,7 +41,11 @@ class AnalyticsPageState extends State<AnalyticsPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const CircularProgressIndicator();
+      return const Scaffold(
+        body: CustomProgressIndicator(
+          color: Color(0xFF1C32A4), // ARMM_Blue color
+        ),
+      );
     }
   
     final List<Widget> fundCharts = [];

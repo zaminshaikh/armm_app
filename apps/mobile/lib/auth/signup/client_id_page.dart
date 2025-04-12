@@ -8,11 +8,13 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
+
 
 class ClientIDPage extends StatefulWidget {
 
@@ -296,7 +298,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
           if (isLoading)
             Container(
               color: Colors.black54,
-              child: const Center(child: CircularProgressIndicator()),
+              child: CustomProgressIndicator(
+                color: ARMM_Blue,
+              ),
             ),
         ],
       ),

@@ -8,6 +8,8 @@ import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:armm_app/components/custom_progress_indicator.dart';
+
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
   @override
@@ -27,8 +29,8 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context){
     if (client == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return const CustomProgressIndicator(
+        color: Color(0xFF1C32A4),
       );
     }
     notifications = List.from(client!.notifications!);

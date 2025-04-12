@@ -4,9 +4,11 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/profile/components/name_cid.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class MyProfilesPage extends StatefulWidget {
   const MyProfilesPage({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class _MyProfilesPageState extends State<MyProfilesPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const CustomProgressIndicator(color: Color(0xFF1C32A4));
     }
 
     return Scaffold(
