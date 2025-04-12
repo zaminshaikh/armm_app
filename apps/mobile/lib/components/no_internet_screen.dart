@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // Define ARMM blue color constant
 const Color ARMMBlue = Color(0xFF1C32A4);
@@ -26,6 +27,7 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
   late final StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  bool _mounted = true; // Track if the widget is mounted
 
   @override
   void initState() {
@@ -54,8 +56,9 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
     } catch (e) {
       results = [ConnectivityResult.none];
     }
-    if (!mounted) return;
+    if (!_mounted) return;
     setState(() {
+      // Choose the first result if available; otherwise, default to none.
       _connectionStatus = results.isNotEmpty ? results.first : ConnectivityResult.none;
     });
     log('Initial connectivity: $_connectionStatus');
@@ -64,7 +67,9 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
     if (_connectionStatus != ConnectivityResult.none) {
       // Small delay to ensure the app has time to initialize
       Future.delayed(const Duration(milliseconds: 500), () {
-        _reload(context);
+        if (_mounted) {
+          _reload(context);
+        }
       });
     }
   }
@@ -72,6 +77,8 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
   // Update our state with the new connectivity status.
   // Since the stream now provides a List, we pick one result.
   void _updateConnectionStatus(List<ConnectivityResult> results) {
+    if (!_mounted) return;
+    
     final previousStatus = _connectionStatus;
     setState(() {
       _connectionStatus = results.isNotEmpty ? results.first : ConnectivityResult.none;
@@ -84,7 +91,9 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
         _connectionStatus != ConnectivityResult.none) {
       // Small delay to ensure connection is stable
       Future.delayed(const Duration(milliseconds: 500), () {
-        _reload(context);
+        if (_mounted) {
+          _reload(context);
+        }
       });
     }
   }
@@ -93,6 +102,7 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
   void dispose() {
     _connectivitySubscription.cancel();
     _animationController.dispose();
+    _mounted = false; // Update mounted flag
     super.dispose();
   }
 
@@ -174,11 +184,16 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
               children: [
                 // Logo or brand element
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: Image.asset(
-                    'assets/icons/armm.png',
-                    width: 120,
-                    height: 120,
+                  padding: const EdgeInsets.only(bottom: 40.0),
+                  child: SvgPicture.asset(
+                    'assets/icons/ARMM_Logo.svg',
+                    height: 40,
+                    errorBuilder: (context, error, stackTrace) => 
+                      Icon(
+                        Icons.account_balance,
+                        size: 80, 
+                        color: ARMMBlue
+                      ),
                   ),
                 ),
                 
@@ -242,13 +257,13 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
+                    children: const [
+                      Icon(
                         Icons.refresh_rounded,
                         color: Colors.white,
                       ),
-                      const SizedBox(width: 8),
-                      const Text(
+                      SizedBox(width: 8),
+                      Text(
                         'Try Again',
                         style: TextStyle(
                           color: Colors.white,
