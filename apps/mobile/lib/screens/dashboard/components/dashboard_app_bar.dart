@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/database/models/client_model.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'total_assets_section.dart'; // Adjust the import according to your project structure
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -20,7 +21,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-      kToolbarHeight + 160); // Base height + estimated total assets section height
+      kToolbarHeight + 200); // Increased height to accommodate the logo
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +113,35 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
             ]
           : null,
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(0),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-          child: TotalAssetsSection(client: client),
+        preferredSize: const Size.fromHeight(80),
+        child: Column(
+          children: [
+            // Total Assets Section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              child: TotalAssetsSection(client: client),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/icons/ARMM_Logo_white.svg',
+                  height: 18,
+                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                  errorBuilder: (context, error, stackTrace) => const Text(
+                    'ARMM',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            
+            // ARMM Logo
+          ],
         ),
       ),
     );
