@@ -78,11 +78,10 @@ class _ActivityAppBarState extends State<ActivityAppBar> {
               );
               },
               child: IconButton(
-              icon: SvgPicture.asset(
-                'assets/icons/notification.svg',
-                width: 30,
-                height: 30,
-                color: Colors.white,
+              icon: const Icon(
+                    Icons.notifications_none,
+                    size: 30,
+                    color: Colors.white,
               ),
               onPressed: widget.onNotificationTap == null ? null : () => widget.onNotificationTap!(),
               ),
