@@ -1,4 +1,5 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/profile/components/delete_account_button.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,46 +40,23 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showPermissionDeniedDialog() {
-    showCupertinoDialog(
+    showDialog(
       context: context,
       builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            'Notifications Disabled',
-            style: GoogleFonts.inter(
-              color: CupertinoColors.darkBackgroundGray,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: const Text(
-            'Please enable notifications in your device settings to receive updates.',
-            style: TextStyle(
-              color: CupertinoColors.black,
-              fontSize: 16,
-            ),
-          ),
+        return CustomAlertDialog(
+          title: 'Notifications Disabled',
+          message: 'Please enable notifications in your device settings to receive updates.',
           actions: [
-            CupertinoDialogAction(
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: CupertinoColors.activeBlue,
-                ),
-              ),
-              onPressed: () => Navigator.of(context).pop(),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
             ),
-            CupertinoDialogAction(
-              child: const Text(
-                'Settings',
-                style: TextStyle(
-                  color: CupertinoColors.activeBlue,
-                ),
-              ),
+            TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 AppSettings.openAppSettings();
               },
+              child: const Text('Settings'),
             ),
           ],
         );
@@ -101,19 +79,19 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showCupertinoDialog(String message) {
-    showCupertinoDialog(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: const Text('Notification Permission'),
-          content: Text(message),
+        return CustomAlertDialog(
+          title: 'Notification Permission',
+          message: message,
           actions: <Widget>[
-            CupertinoDialogAction(
+            TextButton(
               child: const Text('OK'),
               onPressed: () => Navigator.of(context).pop(),
             ),
             if (message.contains('denied'))
-              CupertinoDialogAction(
+              TextButton(
                 child: const Text('Settings'),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -432,9 +410,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         if (context.mounted) {
                           showDialog(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Cannot Change Email'),
-                              content: Text('You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.'),
+                            builder: (context) => CustomAlertDialog(
+                              title: 'Cannot Change Email',
+                              message: 'You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
                               actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
                             ),
                           );
@@ -444,9 +422,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         if (context.mounted) {
                           showDialog(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Cannot Change Email'),
-                              content: Text('You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.'),
+                            builder: (context) => CustomAlertDialog(
+                              title: 'Cannot Change Email',
+                              message: 'You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
                               actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
                             ),
                           );
@@ -457,38 +435,29 @@ class _SettingsPageState extends State<SettingsPage> {
                     // First ask for password to re-authenticate
                     await showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('Verification Required'),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Please enter your current password to verify your identity.'),
-                            SizedBox(height: 16),
-                            TextField(
-                              controller: passwordController,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                hintText: 'Current password',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Verification Required',
+                        message: 'Please enter your current password to verify your identity.',
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(false),
                             child: Text('Cancel'),
                           ),
-                          ElevatedButton(
+                          TextButton(
                             onPressed: () => Navigator.of(context).pop(true),
                             child: Text('Verify'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF2B41B8),
-                            ),
                           ),
                         ],
+                        icon: TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'Current password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
                       ),
                     ).then((confirmed) async {
                       if (confirmed == true) {
@@ -512,9 +481,9 @@ class _SettingsPageState extends State<SettingsPage> {
                               Navigator.of(context).pop(); // Close email change dialog
                               showDialog(
                                 context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text('Email Change Requested'),
-                                  content: Text('We have sent a verification email to your new email address. Please verify it to complete the update.'),
+                                builder: (context) => CustomAlertDialog(
+                                  title: 'Email Change Requested',
+                                  message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
                                   actions: [
                                     TextButton(
                                       onPressed: () => Navigator.of(context).pop(),
@@ -530,9 +499,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           if (context.mounted) {
                             showDialog(
                               context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text('Error'),
-                                content: Text('Authentication failed: ${e.toString()}'),
+                              builder: (context) => CustomAlertDialog(
+                                title: 'Error',
+                                message: 'Authentication failed: ${e.toString()}',
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.of(context).pop(),
@@ -714,9 +683,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Password Change Requested'),
-                            content: const Text('Your password has been successfully updated.'),
+                          return CustomAlertDialog(
+                            title: 'Password Change Requested',
+                            message: 'Your password has been successfully updated.',
                             actions: <Widget>[
                               TextButton(
                                 child: const Text('OK'),
@@ -734,9 +703,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Error'),
-                          content: Text('Error updating password: $e'),
+                        return CustomAlertDialog(
+                          title: 'Error',
+                          message: 'Error updating password: $e',
                           actions: <Widget>[
                             TextButton(
                               child: const Text('OK'),

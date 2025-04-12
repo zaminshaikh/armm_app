@@ -7,6 +7,7 @@ import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +44,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
       if (!mounted) return false;
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Invalid CID'),
-          content: const Text('The CID you entered does not exist. Please try again.'),
+        builder: (context) => CustomAlertDialog(
+          title: 'Invalid CID',
+          message: 'The CID you entered does not exist. Please try again.',
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -59,9 +60,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
       if (!mounted) return false;
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('CID Already Linked'),
-          content: const Text('The CID you entered is already linked to an account. Please try again.'),
+        builder: (context) => CustomAlertDialog(
+          title: 'CID Already Linked',
+          message: 'The CID you entered is already linked to an account. Please try again.',
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -136,16 +137,13 @@ class _ClientIDPageState extends State<ClientIDPage> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                    return AlertDialog(
-                    title: Text(
-                      'What is a Client ID?',
-                      style: TextStyle(color: ARMM_Blue, fontWeight: FontWeight.bold),
+                    return CustomAlertDialog(
+                    title: 'What is a Client ID?',
+                    message: 'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
+                    icon: Icon(
+                      Icons.info_outline_rounded,
+                      color: ARMM_Blue,
                     ),
-                    content: const Text(
-                      'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
-                      style: TextStyle(color: Colors.black),
-                    ),
-
                     actions: [
                       TextButton(
                       onPressed: () {
