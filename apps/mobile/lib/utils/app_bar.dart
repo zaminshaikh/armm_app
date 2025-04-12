@@ -78,11 +78,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       );
                       },
                       child: IconButton(
-                      icon: SvgPicture.asset(
-                      'assets/icons/notification.svg',
-                      width: 30,
-                      height: 30,
-                      color: Colors.white,
+                      icon: const Icon(
+                        Icons.notifications_none,
+                        size: 30,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         Navigator.push(
