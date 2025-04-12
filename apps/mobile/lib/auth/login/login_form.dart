@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
@@ -70,17 +71,17 @@ class LoginForm extends StatelessWidget {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-        title: const Text('Error logging in'),
-        content: Text(errorMessage),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-          Navigator.of(context).pop();
-            },
-          ),
-        ],
+          return CustomAlertDialog(
+            title: 'Error logging in',
+            message: errorMessage,
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           );
         },
       );
