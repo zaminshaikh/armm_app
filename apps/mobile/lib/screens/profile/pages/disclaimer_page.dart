@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:armm_app/utils/app_bar.dart';
 
 class DisclaimerPage extends StatelessWidget {
+  const DisclaimerPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

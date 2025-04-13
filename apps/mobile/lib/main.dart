@@ -342,6 +342,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   '/documents': (context) => const DocumentsPage(),
                   '/settings': (context) => const SettingsPage(),
                   '/my_profiles': (context) => const MyProfilesPage(),
+                  '/disclaimer': (context) => const DisclaimerPage(),
                 },
               ),
             );
