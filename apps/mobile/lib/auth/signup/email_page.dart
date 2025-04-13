@@ -4,6 +4,7 @@ import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -16,8 +17,6 @@ class EmailPage extends StatefulWidget {
   @override
   _EmailPageState createState() => _EmailPageState();
 }
-
-const ARMM_Blue = Color(0xFF1C32A4);
 
 class _EmailPageState extends State<EmailPage> {
   final TextEditingController _emailController = TextEditingController();
@@ -80,14 +79,14 @@ class _EmailPageState extends State<EmailPage> {
                         ),
                       );
                     },
-                    backgroundColor: ARMM_Blue,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                   ),
                   const SizedBox(height: 24),
 
                   // Already have an account? Log in
                   AuthFooter(
-                    primaryColor: ARMM_Blue,
+                    primaryColor: AppColors.primary,
                     onSignUpPressed: () {
                       Navigator.push(
                         context,

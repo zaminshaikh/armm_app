@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/utils/expansion_filter_tile.dart';
+import 'package:armm_app/utils/resources.dart';
 
 /// A modal widget for filtering activities.
 class ActivityFilterModal extends StatefulWidget {
@@ -54,9 +55,6 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
 
   // This flag is used for handling the "All" logic in clients filter.
   bool _allSelected = false;
-
-  static const ARMM_Blue = Color(0xFF1C32A4);
-
 
   @override
   void initState() {
@@ -239,10 +237,10 @@ String toTitleCase(String text) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0), // Adjust the value to control the roundness
         ),
-        side: BorderSide(color: ARMM_Blue, width: 2.0),
+        side: BorderSide(color: AppColors.primary, width: 2.0),
 
         // Colors when checked
-        activeColor: ARMM_Blue,  // Fill color of circle
+        activeColor: AppColors.primary,  // Fill color of circle
         checkColor: Colors.white,  // Color of the check icon
 
         title: Text(
@@ -297,7 +295,7 @@ String toTitleCase(String text) {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: ARMM_Blue,
+                  backgroundColor: AppColors.primary,
                 ),
                 child: Text(
                   'Apply',

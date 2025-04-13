@@ -10,6 +10,7 @@ import 'package:armm_app/auth/signup/email_page.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/components/custom_progress_indicator.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,8 +24,6 @@ class ClientIDPage extends StatefulWidget {
   @override
   _ClientIDPageState createState() => _ClientIDPageState();
 }
-
-const ARMM_Blue = Color(0xFF1C32A4);
 
 class _ClientIDPageState extends State<ClientIDPage> {
   final TextEditingController _cidController = TextEditingController();
@@ -144,7 +143,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     message: 'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
                     icon: Icon(
                       Icons.info_outline_rounded,
-                      color: ARMM_Blue,
+                      color: AppColors.primary,
                     ),
                     actions: [
                       TextButton(
@@ -152,7 +151,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                         Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: ARMM_Blue,
+                        foregroundColor: AppColors.primary,
                       ),
                       child: const Text('Close'),
                       ),
@@ -212,7 +211,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                         ),
                       );
                     },
-                    backgroundColor: ARMM_Blue,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                   ),
                   const SizedBox(height: 16),
@@ -235,10 +234,10 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     label: 'Sign up with Google',
                     icon: SvgPicture.asset(
                       'assets/icons/google.svg',
-                      color: ARMM_Blue,
+                      color: AppColors.primary,
                       height: 24,
                     ),
-                    foregroundColor: ARMM_Blue,
+                    foregroundColor: AppColors.primary,
                     onPressed: () async {
                       // Dismiss the keyboard
                       FocusScope.of(context).unfocus();
@@ -273,7 +272,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
 
                   // Already have an account? Log in
                   AuthFooter(
-                    primaryColor: ARMM_Blue,
+                    primaryColor: AppColors.primary,
                     onSignUpPressed: () {
                       Navigator.push(
                         context,
@@ -299,7 +298,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
             Container(
               color: Colors.black54,
               child: CustomProgressIndicator(
-                color: ARMM_Blue,
+                color: AppColors.primary,
               ),
             ),
         ],

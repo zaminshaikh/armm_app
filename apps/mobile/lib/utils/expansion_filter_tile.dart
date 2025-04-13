@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-const ARMM_Blue = Color(0xFF1C32A4);
+import 'package:armm_app/utils/resources.dart';
 
 String toTitleCase(String text) {
   if (text.isEmpty) return text;
@@ -42,7 +41,7 @@ class _FilterExpansionTileState extends State<FilterExpansionTile> {
       leading: SvgPicture.asset(
         widget.iconPath,
         colorFilter: ColorFilter.mode(
-          _isExpanded ? ARMM_Blue : const Color.fromARGB(255, 77, 77, 77),
+          _isExpanded ? AppColors.primary : const Color.fromARGB(255, 77, 77, 77),
           BlendMode.srcIn,
         ),
       ),
@@ -51,11 +50,11 @@ class _FilterExpansionTileState extends State<FilterExpansionTile> {
         style: GoogleFonts.inter(
           fontWeight: FontWeight.w600,
           // Optionally adjust text color based on expansion.
-          color: _isExpanded ? ARMM_Blue : const Color.fromARGB(255, 77, 77, 77),
+          color: _isExpanded ? AppColors.primary : const Color.fromARGB(255, 77, 77, 77),
         ),
       ),
-      iconColor: ARMM_Blue,
-      collapsedIconColor: ARMM_Blue, // Changed to have a constant icon color.
+      iconColor: AppColors.primary,
+      collapsedIconColor: AppColors.primary, // Changed to have a constant icon color.
       initiallyExpanded: _isExpanded,
       onExpansionChanged: (bool expanded) {
         setState(() => _isExpanded = expanded);

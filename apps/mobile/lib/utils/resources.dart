@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 
 /// Color constants used in the app.
 class AppColors {
+  // Primary ARMM colors
+  static const primary = Color(0xFF1C32A4); // Primary ARMM Blue
+  static const primaryDark = Color(0xFF1E4B89); // Darker blue variant
+  static const primaryLight = Color(0xFF3199DD); // Lighter blue variant
+  
+  // White and Gray scale
   static const defaultWhite = Color(0xFFFFFFFF);
   static const defaultGray50 = Color(0xFFF9FAFB);
   static const defaultGray100 = Color(0xFFF3F4F6);
@@ -10,20 +16,28 @@ class AppColors {
   static const defaultGray700 = Color(0xFF373F51);
   static const defaultGray800 = Color(0xFF1F2937);
 
+  // Green shades
   static const defaultGreen100 = Color(0xFFD1FAE5);
   static const defaultGreen200 = Color(0xFFA7F3D0);
   static const defaultGreen400 = Color(0xFF34D399);
+  static const green = Color(0xFF2F862F);
 
+  // Red shades
   static const defaultRed100 = Color(0xFFFEF2F2);
-  static const defaultRed200 = Color(0xFFFECACA); // Corrected hex code
+  static const defaultRed200 = Color(0xFFFECACA);
   static const defaultRed400 = Color(0xFFF87171);
+  static const red = Color(0xFF951C1C);
 
-  static const defaultYellow400 = Color(0xFFFBBD24); // Corrected hex code
+  // Yellow shades
+  static const defaultYellow400 = Color(0xFFFBBD24);
+  static const yellow = Color(0xFFDBC33C);
 
+  // Blue shades
   static const defaultBlue500 = Color(0xFF0D5EAF);
   static const defaultBlue300 = Color(0xFF3199DD);
   static const defaultBlue100 = Color(0xFFD3EEFF);
 
+  // Blue Gray shades
   static const defaultBlueGray900 = Color(0xFF111827);
   static const defaultBlueGray800 = Color(0xFF1E293B);
   static const defaultBlueGray700 = Color(0xFF334155);
@@ -34,11 +48,13 @@ class AppColors {
   static const defaultBlueGray200 = Color(0xFFE2E8F0);
   static const defaultBlueGray100 = Color(0xFFF1F5F9);
 
+  // Emerald shades
   static const extendedEmerald200 = Color(0xFFA7F3D0);
   static const extendedEmerald400 = Color(0xFF34D399);
   static const extendedEmerald600 = Color(0xFF059669);
   static const extendedEmerald800 = Color(0xFF065F46);
 
+  // Indigo shades
   static const extendedIndigo50 = Color(0xFFEEF2FF);
   static const extendedIndigo200 = Color(0xFFC7D2FE);
   static const extendedIndigo400 = Color(0xFF818CF8);
@@ -51,15 +67,20 @@ class AppColors {
   static const altBlueGray900 = Color(0xFF1F2937);
   static const gray = Color(0xFF7A7A7A);
   static const grayDark = Color(0xFF555657);
-  static const green = Color(0xFF2F862F);
-  static const yellow = Color(0xFFDBC33C);
-  static const red = Color(0xFF951C1C);
 }
 
 /// Text style constants used in the app.
 class AppTextStyles {
   static const _fontFamily = 'Titillium Web';
 
+  // Display text styles
+  static TextStyle display({Color? color}) => TextStyle(
+        fontFamily: _fontFamily,
+        fontWeight: FontWeight.bold,
+        fontSize: 32.0,
+        color: color,
+      );
+  
   // Original text styles
   static TextStyle xl3({Color? color}) => TextStyle(
         fontFamily: _fontFamily,
@@ -167,76 +188,69 @@ class AppTextStyles {
       );
 
   // Additional styles from styles.dart
-  static const headerTextStyle = TextStyle(
-    fontSize: 26,
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle headerText({Color? color}) => TextStyle(
+        fontSize: 26,
+        color: color ?? Colors.white,
+        fontWeight: FontWeight.bold,
+        fontFamily: _fontFamily,
+      );
 
-  static const inputTextStyle = TextStyle(
-    fontSize: 16,
-    color: Colors.white,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle inputText({Color? color}) => TextStyle(
+        fontSize: 16,
+        color: color ?? Colors.white,
+        fontFamily: _fontFamily,
+      );
 
-  static const orTextStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 20,
-    color: Colors.white,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle orText({Color? color}) => TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        color: color ?? Colors.white,
+        fontFamily: _fontFamily,
+      );
 
-  static const validationTextStyle = TextStyle(
-    fontSize: 16,
-    color: Colors.white,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle validationText({Color? color}) => TextStyle(
+        fontSize: 16,
+        color: color ?? Colors.white,
+        fontFamily: _fontFamily,
+      );
 
-  static const nextButtonTextStyle = TextStyle(
-    fontSize: 18,
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle nextButtonText({Color? color}) => TextStyle(
+        fontSize: 18,
+        color: color ?? Colors.white,
+        fontWeight: FontWeight.bold,
+        fontFamily: _fontFamily,
+      );
 
-  static const bodyTextStyle = TextStyle(
-    fontSize: 18,
-    color: Colors.white,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle bodyText({Color? color}) => TextStyle(
+        fontSize: 18,
+        color: color ?? Colors.white,
+        fontFamily: _fontFamily,
+      );
 
-  static const loginTextStyle = TextStyle(
-    fontSize: 18,
-    color: Colors.blue,
-    fontWeight: FontWeight.bold,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle loginText({Color? color}) => TextStyle(
+        fontSize: 18,
+        color: color ?? AppColors.primary,
+        fontWeight: FontWeight.bold,
+        fontFamily: _fontFamily,
+      );
 
-  static const dialogTitleTextStyle = TextStyle(
-    fontSize: 20,
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle dialogTitleText({Color? color}) => TextStyle(
+        fontSize: 20,
+        color: color ?? Colors.white,
+        fontWeight: FontWeight.bold,
+        fontFamily: _fontFamily,
+      );
 
-  static const dialogBodyTextStyle = TextStyle(
-    fontSize: 16,
-    color: Colors.white,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle dialogBodyText({Color? color}) => TextStyle(
+        fontSize: 16,
+        color: color ?? Colors.white,
+        fontFamily: _fontFamily,
+      );
 
-  static const continueButtonTextStyle = TextStyle(
-    fontSize: 18,
-    color: Colors.blue,
-    fontWeight: FontWeight.bold,
-    fontFamily: _fontFamily,
-  );
-
-  static const googleButtonTextStyle = TextStyle(
-    fontSize: 18,
-    color: Colors.blue,
-    fontWeight: FontWeight.bold,
-    fontFamily: _fontFamily,
-  );
+  static TextStyle buttonText({Color? color}) => TextStyle(
+        fontSize: 18,
+        color: color ?? AppColors.primary,
+        fontWeight: FontWeight.bold,
+        fontFamily: _fontFamily,
+      );
 }
