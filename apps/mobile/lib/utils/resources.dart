@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Color constants used in the app.
 class AppColors {
@@ -71,186 +72,158 @@ class AppColors {
 
 /// Text style constants used in the app.
 class AppTextStyles {
-  static const _fontFamily = 'Titillium Web';
-
   // Display text styles
-  static TextStyle display({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle display({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 32.0,
         color: color,
       );
   
   // Original text styles
-  static TextStyle xl3({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle xl3({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 28.0,
         color: color,
       );
 
-  static TextStyle xl2({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle xl2({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 24.0,
         color: color,
       );
 
-  static TextStyle xl({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle xl({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 20.0,
         color: color,
       );
 
-  static TextStyle lBold({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle lBold({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 18.0,
         color: color,
       );
 
-  static TextStyle lRegular({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle lRegular({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.normal,
         fontSize: 18.0,
         color: color,
       );
 
-  static TextStyle mBold({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle mBold({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 16.0,
         color: color,
       );
 
-  static TextStyle mSemiBold({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle mSemiBold({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.w600,
         fontSize: 16.0,
         color: color,
       );
 
-  static TextStyle mRegular({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle mRegular({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
         color: color,
       );
 
-  static TextStyle sBold({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle sBold({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 15.0,
         color: color,
       );
 
-  static TextStyle sRegular({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle sRegular({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.normal,
         fontSize: 15.0,
         color: color,
       );
 
-  static TextStyle xsBold({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle xsBold({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 14.0,
         color: color,
       );
 
-  static TextStyle sSemiBold({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle sSemiBold({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.w600,
         fontSize: 14.0,
         color: color,
       );
 
-  static TextStyle xsRegular({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle xsRegular({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
         color: color,
       );
 
-  static TextStyle xs2Bold({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle xs2Bold({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 12.0,
         color: color,
       );
 
-  static TextStyle xs2Regular({Color? color}) => TextStyle(
-        fontFamily: _fontFamily,
+  static TextStyle xs2Regular({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
         color: color,
       );
 
   // Additional styles from styles.dart
-  static TextStyle headerText({Color? color}) => TextStyle(
+  static TextStyle headerText({Color? color}) => GoogleFonts.inter(
         fontSize: 26,
         color: color ?? Colors.white,
         fontWeight: FontWeight.bold,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle inputText({Color? color}) => TextStyle(
+  static TextStyle inputText({Color? color}) => GoogleFonts.inter(
         fontSize: 16,
         color: color ?? Colors.white,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle orText({Color? color}) => TextStyle(
+  static TextStyle orText({Color? color}) => GoogleFonts.inter(
         fontWeight: FontWeight.bold,
         fontSize: 20,
         color: color ?? Colors.white,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle validationText({Color? color}) => TextStyle(
+  static TextStyle validationText({Color? color}) => GoogleFonts.inter(
         fontSize: 16,
         color: color ?? Colors.white,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle nextButtonText({Color? color}) => TextStyle(
+  static TextStyle nextButtonText({Color? color}) => GoogleFonts.inter(
         fontSize: 18,
         color: color ?? Colors.white,
         fontWeight: FontWeight.bold,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle bodyText({Color? color}) => TextStyle(
+  static TextStyle bodyText({Color? color}) => GoogleFonts.inter(
         fontSize: 18,
         color: color ?? Colors.white,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle loginText({Color? color}) => TextStyle(
+  static TextStyle loginText({Color? color}) => GoogleFonts.inter(
         fontSize: 18,
         color: color ?? AppColors.primary,
         fontWeight: FontWeight.bold,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle dialogTitleText({Color? color}) => TextStyle(
+  static TextStyle dialogTitleText({Color? color}) => GoogleFonts.inter(
         fontSize: 20,
         color: color ?? Colors.white,
         fontWeight: FontWeight.bold,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle dialogBodyText({Color? color}) => TextStyle(
+  static TextStyle dialogBodyText({Color? color}) => GoogleFonts.inter(
         fontSize: 16,
         color: color ?? Colors.white,
-        fontFamily: _fontFamily,
       );
 
-  static TextStyle buttonText({Color? color}) => TextStyle(
+  static TextStyle buttonText({Color? color}) => GoogleFonts.inter(
         fontSize: 18,
         color: color ?? AppColors.primary,
         fontWeight: FontWeight.bold,
-        fontFamily: _fontFamily,
       );
 }

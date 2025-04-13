@@ -108,7 +108,7 @@ class _InitialFaceIdPageState extends State<InitialFaceIdPage>
                       await _initialAuthenticate(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1C32A4), // ARMM_Blue
+                      backgroundColor: const Color(0xFF1C32A4), // AppColors.primary
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),

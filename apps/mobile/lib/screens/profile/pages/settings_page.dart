@@ -2,6 +2,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/profile/components/delete_account_button.dart';
 import 'package:armm_app/utils/app_bar.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -314,7 +315,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildChangeEmailSection() {
 
-    const Color ARMM_blue = Color(0xFF2B41B8);
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -568,10 +568,10 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-          color: ARMM_blue,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: ARMM_blue,
+            color: AppColors.primary,
             width: 1,
           ),
         ),
@@ -591,7 +591,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
   Widget _buildChangePasswordSection() {
-    const Color ARMM_blue = Color(0xFF2B41B8);
 
     return GestureDetector(
       onTap: () {
@@ -742,12 +741,11 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             }
             AlertDialog buildsettingsDialog(BuildContext context, TextEditingController passwordController) {
-              const Color ARMM_blue = Color(0xFF2B41B8);
               return AlertDialog(
                 backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
-                  side: const BorderSide(color: ARMM_blue, width: 2),
+                  side:  BorderSide(color: AppColors.primary, width: 2),
                 ),
                 content: SingleChildScrollView(
                   child: Column(
@@ -757,7 +755,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                          icon: const Icon(Icons.close, color: ARMM_blue),
+                          icon: const Icon(Icons.close, color: AppColors.primary),
                           onPressed: () => Navigator.pop(context),
                         ),
                       ),
@@ -780,10 +778,10 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-          color: ARMM_blue,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: ARMM_blue,
+            color: AppColors.primary,
             width: 1,
           ),
         ),

@@ -43,7 +43,7 @@ class AnalyticsPageState extends State<AnalyticsPage> {
     if (client == null) {
       return const Scaffold(
         body: CustomProgressIndicator(
-          color: Color(0xFF1C32A4), // ARMM_Blue color
+          color: Color(0xFF1C32A4), // AppColors.primary color
         ),
       );
     }

@@ -20,6 +20,7 @@ import 'package:armm_app/screens/profile/pages/my_profiles_page.dart';
 import 'package:armm_app/screens/profile/pages/settings_page.dart';
 import 'package:armm_app/screens/profile/pages/support_page.dart';
 import 'package:armm_app/screens/profile/profile.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,8 +37,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:armm_app/components/custom_progress_indicator.dart';
 
-// Define the ARMM_Blue color at the top of the file, outside any class
-const Color ARMM_Blue = Color(0xFF1C32A4);
+// Define the AppColors.primary color at the top of the file, outside any class
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -301,7 +301,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
               return const Directionality(
                 textDirection: TextDirection.ltr,
                 child: CustomProgressIndicator(
-                  color: ARMM_Blue,
+                  color: AppColors.primary,
                 ),
               );
             }
@@ -469,7 +469,7 @@ class _AuthCheckState extends State<AuthCheck> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CustomProgressIndicator(
-            color: ARMM_Blue,
+            color: AppColors.primary,
           ));
         } else if (snapshot.hasError) {
           log('AuthCheck: StreamBuilder error: ${snapshot.error}');
@@ -492,7 +492,7 @@ class _AuthCheckState extends State<AuthCheck> {
                   return const DashboardPage();
                 } else {
                   return const CustomProgressIndicator(
-                    color: ARMM_Blue,
+                    color: AppColors.primary,
                   );
                 }
               } else if (authSnapshot.hasError) {
@@ -506,7 +506,7 @@ class _AuthCheckState extends State<AuthCheck> {
                     if (appLockSnapshot.connectionState ==
                         ConnectionState.waiting) {
                       return const CustomProgressIndicator(
-                        color: ARMM_Blue,
+                        color: AppColors.primary,
                       );
                     } else if (appLockSnapshot.hasError) {
                       log('AuthCheck: FutureBuilder error: ${appLockSnapshot.error}');

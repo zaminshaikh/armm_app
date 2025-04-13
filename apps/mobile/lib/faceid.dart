@@ -172,7 +172,7 @@ class _FaceIdPageState extends State<FaceIdPage> with WidgetsBindingObserver {
                         },
 
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1C32A4), // ARMM_Blue
+                      backgroundColor: const Color(0xFF1C32A4), // AppColors.primary
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
