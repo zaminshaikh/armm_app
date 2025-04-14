@@ -15,7 +15,7 @@ class CustomProgressIndicator extends StatefulWidget {
     this.color = const Color(0xFF1C32A4), // Default to ARMM Blue
     this.size = 50.0,
     this.showTimeoutDialog = true,
-    this.timeoutDuration = const Duration(seconds: 5),
+    this.timeoutDuration = const Duration(seconds: 10),
     this.onTimeout,
   }) : super(key: key);
 
