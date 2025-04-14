@@ -4,6 +4,7 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/database/models/notification_model.dart';
 import 'package:armm_app/screens/activity/activity.dart';
 import 'package:armm_app/screens/profile/pages/documents_page.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,7 +37,6 @@ class NotificationCard extends StatelessWidget {
         break;
     }
 
-    const ARMM_Blue = Color(0xFF1C32A4);
 
     String timeAgo = timeago.format(notification.time, locale: 'en');
 
@@ -62,7 +62,7 @@ class NotificationCard extends StatelessWidget {
                     width: 10,
                     height: 10,
                     decoration: const BoxDecoration(
-                      color: ARMM_Blue,
+                      color: AppColors.primary,
                       shape: BoxShape.circle,
                     ),
                   ),

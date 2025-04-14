@@ -2,12 +2,12 @@ import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:armm_app/components/custom_progress_indicator.dart';
 
-const Color ARMM_Blue = Color(0xFF1C32A4);
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({Key? key}) : super(key: key);
@@ -54,7 +54,7 @@ class _AuthCheckState extends State<AuthCheck> {
     builder: (BuildContext context,AsyncSnapshot<User?> snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const CustomProgressIndicator(
-          color: ARMM_Blue,
+          color: AppColors.primary,
         );
       } else if (snapshot.hasError) {
         return Center(child: Text('Error: ${snapshot.error}'));
@@ -67,7 +67,7 @@ class _AuthCheckState extends State<AuthCheck> {
           builder:  (context, authSnapshot) {
             if (authSnapshot.connectionState == ConnectionState.waiting) {
               return const CustomProgressIndicator(
-                color: ARMM_Blue,
+                color: AppColors.primary,
               );
             } else if (authSnapshot.hasError) {
               return Center(child: Text('Error: ${authSnapshot.error}'));

@@ -11,6 +11,7 @@ import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:armm_app/utils/resources.dart'; // Import the resources file
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -349,7 +350,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     onPressed: () async {
                       _signUserUp();
                     },
-                    backgroundColor: ARMM_Blue,
+                    backgroundColor: AppColors.primary, // Use centralized color
                     foregroundColor: Colors.white,
                   ),
                   const SizedBox(height: 24),
@@ -358,7 +359,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
                   // Already have an account? Log in
                   AuthFooter(
-                    primaryColor: ARMM_Blue,
+                    primaryColor: AppColors.primary, // Use centralized color
                     onSignUpPressed: () {
                       Navigator.push(
                         context,

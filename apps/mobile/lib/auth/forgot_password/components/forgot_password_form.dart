@@ -1,5 +1,8 @@
 import 'package:armm_app/auth/link_sent/link_sent.dart';
 import 'package:flutter/material.dart';
+import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
+import 'package:armm_app/auth/auth_utils/auth_button.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({Key? key}) : super(key: key);
@@ -37,58 +40,39 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     return Column(
       children: [
         // Email TextField
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF5F6FA),
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                hintText: 'Enter your email',
-                hintStyle: const TextStyle(color: Colors.black38),
-                border: InputBorder.none,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              ),
-            ),
-          ),
+        AuthTextField(
+          hintText: 'Email',
+          controller: _emailController,
         ),
         const SizedBox(height: 24),
         // Submit Button
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: _isButtonEnabled
-                ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LinkSentPage()),
-                    );
-                  }
-                : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _isButtonEnabled
-                  ? const Color(0xFF4252C0)
-                  : const Color(0xFFDDE3F5), // Example "disabled" style
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-            child: Text(
-              'Submit',
-              style: TextStyle(
-                color: _isButtonEnabled
-                  ? const Color.fromARGB(255, 255, 255, 255)
-                  : Colors.black54,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-            ),
-          ),
+        AuthButton(
+          label: 'Submit',
+          onPressed: () {
+            showDialog(
+              context: context,
+              barrierDismissible: false, // Prevents dismissal by tapping outside
+              barrierColor: Colors.black.withOpacity(0.6),
+              builder: (BuildContext context) {
+                return CustomAlertDialog(
+                  title: 'Link Sent',
+                  message: 'We\'ve sent a password reset link to your email address.',
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          backgroundColor: _isButtonEnabled ? const Color(0xFF2C43D6) : Colors.transparent,
+          foregroundColor: _isButtonEnabled ? Colors.white : const Color(0xFFB0B8C7),
+          borderColor: _isButtonEnabled ? const Color(0xFF2C43D6) : const Color(0xFFCBD2E0),
+          isEnabled: _isButtonEnabled,
         ),
       ],
     );
