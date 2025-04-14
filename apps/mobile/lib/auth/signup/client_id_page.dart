@@ -127,6 +127,11 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       'This will help us confirm your identity\n'
                       'to protect your data securely',
                       textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
