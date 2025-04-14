@@ -1,6 +1,7 @@
 import 'package:armm_app/auth/auth_utils/apple_auth.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/auth_utils/social_tile.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +43,7 @@ class LoginSocial extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Google login tile
-            _buildSocialTile(
-              context, 
+            SocialTile(
               icon: SvgPicture.asset(
                 'assets/icons/google.svg',
                 color: primaryColor,
@@ -55,8 +55,7 @@ class LoginSocial extends StatelessWidget {
             ),
             const SizedBox(width: 20),
             // Apple login tile
-            _buildSocialTile(
-              context,
+            SocialTile(
               icon: const Icon(
                 FontAwesomeIcons.apple,
                 color: Colors.black,
@@ -94,23 +93,4 @@ class LoginSocial extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialTile(
-    BuildContext context, {
-    required Widget icon,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        width: 70,
-        height: 70,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300, width: 1.5),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Center(child: icon),
-      ),
-    );
-  }
 }
