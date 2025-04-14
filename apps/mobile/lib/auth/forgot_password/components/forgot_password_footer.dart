@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ForgotPasswordFooter extends StatelessWidget {
   const ForgotPasswordFooter({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryColor = Color(0xFF4252C0);
+    const Color primaryColor = Color(0xFF2C43D6);
 
     return Column(
       children: [
@@ -13,11 +14,11 @@ class ForgotPasswordFooter extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               'Back to ',
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 18,
+              style: GoogleFonts.inter(
+                color: Colors.black45,
+                fontSize: 14,
               ),
             ),
             GestureDetector(
@@ -25,11 +26,11 @@ class ForgotPasswordFooter extends StatelessWidget {
                 // Add navigation logic if needed
               },
               child: Text(
-                'Sign in',
-                style: TextStyle(
+                'Log in',
+                style: GoogleFonts.inter(
                   color: primaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
                 ),
               ),
             ),
