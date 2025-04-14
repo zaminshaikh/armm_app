@@ -1,3 +1,4 @@
+import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -82,7 +83,7 @@ class CustomAlertDialog extends StatelessWidget {
               child: DefaultTextStyle(
           style: GoogleFonts.inter(
             fontWeight: FontWeight.w600,
-            color: theme.colorScheme.primary,
+            color: AppColors.primary,
             fontSize: 15,
           ),
           child: action.child!,
@@ -111,7 +112,7 @@ class CustomAlertDialog extends StatelessWidget {
               child: Text(
                 'OK',
                 style: TextStyle(
-                  color: theme.colorScheme.primary,
+                  color: AppColors.primary,
                 ),
               ),
             ),
