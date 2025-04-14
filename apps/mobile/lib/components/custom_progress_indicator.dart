@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 
 class CustomProgressIndicator extends StatefulWidget {
   final Color? color;
@@ -51,36 +52,16 @@ class _CustomProgressIndicatorState extends State<CustomProgressIndicator> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Colors.grey[800],
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      'Connection Timeout',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(width: 10),
-                    const Icon(
-                      Icons.timer,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              ),
-              const Text(
-                'The connection is taking longer than expected. Please return to the login page and try again.',
-              ),
-            ],
-          ),
+      builder: (BuildContext context) => CustomAlertDialog(
+        title: 'Connection Timeout',
+        message: 'The connection is taking longer than expected. Please return to the login page and try again.',
+        icon: const Icon(
+          Icons.timer,
+          color: Colors.red,
         ),
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () {
+        actions: [
+          TextButton(
+            onPressed: () {
               Navigator.of(context).pop();
               if (widget.onTimeout != null) {
                 widget.onTimeout!();
@@ -90,36 +71,22 @@ class _CustomProgressIndicatorState extends State<CustomProgressIndicator> {
                     '/onboarding', (Route<dynamic> route) => false);
               }
             },
-            child: Container(
-              height: 45,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                border: Border.all(color: Colors.red),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.logout,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Logout',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Titillium Web',
-                      ),
-                    ),
-                  ],
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.logout, 
+                  color: Colors.red,
+                  size: 18,
                 ),
-              ),
+                SizedBox(width: 8),
+                Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
