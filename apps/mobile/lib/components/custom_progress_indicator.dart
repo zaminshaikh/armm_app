@@ -87,7 +87,7 @@ class _CustomProgressIndicatorState extends State<CustomProgressIndicator> {
               } else {
                 // Default behavior
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/login', (Route<dynamic> route) => false);
+                    '/onboarding', (Route<dynamic> route) => false);
               }
             },
             child: Container(
