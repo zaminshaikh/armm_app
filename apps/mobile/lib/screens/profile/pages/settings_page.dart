@@ -140,7 +140,7 @@ class _SettingsPageState extends State<SettingsPage> {
     if (client == null) {
       return const Scaffold(
         body: CustomProgressIndicator(
-          color: Color(0xFF1C32A4),
+          shouldTimeout: true,
         ),
       );
     }

@@ -1,3 +1,4 @@
+import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
@@ -6,15 +7,15 @@ import 'package:armm_app/components/custom_alert_dialog.dart';
 class CustomProgressIndicator extends StatefulWidget {
   final Color? color;
   final double? size;
-  final bool showTimeoutDialog;
+  final bool shouldTimeout;
   final Duration timeoutDuration;
   final Function()? onTimeout;
 
   const CustomProgressIndicator({
     Key? key, 
-    this.color = const Color(0xFF1C32A4), // Default to ARMM Blue
+    this.color = AppColors.primary, // Default to ARMM Blue
     this.size = 50.0,
-    this.showTimeoutDialog = true,
+    this.shouldTimeout = false,
     this.timeoutDuration = const Duration(seconds: 10),
     this.onTimeout,
   }) : super(key: key);
@@ -30,7 +31,7 @@ class _CustomProgressIndicatorState extends State<CustomProgressIndicator> {
   void initState() {
     super.initState();
     
-    if (widget.showTimeoutDialog) {
+    if (widget.shouldTimeout) {
       // Start a timer for specified duration (default 5 seconds)
       _timer = Timer(widget.timeoutDuration, () {
         // After timeout, show the dialog

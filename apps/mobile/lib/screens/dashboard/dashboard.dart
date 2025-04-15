@@ -167,7 +167,9 @@ class _DashboardPageState extends State<DashboardPage>
   
     if (client == null) {
       return const Scaffold(
-        body: CustomProgressIndicator(color: Color(0xFF1C32A4)),
+        body: CustomProgressIndicator(
+          shouldTimeout: true,
+        ),
       );
     }
   

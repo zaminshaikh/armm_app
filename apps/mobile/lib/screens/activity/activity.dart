@@ -88,7 +88,7 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget build(BuildContext context) {
     if (client == null) {
       return const CustomProgressIndicator(
-        color: Color(0xFF2B41B8), // ARMM Blue color
+        shouldTimeout: true,
       );
     }
 
