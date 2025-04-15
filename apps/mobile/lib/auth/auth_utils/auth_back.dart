@@ -17,10 +17,17 @@ class AuthBack extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back),
-              color: Colors.grey,
-              onPressed: onBackPressed,
+            // Replace IconButton with GestureDetector
+            GestureDetector(
+              onTap: onBackPressed,
+              behavior: HitTestBehavior.opaque,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.grey,
+                ),
+              ),
             ),
             // TextButton(
             //   onPressed: onBackPressed,

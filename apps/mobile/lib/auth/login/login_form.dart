@@ -160,6 +160,9 @@ class _LoginFormState extends State<LoginForm> {
                 MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
               );
             },
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+            ),
             child: Text(
               'Forgot Password?',
               style: TextStyle(

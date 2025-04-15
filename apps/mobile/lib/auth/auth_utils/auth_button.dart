@@ -45,6 +45,7 @@ class AuthButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16),
           backgroundColor: effectiveBackgroundColor,
           foregroundColor: effectiveForegroundColor,
+          splashFactory: NoSplash.splashFactory, // Remove splash effect
         ),
         onPressed: isEnabled ? onPressed : null,
         child: icon != null

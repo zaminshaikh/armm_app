@@ -22,6 +22,7 @@ class AuthButtons extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30.0),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16),
+              splashFactory: NoSplash.splashFactory, // Remove splash effect
             ),
             onPressed: () {
               Navigator.push(
@@ -47,6 +48,7 @@ class AuthButtons extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30.0),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16),
+              splashFactory: NoSplash.splashFactory, // Remove splash effect
             ),
             onPressed: () {
               Navigator.push(
@@ -91,6 +93,7 @@ class _AuthButtonsStatefulState extends State<AuthButtonsStateful> {
                 borderRadius: BorderRadius.circular(30.0),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16),
+              splashFactory: NoSplash.splashFactory, // Remove splash effect
             ),
             onPressed: () {
               Navigator.push(
@@ -116,6 +119,7 @@ class _AuthButtonsStatefulState extends State<AuthButtonsStateful> {
                 borderRadius: BorderRadius.circular(30.0),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16),
+              splashFactory: NoSplash.splashFactory, // Remove splash effect
             ),
             onPressed: () {
               Navigator.push(
