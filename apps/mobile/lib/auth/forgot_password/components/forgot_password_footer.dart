@@ -18,19 +18,19 @@ class ForgotPasswordFooter extends StatelessWidget {
               'Back to ',
               style: GoogleFonts.inter(
                 color: Colors.black45,
-                fontSize: 14,
+                fontSize: 16, // Increased font size
               ),
             ),
             GestureDetector(
               onTap: () {
-                // Add navigation logic if needed
+                Navigator.pop(context); // Navigate back to login screen
               },
               child: Text(
                 'Log in',
                 style: GoogleFonts.inter(
                   color: primaryColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontSize: 16, // Increased font size
                 ),
               ),
             ),
