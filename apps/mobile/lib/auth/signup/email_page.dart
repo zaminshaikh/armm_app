@@ -7,6 +7,7 @@ import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EmailPage extends StatefulWidget {
   final String cid;
@@ -41,24 +42,29 @@ class _EmailPageState extends State<EmailPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Title
-                  const Text(
+                    // Title
+                    Text(
                     'Next, enter your Email',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
+                    ),
+                    const SizedBox(height: 8),
 
-                  // Subtitle
-                  const Text(
+                    // Subtitle
+                    Text(
                     'Please enter your email address\n'
                     'to continue the registration process',
+                    style: GoogleFonts.inter(
+                      color: Colors.black,
+                    ),
                     textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
+                    ),
+                    const SizedBox(height: 32),
+
 
                   // Email Text Field
                   AuthTextField(
