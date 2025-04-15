@@ -44,6 +44,9 @@ class _PasswordPageState extends State<PasswordPage> {
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasCapitalLetter => _passwordController.text.contains(RegExp(r'[A-Z]'));
   bool get _hasNumber => _passwordController.text.contains(RegExp(r'\d'));
+  bool get _passwordsMatch => _passwordController.text == _confirmPasswordController.text && _confirmPasswordController.text.isNotEmpty;
+  
+  bool get _isPasswordValid => _hasMinLength && _hasCapitalLetter && _hasNumber && _passwordsMatch;
 
   int _passwordSecurityIndicator = 0;
 
@@ -347,6 +350,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     hintText: 'Confirm Password',
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
+                    onChanged: (_) => setState(() {}), // Trigger rebuild to update button state
                   ),
                   const SizedBox(height: 24),
 
@@ -356,8 +360,9 @@ class _PasswordPageState extends State<PasswordPage> {
                     onPressed: () async {
                       _signUserUp();
                     },
-                    backgroundColor: AppColors.primary, // Use centralized color
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
+                    isEnabled: _isPasswordValid, // Only enable when password is valid
                   ),
                   const SizedBox(height: 24),
 
