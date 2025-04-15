@@ -229,7 +229,7 @@ class ProfileButtons extends StatelessWidget {
         const SizedBox(height: 24),
         // Disclaimer Section
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: const Color(0xFFF1F4FF),
             borderRadius: BorderRadius.circular(12),
@@ -241,30 +241,27 @@ class ProfileButtons extends StatelessWidget {
                 'Disclaimer',
                 style: GoogleFonts.inter(
                   textStyle: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Color.fromARGB(255, 56, 56, 56),
                   ),
                 ),
                 ),
-                const SizedBox(height: 15),
-                Center(
-                child: Text(
+                const SizedBox(height: 8),
+                Text(
                   'Investment products and services are offered '
                   'through ARMM group Investment, a New York '
                   'limited liability company.',
                   style: GoogleFonts.inter(
                   textStyle: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Color.fromARGB(255, 56, 56, 56),
                   ),
                   ),
                   textAlign: TextAlign.center,
                 ),
-
-              ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/disclaimer');
@@ -272,7 +269,7 @@ class ProfileButtons extends StatelessWidget {
                 child: Container(
                   color: Colors.transparent,
                   child: Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -280,24 +277,24 @@ class ProfileButtons extends StatelessWidget {
                           'Real Full Disclaimer',
                           style: GoogleFonts.inter(
                             textStyle: const TextStyle(
-                              fontSize: 17,
+                              fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF2B41B8),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 8),
                         const Icon(
                           Icons.arrow_forward_ios_rounded,
                           color: Color(0xFF2B41B8),
-                          size: 20,
+                          size: 16,
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
             ],
           ),
         ),
