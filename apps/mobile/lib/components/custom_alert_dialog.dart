@@ -73,20 +73,20 @@ class CustomAlertDialog extends StatelessWidget {
             return TextButton(
               onPressed: action.onPressed,
               style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          backgroundColor: Colors.transparent,
-          overlayColor: Colors.transparent, // removes splash
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                backgroundColor: Colors.transparent,
+                overlayColor: Colors.transparent, // removes splash
               ),
               child: DefaultTextStyle(
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w600,
-            color: AppColors.primary,
-            fontSize: 15,
-          ),
-          child: action.child!,
+                style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
+                    fontSize: 15,
+                ),
+                child: action.child!,
               ),
             );
           }
