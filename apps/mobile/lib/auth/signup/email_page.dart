@@ -5,6 +5,10 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/utils/resources.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,6 +26,7 @@ class EmailPage extends StatefulWidget {
 class _EmailPageState extends State<EmailPage> {
   final TextEditingController _emailController = TextEditingController();
   bool _isEmailValid = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -46,10 +51,91 @@ class _EmailPageState extends State<EmailPage> {
       });
     }
   }
+  
+  // Method to check if the email already exists in Firebase Auth
+  Future<bool> _checkEmailExists() async {
+    if (!_isEmailValid) {
+      showDialog(
+        context: context,
+        builder: (context) => CustomAlertDialog(
+          title: 'Invalid Email',
+          message: 'Please enter a valid email address.',
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return true; // Return true to indicate there's a problem
+    }
+    
+    final email = _emailController.text.trim();
+    
+    try {
+      // Try to sign up with the email to check if it exists
+      // This is a workaround as Firebase doesn't provide a direct way to check
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: "temporaryPassword123",
+      );
+      
+      // If we reach here, the email does not exist
+      // We should sign out immediately
+      await FirebaseAuth.instance.currentUser?.delete();
+      
+      return false; // Email does not exist, proceed
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        // Wrong password means the email exists
+        if (!mounted) return true;
+        
+        showDialog(
+          context: context,
+          builder: (context) => CustomAlertDialog(
+            title: 'Email Already Exists',
+            message: 'This email is already registered. Please log in instead or use a different email address.',
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return true; // Email exists, don't proceed
+      } else if (e.code == 'invalid-email') {
+        if (!mounted) return true;
+        
+        showDialog(
+          context: context,
+          builder: (context) => CustomAlertDialog(
+            title: 'Invalid Email',
+            message: 'Please enter a valid email address.',
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return true; // Invalid email, don't proceed
+      } else {
+        // Handle other Firebase Auth exceptions
+        log('Error checking email existence: ${e.code} - ${e.message}');
+        return false; // Proceed in case of other errors
+      }
+    } catch (e) {
+      log('Unexpected error checking email: $e');
+      return false; // Proceed in case of other errors
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    print("Client ID received in EmailPage: ${widget.cid}"); // DEBUG PRINT
+    log("Client ID received in EmailPage: ${widget.cid}"); // DEBUG PRINT
     return Scaffold(
       body: Stack(
         children: [
@@ -101,14 +187,26 @@ class _EmailPageState extends State<EmailPage> {
                   // Continue Button
                   AuthButton(
                     label: 'Continue',
-                    onPressed: () {
+                    onPressed: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      
                       widget.email = _emailController.text;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PasswordPage(cid: widget.cid, email: widget.email),
-                        ),
-                      );
+                      final emailExists = await _checkEmailExists();
+                      
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      
+                      if (!emailExists && context.mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PasswordPage(cid: widget.cid, email: _emailController.text),
+                          ),
+                        );
+                      }
                     },
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
@@ -138,6 +236,14 @@ class _EmailPageState extends State<EmailPage> {
             ),
           ),
           AuthBack(onBackPressed: () => Navigator.pop(context)),
+          // Loading indicator overlay
+          if (_isLoading)
+            Container(
+              color: Colors.black54,
+              child: const Center(
+                child: CustomProgressIndicator(),
+              ),
+            ),
         ],
       ),
     );
