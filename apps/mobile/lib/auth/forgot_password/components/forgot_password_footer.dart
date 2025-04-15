@@ -23,7 +23,7 @@ class ForgotPasswordFooter extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                // Add navigation logic if needed
+                Navigator.of(context).pop(); // Navigate back to login page
               },
               child: Text(
                 'Log in',
