@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:armm_app/auth/link_sent/link_sent.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
@@ -150,8 +152,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
         const SizedBox(height: 24),
         // Submit Button
         _isLoading
-            ? const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2C43D6)),
+            ? const CustomProgressIndicator(
+                color: AppColors.primary,
               )
             : AuthButton(
                 label: 'Submit',
