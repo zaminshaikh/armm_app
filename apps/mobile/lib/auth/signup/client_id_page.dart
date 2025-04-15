@@ -5,6 +5,7 @@ import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/auth_utils/social_tile.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
@@ -15,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 class ClientIDPage extends StatefulWidget {
@@ -227,50 +229,53 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       Expanded(child: Divider()),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text('or', style: TextStyle(color: Colors.grey)),
+                        child: Text('or sign up with', style: TextStyle(color: Colors.grey)),
                       ),
                       Expanded(child: Divider()),
                     ],
                   ),
+
                   const SizedBox(height: 16),
 
-                  // Sign up with Google
-                  AuthButton(
-                    label: 'Sign up with Google',
-                    icon: SvgPicture.asset(
-                      'assets/icons/google.svg',
-                      color: AppColors.primary,
-                      height: 24,
-                    ),
-                    foregroundColor: AppColors.primary,
-                    onPressed: () async {
-                      // Dismiss the keyboard
-                      FocusScope.of(context).unfocus();
-                      try {
-                        setState(() => isLoading = true);
-                        await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
-                      } finally {
-                        setState(() => isLoading = false);
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-
-                  AuthButton(
-                    label: 'Sign up with Apple', 
-                    icon: const Icon(Icons.apple), 
-                    foregroundColor: Colors.black, 
-                    borderColor: Colors.black,
-                    onPressed: () async {
-                      try {
-                        setState(() => isLoading = true);
-                        await AppleAuthService().signUpWithApple(context, _cidController.text);
-                      } finally {
-                        if (mounted){
-                          setState(() => isLoading = false);
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SocialTile(
+                        icon: const Icon(
+                          FontAwesomeIcons.apple,
+                          color: Colors.black,
+                          size: 30,
+                        ),
+                        onTap: () async {
+                          try {
+                            setState(() => isLoading = true);
+                            await AppleAuthService().signUpWithApple(context, _cidController.text);
+                          } finally {
+                            if (mounted){
+                              setState(() => isLoading = false);
+                            }
+                          }
                         }
-                      }
-                    }
+                      ),
+                      const SizedBox(width: 20),
+                      SocialTile(
+                        icon: const Icon(
+                          FontAwesomeIcons.google,
+                          color: AppColors.primary,
+                          size: 30,
+                        ),
+                        onTap: () async {
+                          // Dismiss the keyboard
+                          FocusScope.of(context).unfocus();
+                          try {
+                            setState(() => isLoading = true);
+                            await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
+                          } finally {
+                            setState(() => isLoading = false);
+                          }
+                        },
+                      ),
+                    ],
                   ),
 
                   const SizedBox(height: 24),
