@@ -346,15 +346,6 @@ class _SettingsPageState extends State<SettingsPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 8),
-                  Text(
-                    'Update the email associated with your account.',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
                   Text(
                     'Email',
                     style: GoogleFonts.inter(
