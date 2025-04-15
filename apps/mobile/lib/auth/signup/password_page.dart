@@ -15,6 +15,7 @@ import 'package:armm_app/utils/resources.dart'; // Import the resources file
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PasswordPage extends StatefulWidget {
 
@@ -232,19 +233,21 @@ class _PasswordPageState extends State<PasswordPage> {
                   const SizedBox(height: 16),
 
                   // Title
-                  const Text(
+                  Text(
                     'Next, create your Password',
-                    style: TextStyle(
+                    style: GoogleFonts.roboto(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
 
                   // Subtitle
-                  const Text(
+                  Text(
                     'It will protect your account',
+                    style: GoogleFonts.roboto(color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 28),
@@ -267,8 +270,9 @@ class _PasswordPageState extends State<PasswordPage> {
                                 color: _hasMinLength ? Colors.green : Colors.grey,
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Minimum\n8 characters',
+                              Text(
+                                '8 characters',
+                                style: GoogleFonts.roboto(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -291,8 +295,9 @@ class _PasswordPageState extends State<PasswordPage> {
                                 color: _hasCapitalLetter ? Colors.green : Colors.grey,
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Minimum\n1 Capital letter',
+                              Text(
+                                '1 Capital letter',
+                                style: GoogleFonts.roboto(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -315,8 +320,9 @@ class _PasswordPageState extends State<PasswordPage> {
                                 color: _hasNumber ? Colors.green : Colors.grey,
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Minimum\n1 Number',
+                              Text(
+                                '1 Number',
+                                style: GoogleFonts.roboto(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],
