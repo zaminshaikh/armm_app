@@ -168,7 +168,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     return CustomAlertDialog(
                     title: 'What is a Client ID?',
                     message: 'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.info_outline_rounded,
                       color: AppColors.primary,
                     ),
@@ -189,9 +189,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
             },
             child: Container(
               color: Colors.transparent,
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Icon(
                     Icons.info_outline_rounded,
                     color: Colors.grey,
@@ -308,7 +308,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         ),
                       );
                     },
@@ -328,9 +328,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
           if (isLoading)
             Container(
               color: Colors.black54,
-              child: CustomProgressIndicator(
-                color: AppColors.primary,
-              ),
+              child: const CustomProgressIndicator(),
             ),
         ],
       ),

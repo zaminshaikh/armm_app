@@ -54,7 +54,7 @@ class _AuthCheckState extends State<AuthCheck> {
     builder: (BuildContext context,AsyncSnapshot<User?> snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const CustomProgressIndicator(
-          color: AppColors.primary,
+          shouldTimeout: true,
         );
       } else if (snapshot.hasError) {
         return Center(child: Text('Error: ${snapshot.error}'));
@@ -67,7 +67,7 @@ class _AuthCheckState extends State<AuthCheck> {
           builder:  (context, authSnapshot) {
             if (authSnapshot.connectionState == ConnectionState.waiting) {
               return const CustomProgressIndicator(
-                color: AppColors.primary,
+                shouldTimeout: true,
               );
             } else if (authSnapshot.hasError) {
               return Center(child: Text('Error: ${authSnapshot.error}'));

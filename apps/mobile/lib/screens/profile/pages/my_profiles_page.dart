@@ -29,7 +29,9 @@ class _MyProfilesPageState extends State<MyProfilesPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const CustomProgressIndicator(color: Color(0xFF1C32A4));
+      return const CustomProgressIndicator(
+        shouldTimeout: true,
+      );
     }
 
     return Scaffold(

@@ -152,9 +152,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
         const SizedBox(height: 24),
         // Submit Button
         _isLoading
-            ? const CustomProgressIndicator(
-                color: AppColors.primary,
-              )
+            ? const CustomProgressIndicator()
             : AuthButton(
                 label: 'Submit',
                 onPressed: _sendPasswordResetEmail,
