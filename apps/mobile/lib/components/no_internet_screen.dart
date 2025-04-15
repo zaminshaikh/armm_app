@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
@@ -116,55 +117,16 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
     } else {
       await showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(
-            'No Internet Connection',
-            style: TextStyle(
-              color: ARMMBlue,
-              fontFamily: 'Titillium Web',
-              fontWeight: FontWeight.bold,
+        builder: (context) => CustomAlertDialog(
+          title: 'No Internet Connection',
+          message: 'Please check your internet connection and try again.',
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-          ),
-          content: Text(
-            'Please check your internet connection and try again.',
-            style: TextStyle(
-              color: Colors.black87,
-              fontFamily: 'Titillium Web',
-            ),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: ARMMBlue,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: ARMMBlue.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Text(
-                  'OK',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Titillium Web',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            )
           ],
         ),
       );

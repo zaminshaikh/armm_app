@@ -538,25 +538,20 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               );
             }
-            return AlertDialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-              content: SingleChildScrollView(
-                child: Column(
+            return CustomAlertDialog(
+              title: 'Change Email',
+              message: 'Update the email associated with your account.',
+              icon: null,
+              actions: [
+                Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    buildCloseButton(context),
-                    const SizedBox(height: 1),
                     buildEmailInputSection(emailController),
                     const SizedBox(height: 24),
                     buildContinueButton(context, emailController),
-                    const SizedBox(height: 24),
                   ],
                 ),
-              ),
+              ],
             );
           },
         );
@@ -591,39 +586,17 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
   Widget _buildChangePasswordSection() {
-
     return GestureDetector(
       onTap: () {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             TextEditingController passwordController = TextEditingController();
-            Widget buildCloseButton(BuildContext context) {
-              return Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.close, color: Colors.black),
-                ),
-              );
-            }
-            Widget buildIconArt() {
-              return SvgPicture.asset(
-                '',
-              );
-            }
-            Widget buildPasswordInputSection(TextEditingController passwordController) {
+            
+            Widget buildPasswordInputSection(TextEditingController controller) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Change Password',
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   const SizedBox(height: 8),
                   Text(
                     'You are changing the password associated with your account.',
@@ -642,7 +615,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    controller: passwordController,
+                    controller: controller,
                     obscureText: true,
                     style: GoogleFonts.inter(
                       fontSize: 16,
@@ -672,11 +645,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               );
             }
-            Widget buildContinueButton(BuildContext context, TextEditingController passwordController) {
+            
+            Widget buildContinueButton(BuildContext context, TextEditingController controller) {
               return ElevatedButton(
                 onPressed: () async {
                   try {
-                    String newPassword = passwordController.text.trim();
+                    String newPassword = controller.text.trim();
                     var user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       await user.updatePassword(newPassword);
@@ -740,41 +714,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               );
             }
-            AlertDialog buildsettingsDialog(BuildContext context, TextEditingController passwordController) {
-              return AlertDialog(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side:  BorderSide(color: AppColors.primary, width: 2),
+            
+            return CustomAlertDialog(
+              title: 'Change Password',
+              message: 'You are changing the password associated with your account.',
+              actions: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    buildPasswordInputSection(passwordController),
+                    const SizedBox(height: 24),
+                    buildContinueButton(context, passwordController),
+                  ],
                 ),
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Updated close button with ARMM blue color
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          icon: const Icon(Icons.close, color: AppColors.primary),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      // Keep the email/password input section as is
-                      buildPasswordInputSection(passwordController),
-                      const SizedBox(height: 20),
-                      buildContinueButton(context, passwordController),
-                    ],
-                  ),
-                ),
-              );
-            }
-            return buildsettingsDialog(context, passwordController);
+              ],
+            );
           },
         );
       },
-
-      
       child: Container(
         height: 45,
         decoration: BoxDecoration(
