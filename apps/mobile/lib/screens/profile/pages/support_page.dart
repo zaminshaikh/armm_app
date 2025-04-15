@@ -43,7 +43,7 @@ class SupportPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Investment Advisor',
+                        'Founder & President',
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           color: Colors.black,
