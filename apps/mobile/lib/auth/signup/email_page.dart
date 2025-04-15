@@ -21,6 +21,31 @@ class EmailPage extends StatefulWidget {
 
 class _EmailPageState extends State<EmailPage> {
   final TextEditingController _emailController = TextEditingController();
+  bool _isEmailValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(_validateEmail);
+  }
+
+  @override
+  void dispose() {
+    _emailController.removeListener(_validateEmail);
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  void _validateEmail() {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final isValid = emailRegex.hasMatch(_emailController.text);
+    
+    if (isValid != _isEmailValid) {
+      setState(() {
+        _isEmailValid = isValid;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +112,7 @@ class _EmailPageState extends State<EmailPage> {
                     },
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
+                    isEnabled: _isEmailValid,
                   ),
                   const SizedBox(height: 24),
 
