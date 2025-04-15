@@ -153,6 +153,8 @@ class _ActivityPageState extends State<ActivityPage> {
         .toSet()
         // convert back to a list
         .toList();
+
+    allRecipients = allRecipients.toSet().toList(); // Ensure unique recipients
   }
 
   /// Builds the content of the list based on the index.

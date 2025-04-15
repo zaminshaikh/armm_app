@@ -22,7 +22,7 @@ class ActivityDetailsModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      heightFactor: 0.67,
+      heightFactor: 0.75,
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30.0),
@@ -140,13 +140,22 @@ class ActivityDetailsModal extends StatelessWidget {
         ),
         const Divider(color: Colors.black, thickness: 0.2),
         _buildModalDetailSection(
+          icon: Icon(
+            Icons.arrow_back,
+            size: 32,
+            color: const Color.fromARGB(255, 82, 82, 82),
+          ),
+          title: 'Recipient',
+          content: activity.recipient,
+        ),
+        const Divider(color: Colors.black, thickness: 0.2),
+        _buildModalDetailSection(
           icon: SvgPicture.asset(
             'assets/icons/profile_hollow.svg',
             color: const Color.fromARGB(255, 82, 82, 82),
           ),
-
-          title: 'Recipient',
-          content: activity.recipient,
+          title: 'Client',
+          content: activity.parentName ?? 'N/A',
         ),
       ],
     );
