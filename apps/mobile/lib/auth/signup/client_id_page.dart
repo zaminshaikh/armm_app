@@ -30,6 +30,25 @@ class ClientIDPage extends StatefulWidget {
 class _ClientIDPageState extends State<ClientIDPage> {
   final TextEditingController _cidController = TextEditingController();
   bool isLoading = false;
+  bool _isCIDValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _cidController.addListener(_validateCID);
+  }
+
+  void _validateCID() {
+    final text = _cidController.text;
+    // Check if the text is exactly 8 digits
+    final isValid = text.length == 8 && RegExp(r'^\d{8}$').hasMatch(text);
+    
+    if (isValid != _isCIDValid) {
+      setState(() {
+        _isCIDValid = isValid;
+      });
+    }
+  }
 
   Future<bool> isValidCID(String cid) async {
     DatabaseService db = DatabaseService.withCID('', cid);
@@ -82,6 +101,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
 
   @override
   void dispose() {
+    _cidController.removeListener(_validateCID);
     _cidController.dispose();
     isLoading = false;
     super.dispose();
@@ -220,6 +240,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     },
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
+                    isEnabled: _isCIDValid,
                   ),
                   const SizedBox(height: 16),
 
