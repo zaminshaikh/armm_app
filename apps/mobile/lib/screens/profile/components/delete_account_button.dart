@@ -43,7 +43,7 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         ),
         onPressed: () => _showDeleteAccountDialog(context),
         child: Row(
@@ -52,15 +52,15 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
           children: [
             SvgPicture.asset(
               'assets/icons/trash.svg',
-              width: 24,
-              height: 24,
+              width: 20,
+              height: 20,
               color: Colors.red,
             ),
             const SizedBox(width: 12),
             const Text(
               'Delete Account',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
               ),
