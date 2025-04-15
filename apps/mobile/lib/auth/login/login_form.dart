@@ -14,7 +14,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final bool obscurePassword;
@@ -30,6 +30,36 @@ class LoginForm extends StatelessWidget {
     required this.onTogglePassword,
   }) : super(key: key);
 
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  bool isEmailValid = false;
+  bool isPasswordValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Check initial values
+    validateEmail(widget.emailController.text);
+    validatePassword(widget.passwordController.text);
+  }
+
+  void validateEmail(String email) {
+    // Simple email validation
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    setState(() {
+      isEmailValid = emailRegex.hasMatch(email);
+    });
+  }
+
+  void validatePassword(String password) {
+    setState(() {
+      isPasswordValid = password.isNotEmpty;
+    });
+  }
+
   // Sign user in method
   Future<bool> signUserIn(BuildContext context) async {
     log('login.dart: Attempting to sign user in...'); // Debugging output
@@ -37,8 +67,8 @@ class LoginForm extends StatelessWidget {
       log('login.dart: Calling FirebaseAuth to sign in with email and password...'); // Debugging output
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
+        email: widget.emailController.text,
+        password: widget.passwordController.text,
       );
       // await updateFirebaseMessagingToken(userCredential.user, context);
       log('login.dart: Signed in user ${userCredential.user!.uid}'); // Debugging output
@@ -98,22 +128,27 @@ class LoginForm extends StatelessWidget {
     return Column(
       children: [
         // Email TextField
-        AuthTextField(hintText: 'Email', controller: emailController),
+        AuthTextField(
+          hintText: 'Email', 
+          controller: widget.emailController,
+          onChanged: (value) => validateEmail(value),
+        ),
         const SizedBox(height: 5),
         // Password TextField with toggle visibility
         AuthTextField(
           hintText: 'Password',
-          controller: passwordController,
-          obscureText: obscurePassword,
-          onChanged: (value) {},
+          controller: widget.passwordController,
+          obscureText: widget.obscurePassword,
+          onChanged: (value) => validatePassword(value),
         ),
         const SizedBox(height: 16),
         // Log In button
         AuthButton(
           label: 'Log in',
           onPressed: () => signUserIn(context),
-          backgroundColor: primaryColor,
+          backgroundColor: widget.primaryColor,
           foregroundColor: Colors.white,
+          isEnabled: isEmailValid && isPasswordValid,
         ),
         const SizedBox(height: 16),
         // Forgot Password button
@@ -128,7 +163,7 @@ class LoginForm extends StatelessWidget {
             child: Text(
               'Forgot Password?',
               style: TextStyle(
-                color: primaryColor,
+                color: widget.primaryColor,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
