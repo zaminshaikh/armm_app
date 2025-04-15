@@ -107,6 +107,7 @@ class _PasswordPageState extends State<PasswordPage> {
       if (!mounted) return;
       await showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return CustomAlertDialog(
             title: 'Verify your email',
@@ -114,8 +115,63 @@ class _PasswordPageState extends State<PasswordPage> {
             actions: [
               TextButton(
                 onPressed: () async {
-                  Navigator.of(context).pop();
-                  await _verifyEmail();
+                  // Check if the email is verified
+                  User? user = FirebaseAuth.instance.currentUser;
+                  await user?.reload();
+                  user = FirebaseAuth.instance.currentUser;
+                  
+                  if (user != null && user.emailVerified) {
+                    Navigator.of(context).pop(); // Close the dialog
+                    
+                    // Show success dialog
+                    if (!mounted) return;
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomAlertDialog(
+                          title: 'Success',
+                          message: 'Email verified successfully.',
+                          icon: const Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                _verifyEmail(); // Continue with the verification process
+                              },
+                              child: const Text('Continue'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    // Show "check your email" dialog
+                    if (!mounted) return;
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomAlertDialog(
+                          title: 'Email Not Verified',
+                          message: 'Please check your email and click on the verification link. If you don\'t see it, check your spam folder.',
+                          icon: const Icon(
+                            Icons.warning_amber_rounded,
+                            color: Colors.orange,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 child: const Text('Continue'),
               ),
@@ -150,27 +206,7 @@ class _PasswordPageState extends State<PasswordPage> {
       // await updateFirebaseMessagingToken(user, context);
 
       if (!mounted) return true;
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomAlertDialog(
-            title: 'Success',
-            message: 'Email verified successfully.',
-            icon: const Icon(
-              Icons.check_circle,
-              color: Colors.green,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+            
       if (!mounted) return true;
       // appState = Provider.of<AuthService>(context, listen: false);
       setState(() {
