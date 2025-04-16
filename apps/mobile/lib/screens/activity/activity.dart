@@ -354,7 +354,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
   /// Shows the filter modal.
   void _showFilterModal(BuildContext context) {
-    var allTypes = ['income', 'profit', 'deposit', 'withdrawal'];
+    var allTypes = ['profit', 'deposit', 'withdrawal'];
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
