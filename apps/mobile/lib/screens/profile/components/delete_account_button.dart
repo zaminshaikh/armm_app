@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:developer';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/utils/resources.dart';
@@ -81,14 +82,11 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
       context: context,
       builder: (BuildContext dialogContext) {
         return StatefulBuilder(
-          builder: (context, setDialogState) => AlertDialog(
-            title: const Text("Confirm Delete Account"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
+          builder: (context, setDialogState) {
+            // Create the input widget with TextField
+            Widget inputWidget = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Are you sure you want to permanently delete your account?"),
-                const SizedBox(height: 16),
                 const Text("Please enter your CID to confirm:"),
                 const SizedBox(height: 8),
                 TextField(
@@ -112,29 +110,35 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
                   },
                 ),
               ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(dialogContext).pop(false);
-                },
-                child: const Text("Cancel"),
-              ),
-              TextButton(
-                onPressed: () {
-                  if (_clientIdController.text != widget.client.cid) {
-                    setDialogState(() {
-                      _errorText = 'CID does not match';
-                    });
-                    return;
-                  }
-                  Navigator.of(dialogContext).pop(true);
-                  _deleteAccount();
-                },
-                child: const Text("Delete Account", style: TextStyle(color: Colors.red)),
-              ),
-            ],
-          ),
+            );
+
+            return CustomAlertDialog(
+              title: "Confirm Delete Account",
+              message: "Are you sure you want to permanently delete your account?",
+              input: inputWidget,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop(false);
+                  },
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (_clientIdController.text != widget.client.cid) {
+                      setDialogState(() {
+                        _errorText = 'CID does not match';
+                      });
+                      return;
+                    }
+                    Navigator.of(dialogContext).pop(true);
+                    _deleteAccount();
+                  },
+                  child: const Text("Delete Account", style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            );
+          },
         );
       },
     );
