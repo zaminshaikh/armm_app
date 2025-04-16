@@ -25,8 +25,16 @@ class SupportPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  radius: 35,
+                Container(
+                  width: 70, // Set desired width
+                  height: 70, // Set desired height
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,// Circular border
+                    image: DecorationImage(
+                      image: AssetImage('assets/icons/mo_shaikh.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
