@@ -2,6 +2,7 @@ import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_mail_app/open_mail_app.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MailAppPickerSheet extends StatelessWidget {
   final List<MailApp> options;
@@ -45,28 +46,37 @@ class MailAppPickerSheet extends StatelessWidget {
               ...options.map(
                 (app) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: TextButton(
-                    onPressed: () {
-                      OpenMailApp.openSpecificMailApp(app);
-                      Navigator.of(context).pop();
-                    },
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      overlayColor: Colors.transparent,
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        app.name,
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          color: AppColors.primary,
+                  child: SizedBox(
+                    width: double.infinity,              // make the button full-width
+                    child: OutlinedButton(
+                      onPressed: () {
+                        OpenMailApp.openSpecificMailApp(app);
+                        Navigator.of(context).pop();
+                      },
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        side: BorderSide(color: AppColors.primary, width: 1.2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
+                        foregroundColor: AppColors.primary,
+                        backgroundColor: Colors.transparent,
+                        overlayColor: Colors.transparent,
+                        minimumSize: const Size.fromHeight(48),   // ensure a consistent height
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _iconFor(app.name, AppColors.primary),
+                          const SizedBox(width: 8),
+                          Text(
+                            app.name,
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -75,15 +85,16 @@ class MailAppPickerSheet extends StatelessWidget {
 
               const Divider(height: 20),
 
-              // ────── Cancel button ──────
+              // ────── Cancel button (no outline) ──────
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  foregroundColor: theme.colorScheme.onSurface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  backgroundColor: Colors.transparent,
                   overlayColor: Colors.transparent,
                 ),
                 child: Text(
@@ -91,7 +102,6 @@ class MailAppPickerSheet extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w600,
                     fontSize: 15,
-                    color: AppColors.primary,
                   ),
                 ),
               ),
@@ -100,5 +110,31 @@ class MailAppPickerSheet extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _iconFor(String appName, Color color) {
+    switch (appName.toLowerCase()) {
+      case 'gmail':
+        return FaIcon(FontAwesomeIcons.google, size: 20, color: color);
+      case 'outlook':
+        return FaIcon(FontAwesomeIcons.microsoft, size: 20, color: color);
+      case 'spark':
+        return FaIcon(FontAwesomeIcons.bolt, size: 20, color: color);
+      case 'airmail':
+        return FaIcon(FontAwesomeIcons.paperPlane, size: 20, color: color);
+      case 'yahoo mail':
+      case 'ymail':
+        return FaIcon(FontAwesomeIcons.yahoo, size: 20, color: color);
+      case 'fastmail':
+        return FaIcon(FontAwesomeIcons.envelope, size: 20, color: color);
+      case 'superhuman':
+        return FaIcon(FontAwesomeIcons.rocket, size: 20, color: color);
+      case 'protonmail':
+        return FaIcon(FontAwesomeIcons.lock, size: 20, color: color);
+      case 'apple mail':
+        return FaIcon(FontAwesomeIcons.apple, size: 20, color: color);
+      default:
+        return Icon(Icons.email, size: 20, color: color);
+    }
   }
 }
