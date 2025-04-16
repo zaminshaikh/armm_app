@@ -268,8 +268,14 @@ class _ClientIDPageState extends State<ClientIDPage> {
                           size: 30,
                         ),
                         onTap: () async {
+                          setState(() => isLoading = true);
+                          bool shouldSignUp = await isValidCID(_cidController.text);
+                          if (!shouldSignUp) {
+                            setState(() => isLoading = false);
+                            return;
+                          }
+                          if (!context.mounted) return; 
                           try {
-                            setState(() => isLoading = true);
                             await AppleAuthService().signUpWithApple(context, _cidController.text);
                           } finally {
                             if (mounted){
@@ -286,10 +292,16 @@ class _ClientIDPageState extends State<ClientIDPage> {
                           size: 30,
                         ),
                         onTap: () async {
+                          setState(() => isLoading = true);
+                          bool shouldSignUp = await isValidCID(_cidController.text);
+                          if (!shouldSignUp) {
+                            setState(() => isLoading = false);
+                            return;
+                          }
+                          if (!context.mounted) return; 
                           // Dismiss the keyboard
                           FocusScope.of(context).unfocus();
                           try {
-                            setState(() => isLoading = true);
                             await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
                           } finally {
                             setState(() => isLoading = false);
