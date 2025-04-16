@@ -300,8 +300,15 @@ class LineChartSectionState extends State<LineChartSection> {
 
   Widget _buildPersonalDropdown(BuildContext context) {
     // If no clients, show "Personal" by default
-    if (allClients.isEmpty) {
-      return _pillContainer(child: Text('Personal', style: _pillTextStyle()));
+    if (allClients.length == 1) {
+      return _pillContainer(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+        Text('Personal', style: _pillTextStyle()),
+          ],
+        ),
+      );
     }
 
     // Currently selected client
