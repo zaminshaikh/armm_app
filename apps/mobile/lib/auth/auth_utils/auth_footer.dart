@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthFooter extends StatelessWidget {
   final Color primaryColor;
@@ -21,7 +22,7 @@ class AuthFooter extends StatelessWidget {
       children: [
         Text(
           questionText,
-          style: const TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 16,
             color: Colors.black,
           ),
@@ -33,7 +34,7 @@ class AuthFooter extends StatelessWidget {
           onPressed: onSignUpPressed,
           child: Text(
             buttonText,
-            style: TextStyle(
+            style: GoogleFonts.inter(
               color: primaryColor,
               fontSize: 16,
               fontWeight: FontWeight.bold,

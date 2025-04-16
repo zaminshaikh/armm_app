@@ -13,6 +13,7 @@ import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginForm extends StatefulWidget {
   final TextEditingController emailController;
@@ -165,7 +166,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             child: Text(
               'Forgot Password?',
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 color: widget.primaryColor,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,

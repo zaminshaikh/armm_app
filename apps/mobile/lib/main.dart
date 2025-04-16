@@ -357,49 +357,43 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   /// Build the application theme
   ThemeData _buildAppTheme() => ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 251, 251, 251),
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(
+        textTheme: TextTheme(
+          titleLarge: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
-          titleMedium: TextStyle(
+          titleMedium: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
-          titleSmall: TextStyle(
+          titleSmall: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
           labelLarge:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           labelMedium:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           labelSmall:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           displayLarge:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           displayMedium:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           displaySmall:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
-          headlineLarge: TextStyle(
+              GoogleFonts.inter(color: Colors.white),
+          headlineLarge: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
-          headlineMedium: TextStyle(
+          headlineMedium: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
-          headlineSmall: TextStyle(
+          headlineSmall: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
           bodyLarge:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           bodyMedium:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           bodySmall:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
         ),
       );
 }
