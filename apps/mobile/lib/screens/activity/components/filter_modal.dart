@@ -124,13 +124,15 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                             filterList: _recipientsFilter,
                             buildCheckbox: _buildCheckbox,
                             ),
-                            _buildFilter(
-                            title: 'Clients',
-                            iconPath: 'assets/icons/group.svg',
-                            items: widget.allClients,
-                            filterList: _clientsFilter,
-                            buildCheckbox: _buildCheckbox,
-                            ),
+                            // Only show Clients filter if there are connected users
+                            if (widget.allClients.length > 1)
+                              _buildFilter(
+                              title: 'Clients',
+                              iconPath: 'assets/icons/group.svg',
+                              items: widget.allClients,
+                              filterList: _clientsFilter,
+                              buildCheckbox: _buildCheckbox,
+                              ),
                         ],
                       ),
                     ),
