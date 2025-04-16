@@ -300,8 +300,15 @@ class LineChartSectionState extends State<LineChartSection> {
 
   Widget _buildPersonalDropdown(BuildContext context) {
     // Only show the dropdown if there are connected users
-    if (allClients.length <= 1) {
-      return const SizedBox.shrink(); // Don't show anything when no connected users
+    if (allClients.length == 1) {
+      return _pillContainer(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+        Text('Personal', style: _pillTextStyle()),
+          ],
+        ),
+      );
     }
 
     // Currently selected client
