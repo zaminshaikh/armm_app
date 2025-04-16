@@ -272,7 +272,7 @@ class _PasswordPageState extends State<PasswordPage> {
                   // Title
                   Text(
                     'Next, create your Password',
-                    style: GoogleFonts.roboto(
+                    style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                       color: Colors.black,
@@ -283,8 +283,8 @@ class _PasswordPageState extends State<PasswordPage> {
 
                   // Subtitle
                   Text(
-                    'It will protect your account',
-                    style: GoogleFonts.roboto(color: Colors.black),
+                    'Create a strong password to protect your information',
+                    style: GoogleFonts.inter(color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 28),
@@ -309,7 +309,7 @@ class _PasswordPageState extends State<PasswordPage> {
                               const SizedBox(height: 8),
                               Text(
                                 '8 characters',
-                                style: GoogleFonts.roboto(color: Colors.black),
+                                style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -334,7 +334,7 @@ class _PasswordPageState extends State<PasswordPage> {
                               const SizedBox(height: 8),
                               Text(
                                 '1 Capital letter',
-                                style: GoogleFonts.roboto(color: Colors.black),
+                                style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -359,7 +359,7 @@ class _PasswordPageState extends State<PasswordPage> {
                               const SizedBox(height: 8),
                               Text(
                                 '1 Number',
-                                style: GoogleFonts.roboto(color: Colors.black),
+                                style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],

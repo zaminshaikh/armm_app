@@ -18,7 +18,7 @@ class ForgotPasswordFooter extends StatelessWidget {
               'Back to ',
               style: GoogleFonts.inter(
                 color: Colors.black45,
-                fontSize: 14,
+                fontSize: 16, // Increased font size
               ),
             ),
             GestureDetector(
@@ -30,7 +30,7 @@ class ForgotPasswordFooter extends StatelessWidget {
                 style: GoogleFonts.inter(
                   color: primaryColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontSize: 16, // Increased font size
                 ),
               ),
             ),

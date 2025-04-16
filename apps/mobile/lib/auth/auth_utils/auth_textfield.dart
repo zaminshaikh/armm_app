@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:armm_app/utils/resources.dart';
+import 'package:google_fonts/google_fonts.dart';
       
 class AuthTextField extends StatefulWidget {
   final String hintText;
@@ -52,14 +53,14 @@ class _AuthTextFieldState extends State<AuthTextField> {
         controller: widget.controller,
         obscureText: _obscureText,
         style: widget.textStyle ??
-            const TextStyle(
+            GoogleFonts.inter(
               fontSize: 18,
               color: Colors.black,
             ),
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: widget.hintStyle ??
-              const TextStyle(
+              GoogleFonts.inter(
                 color: Color.fromARGB(100, 0, 0, 0),
               ),
           border: OutlineInputBorder(

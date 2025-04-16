@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthButton extends StatelessWidget {
   final String label;
@@ -45,6 +46,7 @@ class AuthButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16),
           backgroundColor: effectiveBackgroundColor,
           foregroundColor: effectiveForegroundColor,
+          splashFactory: NoSplash.splashFactory, // Remove splash effect
         ),
         onPressed: isEnabled ? onPressed : null,
         child: icon != null
@@ -55,7 +57,7 @@ class AuthButton extends StatelessWidget {
                   const SizedBox(width: 18),
                   Text(
                     label,
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
@@ -64,7 +66,7 @@ class AuthButton extends StatelessWidget {
               )
             : Text(
                 label,
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),

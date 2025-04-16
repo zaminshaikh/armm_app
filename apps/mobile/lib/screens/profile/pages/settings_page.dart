@@ -363,7 +363,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     decoration: InputDecoration(
                       hintText: 'Enter your new email',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      hintStyle: GoogleFonts.inter(color: Colors.grey[500]),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -705,7 +705,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     decoration: InputDecoration(
                       hintText: 'Enter your new password',
-                      hintStyle: TextStyle(
+                      hintStyle: GoogleFonts.inter(
                         color: Colors.grey[400],
                       ),
                       border: OutlineInputBorder(
@@ -843,10 +843,10 @@ class _SettingsPageState extends State<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Row with Title and Dividers
-        const Row(
+        Row(
           children: [
             // Left divider
-            Expanded(
+            const Expanded(
               child: Divider(
                 thickness: 1,
                 color: Color.fromARGB(50, 0, 0, 0),
@@ -854,10 +854,10 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             // Title in the center
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 'Delete Account',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -865,7 +865,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Right divider
-            Expanded(
+            const Expanded(
               child: Divider(
                 thickness: 1,
                 color: Color.fromARGB(50, 0, 0, 0),
@@ -875,10 +875,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         const SizedBox(height: 8),
         // Subtitle text
-        const Text(
+        Text(
           'Delete your account. This action is irreversible.',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 14,
             color: Color.fromARGB(200, 0, 0, 0),
           ),
@@ -895,10 +895,10 @@ class _SettingsPageState extends State<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Row with Title and Dividers
-        const Row(
+        Row(
           children: [
             // Left divider
-            Expanded(
+            const Expanded(
               child: Divider(
                 thickness: 1,
                 color: Color.fromARGB(50, 0, 0, 0),
@@ -906,10 +906,10 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             // Title in the center
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 'Log out',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -917,7 +917,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Right divider
-            Expanded(
+            const Expanded(
               child: Divider(
                 thickness: 1,
                 color: Color.fromARGB(50, 0, 0, 0),
@@ -927,10 +927,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         const SizedBox(height: 8),
         // Subtitle text
-        const Text(
+        Text(
           'Log out of your account',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 14,
             color: Color.fromARGB(200, 0, 0, 0),
           ),

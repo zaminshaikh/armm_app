@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FaceIdPage extends StatefulWidget {
   const FaceIdPage({super.key});
@@ -142,21 +143,21 @@ class _FaceIdPageState extends State<FaceIdPage> with WidgetsBindingObserver {
                   width: 40,
                 ),
                 const SizedBox(height: 40.0),
-                const Text(
+                Text(
                   'ARMM App Locked',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 28,
-                    color: Color(0xFF1C32A4),
+                    color: const Color(0xFF1C32A4),
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16.0),
-                const Text(
+                Text(
                   'Unlock with Face ID to continue',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 18,
-                    color: Color(0xFF333333),
+                    color: const Color(0xFF333333),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -178,9 +179,9 @@ class _FaceIdPageState extends State<FaceIdPage> with WidgetsBindingObserver {
                       ),
                       elevation: 3,
                     ),
-                    child: const Text(
+                    child: Text(
                       'Use Face ID',
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 18,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

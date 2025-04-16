@@ -66,7 +66,7 @@ class LogoutButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         ),
         onPressed: () => _confirmLogout(context),
         child: Row(
@@ -75,8 +75,8 @@ class LogoutButton extends StatelessWidget {
           children: [
             SvgPicture.asset(
               'assets/icons/logout.svg',
-              width: 24,
-              height: 24,
+              width: 20,
+              height: 20,
               color: Colors.red,
             ),
             const SizedBox(width: 12),
@@ -84,7 +84,7 @@ class LogoutButton extends StatelessWidget {
               'Log out',
               style: GoogleFonts.inter(
                 textStyle: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Colors.red,
                 ),
