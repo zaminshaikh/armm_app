@@ -40,7 +40,6 @@ class NotificationCard extends StatelessWidget {
 
     String timeAgo = timeago.format(notification.time, locale: 'en');
 
-    // Wrap each notification in Dismissible for iOS-style "swipe to delete"
     return Column(
       children: [
         Card(
@@ -111,6 +110,8 @@ class NotificationCard extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     onTap: () async {
                       final targetPage = (notification.type == 'activity')
                           ? const ActivityPage()
