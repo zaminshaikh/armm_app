@@ -392,6 +392,28 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
+
+                    String newEmail = emailController.text.trim();
+                    bool isValidEmail = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(newEmail);
+                    
+                    if (!isValidEmail) {
+                      if (context.mounted) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => CustomAlertDialog(
+                            title: 'Invalid Email',
+                            message: 'Please enter a valid email address.',
+                            actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('OK'),
+                            ),
+                            ],
+                          ),
+                        );
+                      }
+                      return;
+                    }
                     // First check how the user is authenticated
                     final user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
@@ -433,6 +455,23 @@ class _SettingsPageState extends State<SettingsPage> {
                       builder: (context) => CustomAlertDialog(
                         title: 'Verification Required',
                         message: 'Please enter your current password to verify your identity.',
+                        input: Container(
+                          width: 300, // Fixed width that should fit in the dialog
+                          child: TextField(
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              color: Colors.black87,
+                            ),
+                            controller: passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: 'Current password',
+                              border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(false),
@@ -443,73 +482,125 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: Text('Verify'),
                           ),
                         ],
-                        icon: TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: 'Current password',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        ),
                       ),
                     ).then((confirmed) async {
                       if (confirmed == true) {
-                        try {
-                          // Get current user
-                          final user = FirebaseAuth.instance.currentUser;
-                          if (user != null && user.email != null) {
-                            // Re-authenticate user with current email and provided password
-                            AuthCredential credential = EmailAuthProvider.credential(
-                              email: user.email!, 
-                              password: passwordController.text
-                            );
-                            await user.reauthenticateWithCredential(credential);
-                            
-                            // Now proceed with email change
-                            String newEmail = emailController.text.trim();
-                            await user.verifyBeforeUpdateEmail(newEmail);
-                            
-                            // Show success dialog
-                            if (context.mounted) {
-                              Navigator.of(context).pop(); // Close email change dialog
-                              showDialog(
-                                context: context,
-                                builder: (context) => CustomAlertDialog(
-                                  title: 'Email Change Requested',
-                                  message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.of(context).pop(),
-                                      child: Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              );
+                      try {
+                        // Validate email first
+                        String newEmail = emailController.text.trim();
+                        
+                        // Get current user
+                        final user = FirebaseAuth.instance.currentUser;
+                        if (user != null && user.email != null) {
+                        // Re-authenticate user with current email and provided password
+                        AuthCredential credential = EmailAuthProvider.credential(
+                          email: user.email!, 
+                          password: passwordController.text
+                        );
+                        await user.reauthenticateWithCredential(credential);
+                        
+                        // Now proceed with email change
+                        await user.verifyBeforeUpdateEmail(newEmail);
+                        
+                        // Show success dialog
+                        if (context.mounted) {
+                          Navigator.of(context).pop(); // Close email change dialog
+                          showDialog(
+                          context: context,
+                          builder: (context) => CustomAlertDialog(
+                            title: 'Email Change Requested',
+                            message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
+                            actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('OK'),
+                            ),
+                            ],
+                          ),
+                          );
+                        }
+                        }
+                      } catch (e) {
+                        // Show error dialog
+                        if (context.mounted) {
+                          String errorMessage = 'An error occurred while updating your email.';
+
+                          // Check Firebase Auth error codes
+                          if (e is FirebaseAuthException) {
+                            switch (e.code) {
+                              case 'requires-recent-login':
+                                errorMessage = 'Please log out and log back in to update your email.';
+                                break;
+                              case 'email-already-in-use':
+                                errorMessage = 'This email is already in use by another account.';
+                                break;
+                              case 'invalid-email':
+                                errorMessage = 'The email address is invalid.';
+                                break;
+                              case 'wrong-password':
+                                errorMessage = 'Incorrect password. Please try again.';
+                                break;
+                              case 'too-many-requests':
+                                errorMessage = 'Too many attempts. Please try again later.';
+                                break;
+                              case 'network-request-failed':
+                                errorMessage = 'Network error. Please check your connection.';
+                                break;
+                              case 'user-mismatch':
+                                errorMessage = 'The credential does not match the user you\'re trying to update.';
+                                break;
+                              case 'user-not-found':
+                                errorMessage = 'No user found for the provided email.';
+                                break;
+                              case 'invalid-credential':
+                                errorMessage = 'The credential provided is invalid or has expired. The password entered may be incorrect.';
+                                break;
+                              case 'invalid-verification-code':
+                                errorMessage = 'The verification code is invalid.';
+                                break;
+                              case 'invalid-verification-id':
+                                errorMessage = 'The verification ID is invalid.';
+                                break;
+                              case 'missing-android-pkg-name':
+                                errorMessage = 'An Android package name is required for this operation.';
+                                break;
+                              case 'missing-continue-uri':
+                                errorMessage = 'A continue URL must be provided for this operation.';
+                                break;
+                              case 'missing-ios-bundle-id':
+                                errorMessage = 'An iOS bundle ID is required for this operation.';
+                                break;
+                              case 'invalid-continue-uri':
+                                errorMessage = 'The continue URL provided is invalid.';
+                                break;
+                              case 'unauthorized-continue-uri':
+                                errorMessage = 'The domain of the continue URL is not whitelisted.';
+                                break;
+                              default:
+                                errorMessage = 'Authentication failed: ${e.message}';
                             }
+                          } else {
+                            errorMessage = 'Error: ${e.toString()}';
                           }
-                        } catch (e) {
-                          // Show error dialog
-                          if (context.mounted) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => CustomAlertDialog(
-                                title: 'Error',
-                                message: 'Authentication failed: ${e.toString()}',
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(),
-                                    child: Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
+
+                          showDialog(
+                            context: context,
+                            builder: (context) => CustomAlertDialog(
+                              title: 'Email Change Failed',
+                              message: errorMessage,
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
                         }
                       }
-                    });
-                  },
+                    }
+                  });
+                },
                   // Rest of the button styling remains the same
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2B41B8),

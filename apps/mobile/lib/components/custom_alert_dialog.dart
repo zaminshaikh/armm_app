@@ -6,6 +6,7 @@ class CustomAlertDialog extends StatelessWidget {
   final String title;
   final String message;
   final Widget? icon;
+  final Widget? input; // New property for input widgets
   final List<Widget> actions;
 
   const CustomAlertDialog({
@@ -13,6 +14,7 @@ class CustomAlertDialog extends StatelessWidget {
     required this.title,
     required this.message,
     this.icon,
+    this.input, // Added this new property
     required this.actions,
   }) : super(key: key);
 
@@ -57,14 +59,24 @@ class CustomAlertDialog extends StatelessWidget {
             ),
           ],
         ),
-        content: Text(
-          message,
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w400, // Regular weight for body text
-            color: theme.colorScheme.onSurface.withOpacity(0.8), // Slightly muted text
-            fontSize: 15, // Slightly larger for readability
-            height: 1.4, // Better line height for readability
-          ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              message,
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w400, // Regular weight for body text
+                color: theme.colorScheme.onSurface.withOpacity(0.8), // Slightly muted text
+                fontSize: 15, // Slightly larger for readability
+                height: 1.4, // Better line height for readability
+              ),
+            ),
+            if (input != null) ...[
+              const SizedBox(height: 16),
+              input!, // Display the input widget if provided
+            ],
+          ],
         ),
         actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 20), // More bottom padding
         actions: actions.map((action) {
@@ -96,7 +108,7 @@ class CustomAlertDialog extends StatelessWidget {
     );
   }
 
-  static Future<void> showAlertDialog(BuildContext context, String title, String message, {Widget? icon}) async {
+  static Future<void> showAlertDialog(BuildContext context, String title, String message, {Widget? icon, Widget? input}) async {
     return showDialog(
       context: context,
       barrierColor: Colors.black.withOpacity(0.6), // Darker, more immersive barrier
@@ -106,6 +118,7 @@ class CustomAlertDialog extends StatelessWidget {
           title: title,
           message: message,
           icon: icon,
+          input: input,
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
