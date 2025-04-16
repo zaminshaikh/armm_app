@@ -186,7 +186,7 @@ Widget clientCard(Client c) {
               ),
             ),
             Text(
-              c.initEmail ?? 'N/A',
+              (c.initEmail == null || c.initEmail!.isEmpty) ? 'N/A' : c.initEmail!,
               style: GoogleFonts.inter(
                 fontSize: 14,
                 color: Colors.black,
@@ -211,7 +211,7 @@ Widget clientCard(Client c) {
               ),
             ),
             Text(
-              c.phoneNumber ?? 'N/A',
+              (c.phoneNumber == null || c.phoneNumber!.isEmpty) ? 'N/A' : c.phoneNumber!,
               style: GoogleFonts.inter(
                 fontSize: 14,
                 color: Colors.black,
@@ -235,7 +235,7 @@ Widget clientCard(Client c) {
               ),
             ),
             Text(
-              c.address ?? 'N/A',
+              (c.address == null || c.address!.isEmpty) ? 'N/A' : c.address!,
               style: GoogleFonts.inter(
                 fontSize: 14,
                 color: Colors.black,
