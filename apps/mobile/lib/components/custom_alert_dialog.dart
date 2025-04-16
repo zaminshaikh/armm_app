@@ -24,11 +24,12 @@ class CustomAlertDialog extends StatelessWidget {
     
     return Theme(
       data: theme.copyWith(
+        dialogBackgroundColor: Colors.white,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
       child: AlertDialog(
-        backgroundColor: theme.cardColor,
+        backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         elevation: 8, // Increased elevation for better depth
         shape: RoundedRectangleBorder(
