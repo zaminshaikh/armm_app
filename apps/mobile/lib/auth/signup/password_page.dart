@@ -7,6 +7,7 @@ import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/mail_app_picker_bottom';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
@@ -16,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_mail_app/open_mail_app.dart';
 
 class PasswordPage extends StatefulWidget {
 
@@ -48,7 +50,7 @@ class _PasswordPageState extends State<PasswordPage> {
   
   bool get _isPasswordValid => _hasMinLength && _hasCapitalLetter && _hasNumber && _passwordsMatch;
 
-  int _passwordSecurityIndicator = 0;
+  final int _passwordSecurityIndicator = 0;
 
   /// Check if the user is authenticated and linked
   Future<bool> isAuthenticated() async {
@@ -65,6 +67,45 @@ class _PasswordPageState extends State<PasswordPage> {
 
     return isLinked;
   }
+  void _openMailApp() async {
+    final result = await OpenMailApp.openMailApp();
+
+    // 1️⃣  No mail clients at all
+    if (!result.didOpen && !result.canOpen) {
+      _showNoMailAppsDialog(context);
+      return;
+    }
+
+    // 2️⃣  Several clients → present sheet
+    if (!result.didOpen && result.canOpen) {
+      showModalBottomSheet(
+        context: context,
+        // identical glass‑dim effect you use for dialogs
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: Colors.transparent,       // let us draw our own card
+        isScrollControlled: true,                  // sheet hugs content
+        builder: (ctx) => MailAppPickerSheet(options: result.options),
+      );
+    }
+
+    // 3️⃣  Android auto‑chooser path is unchanged
+  }
+    
+  void _showNoMailAppsDialog (BuildContext context) => showDialog(
+    context: context,
+    builder: (context) {
+      return CustomAlertDialog(
+        title: 'No Mail Apps Installed',
+        message: 'Please install a mail app to verify your email.',
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 
   /// Handles the sign-up process.
   void _signUserUp() async {
@@ -175,6 +216,7 @@ class _PasswordPageState extends State<PasswordPage> {
                 },
                 child: const Text('Continue'),
               ),
+              TextButton(onPressed: _openMailApp, child: const Text('Open Mail App')),
             ],
           );
         },
