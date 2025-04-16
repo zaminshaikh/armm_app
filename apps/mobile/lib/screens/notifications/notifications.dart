@@ -30,7 +30,7 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context){
     if (client == null) {
       return const CustomProgressIndicator(
-        color: Color(0xFF1C32A4),
+        shouldTimeout: true,
       );
     }
     notifications = List.from(client!.notifications!);

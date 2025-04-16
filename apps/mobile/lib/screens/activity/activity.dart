@@ -88,7 +88,7 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget build(BuildContext context) {
     if (client == null) {
       return const CustomProgressIndicator(
-        color: Color(0xFF2B41B8), // ARMM Blue color
+        shouldTimeout: true,
       );
     }
 
@@ -153,6 +153,8 @@ class _ActivityPageState extends State<ActivityPage> {
         .toSet()
         // convert back to a list
         .toList();
+
+    allRecipients = allRecipients.toSet().toList(); // Ensure unique recipients
   }
 
   /// Builds the content of the list based on the index.
