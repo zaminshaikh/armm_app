@@ -305,7 +305,10 @@ class LineChartSectionState extends State<LineChartSection> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-        Text('Personal', style: _pillTextStyle()),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text('Personal', style: _pillTextStyle()),
+            ),
           ],
         ),
       );
@@ -320,24 +323,59 @@ class LineChartSectionState extends State<LineChartSection> {
     return GestureDetector(
       onTap: () => _showClientsBottomSheet(context),
       child: _pillContainer(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-        Text(
-          displayName,
-          style: _pillTextStyle(),
-        ),
-        const SizedBox(width: 10), // space between text and icon
-          const RotatedBox(
-            quarterTurns: 3,
-            child: Icon(
-              Icons.arrow_back_ios_rounded,
-              color: Color.fromARGB(255, 102, 102, 102),
-              size: 22,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  displayName,
+                  style: _pillTextStyle(),
+                ),
+              ),
             ),
-          )
-        ],
+            const SizedBox(width: 10), // space between text and icon
+            const RotatedBox(
+              quarterTurns: 3,
+              child: Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Color.fromARGB(255, 102, 102, 102),
+                size: 22,
+              ),
+            )
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildTimeFilterPill(BuildContext context) {
+    final selectedText = _getTimeLabel(dropdownValue);
+
+    return InkWell(
+      onTap: () => _showTimeOptionsBottomSheet(context),
+      child: _pillContainer(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(selectedText, style: _pillTextStyle()),
+              ),
+            ),
+            const SizedBox(width: 10),
+            const RotatedBox(
+              quarterTurns: 3,
+              child: Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Color.fromARGB(255, 102, 102, 102),
+                size: 22,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -408,31 +446,6 @@ class LineChartSectionState extends State<LineChartSection> {
     );
   }
 
-  Widget _buildTimeFilterPill(BuildContext context) {
-    final selectedText = _getTimeLabel(dropdownValue);
-
-    return InkWell(
-      onTap: () => _showTimeOptionsBottomSheet(context),
-      child: _pillContainer(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-        Text(selectedText, style: _pillTextStyle()),
-        const SizedBox(width: 10),
-        const RotatedBox(
-          quarterTurns: 3,
-          child: Icon(
-          Icons.arrow_back_ios_rounded,
-          color: Color.fromARGB(255, 102, 102, 102),
-          size: 22,
-          ),
-        )
-        ],
-      ),
-      ),
-    );
-  }
-
   void _showTimeOptionsBottomSheet(BuildContext context) {
     var timeOptions = [
       'last-week',
@@ -477,6 +490,9 @@ class LineChartSectionState extends State<LineChartSection> {
       ),
     );
   }
+
+
+
 
   FlGridData _buildGridData() => FlGridData(
         show: true,

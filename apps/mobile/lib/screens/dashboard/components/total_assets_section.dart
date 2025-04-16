@@ -46,12 +46,15 @@ class TotalAssetsSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    currencyFormat(totalAssets),
-                    style: GoogleFonts.inter(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      currencyFormat(totalAssets),
+                      style: GoogleFonts.inter(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ],
