@@ -154,13 +154,42 @@ class LineChartSectionState extends State<LineChartSection> {
           children: [
             const SizedBox(height: 16),
             // Title: "Asset Timeline" at the top center
-            Text(
-              'Asset Timeline',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [                  
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Asset Timeline',
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+            
+                    // Subtitle
+                    Text(
+                      'Value over time',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    SvgPicture.asset(
+                      'assets/icons/ARMM_Logo.svg',
+                      width: 26,
+                      height: 26,
+                    ),
+                  ],
+                ),
+              ],
             ),
             const SizedBox(height: 32),
     
