@@ -86,11 +86,7 @@ class CustomAlertDialog extends StatelessWidget {
               onPressed: action.onPressed,
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
                 backgroundColor: Colors.transparent,
-                overlayColor: Colors.transparent, // removes splash
               ),
               child: DefaultTextStyle(
                 style: GoogleFonts.inter(
@@ -113,7 +109,6 @@ class CustomAlertDialog extends StatelessWidget {
       context: context,
       barrierColor: Colors.black.withOpacity(0.6), // Darker, more immersive barrier
       builder: (BuildContext context) {
-        final theme = Theme.of(context);
         return CustomAlertDialog(
           title: title,
           message: message,
@@ -122,12 +117,7 @@ class CustomAlertDialog extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                'OK',
-                style: TextStyle(
-                  color: AppColors.primary,
-                ),
-              ),
+              child: const Text('OK'),
             ),
           ],
         );
