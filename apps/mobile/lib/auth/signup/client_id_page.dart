@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:armm_app/auth/auth_utils/apple_auth.dart';
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
@@ -261,30 +262,34 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SocialTile(
-                        icon: const Icon(
-                          FontAwesomeIcons.apple,
-                          color: Colors.black,
-                          size: 30,
-                        ),
-                        onTap: () async {
-                          setState(() => isLoading = true);
-                          bool shouldSignUp = await isValidCID(_cidController.text);
-                          if (!shouldSignUp) {
-                            setState(() => isLoading = false);
-                            return;
-                          }
-                          if (!context.mounted) return; 
-                          try {
-                            await AppleAuthService().signUpWithApple(context, _cidController.text);
-                          } finally {
-                            if (mounted){
+                      // Only show Apple button on iOS
+                      if (Platform.isIOS)
+                        SocialTile(
+                          icon: const Icon(
+                            FontAwesomeIcons.apple,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          onTap: () async {
+                            setState(() => isLoading = true);
+                            bool shouldSignUp = await isValidCID(_cidController.text);
+                            if (!shouldSignUp) {
                               setState(() => isLoading = false);
+                              return;
+                            }
+                            if (!context.mounted) return; 
+                            try {
+                              await AppleAuthService().signUpWithApple(context, _cidController.text);
+                            } finally {
+                              if (mounted){
+                                setState(() => isLoading = false);
+                              }
                             }
                           }
-                        }
-                      ),
-                      const SizedBox(width: 20),
+                        ),
+                      // Add spacing only if both buttons are shown
+                      if (Platform.isIOS)
+                        const SizedBox(width: 20),
                       SocialTile(
                         icon: const Icon(
                           FontAwesomeIcons.google,

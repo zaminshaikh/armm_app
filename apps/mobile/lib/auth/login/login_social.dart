@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:armm_app/auth/auth_utils/apple_auth.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
@@ -53,25 +54,28 @@ class LoginSocial extends StatelessWidget {
                 GoogleAuthService().signInWithGoogle(context);
               }
             ),
-            const SizedBox(width: 20),
-            // Apple login tile
-            SocialTile(
-              icon: const Icon(
-                FontAwesomeIcons.apple,
-                color: Colors.black,
-                size: 30,
+            // Only show Apple button on iOS
+            if (Platform.isIOS) ...[
+              const SizedBox(width: 20),
+              // Apple login tile
+              SocialTile(
+                icon: const Icon(
+                  FontAwesomeIcons.apple,
+                  color: Colors.black,
+                  size: 30,
+                ),
+                onTap: () async {
+                  if (await AppleAuthService().signInWithApple(context) && context.mounted) {
+                    await Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardPage(),
+                      ),
+                    );
+                  }
+                },
               ),
-              onTap: () async {
-                if (await AppleAuthService().signInWithApple(context) && context.mounted) {
-                  await Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DashboardPage(),
-                    ),
-                  );
-                }
-              },
-            ),
+            ],
           ],
         ),
         const SizedBox(height: 32),
