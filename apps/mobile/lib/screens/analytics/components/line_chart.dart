@@ -510,17 +510,30 @@ class LineChartSectionState extends State<LineChartSection> {
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 40,
+            reservedSize: 70, // Increased from 40 to provide more space
             getTitlesWidget: (value, meta) {
               if (value == meta.min || value == meta.max) {
                 return const SizedBox.shrink();
               }
+              
+              // Format the number
+              final formattedNumber = abbreviateNumber(value);
+              
+              // Dynamically adjust font size based on length
+              double fontSize = 12;
+              if (formattedNumber.length > 6) {
+                fontSize = 10;
+              }
+              if (formattedNumber.length > 8) {
+                fontSize = 9;
+              }
+              
               return Padding(
-                padding: const EdgeInsets.only(right: 4),
+                padding: const EdgeInsets.only(right: 8), // Increased padding
                 child: Text(
-                  abbreviateNumber(value),
+                  formattedNumber,
                   style: GoogleFonts.inter(
-                    fontSize: 12,
+                    fontSize: fontSize, // Dynamic font size
                     color: Colors.black87,
                   ),
                 ),
