@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'total_assets_section.dart'; // Adjust the import according to your project structure
+import 'package:armm_app/utils/utilities.dart';
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Client client;
@@ -83,7 +84,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                     Text(
-                      '${client.firstName} ${client.lastName}',
+                      formatName(client.firstName, client.lastName),
                       style: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: 22,

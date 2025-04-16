@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'package:armm_app/utils/utilities.dart';
 
 class MyProfilesPage extends StatefulWidget {
   const MyProfilesPage({Key? key}) : super(key: key);
@@ -127,7 +128,7 @@ Widget clientCard(Client c) {
             children: [
               // --- Name ---
               Text(
-                '${c.firstName} ${c.lastName}',
+                formatName(c.firstName, c.lastName),
                 style: GoogleFonts.inter(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

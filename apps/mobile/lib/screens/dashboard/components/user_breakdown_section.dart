@@ -110,7 +110,7 @@ class UserBreakdownSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${client.firstName} ${client.lastName}',
+                    formatName(client.firstName, client.lastName),
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

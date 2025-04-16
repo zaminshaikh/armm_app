@@ -155,7 +155,9 @@ class ActivityDetailsModal extends StatelessWidget {
             color: const Color.fromARGB(255, 82, 82, 82),
           ),
           title: 'Client',
-          content: activity.parentName ?? 'N/A',
+          content: activity.parentName != null 
+              ? activity.parentName! 
+              : 'N/A',
         ),
       ],
     );
