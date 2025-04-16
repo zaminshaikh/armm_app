@@ -4,18 +4,39 @@ import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/auth_utils/social_tile.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class LoginSocial extends StatelessWidget {
+class LoginSocial extends StatefulWidget {
   final Color primaryColor;
+  final Function showLoading;
+  final Function hideLoading;
 
   const LoginSocial({
     Key? key,
     required this.primaryColor,
+    required this.showLoading,
+    required this.hideLoading,
   }) : super(key: key);
+
+  @override
+  State<LoginSocial> createState() => _LoginSocialState();
+}
+
+class _LoginSocialState extends State<LoginSocial> {
+  
+  void _navigateToDashboard(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const DashboardPage(),
+      ),
+      (route) => false, // This removes all previous routes
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +68,17 @@ class LoginSocial extends StatelessWidget {
             SocialTile(
               icon: SvgPicture.asset(
                 'assets/icons/google.svg',
-                color: primaryColor,
+                color: widget.primaryColor,
                 height: 24,
               ),
-              onTap: () {
-                GoogleAuthService().signInWithGoogle(context);
+              onTap: () async {
+                widget.showLoading();
+                final success = await GoogleAuthService().signInWithGoogle(context);
+                if (success == true && mounted) {
+                  _navigateToDashboard(context);
+                } else {
+                  widget.hideLoading();
+                }
               }
             ),
             // Only show Apple button on iOS
@@ -65,13 +92,12 @@ class LoginSocial extends StatelessWidget {
                   size: 30,
                 ),
                 onTap: () async {
-                  if (await AppleAuthService().signInWithApple(context) && context.mounted) {
-                    await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DashboardPage(),
-                      ),
-                    );
+                  widget.showLoading();
+                  final success = await AppleAuthService().signInWithApple(context);
+                  if (success && mounted) {
+                    _navigateToDashboard(context);
+                  } else {
+                    widget.hideLoading();
                   }
                 },
               ),
@@ -81,7 +107,7 @@ class LoginSocial extends StatelessWidget {
         const SizedBox(height: 32),
         // Sign up row
         AuthFooter(
-          primaryColor: primaryColor,
+          primaryColor: widget.primaryColor,
           onSignUpPressed: () {
             Navigator.push(
               context,
@@ -96,5 +122,4 @@ class LoginSocial extends StatelessWidget {
       ],
     );
   }
-
 }

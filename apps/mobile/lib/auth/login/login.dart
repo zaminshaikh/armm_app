@@ -5,6 +5,7 @@ import 'login_header.dart';
 import 'login_form.dart';
 import 'login_social.dart';
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -17,11 +18,24 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = '';
   bool isLogin = true;
+  bool _isLoading = false;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   bool _obscurePassword = true;
+
+  void showLoading() {
+    setState(() {
+      _isLoading = true;
+    });
+  }
+
+  void hideLoading() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   void dispose() {
@@ -66,8 +80,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 12),
                   // The divider & social login buttons & sign-up link
-                  const LoginSocial(
+                  LoginSocial(
                     primaryColor: primaryColor,
+                    showLoading: showLoading,
+                    hideLoading: hideLoading,
                   ),
                   const SizedBox(height: 24),
                 ],
@@ -79,6 +95,16 @@ class _LoginPageState extends State<LoginPage> {
             left: 0,
             child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
+          // Loading overlay for the entire page
+          if (_isLoading)
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.black.withOpacity(0.3),
+              child: const Center(
+                child: CustomProgressIndicator(),
+              ),
+            ),
         ],
       ),
     );
