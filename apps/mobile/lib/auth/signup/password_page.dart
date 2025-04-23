@@ -5,6 +5,7 @@ import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/components/mail_app_picker_bottom';
@@ -67,45 +68,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
     return isLinked;
   }
-  void _openMailApp() async {
-    final result = await OpenMailApp.openMailApp();
-
-    // 1️⃣  No mail clients at all
-    if (!result.didOpen && !result.canOpen) {
-      _showNoMailAppsDialog(context);
-      return;
-    }
-
-    // 2️⃣  Several clients → present sheet
-    if (!result.didOpen && result.canOpen) {
-      showModalBottomSheet(
-        context: context,
-        // identical glass‑dim effect you use for dialogs
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: Colors.transparent,       // let us draw our own card
-        isScrollControlled: true,                  // sheet hugs content
-        builder: (ctx) => MailAppPickerSheet(options: result.options),
-      );
-    }
-
-    // 3️⃣  Android auto‑chooser path is unchanged
-  }
-    
-  void _showNoMailAppsDialog (BuildContext context) => showDialog(
-    context: context,
-    builder: (context) {
-      return CustomAlertDialog(
-        title: 'No Mail Apps Installed',
-        message: 'Please install a mail app to verify your email.',
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
+  
 
   /// Handles the sign-up process.
   void _signUserUp() async {
@@ -216,7 +179,7 @@ class _PasswordPageState extends State<PasswordPage> {
                 },
                 child: const Text('Continue'),
               ),
-              TextButton(onPressed: _openMailApp, child: const Text('Open Mail App')),
+              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail App')),
             ],
           );
         },

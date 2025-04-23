@@ -1,4 +1,5 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/profile/components/delete_account_button.dart';
 import 'package:armm_app/utils/app_bar.dart';
@@ -511,10 +512,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             title: 'Email Change Requested',
                             message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
                             actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: Text('OK'),
-                            ),
+                              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail App'))
                             ],
                           ),
                           );
