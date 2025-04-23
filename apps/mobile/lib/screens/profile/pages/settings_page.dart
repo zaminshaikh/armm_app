@@ -315,9 +315,10 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildChangeEmailSection() {
-
     return GestureDetector(
       onTap: () {
+        // Capture the parent context
+        final parentContext = context;
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -393,14 +394,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
+                    Navigator.of(context).pop();
 
                     String newEmail = emailController.text.trim();
                     bool isValidEmail = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(newEmail);
                     
                     if (!isValidEmail) {
-                      if (context.mounted) {
+                      if (parentContext.mounted) {
                         showDialog(
-                          context: context,
+                          context: parentContext,
                           builder: (context) => CustomAlertDialog(
                             title: 'Invalid Email',
                             message: 'Please enter a valid email address.',
@@ -425,9 +427,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       
                       // Check if user is OAuth authenticated
                       if (providers.contains('apple.com')) {
-                        if (context.mounted) {
+                        if (parentContext.mounted) {
                           showDialog(
-                            context: context,
+                            context: parentContext,
                             builder: (context) => CustomAlertDialog(
                               title: 'Cannot Change Email',
                               message: 'You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
@@ -437,9 +439,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         }
                         return;
                       } else if (providers.contains('google.com')) {
-                        if (context.mounted) {
+                        if (parentContext.mounted) {
                           showDialog(
-                            context: context,
+                            context: parentContext,
                             builder: (context) => CustomAlertDialog(
                               title: 'Cannot Change Email',
                               message: 'You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
@@ -452,7 +454,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     }
                     // First ask for password to re-authenticate
                     await showDialog(
-                      context: context,
+                      context: parentContext,
                       builder: (context) => CustomAlertDialog(
                         title: 'Verification Required',
                         message: 'Please enter your current password to verify your identity.',
@@ -504,15 +506,15 @@ class _SettingsPageState extends State<SettingsPage> {
                         await user.verifyBeforeUpdateEmail(newEmail);
                         
                         // Show success dialog
-                        if (context.mounted) {
-                          Navigator.of(context).pop(); // Close email change dialog
+                        if (parentContext.mounted) {
+                          Navigator.of(parentContext).pop(); // Close email change dialog
                           showDialog(
-                          context: context,
+                          context: parentContext,
                           builder: (context) => CustomAlertDialog(
                             title: 'Email Change Requested',
                             message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
                             actions: [
-                              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail App'))
+                              TextButton(onPressed: () => openMailApp(parentContext), child: const Text('Open Mail App'))
                             ],
                           ),
                           );
@@ -520,7 +522,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         }
                       } catch (e) {
                         // Show error dialog
-                        if (context.mounted) {
+                        if (parentContext.mounted) {
                           String errorMessage = 'An error occurred while updating your email.';
 
                           // Check Firebase Auth error codes
@@ -581,14 +583,16 @@ class _SettingsPageState extends State<SettingsPage> {
                             errorMessage = 'Error: ${e.toString()}';
                           }
 
+                          log('settings.dart: Error updating email: $errorMessage');
+
                           showDialog(
-                            context: context,
+                            context: parentContext,
                             builder: (context) => CustomAlertDialog(
                               title: 'Email Change Failed',
                               message: errorMessage,
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
+                                  onPressed: () => Navigator.of(parentContext).pop(),
                                   child: Text('OK'),
                                 ),
                               ],
