@@ -22,12 +22,13 @@ class LoginHeader extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 16), // Reduced from 24
               // Center illustration
               SvgPicture.asset(
                 illustrationAsset,
-                height: 180,
+                height: 160,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16), // Reduced from 24
               // Title text: "Log in"
               Text(
                 'Log in',

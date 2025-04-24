@@ -64,6 +64,8 @@
 		</array>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>This app requires access to your photo library to allow you to select photos for [purpose, e.g., profile images, document uploads, etc.].</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>This app uses Face ID to securely authenticate your identity.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
     <key>LSApplicationQueriesSchemes</key>
