@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = '';
   bool isLogin = true;
-  bool _isLoading = false;
+  bool isLoading = false;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -27,13 +27,13 @@ class _LoginPageState extends State<LoginPage> {
 
   void showLoading() {
     setState(() {
-      _isLoading = true;
+      isLoading = true;
     });
   }
 
   void hideLoading() {
     setState(() {
-      _isLoading = false;
+      isLoading = false;
     });
   }
 
@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     passwordController: _passwordController,
                     obscurePassword: _obscurePassword,
                     primaryColor: primaryColor,
+                    isLoading: isLoading,
                     onTogglePassword: () {
                       setState(() {
                         _obscurePassword = !_obscurePassword;
@@ -96,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
             child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
           // Loading overlay for the entire page
-          if (_isLoading)
+          if (isLoading)
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,

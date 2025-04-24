@@ -200,7 +200,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         }
       }});
 
-    @override
+  @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     final appState = Provider.of<AuthState>(context, listen: false);
     log('AppLifecycleState changed: $state');
@@ -264,7 +264,6 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // Reset navigation flags when the user has just authenticated
       appState.setHasNavigatedToFaceIDPage(false);
       appState.setJustAuthenticated(false);
-      log('Reset navigation flags after authentication');
       log('Reset navigation flags after authentication');
     }
   }

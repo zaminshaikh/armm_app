@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
@@ -21,14 +22,16 @@ class LoginForm extends StatefulWidget {
   final bool obscurePassword;
   final Color primaryColor;
   final VoidCallback onTogglePassword;
+  bool isLoading;
 
-  const LoginForm({
+  LoginForm({
     Key? key,
     required this.emailController,
     required this.passwordController,
     required this.obscurePassword,
     required this.primaryColor,
     required this.onTogglePassword,
+    required this.isLoading,
   }) : super(key: key);
 
   @override
@@ -63,6 +66,10 @@ class _LoginFormState extends State<LoginForm> {
 
   // Sign user in method
   Future<bool> signUserIn(BuildContext context) async {
+    setState(() {
+      widget.isLoading = true;
+    });
+
     log('login.dart: Attempting to sign user in...'); // Debugging output
     try {
       log('login.dart: Calling FirebaseAuth to sign in with email and password...'); // Debugging output
@@ -121,58 +128,68 @@ class _LoginFormState extends State<LoginForm> {
     } catch (e) {
       log('login.dart: An unexpected error occurred: $e'); // Debugging output for any other exceptions
       return false;
+    } finally {
+      if (mounted) {
+        setState(() {
+          widget.isLoading = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        // Email TextField
-        AuthTextField(
-          hintText: 'Email', 
-          controller: widget.emailController,
-          onChanged: (value) => validateEmail(value),
-        ),
-        const SizedBox(height: 5),
-        // Password TextField with toggle visibility
-        AuthTextField(
-          hintText: 'Password',
-          controller: widget.passwordController,
-          obscureText: widget.obscurePassword,
-          onChanged: (value) => validatePassword(value),
-        ),
-        const SizedBox(height: 16),
-        // Log In button
-        AuthButton(
-          label: 'Log in',
-          onPressed: () => signUserIn(context),
-          backgroundColor: widget.primaryColor,
-          foregroundColor: Colors.white,
-          isEnabled: isEmailValid && isPasswordValid,
-        ),
-        const SizedBox(height: 16),
-        // Forgot Password button
-        Center(
-          child: TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
-              );
-            },
-            style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
+        Column(
+          children: [
+            // Email TextField
+            AuthTextField(
+              hintText: 'Email', 
+              controller: widget.emailController,
+              onChanged: (value) => validateEmail(value),
             ),
-            child: Text(
-              'Forgot Password?',
-              style: GoogleFonts.inter(
-                color: widget.primaryColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+            const SizedBox(height: 5),
+            // Password TextField with toggle visibility
+            AuthTextField(
+              hintText: 'Password',
+              controller: widget.passwordController,
+              obscureText: widget.obscurePassword,
+              onChanged: (value) => validatePassword(value),
+            ),
+            const SizedBox(height: 16),
+            // Log In button
+            AuthButton(
+              label: 'Log in',
+              onPressed: () => signUserIn(context),
+              backgroundColor: widget.primaryColor,
+              foregroundColor: Colors.white,
+              isEnabled: isEmailValid && isPasswordValid,
+            ),
+            const SizedBox(height: 16),
+            // Forgot Password button
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                  );
+                },
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                ),
+                child: Text(
+                  'Forgot Password?',
+                  style: GoogleFonts.inter(
+                    color: widget.primaryColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ],
     );
