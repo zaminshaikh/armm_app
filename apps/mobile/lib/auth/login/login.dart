@@ -53,12 +53,12 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         children: [
           SafeArea(
-            child: SingleChildScrollView(
+            child: Padding( // Changed SingleChildScrollView to Padding
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 50),
+                  const Spacer(flex: 1), // Added Spacer for flexible top space
                   // The illustration, and the "Log in" text
                   LoginHeader(
                     onBackPressed: () => Navigator.of(context).pop(),
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     passwordController: _passwordController,
                     obscurePassword: _obscurePassword,
                     primaryColor: primaryColor,
-                    isLoading: isLoading,
+                    isLoading: isLoading, // Pass isLoading state
                     onTogglePassword: () {
                       setState(() {
                         _obscurePassword = !_obscurePassword;
@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                     showLoading: showLoading,
                     hideLoading: hideLoading,
                   ),
-                  const SizedBox(height: 24),
+                  const Spacer(flex: 1), // Added Spacer for flexible bottom space
                 ],
               ),
             ),

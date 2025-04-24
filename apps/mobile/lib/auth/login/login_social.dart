@@ -104,7 +104,7 @@ class _LoginSocialState extends State<LoginSocial> {
             ],
           ],
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 24), // Reduced from 32
         // Sign up row
         AuthFooter(
           primaryColor: widget.primaryColor,

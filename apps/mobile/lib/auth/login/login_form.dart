@@ -157,7 +157,7 @@ class _LoginFormState extends State<LoginForm> {
               obscureText: widget.obscurePassword,
               onChanged: (value) => validatePassword(value),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12), // Reduced from 16
             // Log In button
             AuthButton(
               label: 'Log in',
@@ -166,7 +166,7 @@ class _LoginFormState extends State<LoginForm> {
               foregroundColor: Colors.white,
               isEnabled: isEmailValid && isPasswordValid,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12), // Reduced from 16
             // Forgot Password button
             Center(
               child: TextButton(
