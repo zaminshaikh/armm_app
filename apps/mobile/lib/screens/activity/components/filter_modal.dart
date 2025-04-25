@@ -156,17 +156,21 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               lastDate: DateTime(3000),
               builder: (BuildContext context, Widget? child) => Theme(
                 data: Theme.of(context).copyWith(
-                  scaffoldBackgroundColor: Colors.black,
-                  colorScheme: ColorScheme.dark().copyWith(
-                    brightness: Brightness.dark,
-                    primary: Colors.white,
-                    onPrimary: Colors.black,
-                    secondary: Colors.black,
-                    onSecondary: Colors.black,
-                    secondaryContainer: Colors.black,
-                    onSecondaryContainer: Colors.black,
-                    secondaryFixed: Colors.black,
-                    secondaryFixedDim: Colors.black,
+                  scaffoldBackgroundColor: Colors.white,
+                  colorScheme: const ColorScheme.light(
+                    primary: AppColors.primary, // selected button color
+                    onPrimary: Colors.white, // selected button text color
+                    onSurface: Colors.black, // date text color
+                    secondaryContainer: Color.fromARGB(255, 176, 186, 237),
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.primary, // Button text color
+                    ),
+                  ),
+                  textTheme: const TextTheme(
+                    bodyMedium: TextStyle(color: Colors.black), // All calendar days text
+                    bodyLarge: TextStyle(color: Colors.black), // Month and year text
                   ),
                 ),
                 child: child!,
