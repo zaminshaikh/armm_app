@@ -317,198 +317,123 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildChangeEmailSection() {
     return GestureDetector(
       onTap: () {
-        // Capture the parent context
         final parentContext = context;
         showDialog(
           context: context,
           builder: (BuildContext context) {
             TextEditingController emailController = TextEditingController();
-  
-            Widget buildCloseButton(BuildContext context) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // This spreads elements to both edges
-                children: [
-                  Text(
-                    'Change Email',
-                    style: GoogleFonts.inter(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.close, color: Colors.grey[700]),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              );
-            }
-  
-            Widget buildEmailInputSection(TextEditingController controller) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Email',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: controller,
-                    keyboardType: TextInputType.emailAddress,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Enter your new email',
-                      hintStyle: GoogleFonts.inter(color: Colors.grey[500]),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF2B41B8),
-                          width: 2,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                        horizontal: 14,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
-  
-            Widget buildContinueButton(BuildContext context, TextEditingController emailController) {
-              // Add password controller
-              TextEditingController passwordController = TextEditingController();
-              
-              return SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.of(context).pop();
+            bool isEmailValid = false;
 
-                    String newEmail = emailController.text.trim();
-                    bool isValidEmail = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(newEmail);
-                    
-                    if (!isValidEmail) {
-                      if (parentContext.mounted) {
-                        showDialog(
-                          context: parentContext,
-                          builder: (context) => CustomAlertDialog(
-                            title: 'Invalid Email',
-                            message: 'Please enter a valid email address.',
-                            actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: Text('OK'),
-                            ),
-                            ],
-                          ),
-                        );
-                      }
-                      return;
-                    }
-                    // First check how the user is authenticated
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      List<String> providers = [];
-                      for (var info in user.providerData) {
-                        providers.add(info.providerId);
-                      }
-                      
-                      // Check if user is OAuth authenticated
-                      if (providers.contains('apple.com')) {
-                        if (parentContext.mounted) {
-                          showDialog(
-                            context: parentContext,
-                            builder: (context) => CustomAlertDialog(
-                              title: 'Cannot Change Email',
-                              message: 'You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
-                              actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
-                            ),
-                          );
-                        }
-                        return;
-                      } else if (providers.contains('google.com')) {
-                        if (parentContext.mounted) {
-                          showDialog(
-                            context: parentContext,
-                            builder: (context) => CustomAlertDialog(
-                              title: 'Cannot Change Email',
-                              message: 'You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
-                              actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
-                            ),
-                          );
-                        }
-                        return;
-                      }
-                    }
-                    // First ask for password to re-authenticate
-                    await showDialog(
+            // Save the onPressed logic for the Continue button
+            Future<void> onContinuePressed() async {
+              Navigator.of(context).pop();
+              
+              String newEmail = emailController.text.trim();
+              bool isValidEmail = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(newEmail);
+
+              if (!isValidEmail) {
+                if (parentContext.mounted) {
+                  showDialog(
+                    context: parentContext,
+                    builder: (context) => CustomAlertDialog(
+                      title: 'Invalid Email',
+                      message: 'Please enter a valid email address.',
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return;
+              }
+              // First check how the user is authenticated
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                List<String> providers = [];
+                for (var info in user.providerData) {
+                  providers.add(info.providerId);
+                }
+
+                // Check if user is OAuth authenticated
+                if (providers.contains('apple.com')) {
+                  if (parentContext.mounted) {
+                    showDialog(
                       context: parentContext,
                       builder: (context) => CustomAlertDialog(
-                        title: 'Verification Required',
-                        message: 'Please enter your current password to verify your identity.',
-                        input: Container(
-                          width: 300, // Fixed width that should fit in the dialog
-                          child: TextField(
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                            controller: passwordController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              hintText: 'Current password',
-                              border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: Text('Verify'),
-                          ),
-                        ],
+                        title: 'Cannot Change Email',
+                        message: 'You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
+                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
                       ),
-                    ).then((confirmed) async {
-                      if (confirmed == true) {
-                      try {
-                        // Validate email first
-                        String newEmail = emailController.text.trim();
-                        
-                        // Get current user
-                        final user = FirebaseAuth.instance.currentUser;
-                        if (user != null && user.email != null) {
-                        // Re-authenticate user with current email and provided password
-                        AuthCredential credential = EmailAuthProvider.credential(
-                          email: user.email!, 
-                          password: passwordController.text
-                        );
-                        await user.reauthenticateWithCredential(credential);
-                        
-                        // Now proceed with email change
-                        await user.verifyBeforeUpdateEmail(newEmail);
-                        
-                        // Show success dialog
-                        if (parentContext.mounted) {
-                          Navigator.of(parentContext).pop(); // Close email change dialog
-                          showDialog(
+                    );
+                  }
+                  return;
+                } else if (providers.contains('google.com')) {
+                  if (parentContext.mounted) {
+                    showDialog(
+                      context: parentContext,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Cannot Change Email',
+                        message: 'You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
+                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                      ),
+                    );
+                  }
+                  return;
+                }
+              }
+              // First ask for password to re-authenticate
+              TextEditingController passwordController = TextEditingController();
+              await showDialog(
+                context: parentContext,
+                builder: (context) => CustomAlertDialog(
+                  title: 'Verification Required',
+                  message: 'Please enter your current password to verify your identity.',
+                  input: Container(
+                    width: 300,
+                    child: TextField(
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: Colors.black87,
+                      ),
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Current password',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: Text('Verify'),
+                    ),
+                  ],
+                ),
+              ).then((confirmed) async {
+                if (confirmed == true) {
+                  try {
+                    String newEmail = emailController.text.trim();
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null && user.email != null) {
+                      AuthCredential credential = EmailAuthProvider.credential(
+                        email: user.email!,
+                        password: passwordController.text,
+                      );
+                      await user.reauthenticateWithCredential(credential);
+                      await user.verifyBeforeUpdateEmail(newEmail);
+                      if (parentContext.mounted) {
+                        Navigator.of(parentContext).pop();
+                        showDialog(
                           context: parentContext,
                           builder: (context) => CustomAlertDialog(
                             title: 'Email Change Requested',
@@ -517,133 +442,182 @@ class _SettingsPageState extends State<SettingsPage> {
                               TextButton(onPressed: () => openMailApp(parentContext), child: const Text('Open Mail App'))
                             ],
                           ),
-                          );
-                        }
-                        }
-                      } catch (e) {
-                        // Show error dialog
-                        if (parentContext.mounted) {
-                          String errorMessage = 'An error occurred while updating your email.';
-
-                          // Check Firebase Auth error codes
-                          if (e is FirebaseAuthException) {
-                            switch (e.code) {
-                              case 'requires-recent-login':
-                                errorMessage = 'Please log out and log back in to update your email.';
-                                break;
-                              case 'email-already-in-use':
-                                errorMessage = 'This email is already in use by another account.';
-                                break;
-                              case 'invalid-email':
-                                errorMessage = 'The email address is invalid.';
-                                break;
-                              case 'wrong-password':
-                                errorMessage = 'Incorrect password. Please try again.';
-                                break;
-                              case 'too-many-requests':
-                                errorMessage = 'Too many attempts. Please try again later.';
-                                break;
-                              case 'network-request-failed':
-                                errorMessage = 'Network error. Please check your connection.';
-                                break;
-                              case 'user-mismatch':
-                                errorMessage = 'The credential does not match the user you\'re trying to update.';
-                                break;
-                              case 'user-not-found':
-                                errorMessage = 'No user found for the provided email.';
-                                break;
-                              case 'invalid-credential':
-                                errorMessage = 'The credential provided is invalid or has expired. The password entered may be incorrect.';
-                                break;
-                              case 'invalid-verification-code':
-                                errorMessage = 'The verification code is invalid.';
-                                break;
-                              case 'invalid-verification-id':
-                                errorMessage = 'The verification ID is invalid.';
-                                break;
-                              case 'missing-android-pkg-name':
-                                errorMessage = 'An Android package name is required for this operation.';
-                                break;
-                              case 'missing-continue-uri':
-                                errorMessage = 'A continue URL must be provided for this operation.';
-                                break;
-                              case 'missing-ios-bundle-id':
-                                errorMessage = 'An iOS bundle ID is required for this operation.';
-                                break;
-                              case 'invalid-continue-uri':
-                                errorMessage = 'The continue URL provided is invalid.';
-                                break;
-                              case 'unauthorized-continue-uri':
-                                errorMessage = 'The domain of the continue URL is not whitelisted.';
-                                break;
-                              default:
-                                errorMessage = 'Authentication failed: ${e.message}';
-                            }
-                          } else {
-                            errorMessage = 'Error: ${e.toString()}';
-                          }
-
-                          log('settings.dart: Error updating email: $errorMessage');
-
-                          showDialog(
-                            context: parentContext,
-                            builder: (context) => CustomAlertDialog(
-                              title: 'Email Change Failed',
-                              message: errorMessage,
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(parentContext).pop(),
-                                  child: Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
+                        );
                       }
                     }
-                  });
-                },
-                  // Rest of the button styling remains the same
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2B41B8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: Text(
-                    'Continue',
-                    style: GoogleFonts.inter(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              );
+                  } catch (e) {
+                    if (parentContext.mounted) {
+                      String errorMessage = 'An error occurred while updating your email.';
+                      if (e is FirebaseAuthException) {
+                        switch (e.code) {
+                          case 'requires-recent-login':
+                            errorMessage = 'Please log out and log back in to update your email.';
+                            break;
+                          case 'email-already-in-use':
+                            errorMessage = 'This email is already in use by another account.';
+                            break;
+                          case 'invalid-email':
+                            errorMessage = 'The email address is invalid.';
+                            break;
+                          case 'wrong-password':
+                            errorMessage = 'Incorrect password. Please try again.';
+                            break;
+                          case 'too-many-requests':
+                            errorMessage = 'Too many attempts. Please try again later.';
+                            break;
+                          case 'network-request-failed':
+                            errorMessage = 'Network error. Please check your connection.';
+                            break;
+                          case 'user-mismatch':
+                            errorMessage = 'The credential does not match the user you\'re trying to update.';
+                            break;
+                          case 'user-not-found':
+                            errorMessage = 'No user found for the provided email.';
+                            break;
+                          case 'invalid-credential':
+                            errorMessage = 'The credential provided is invalid or has expired. The password entered may be incorrect.';
+                            break;
+                          case 'invalid-verification-code':
+                            errorMessage = 'The verification code is invalid.';
+                            break;
+                          case 'invalid-verification-id':
+                            errorMessage = 'The verification ID is invalid.';
+                            break;
+                          case 'missing-android-pkg-name':
+                            errorMessage = 'An Android package name is required for this operation.';
+                            break;
+                          case 'missing-continue-uri':
+                            errorMessage = 'A continue URL must be provided for this operation.';
+                            break;
+                          case 'missing-ios-bundle-id':
+                            errorMessage = 'An iOS bundle ID is required for this operation.';
+                            break;
+                          case 'invalid-continue-uri':
+                            errorMessage = 'The continue URL provided is invalid.';
+                            break;
+                          case 'unauthorized-continue-uri':
+                            errorMessage = 'The domain of the continue URL is not whitelisted.';
+                            break;
+                          default:
+                            errorMessage = 'Authentication failed: ${e.message}';
+                        }
+                      } else {
+                        errorMessage = 'Error: ${e.toString()}';
+                      }
+                      log('settings.dart: Error updating email: $errorMessage');
+                      showDialog(
+                        context: parentContext,
+                        builder: (context) => CustomAlertDialog(
+                          title: 'Email Change Failed',
+                          message: errorMessage,
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(parentContext).pop(),
+                              child: Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  }
+                }
+              });
             }
-            return CustomAlertDialog(
-              title: 'Change Email',
-              message: 'Update the email associated with your account.',
-              icon: null,
-              actions: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    buildEmailInputSection(emailController),
-                    const SizedBox(height: 24),
-                    buildContinueButton(context, emailController),
-                  ],
-                ),
-              ],
+
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return Dialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 8),
+                        SvgPicture.asset(
+                          'assets/icons/change_email.svg',
+                          height: 180,
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Change Email',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'You are changing the email associated with your account.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        TextField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            hintText: 'New Email',
+                            hintStyle: GoogleFonts.inter(color: Colors.black54),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3FA),
+                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          style: GoogleFonts.inter(color: Colors.black),
+                          onChanged: (value) {
+                            setState(() {
+                              isEmailValid = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value.trim());
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: isEmailValid ? onContinuePressed : null,
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              backgroundColor: isEmailValid ? AppColors.primary : Colors.grey[300]!,
+                              disabledBackgroundColor: Colors.transparent,
+                              side: BorderSide(
+                                color: Colors.grey[300]!,
+                                width: 2,
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              'Continue',
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: isEmailValid ? Colors.white : Colors.grey[600]!,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
             );
           },
         );
       },
-      
-      
-      
-      
       child: Container(
         height: 45,
         decoration: BoxDecoration(
