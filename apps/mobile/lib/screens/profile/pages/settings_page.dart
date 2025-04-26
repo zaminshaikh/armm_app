@@ -646,101 +646,48 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildChangePasswordSection() {
     return GestureDetector(
       onTap: () {
+        final parentContext = context;
         showDialog(
           context: context,
           builder: (BuildContext context) {
             TextEditingController passwordController = TextEditingController();
-            
-            Widget buildPasswordInputSection(TextEditingController controller) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                  Text(
-                    'You are changing the password associated with your account.',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Password',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: controller,
-                    obscureText: true,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Enter your new password',
-                      hintStyle: GoogleFonts.inter(
-                        color: Colors.grey[400],
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(11),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(11),
-                        borderSide: const BorderSide(
-                          color: Colors.blue,
-                          width: 2,
+            bool isPasswordValid = false;
+
+            // Save the onPressed logic for the Continue button
+            Future<void> onContinuePressed() async {
+              Navigator.of(context).pop();
+              
+              String newPassword = passwordController.text.trim();
+              if (newPassword.length < 6) {
+                if (parentContext.mounted) {
+                  showDialog(
+                    context: parentContext,
+                    builder: (context) => CustomAlertDialog(
+                      title: 'Invalid Password',
+                      message: 'Password should be at least 6 characters.',
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text('OK'),
                         ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                        horizontal: 14,
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              );
-            }
-            
-            Widget buildContinueButton(BuildContext context, TextEditingController controller) {
-              return ElevatedButton(
-                onPressed: () async {
-                  try {
-                    String newPassword = controller.text.trim();
-                    var user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      await user.updatePassword(newPassword);
-                      // Dismiss the change password dialog first
-                      Navigator.of(context).pop();
-                      // Then show the success dialog
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CustomAlertDialog(
-                            title: 'Password Change Requested',
-                            message: 'Your password has been successfully updated.',
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  } catch (e) {
-                    log('settings.dart: Error updating password: $e');
+                  );
+                }
+                return;
+              }
+              
+              try {
+                var user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  await user.updatePassword(newPassword);
+                  if (parentContext.mounted) {
                     showDialog(
-                      context: context,
+                      context: parentContext,
                       builder: (BuildContext context) {
                         return CustomAlertDialog(
-                          title: 'Error',
-                          message: 'Error updating password: $e',
+                          title: 'Password Updated',
+                          message: 'Your password has been successfully updated.',
                           actions: <Widget>[
                             TextButton(
                               child: const Text('OK'),
@@ -753,39 +700,121 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     );
                   }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 30, 75, 137),
-                  splashFactory: NoSplash.splashFactory,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                ),
-                child: Text(
-                  'Continue',
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              );
+                }
+              } catch (e) {
+                log('settings.dart: Error updating password: $e');
+                if (parentContext.mounted) {
+                  showDialog(
+                    context: parentContext,
+                    builder: (BuildContext context) {
+                      return CustomAlertDialog(
+                        title: 'Error',
+                        message: 'Error updating password: $e',
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              }
             }
-            
-            return CustomAlertDialog(
-              title: 'Change Password',
-              message: 'You are changing the password associated with your account.',
-              actions: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    buildPasswordInputSection(passwordController),
-                    const SizedBox(height: 24),
-                    buildContinueButton(context, passwordController),
-                  ],
-                ),
-              ],
+
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return Dialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 8),
+                        SvgPicture.asset(
+                          'assets/icons/change_password.svg', // Assuming this asset exists
+                          height: 180,
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Change Password',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'You are changing the password associated with your account.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'New Password',
+                            hintStyle: GoogleFonts.inter(color: Colors.black54),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3FA),
+                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          style: GoogleFonts.inter(color: Colors.black),
+                          onChanged: (value) {
+                            setState(() {
+                              isPasswordValid = value.trim().length >= 6;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: isPasswordValid ? onContinuePressed : null,
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              backgroundColor: isPasswordValid ? AppColors.primary : Colors.grey[300]!,
+                              disabledBackgroundColor: Colors.transparent,
+                              side: BorderSide(
+                                color: Colors.grey[300]!,
+                                width: 2,
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              'Continue',
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: isPasswordValid ? Colors.white : Colors.grey[600]!,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
             );
           },
         );
