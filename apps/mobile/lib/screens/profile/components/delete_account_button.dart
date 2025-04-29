@@ -11,6 +11,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DeleteAccountButton extends StatefulWidget { // Renamed widget
   final Client client;
@@ -87,26 +88,33 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
             Widget inputWidget = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Please enter your CID to confirm:"),
+                Text(
+                  "Please enter your CID to confirm:",
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 TextField(
                   controller: _clientIdController,
                   focusNode: _clientIdFocusNode,
                   keyboardType: TextInputType.number,
+                  style: TextStyle(color: Colors.black), // Added style for black text
                   decoration: InputDecoration(
-                    hintText: 'Your CID: ${widget.client.cid}',
-                    errorText: _errorText,
+                  hintText: 'Your CID: ${widget.client.cid}',
+                  errorText: _errorText,
                   ),
                   onChanged: (value) {
-                    if (value.length >= 8) {
-                      _clientIdFocusNode.unfocus();
-                    }
-                    // Clear error when user types
-                    if (_errorText != null) {
-                      setDialogState(() {
-                        _errorText = null;
-                      });
-                    }
+                  if (value.length >= 8) {
+                    _clientIdFocusNode.unfocus();
+                  }
+                  // Clear error when user types
+                  if (_errorText != null) {
+                    setDialogState(() {
+                    _errorText = null;
+                    });
+                  }
                   },
                 ),
               ],
