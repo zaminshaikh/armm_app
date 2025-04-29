@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'total_assets_section.dart'; // Adjust the import according to your project structure
 import 'package:armm_app/utils/utilities.dart';
 
@@ -59,17 +60,37 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: const Color.fromARGB(54, 255, 255, 255),
-                  child: Text(
-                    '${client.firstName[0]}${client.lastName[0]}',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                FutureBuilder<String?>(
+                  future: _getProfilePicUrl(client.cid.toString()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircleAvatar(
+                        radius: 30,
+                        backgroundColor: const Color.fromARGB(54, 255, 255, 255),
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      );
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      return CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(snapshot.data!),
+                      );
+                    } else {
+                      return CircleAvatar(
+                        radius: 30,
+                        backgroundColor: const Color.fromARGB(54, 255, 255, 255),
+                        child: Text(
+                          '${client.firstName[0]}${client.lastName[0]}',
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 const SizedBox(width: 10),
                 Column(
@@ -140,11 +161,21 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
             ),
-            
+
             // ARMM Logo
           ],
         ),
       ),
     );
+  }
+
+  // Helper to check for a profile pic in Firebase Storage
+  Future<String?> _getProfilePicUrl(String clientId) async {
+    try {
+      final ref = FirebaseStorage.instance.ref('profilePics/$clientId.jpg');
+      return await ref.getDownloadURL();
+    } catch (_) {
+      return null;
+    }
   }
 }
