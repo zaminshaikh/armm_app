@@ -1,5 +1,6 @@
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
@@ -32,12 +33,31 @@ class AppLockPromptPage extends StatelessWidget {
           showNotificationButton: false,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/auth.svg',
+                    width: 64,
+                    height: 64,
+                  ),
+                  SizedBox(width: 16),
+                  Text(
+                    'Enable App Lock?',
+                    style: GoogleFonts.inter(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
               Text(
-                'Would you like to enable App Lock?\n'
                 'This feature will require a passcode or biometric authentication when you re-open the app.',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
@@ -47,33 +67,44 @@ class AppLockPromptPage extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => _setAppLock(context, true),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 14),
-                    ),
-                    child: const Text(
-                      'Yes',
-                      style: TextStyle(color: Colors.white),
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () => _setAppLock(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'Yes',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
-                  OutlinedButton(
-                    onPressed: () => _setAppLock(context, false),
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      side: BorderSide(color: AppColors.primary),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 14),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: OutlinedButton(
+                        onPressed: () => _setAppLock(context, false),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: BorderSide(color: AppColors.primary, width: 2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'No',
+                          style: TextStyle(fontSize: 16, color: AppColors.primary),
+                        ),
+                      ),
                     ),
-                    child: const Text('No'),
                   ),
                 ],
               ),
