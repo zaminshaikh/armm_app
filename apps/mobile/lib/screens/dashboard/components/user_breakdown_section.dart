@@ -71,18 +71,25 @@ class UserBreakdownSection extends StatelessWidget {
     assetTilesARMM.sort((a, b) => a.asset.index.compareTo(b.asset.index));
 
     return Container(
+      // ↑ new width control
+      width: isConnectedUser ? 300 : null,
       padding: const EdgeInsets.only(left: 15, right: 15, top: 8, bottom: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(0, 0, 0, 0).withOpacity(0.1),
-            blurRadius: 8,
-            spreadRadius: 2,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        // ↑ add border for connected users
+        border: isConnectedUser ? Border.all(color: Colors.grey.shade300) : null,
+        // ↑ remove shadow for connected users
+        boxShadow: isConnectedUser
+            ? []
+            : [
+                BoxShadow(
+                  color: const Color.fromARGB(0, 0, 0, 0).withOpacity(0.1),
+                  blurRadius: 8,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 3),
+                ),
+              ],
       ),
       child: Theme(
         data: Theme.of(context).copyWith(

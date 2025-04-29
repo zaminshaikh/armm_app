@@ -381,12 +381,9 @@ class _DashboardPageState extends State<DashboardPage>
               itemCount: client!.connectedUsers!.length,
               itemBuilder: (context, index) {
                 final connectedUser = client!.connectedUsers![index]!;
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: UserBreakdownSection(
-                    client: connectedUser,
-                    isConnectedUser: true,
-                  ),
+                return UserBreakdownSection(
+                  client: connectedUser,
+                  isConnectedUser: true,
                 );
               },
             ),
