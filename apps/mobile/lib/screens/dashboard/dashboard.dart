@@ -13,11 +13,12 @@ import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:armm_app/utils/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -36,6 +37,9 @@ class _DashboardPageState extends State<DashboardPage>
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   List<Activity> activities = [];
+  late final PageController _connectedUsersPageController;
+  int _currentConnectedUserPage = 0;
+  Future<String?>? _profilePicUrlFuture;
 
   @override
   void initState() {
@@ -61,11 +65,21 @@ class _DashboardPageState extends State<DashboardPage>
     _updateAuthState();
     // Validate whether the user is authenticated
     _validateAuth();
+
+    // Initialize controller for connected users carousel
+    _connectedUsersPageController = PageController();
+    _connectedUsersPageController.addListener(() {
+      final page = _connectedUsersPageController.page?.round() ?? 0;
+      if (page != _currentConnectedUserPage) {
+        setState(() => _currentConnectedUserPage = page);
+      }
+    });
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // Dispose of the animation controller
+    _connectedUsersPageController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -74,6 +88,15 @@ class _DashboardPageState extends State<DashboardPage>
     super.didChangeDependencies();
     client = Provider.of<Client?>(context);
     _retrieveActivities();
+
+    // Initialize profile‑pic once
+    if (client != null && _profilePicUrlFuture == null) {
+      _profilePicUrlFuture = FirebaseStorage
+        .instance
+        .ref('profilePics/${client!.cid}.jpg')
+        .getDownloadURL()
+        .catchError((_) => null);
+    }
   }
 
   Future<void> _loadAppLockState() async {
@@ -251,18 +274,20 @@ class _DashboardPageState extends State<DashboardPage>
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 251, 251, 251),
       appBar: client != null
-      ? DashboardAppBar(
-          showNotificationButton: true,
-          onNotificationTap: () {
+        ? DashboardAppBar(
+            client: client!,
+            profilePicFuture: _profilePicUrlFuture,    // ← pass it here
+            showNotificationButton: true,
+            onNotificationTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const NotificationPage(),
           ),
         );
-          },
-          client: client!,
-        ) : null, // Show nothing if client is null
+            },
+          )
+        : null, // Show nothing if client is null
 
       body: SingleChildScrollView(
         child: Column(
@@ -346,21 +371,44 @@ class _DashboardPageState extends State<DashboardPage>
             ],
           ),
           const SizedBox(height: 20),
-          Column(
-            children: client!.connectedUsers!
-                .map(
-                  (connectedUser) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      UserBreakdownSection(
-                        client: connectedUser!,
-                        isConnectedUser: true,
-                      ),
-                      const SizedBox(height: 20),
-                    ],
+          // Expandable carousel so tiles can grow dynamically
+          AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            child: ExpandablePageView.builder(
+              controller: _connectedUsersPageController,
+              onPageChanged: (index) => setState(() => _currentConnectedUserPage = index),
+              scrollDirection: Axis.horizontal,
+              itemCount: client!.connectedUsers!.length,
+              itemBuilder: (context, index) {
+                final connectedUser = client!.connectedUsers![index]!;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: UserBreakdownSection(
+                    client: connectedUser,
+                    isConnectedUser: true,
                   ),
-                )
-                .toList(),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          // sliding indicator dots
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              client!.connectedUsers!.length,
+              (index) => Container(
+                width: 8,
+                height: 8,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentConnectedUserPage == index
+                      ? AppColors.primary
+                      : Colors.grey,
+                ),
+              ),
+            ),
           ),
         ],
       );

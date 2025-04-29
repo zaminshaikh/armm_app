@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   device_info_plus: ^11.1.0
   dio: ^5.4.1
+  expandable_page_view: ^1.0.17
   file_picker: ^8.0.0+1
   file_saver: ^0.2.12
   firebase_auth: ^5.3.1

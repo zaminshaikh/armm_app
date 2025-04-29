@@ -12,6 +12,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onNotificationTap;
   final bool implyLeading;
   final bool showNotificationButton;
+  final Future<String?>? profilePicFuture;         // ← new
 
   const DashboardAppBar({
     Key? key,
@@ -19,6 +20,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onNotificationTap,
     this.implyLeading = false,
     this.showNotificationButton = true,
+    this.profilePicFuture,                        // ← new
   }) : super(key: key);
 
   @override
@@ -61,7 +63,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FutureBuilder<String?>(
-                  future: _getProfilePicUrl(client.cid.toString()),
+                  future: profilePicFuture,             // ← use cached future
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircleAvatar(
@@ -169,13 +171,5 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // Helper to check for a profile pic in Firebase Storage
-  Future<String?> _getProfilePicUrl(String clientId) async {
-    try {
-      final ref = FirebaseStorage.instance.ref('profilePics/$clientId.jpg');
-      return await ref.getDownloadURL();
-    } catch (_) {
-      return null;
-    }
-  }
+  // _getProfilePicUrl can be removed or left unused
 }

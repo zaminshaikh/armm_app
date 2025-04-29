@@ -77,7 +77,7 @@ class UserBreakdownSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: const Color.fromARGB(0, 0, 0, 0).withOpacity(0.1),
             blurRadius: 8,
             spreadRadius: 2,
             offset: const Offset(0, 3),
