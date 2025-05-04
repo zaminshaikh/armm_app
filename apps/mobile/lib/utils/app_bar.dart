@@ -1,5 +1,7 @@
+import 'package:armm_app/screens/notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -56,27 +58,42 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           centerTitle: true,
             title: Text(
               title,
-              style: const TextStyle(
+              style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 25,
                 fontWeight: FontWeight.w600,
-                fontFamily: 'Inter',
               ),
             ),
           actions: showNotificationButton
               ? [
-                  Padding(
+                    Padding(
                     padding: const EdgeInsets.only(right: 10.0),
-                    child: IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/icons/notification.svg',
-                        width: 30,
-                        height: 30,
+                    child: InkWell(
+                      onTap: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => const NotificationPage(),
+                      ),
+                      );
+                      },
+                      child: IconButton(
+                      icon: const Icon(
+                        Icons.notifications_none,
+                        size: 30,
                         color: Colors.white,
                       ),
-                      onPressed: onNotificationTap ?? () {},
+                      onPressed: () {
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationPage(),
+                        ),
+                        );
+                      },
+                      ),
                     ),
-                  ),
+                    ),
                 ]
               : null,
         ),

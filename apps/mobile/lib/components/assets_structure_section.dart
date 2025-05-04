@@ -49,11 +49,19 @@ class AssetsStructureSection extends StatelessWidget {
     final List<_AccountSlice> sliceData = [];
 
     final colorPalette = <Color>[
-      Color(0xFF1C32A4),
-      Color.fromARGB(255, 72, 93, 197),
-      Color.fromARGB(255, 16, 49, 209),
-      Color.fromARGB(255, 129, 147, 239),
-      Color.fromARGB(255, 160, 172, 231),
+      Color(0xFF2563EB),
+      Color(0xFF2B41B8),
+      Color(0xFF334155),
+      Color(0xFF60A5FA),
+      Color(0xFF64748B),
+      Color(0xFF6D28D9),
+      Color(0xFF8B5CF6),
+      Color(0xFFA78BFA),
+      Color(0xFFBFDBFE),
+      Color(0xFFF8BC55),
+      Color(0xFFFDD366),
+      Color(0xFFFDE183),
+      Color(0xFFFFFFFF),
     ];
 
     int colorIndex = 0;

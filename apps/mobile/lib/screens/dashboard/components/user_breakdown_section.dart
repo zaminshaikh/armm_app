@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Enum for font size types
+enum FontSizeType { ytd, total }
+
 class UserBreakdownSection extends StatelessWidget {
   final Client client;
   final bool isConnectedUser;
@@ -17,6 +20,35 @@ class UserBreakdownSection extends StatelessWidget {
     required this.client,
     this.isConnectedUser = false,
   }) : super(key: key);
+
+  // Helper function to determine font size based on value
+  double _getFontSize(double value, FontSizeType type) {
+    // Base sizes for different elements
+    double baseYtdSize = 12.0;
+    double baseTotalSize = 16.0;
+    
+    // Scale factor based on value magnitude (logarithmic scale)
+    double scaleFactor = 0;
+    if (value >= 1000000) { // > 1M
+      scaleFactor = 1.5;
+    } else if (value >= 100000) { // > 100k
+      scaleFactor = 1.2;
+    } else if (value >= 10000) { // > 10k
+      scaleFactor = 1.0;
+    } else if (value >= 1000) { // > 1k
+      scaleFactor = 0.8;
+    }
+    
+    // Apply scale factor based on type
+    switch (type) {
+      case FontSizeType.ytd:
+        return baseYtdSize + (scaleFactor * 0.1); // Smaller scaling for YTD
+      case FontSizeType.total:
+        return baseTotalSize + (scaleFactor * 0.2); // Larger scaling for total
+      default:
+        return type == FontSizeType.ytd ? baseYtdSize : baseTotalSize; // Default case
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +110,7 @@ class UserBreakdownSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${client.firstName} ${client.lastName}',
+                    formatName(client.firstName, client.lastName),
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -99,7 +131,7 @@ class UserBreakdownSection extends StatelessWidget {
                       Text(
                         currencyFormat(client.assets?.ytd ?? 0),
                         style: GoogleFonts.inter(
-                          fontSize: 14,
+                          fontSize: _getFontSize(client.assets?.ytd?.abs() ?? 0, FontSizeType.ytd),
                           fontWeight: FontWeight.w600,
                           color: Colors.green,
                         ),
@@ -114,7 +146,7 @@ class UserBreakdownSection extends StatelessWidget {
               Text(
                 currencyFormat(client.assets?.totalAssets ?? 0),
                 style: GoogleFonts.inter(
-                  fontSize: 18,
+                  fontSize: _getFontSize(client.assets?.totalAssets ?? 0, FontSizeType.total),
                   fontWeight: FontWeight.bold,
                   color: armmBlue,
                 ),
@@ -135,3 +167,4 @@ class UserBreakdownSection extends StatelessWidget {
     );
   }
 }
+

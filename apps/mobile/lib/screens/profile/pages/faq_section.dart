@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FAQItem {
   final String question;
@@ -72,7 +73,7 @@ class _FAQSectionState extends State<FAQSection> {
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 title: Text(
                   item.question,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w600),
                 ),
                 trailing: Icon(
                   _isExpanded[index] ? Icons.remove : Icons.add,
@@ -87,7 +88,11 @@ class _FAQSectionState extends State<FAQSection> {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(8),
-                    child: Text(item.answer),
+                    child: Text(
+                      item.answer,
+                      style: GoogleFonts.inter(color: Colors.black),
+                    ),
+
                   ),
                 ],
               ),

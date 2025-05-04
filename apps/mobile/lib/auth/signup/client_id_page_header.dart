@@ -1,4 +1,5 @@
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -48,26 +49,53 @@ class ClientIDPageHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        // "What is my Client ID?" (You could make this a clickable text or info button)
-        const Center(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.info_outline_rounded,
-                color: Colors.grey,
+        // "What is my Client ID?" (Clickable text to open a dialog)
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomAlertDialog(
+                    title: 'What is a Client ID?',
+                    message: 'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
+                    icon: const Icon(
+                      Icons.info_outline_rounded,
+                      color: Colors.blue,
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Container(
+              color: Colors.purple,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'What is my Client ID?',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(width: 12),
-              Text(
-                'What is my Client ID?',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-
       ],
     );
   }

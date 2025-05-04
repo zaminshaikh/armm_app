@@ -1,6 +1,9 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/profile/components/delete_account_button.dart';
 import 'package:armm_app/utils/app_bar.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,11 +11,13 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:armm_app/screens/profile/components/logout_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -39,46 +44,23 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showPermissionDeniedDialog() {
-    showCupertinoDialog(
+    showDialog(
       context: context,
       builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            'Notifications Disabled',
-            style: GoogleFonts.inter(
-              color: CupertinoColors.darkBackgroundGray,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: const Text(
-            'Please enable notifications in your device settings to receive updates.',
-            style: TextStyle(
-              color: CupertinoColors.black,
-              fontSize: 16,
-            ),
-          ),
+        return CustomAlertDialog(
+          title: 'Notifications Disabled',
+          message: 'Please enable notifications in your device settings to receive updates.',
           actions: [
-            CupertinoDialogAction(
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: CupertinoColors.activeBlue,
-                ),
-              ),
-              onPressed: () => Navigator.of(context).pop(),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
             ),
-            CupertinoDialogAction(
-              child: const Text(
-                'Settings',
-                style: TextStyle(
-                  color: CupertinoColors.activeBlue,
-                ),
-              ),
+            TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 AppSettings.openAppSettings();
               },
+              child: const Text('Settings'),
             ),
           ],
         );
@@ -101,19 +83,19 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showCupertinoDialog(String message) {
-    showCupertinoDialog(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: const Text('Notification Permission'),
-          content: Text(message),
+        return CustomAlertDialog(
+          title: 'Notification Permission',
+          message: message,
           actions: <Widget>[
-            CupertinoDialogAction(
+            TextButton(
               child: const Text('OK'),
               onPressed: () => Navigator.of(context).pop(),
             ),
             if (message.contains('denied'))
-              CupertinoDialogAction(
+              TextButton(
                 child: const Text('Settings'),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -158,28 +140,27 @@ class _SettingsPageState extends State<SettingsPage> {
   Scaffold buildSettingsPage() {
     if (client == null) {
       return const Scaffold(
-        body: CircularProgressIndicator(),
+        body: CustomProgressIndicator(
+          shouldTimeout: true,
+        ),
       );
     }
 
     return Scaffold(
+      appBar: const CustomAppBar(
+      title: 'Settings',
+      implyLeading: true,
+      showNotificationButton: false,
+      ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const CustomAppBar(
-              title: 'Settings',
-              implyLeading: true,
-              showNotificationButton: false,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: _settings(),
-            ),
-          ],
-        ),
+      child: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: _settings(),
+      ),
       ),
     );
-  }
+    }
+
 
   Column _settings() => Column(
         children: [
@@ -334,274 +315,316 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildChangeEmailSection() {
-
-    const Color ARMM_blue = Color(0xFF2B41B8);
     return GestureDetector(
       onTap: () {
+        final parentContext = context;
         showDialog(
           context: context,
           builder: (BuildContext context) {
             TextEditingController emailController = TextEditingController();
-  
-            Widget buildCloseButton(BuildContext context) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // This spreads elements to both edges
-                children: [
-                  Text(
-                    'Change Email',
-                    style: GoogleFonts.inter(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+            bool isEmailValid = false;
+
+            // Save the onPressed logic for the Continue button
+            Future<void> onContinuePressed() async {
+              Navigator.of(context).pop();
+              
+              String newEmail = emailController.text.trim();
+              bool isValidEmail = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(newEmail);
+
+              if (!isValidEmail) {
+                if (parentContext.mounted) {
+                  showDialog(
+                    context: parentContext,
+                    builder: (context) => CustomAlertDialog(
+                      title: 'Invalid Email',
+                      message: 'Please enter a valid email address.',
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text('OK'),
+                        ),
+                      ],
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.close, color: Colors.grey[700]),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              );
-            }
-  
-            Widget buildEmailInputSection(TextEditingController controller) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                  Text(
-                    'Update the email associated with your account.',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Email',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: controller,
-                    keyboardType: TextInputType.emailAddress,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Enter your new email',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  );
+                }
+                return;
+              }
+              // First check how the user is authenticated
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                List<String> providers = [];
+                for (var info in user.providerData) {
+                  providers.add(info.providerId);
+                }
+
+                // Check if user is OAuth authenticated
+                if (providers.contains('apple.com')) {
+                  if (parentContext.mounted) {
+                    showDialog(
+                      context: parentContext,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Cannot Change Email',
+                        message: 'You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
+                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF2B41B8),
-                          width: 2,
+                    );
+                  }
+                  return;
+                } else if (providers.contains('google.com')) {
+                  if (parentContext.mounted) {
+                    showDialog(
+                      context: parentContext,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Cannot Change Email',
+                        message: 'You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
+                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                      ),
+                    );
+                  }
+                  return;
+                }
+              }
+              // First ask for password to re-authenticate
+              TextEditingController passwordController = TextEditingController();
+              await showDialog(
+                context: parentContext,
+                builder: (context) => CustomAlertDialog(
+                  title: 'Verification Required',
+                  message: 'Please enter your current password to verify your identity.',
+                  input: Container(
+                    width: 300,
+                    child: TextField(
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: Colors.black87,
+                      ),
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Current password',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                        horizontal: 14,
-                      ),
                     ),
                   ),
-                ],
-              );
-            }
-  
-            Widget buildContinueButton(BuildContext context, TextEditingController emailController) {
-              // Add password controller
-              TextEditingController passwordController = TextEditingController();
-              
-              return SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    // First check how the user is authenticated
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: Text('Verify'),
+                    ),
+                  ],
+                ),
+              ).then((confirmed) async {
+                if (confirmed == true) {
+                  try {
+                    String newEmail = emailController.text.trim();
                     final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      List<String> providers = [];
-                      for (var info in user.providerData) {
-                        providers.add(info.providerId);
-                      }
-                      
-                      // Check if user is OAuth authenticated
-                      if (providers.contains('apple.com')) {
-                        if (context.mounted) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Cannot Change Email'),
-                              content: Text('You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.'),
-                              actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
-                            ),
-                          );
-                        }
-                        return;
-                      } else if (providers.contains('google.com')) {
-                        if (context.mounted) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Cannot Change Email'),
-                              content: Text('You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.'),
-                              actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
-                            ),
-                          );
-                        }
-                        return;
+                    if (user != null && user.email != null) {
+                      AuthCredential credential = EmailAuthProvider.credential(
+                        email: user.email!,
+                        password: passwordController.text,
+                      );
+                      await user.reauthenticateWithCredential(credential);
+                      await user.verifyBeforeUpdateEmail(newEmail);
+                      if (parentContext.mounted) {
+                        Navigator.of(parentContext).pop();
+                        showDialog(
+                          context: parentContext,
+                          builder: (context) => CustomAlertDialog(
+                            title: 'Email Change Requested',
+                            message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
+                            actions: [
+                              TextButton(onPressed: () => openMailApp(parentContext), child: const Text('Open Mail App'))
+                            ],
+                          ),
+                        );
                       }
                     }
-                    // First ask for password to re-authenticate
-                    await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('Verification Required'),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Please enter your current password to verify your identity.'),
-                            SizedBox(height: 16),
-                            TextField(
-                              controller: passwordController,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                hintText: 'Current password',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
+                  } catch (e) {
+                    if (parentContext.mounted) {
+                      String errorMessage = 'An error occurred while updating your email.';
+                      if (e is FirebaseAuthException) {
+                        switch (e.code) {
+                          case 'requires-recent-login':
+                            errorMessage = 'Please log out and log back in to update your email.';
+                            break;
+                          case 'email-already-in-use':
+                            errorMessage = 'This email is already in use by another account.';
+                            break;
+                          case 'invalid-email':
+                            errorMessage = 'The email address is invalid.';
+                            break;
+                          case 'wrong-password':
+                            errorMessage = 'Incorrect password. Please try again.';
+                            break;
+                          case 'too-many-requests':
+                            errorMessage = 'Too many attempts. Please try again later.';
+                            break;
+                          case 'network-request-failed':
+                            errorMessage = 'Network error. Please check your connection.';
+                            break;
+                          case 'user-mismatch':
+                            errorMessage = 'The credential does not match the user you\'re trying to update.';
+                            break;
+                          case 'user-not-found':
+                            errorMessage = 'No user found for the provided email.';
+                            break;
+                          case 'invalid-credential':
+                            errorMessage = 'The credential provided is invalid or has expired. The password entered may be incorrect.';
+                            break;
+                          case 'invalid-verification-code':
+                            errorMessage = 'The verification code is invalid.';
+                            break;
+                          case 'invalid-verification-id':
+                            errorMessage = 'The verification ID is invalid.';
+                            break;
+                          case 'missing-android-pkg-name':
+                            errorMessage = 'An Android package name is required for this operation.';
+                            break;
+                          case 'missing-continue-uri':
+                            errorMessage = 'A continue URL must be provided for this operation.';
+                            break;
+                          case 'missing-ios-bundle-id':
+                            errorMessage = 'An iOS bundle ID is required for this operation.';
+                            break;
+                          case 'invalid-continue-uri':
+                            errorMessage = 'The continue URL provided is invalid.';
+                            break;
+                          case 'unauthorized-continue-uri':
+                            errorMessage = 'The domain of the continue URL is not whitelisted.';
+                            break;
+                          default:
+                            errorMessage = 'Authentication failed: ${e.message}';
+                        }
+                      } else {
+                        errorMessage = 'Error: ${e.toString()}';
+                      }
+                      log('settings.dart: Error updating email: $errorMessage');
+                      showDialog(
+                        context: parentContext,
+                        builder: (context) => CustomAlertDialog(
+                          title: 'Email Change Failed',
+                          message: errorMessage,
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(parentContext).pop(),
+                              child: Text('OK'),
                             ),
                           ],
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: Text('Cancel'),
+                      );
+                    }
+                  }
+                }
+              });
+            }
+
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return Dialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 8),
+                        SvgPicture.asset(
+                          'assets/icons/change_email.svg',
+                          height: 180,
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Change Email',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
-                          ElevatedButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: Text('Verify'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF2B41B8),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'You are changing the email associated with your account.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        TextField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            hintText: 'New Email',
+                            hintStyle: GoogleFonts.inter(color: Colors.black54),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3FA),
+                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide.none,
                             ),
                           ),
-                        ],
-                      ),
-                    ).then((confirmed) async {
-                      if (confirmed == true) {
-                        try {
-                          // Get current user
-                          final user = FirebaseAuth.instance.currentUser;
-                          if (user != null && user.email != null) {
-                            // Re-authenticate user with current email and provided password
-                            AuthCredential credential = EmailAuthProvider.credential(
-                              email: user.email!, 
-                              password: passwordController.text
-                            );
-                            await user.reauthenticateWithCredential(credential);
-                            
-                            // Now proceed with email change
-                            String newEmail = emailController.text.trim();
-                            await user.verifyBeforeUpdateEmail(newEmail);
-                            
-                            // Show success dialog
-                            if (context.mounted) {
-                              Navigator.of(context).pop(); // Close email change dialog
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text('Email Change Requested'),
-                                  content: Text('We have sent a verification email to your new email address. Please verify it to complete the update.'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.of(context).pop(),
-                                      child: Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          }
-                        } catch (e) {
-                          // Show error dialog
-                          if (context.mounted) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text('Error'),
-                                content: Text('Authentication failed: ${e.toString()}'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(),
-                                    child: Text('OK'),
-                                  ),
-                                ],
+                          style: GoogleFonts.inter(color: Colors.black),
+                          onChanged: (value) {
+                            setState(() {
+                              isEmailValid = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value.trim());
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: isEmailValid ? onContinuePressed : null,
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
                               ),
-                            );
-                          }
-                        }
-                      }
-                    });
-                  },
-                  // Rest of the button styling remains the same
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2B41B8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                              backgroundColor: isEmailValid ? AppColors.primary : Colors.grey[300]!,
+                              disabledBackgroundColor: Colors.transparent,
+                              side: BorderSide(
+                                color: Colors.grey[300]!,
+                                width: 2,
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              'Continue',
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: isEmailValid ? Colors.white : Colors.grey[600]!,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: Text(
-                    'Continue',
-                    style: GoogleFonts.inter(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              );
-            }
-            return AlertDialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    buildCloseButton(context),
-                    const SizedBox(height: 1),
-                    buildEmailInputSection(emailController),
-                    const SizedBox(height: 24),
-                    buildContinueButton(context, emailController),
-                    const SizedBox(height: 24),
-                  ],
-                ),
-              ),
+                );
+              }
             );
           },
         );
       },
-      
-      
-      
-      
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-          color: ARMM_blue,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: ARMM_blue,
+            color: AppColors.primary,
             width: 1,
           ),
         ),
@@ -621,125 +644,50 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
   Widget _buildChangePasswordSection() {
-    const Color ARMM_blue = Color(0xFF2B41B8);
-
     return GestureDetector(
       onTap: () {
+        final parentContext = context;
         showDialog(
           context: context,
           builder: (BuildContext context) {
             TextEditingController passwordController = TextEditingController();
-            Widget buildCloseButton(BuildContext context) {
-              return Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.close, color: Colors.black),
-                ),
-              );
-            }
-            Widget buildIconArt() {
-              return SvgPicture.asset(
-                '',
-              );
-            }
-            Widget buildPasswordInputSection(TextEditingController passwordController) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Change Password',
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'You are changing the password associated with your account.',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Password',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Enter your new password',
-                      hintStyle: TextStyle(
-                        color: Colors.grey[400],
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(11),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(11),
-                        borderSide: const BorderSide(
-                          color: Colors.blue,
-                          width: 2,
+            bool isPasswordValid = false;
+
+            // Save the onPressed logic for the Continue button
+            Future<void> onContinuePressed() async {
+              Navigator.of(context).pop();
+              
+              String newPassword = passwordController.text.trim();
+              if (newPassword.length < 6) {
+                if (parentContext.mounted) {
+                  showDialog(
+                    context: parentContext,
+                    builder: (context) => CustomAlertDialog(
+                      title: 'Invalid Password',
+                      message: 'Password should be at least 6 characters.',
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text('OK'),
                         ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                        horizontal: 14,
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              );
-            }
-            Widget buildContinueButton(BuildContext context, TextEditingController passwordController) {
-              return ElevatedButton(
-                onPressed: () async {
-                  try {
-                    String newPassword = passwordController.text.trim();
-                    var user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      await user.updatePassword(newPassword);
-                      // Dismiss the change password dialog first
-                      Navigator.of(context).pop();
-                      // Then show the success dialog
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Password Change Requested'),
-                            content: const Text('Your password has been successfully updated.'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  } catch (e) {
-                    log('settings.dart: Error updating password: $e');
+                  );
+                }
+                return;
+              }
+              
+              try {
+                var user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  await user.updatePassword(newPassword);
+                  if (parentContext.mounted) {
                     showDialog(
-                      context: context,
+                      context: parentContext,
                       builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Error'),
-                          content: Text('Error updating password: $e'),
+                        return CustomAlertDialog(
+                          title: 'Password Updated',
+                          message: 'Your password has been successfully updated.',
                           actions: <Widget>[
                             TextButton(
                               child: const Text('OK'),
@@ -752,68 +700,132 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     );
                   }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 30, 75, 137),
-                  splashFactory: NoSplash.splashFactory,
+                }
+              } catch (e) {
+                log('settings.dart: Error updating password: $e');
+                if (parentContext.mounted) {
+                  showDialog(
+                    context: parentContext,
+                    builder: (BuildContext context) {
+                      return CustomAlertDialog(
+                        title: 'Error',
+                        message: 'Error updating password: $e',
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              }
+            }
+
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return Dialog(
+                  backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                ),
-                child: Text(
-                  'Continue',
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              );
-            }
-            AlertDialog buildsettingsDialog(BuildContext context, TextEditingController passwordController) {
-              const Color ARMM_blue = Color(0xFF2B41B8);
-              return AlertDialog(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: const BorderSide(color: ARMM_blue, width: 2),
-                ),
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Updated close button with ARMM blue color
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          icon: const Icon(Icons.close, color: ARMM_blue),
-                          onPressed: () => Navigator.pop(context),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 8),
+                        SvgPicture.asset(
+                          'assets/icons/change_password.svg', // Assuming this asset exists
+                          height: 180,
                         ),
-                      ),
-                      const SizedBox(height: 30),
-                      // Keep the email/password input section as is
-                      buildPasswordInputSection(passwordController),
-                      const SizedBox(height: 20),
-                      buildContinueButton(context, passwordController),
-                    ],
+                        const SizedBox(height: 24),
+                        Text(
+                          'Change Password',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'You are changing the password associated with your account.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'New Password',
+                            hintStyle: GoogleFonts.inter(color: Colors.black54),
+                            filled: true,
+                            fillColor: Color(0xFFF2F3FA),
+                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          style: GoogleFonts.inter(color: Colors.black),
+                          onChanged: (value) {
+                            setState(() {
+                              isPasswordValid = value.trim().length >= 6;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: isPasswordValid ? onContinuePressed : null,
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              backgroundColor: isPasswordValid ? AppColors.primary : Colors.grey[300]!,
+                              disabledBackgroundColor: Colors.transparent,
+                              side: BorderSide(
+                                color: Colors.grey[300]!,
+                                width: 2,
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              'Continue',
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: isPasswordValid ? Colors.white : Colors.grey[600]!,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }
-            return buildsettingsDialog(context, passwordController);
+                );
+              }
+            );
           },
         );
       },
-
-      
       child: Container(
         height: 45,
         decoration: BoxDecoration(
-          color: ARMM_blue,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: ARMM_blue,
+            color: AppColors.primary,
             width: 1,
           ),
         ),
@@ -836,10 +848,10 @@ class _SettingsPageState extends State<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Row with Title and Dividers
-        const Row(
+        Row(
           children: [
             // Left divider
-            Expanded(
+            const Expanded(
               child: Divider(
                 thickness: 1,
                 color: Color.fromARGB(50, 0, 0, 0),
@@ -847,10 +859,10 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             // Title in the center
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 'Delete Account',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -858,7 +870,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Right divider
-            Expanded(
+            const Expanded(
               child: Divider(
                 thickness: 1,
                 color: Color.fromARGB(50, 0, 0, 0),
@@ -868,10 +880,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         const SizedBox(height: 8),
         // Subtitle text
-        const Text(
+        Text(
           'Delete your account. This action is irreversible.',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 14,
             color: Color.fromARGB(200, 0, 0, 0),
           ),
@@ -888,10 +900,10 @@ class _SettingsPageState extends State<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Row with Title and Dividers
-        const Row(
+        Row(
           children: [
             // Left divider
-            Expanded(
+            const Expanded(
               child: Divider(
                 thickness: 1,
                 color: Color.fromARGB(50, 0, 0, 0),
@@ -899,10 +911,10 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             // Title in the center
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 'Log out',
-                style: TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -910,7 +922,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Right divider
-            Expanded(
+            const Expanded(
               child: Divider(
                 thickness: 1,
                 color: Color.fromARGB(50, 0, 0, 0),
@@ -920,10 +932,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         const SizedBox(height: 8),
         // Subtitle text
-        const Text(
+        Text(
           'Log out of your account',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 14,
             color: Color.fromARGB(200, 0, 0, 0),
           ),

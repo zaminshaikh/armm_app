@@ -17,27 +17,30 @@ class LogoutButton extends StatelessWidget {
         return CustomAlertDialog(
           title: "Confirm Logout",
           message: "Are you sure you want to log out?",
-          icon: const Icon(Icons.logout, color: Colors.red),
-          actions: [
-            TextButton(
-              onPressed: () {
+            icon: const Icon(Icons.logout, color: Colors.red),
+            actions: [
+              TextButton(
+                onPressed: () {
                 Navigator.of(dialogContext).pop(false);
-              },
-              child: Text(
+                },
+                child: Text(
                 "Cancel",
                 style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
+              TextButton(
+                onPressed: () {
                 Navigator.of(dialogContext).pop(true);
-              },
-              child: Text(
+                },
+                child: Text(
                 "Log out",
-                style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.red, // Make the logout option red
+                ),
+                ),
               ),
-            ),
-          ],
+            ],
         );
       },
     );
@@ -63,7 +66,7 @@ class LogoutButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         ),
         onPressed: () => _confirmLogout(context),
         child: Row(
@@ -72,8 +75,8 @@ class LogoutButton extends StatelessWidget {
           children: [
             SvgPicture.asset(
               'assets/icons/logout.svg',
-              width: 24,
-              height: 24,
+              width: 20,
+              height: 20,
               color: Colors.red,
             ),
             const SizedBox(width: 12),
@@ -81,7 +84,7 @@ class LogoutButton extends StatelessWidget {
               'Log out',
               style: GoogleFonts.inter(
                 textStyle: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Colors.red,
                 ),

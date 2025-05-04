@@ -34,3 +34,33 @@ String toTitleCase(String input) {
     return word[0].toUpperCase() + word.substring(1).toLowerCase();
   }).join(' ');
 }
+
+/// Formats a name to a shortened version if either first or last name is too long
+/// Returns full name if both names are short enough
+/// Otherwise returns first name + last initial or first initial + last name
+String formatName(String firstName, String lastName, {int maxLength = 15}) {
+  // Handle empty cases
+  if (firstName.isEmpty && lastName.isEmpty) return '';
+  if (firstName.isEmpty) return lastName;
+  if (lastName.isEmpty) return firstName;
+  
+  // If both names are short enough, return the full name
+  if (firstName.length <= 8 && lastName.length <= 8) {
+    return '$firstName $lastName';
+  }
+  
+  // Regular format: First name + Last initial (e.g., "John D.")
+  String formatted = '$firstName ${lastName[0]}.';
+  
+  // If the formatted name is still too long, use first initial + last name
+  if (formatted.length > maxLength && lastName.length < firstName.length) {
+    formatted = '${firstName[0]}. $lastName';
+  }
+  
+  // If it's still too long, truncate
+  if (formatted.length > maxLength) {
+    formatted = formatted.substring(0, maxLength - 3) + '...';
+  }
+  
+  return formatted;
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:armm_app/utils/utilities.dart';
 
 class NameAndCID extends StatelessWidget {
   const NameAndCID({Key? key}) : super(key: key);
@@ -17,11 +18,12 @@ class NameAndCID extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${client?.firstName} ${client?.lastName}",
+              formatName(client?.firstName ?? '', client?.lastName ?? ''),
               style: GoogleFonts.inter(
                 textStyle: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
             ),
