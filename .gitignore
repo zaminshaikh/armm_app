@@ -16,3 +16,4 @@ key.properties
 node_modules
 pakcage-lock.json
 services/functions/src/notion.env
+services/admin/armm-service-account.json
