@@ -1,5 +1,5 @@
-import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/screens/activity/utils/sort_activities.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -61,7 +61,7 @@ class ActivitySortModal extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: currentOrder == value
-              ? ARMM_Blue
+              ? AppColors.primary
               : Colors.transparent,
           borderRadius: BorderRadius.circular(15),
         ),

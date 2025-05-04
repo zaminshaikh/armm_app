@@ -154,13 +154,42 @@ class LineChartSectionState extends State<LineChartSection> {
           children: [
             const SizedBox(height: 16),
             // Title: "Asset Timeline" at the top center
-            Text(
-              'Asset Timeline',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [                  
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Asset Timeline',
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+            
+                    // Subtitle
+                    Text(
+                      'Value over time',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    SvgPicture.asset(
+                      'assets/icons/ARMM_Logo.svg',
+                      width: 26,
+                      height: 26,
+                    ),
+                  ],
+                ),
+              ],
             ),
             const SizedBox(height: 32),
     
@@ -270,9 +299,19 @@ class LineChartSectionState extends State<LineChartSection> {
   }
 
   Widget _buildPersonalDropdown(BuildContext context) {
-    // If no clients, show "Personal" by default
-    if (allClients.isEmpty) {
-      return _pillContainer(child: Text('Personal', style: _pillTextStyle()));
+    // Only show the dropdown if there are connected users
+    if (allClients.length == 1) {
+      return _pillContainer(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text('Personal', style: _pillTextStyle()),
+            ),
+          ],
+        ),
+      );
     }
 
     // Currently selected client
@@ -284,24 +323,59 @@ class LineChartSectionState extends State<LineChartSection> {
     return GestureDetector(
       onTap: () => _showClientsBottomSheet(context),
       child: _pillContainer(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-        Text(
-          displayName,
-          style: _pillTextStyle(),
-        ),
-        const SizedBox(width: 10), // space between text and icon
-          const RotatedBox(
-            quarterTurns: 3,
-            child: Icon(
-              Icons.arrow_back_ios_rounded,
-              color: Color.fromARGB(255, 102, 102, 102),
-              size: 22,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  displayName,
+                  style: _pillTextStyle(),
+                ),
+              ),
             ),
-          )
-        ],
+            const SizedBox(width: 10), // space between text and icon
+            const RotatedBox(
+              quarterTurns: 3,
+              child: Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Color.fromARGB(255, 102, 102, 102),
+                size: 22,
+              ),
+            )
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildTimeFilterPill(BuildContext context) {
+    final selectedText = _getTimeLabel(dropdownValue);
+
+    return InkWell(
+      onTap: () => _showTimeOptionsBottomSheet(context),
+      child: _pillContainer(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(selectedText, style: _pillTextStyle()),
+              ),
+            ),
+            const SizedBox(width: 10),
+            const RotatedBox(
+              quarterTurns: 3,
+              child: Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Color.fromARGB(255, 102, 102, 102),
+                size: 22,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -372,31 +446,6 @@ class LineChartSectionState extends State<LineChartSection> {
     );
   }
 
-  Widget _buildTimeFilterPill(BuildContext context) {
-    final selectedText = _getTimeLabel(dropdownValue);
-
-    return InkWell(
-      onTap: () => _showTimeOptionsBottomSheet(context),
-      child: _pillContainer(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-        Text(selectedText, style: _pillTextStyle()),
-        const SizedBox(width: 10),
-        const RotatedBox(
-          quarterTurns: 3,
-          child: Icon(
-          Icons.arrow_back_ios_rounded,
-          color: Color.fromARGB(255, 102, 102, 102),
-          size: 22,
-          ),
-        )
-        ],
-      ),
-      ),
-    );
-  }
-
   void _showTimeOptionsBottomSheet(BuildContext context) {
     var timeOptions = [
       'last-week',
@@ -442,6 +491,9 @@ class LineChartSectionState extends State<LineChartSection> {
     );
   }
 
+
+
+
   FlGridData _buildGridData() => FlGridData(
         show: true,
         drawVerticalLine: false,
@@ -458,17 +510,30 @@ class LineChartSectionState extends State<LineChartSection> {
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 40,
+            reservedSize: 70, // Increased from 40 to provide more space
             getTitlesWidget: (value, meta) {
               if (value == meta.min || value == meta.max) {
                 return const SizedBox.shrink();
               }
+              
+              // Format the number
+              final formattedNumber = abbreviateNumber(value);
+              
+              // Dynamically adjust font size based on length
+              double fontSize = 12;
+              if (formattedNumber.length > 6) {
+                fontSize = 10;
+              }
+              if (formattedNumber.length > 8) {
+                fontSize = 9;
+              }
+              
               return Padding(
-                padding: const EdgeInsets.only(right: 4),
+                padding: const EdgeInsets.only(right: 8), // Increased padding
                 child: Text(
-                  abbreviateNumber(value),
+                  formattedNumber,
                   style: GoogleFonts.inter(
-                    fontSize: 12,
+                    fontSize: fontSize, // Dynamic font size
                     color: Colors.black87,
                   ),
                 ),

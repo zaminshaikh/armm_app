@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PDFScreen extends StatelessWidget {
   final String path;
@@ -12,11 +13,10 @@ class PDFScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text(
+        title: Text(
           'PDF Preview',
-          style: TextStyle(
+          style: GoogleFonts.inter(
             color: Colors.white,
-            
           ),
         ),
       ),

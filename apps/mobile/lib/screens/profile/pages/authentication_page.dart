@@ -29,8 +29,11 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   void initState() {
     super.initState();
-    _loadSelectedTimeOption();
-    _loadAppLockState();
+    _initializeAuthState();
+  }
+
+  Future<void> _initializeAuthState() async {
+    await context.read<AuthState>().loadSavedSettings();
   }
 
   // Load the selected time option from SharedPreferences
@@ -43,10 +46,14 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   // Save the selected time option to SharedPreferences
   Future<void> _saveSelectedTimeOption(String timeOption) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('selectedTimeOption', timeOption);
-    context.read<AuthState>().setSelectedTimeOption(timeOption);
-    print('Saved selected time option: $timeOption');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('selectedTimeOption', timeOption);
+      context.read<AuthState>().setSelectedTimeOption(timeOption);
+      print('Saved selected time option: $timeOption');
+    } catch (e) {
+      print('Error saving time option: $e');
+    }
   }
 
   // Load the app lock state from SharedPreferences
@@ -59,10 +66,14 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   // Save the app lock state to SharedPreferences
   Future<void> _saveAppLockState(bool isEnabled) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isAppLockEnabled', isEnabled);
-    context.read<AuthState>().setAppLockEnabled(isEnabled);
-    print('Saved app lock state: $isEnabled');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isAppLockEnabled', isEnabled);
+      context.read<AuthState>().setAppLockEnabled(isEnabled);
+      print('Saved app lock state: $isEnabled');
+    } catch (e) {
+      print('Error saving app lock state: $e');
+    }
   }
 
   @override
@@ -119,6 +130,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
+                    color: Colors.black,
                   ),
                 ),
                 const Spacer(),
@@ -227,11 +239,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           fontWeight: FontWeight.w600,
         ),
       ),
-      onTap: () {
-        setState(() {
-          context.read<AuthState>().setSelectedTimeOption(timeOption);
-          _saveSelectedTimeOption(timeOption);
-        });
+      onTap: () async {
+        await _saveSelectedTimeOption(timeOption);
+        setState(() {});
         print('Selected time option: $timeOption');
       },
       trailing: context.watch<AuthState>().selectedTimeOption == timeOption

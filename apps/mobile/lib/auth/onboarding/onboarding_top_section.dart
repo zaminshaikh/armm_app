@@ -35,7 +35,7 @@ class OnboardingTopSection extends StatelessWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: const Color.fromARGB(255, 0, 0, 0),
-                fontSize: 15,
+                fontSize: 13,
               ),
         ),
       ],

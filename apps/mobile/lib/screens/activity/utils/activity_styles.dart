@@ -1,6 +1,6 @@
-import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/screens/activity/utils/sort_activities.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,7 +33,7 @@ Color getActivityColor(String type) {
       return Colors.black;
     case 'income':
     case 'profit':
-      return ARMM_Blue;
+      return AppColors.primary;
     default:
       return Colors.black;
   }

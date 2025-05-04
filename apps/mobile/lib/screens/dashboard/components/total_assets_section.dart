@@ -11,6 +11,13 @@ class TotalAssetsSection extends StatelessWidget {
 
   const TotalAssetsSection({Key? key, required this.client}) : super(key: key);
 
+  // Helper method to calculate font size based on value length
+  double _calculateAssetsFontSize(double value) {
+    final digits = value.toStringAsFixed(0).length;
+    // Start with base size and reduce for larger numbers
+    return digits <= 6 ? 24.0 : 24.0 - ((digits - 6) * 1.5);
+  }
+
   @override
   Widget build(BuildContext context) {
     double totalAssets = client.assets?.totalAssets ?? 0;
@@ -20,6 +27,9 @@ class TotalAssetsSection extends StatelessWidget {
         totalAssets += user?.assets?.totalAssets ?? 0;
       }
     }
+
+    // Calculate dynamic font size based on total assets
+    final assetsFontSize = _calculateAssetsFontSize(totalAssets);
 
     return Stack(
       children: [
@@ -49,7 +59,7 @@ class TotalAssetsSection extends StatelessWidget {
                   Text(
                     currencyFormat(totalAssets),
                     style: GoogleFonts.inter(
-                      fontSize: 30,
+                      fontSize: assetsFontSize,
                       fontWeight: FontWeight.w700,
                       color: Colors.black,
                     ),

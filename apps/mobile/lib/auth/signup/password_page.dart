@@ -5,14 +5,20 @@ import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/auth/login/login.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/mail_app_picker_bottom';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:armm_app/utils/resources.dart'; // Import the resources file
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:open_mail_app/open_mail_app.dart';
 
 class PasswordPage extends StatefulWidget {
 
@@ -41,8 +47,11 @@ class _PasswordPageState extends State<PasswordPage> {
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasCapitalLetter => _passwordController.text.contains(RegExp(r'[A-Z]'));
   bool get _hasNumber => _passwordController.text.contains(RegExp(r'\d'));
+  bool get _passwordsMatch => _passwordController.text == _confirmPasswordController.text && _confirmPasswordController.text.isNotEmpty;
+  
+  bool get _isPasswordValid => _hasMinLength && _hasCapitalLetter && _hasNumber && _passwordsMatch;
 
-  int _passwordSecurityIndicator = 0;
+  final int _passwordSecurityIndicator = 0;
 
   /// Check if the user is authenticated and linked
   Future<bool> isAuthenticated() async {
@@ -59,6 +68,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
     return isLinked;
   }
+  
 
   /// Handles the sign-up process.
   void _signUserUp() async {
@@ -101,18 +111,75 @@ class _PasswordPageState extends State<PasswordPage> {
       if (!mounted) return;
       await showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Verify your email'),
-            content: const Text('A verification link has been sent to your email. Please verify your email to continue.'),
+          return CustomAlertDialog(
+            title: 'Verify your email',
+            message: 'A verification link has been sent to your email. Please verify your email to continue.',
             actions: [
               TextButton(
                 onPressed: () async {
-                  Navigator.of(context).pop();
-                  await _verifyEmail();
+                  // Check if the email is verified
+                  User? user = FirebaseAuth.instance.currentUser;
+                  await user?.reload();
+                  user = FirebaseAuth.instance.currentUser;
+                  
+                  if (user != null && user.emailVerified) {
+                    Navigator.of(context).pop(); // Close the dialog
+                    
+                    // Show success dialog
+                    if (!mounted) return;
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomAlertDialog(
+                          title: 'Success',
+                          message: 'Email verified successfully.',
+                          icon: const Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                _verifyEmail(); // Continue with the verification process
+                              },
+                              child: const Text('Continue'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    // Show "check your email" dialog
+                    if (!mounted) return;
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomAlertDialog(
+                          title: 'Email Not Verified',
+                          message: 'Please check your email and click on the verification link. If you don\'t see it, check your spam folder.',
+                          icon: const Icon(
+                            Icons.warning_amber_rounded,
+                            color: Colors.orange,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 child: const Text('Continue'),
               ),
+              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail App')),
             ],
           );
         },
@@ -142,35 +209,17 @@ class _PasswordPageState extends State<PasswordPage> {
       log('User $uid connected to Client ID $widget.signUpData.cid');
 
       // await updateFirebaseMessagingToken(user, context);
-
-      if (!mounted) return true;
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Email verified successfully.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+            
       if (!mounted) return true;
       // appState = Provider.of<AuthService>(context, listen: false);
       setState(() {
         isLoading = false;
       });
 
-        await Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => DashboardPage()),
-        );
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardPage()),
+      );
 
       return true;
     } else {
@@ -178,9 +227,13 @@ class _PasswordPageState extends State<PasswordPage> {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Email not verified. Please check your inbox for the verification link.'),
+          return CustomAlertDialog(
+            title: 'Error',
+            message: 'Email not verified. Please check your inbox for the verification link.',
+            icon: const Icon(
+              Icons.error,
+              color: Colors.red,
+            ),
             actions: [
               TextButton(
                 onPressed: () {
@@ -222,19 +275,21 @@ class _PasswordPageState extends State<PasswordPage> {
                   const SizedBox(height: 16),
 
                   // Title
-                  const Text(
+                  Text(
                     'Next, create your Password',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
 
                   // Subtitle
-                  const Text(
-                    'It will protect your account',
+                  Text(
+                    'Create a strong password to protect your information',
+                    style: GoogleFonts.inter(color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 28),
@@ -257,8 +312,9 @@ class _PasswordPageState extends State<PasswordPage> {
                                 color: _hasMinLength ? Colors.green : Colors.grey,
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Minimum\n8 characters',
+                              Text(
+                                '8 characters',
+                                style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -281,8 +337,9 @@ class _PasswordPageState extends State<PasswordPage> {
                                 color: _hasCapitalLetter ? Colors.green : Colors.grey,
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Minimum\n1 Capital letter',
+                              Text(
+                                '1 Capital letter',
+                                style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -305,8 +362,9 @@ class _PasswordPageState extends State<PasswordPage> {
                                 color: _hasNumber ? Colors.green : Colors.grey,
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Minimum\n1 Number',
+                              Text(
+                                '1 Number',
+                                style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -331,6 +389,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     hintText: 'Confirm Password',
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
+                    onChanged: (_) => setState(() {}), // Trigger rebuild to update button state
                   ),
                   const SizedBox(height: 24),
 
@@ -340,8 +399,9 @@ class _PasswordPageState extends State<PasswordPage> {
                     onPressed: () async {
                       _signUserUp();
                     },
-                    backgroundColor: ARMM_Blue,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
+                    isEnabled: _isPasswordValid, // Only enable when password is valid
                   ),
                   const SizedBox(height: 24),
 
@@ -349,7 +409,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
                   // Already have an account? Log in
                   AuthFooter(
-                    primaryColor: ARMM_Blue,
+                    primaryColor: AppColors.primary, // Use centralized color
                     onSignUpPressed: () {
                       Navigator.push(
                         context,

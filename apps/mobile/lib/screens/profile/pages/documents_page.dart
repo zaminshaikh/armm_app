@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class DocumentsPage extends StatefulWidget {
   const DocumentsPage({Key? key}) : super(key: key);
@@ -58,7 +59,9 @@ class _DocumentsPageState extends State<DocumentsPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const CircularProgressIndicator();
+      return const CustomProgressIndicator(
+        shouldTimeout: true,
+      );
     }
   
     return buildDocumentsPage();

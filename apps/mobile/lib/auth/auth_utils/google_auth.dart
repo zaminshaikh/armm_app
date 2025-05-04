@@ -2,6 +2,7 @@
 
 
 import 'package:armm_app/auth/login/login.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
@@ -86,18 +87,17 @@ class GoogleAuthService {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-        title: const Text('Google Sign-In Failed'),
-        content: const Text(
-            'The Gmail Account you tried to sign in with has not been registered with the app yet. Please try again or sign in with your email and password.'),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-          Navigator.of(context).pop();
-            },
-          ),
-        ],
+          return CustomAlertDialog(
+            title: 'Google Sign-In Failed',
+            message: 'The Gmail Account you tried to sign in with has not been registered with the app yet. Please try again or sign in with your email and password.',
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           );
         },
       );
@@ -111,17 +111,17 @@ class GoogleAuthService {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-        title: const Text('Google Sign-In Failed'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-          Navigator.of(context).pop();
-            },
-          ),
-        ],
+          return CustomAlertDialog(
+            title: 'Google Sign-In Failed',
+            message: message,
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           );
         },
       );
@@ -135,18 +135,17 @@ class GoogleAuthService {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-        title: const Text('Google Sign-Up Failed'),
-        content: const Text(
-            'The CID you entered does not exist. Please try again with a valid CID.'),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-          Navigator.of(context).pop();
-            },
-          ),
-        ],
+          return CustomAlertDialog(
+            title: 'Google Sign-Up Failed',
+            message: 'The CID you entered does not exist. Please try again with a valid CID.',
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           );
         },
       );
