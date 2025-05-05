@@ -288,11 +288,6 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
                 ),
               ),
             ),
-            Positioned(
-              top: 0,
-              left: 0,
-              child: AuthBack(onBackPressed: () => Navigator.pop(context)),
-            ),
             if (_isLoading)
               Container(
                 color: Colors.black54,
