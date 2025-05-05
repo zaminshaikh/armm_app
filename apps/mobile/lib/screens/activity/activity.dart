@@ -12,10 +12,12 @@ import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:developer';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -85,7 +87,9 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     if (client == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const CustomProgressIndicator(
+        shouldTimeout: true,
+      );
     }
 
     // Retrieve activities and recipients
@@ -149,6 +153,8 @@ class _ActivityPageState extends State<ActivityPage> {
         .toSet()
         // convert back to a list
         .toList();
+
+    allRecipients = allRecipients.toSet().toList(); // Ensure unique recipients
   }
 
   /// Builds the content of the list based on the index.
@@ -348,7 +354,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
   /// Shows the filter modal.
   void _showFilterModal(BuildContext context) {
-    var allTypes = ['income', 'profit', 'deposit', 'withdrawal'];
+    var allTypes = ['profit', 'deposit', 'withdrawal'];
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

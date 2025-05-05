@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/utils/expansion_filter_tile.dart';
+import 'package:armm_app/utils/resources.dart';
 
 /// A modal widget for filtering activities.
 class ActivityFilterModal extends StatefulWidget {
@@ -54,9 +55,6 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
 
   // This flag is used for handling the "All" logic in clients filter.
   bool _allSelected = false;
-
-  static const ARMM_Blue = Color(0xFF1C32A4);
-
 
   @override
   void initState() {
@@ -126,13 +124,15 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
                             filterList: _recipientsFilter,
                             buildCheckbox: _buildCheckbox,
                             ),
-                            _buildFilter(
-                            title: 'Clients',
-                            iconPath: 'assets/icons/group.svg',
-                            items: widget.allClients,
-                            filterList: _clientsFilter,
-                            buildCheckbox: _buildCheckbox,
-                            ),
+                            // Only show Clients filter if there are connected users
+                            if (widget.allClients.length > 1)
+                              _buildFilter(
+                              title: 'Clients',
+                              iconPath: 'assets/icons/group.svg',
+                              items: widget.allClients,
+                              filterList: _clientsFilter,
+                              buildCheckbox: _buildCheckbox,
+                              ),
                         ],
                       ),
                     ),
@@ -156,17 +156,21 @@ class _ActivityFilterModalState extends State<ActivityFilterModal> {
               lastDate: DateTime(3000),
               builder: (BuildContext context, Widget? child) => Theme(
                 data: Theme.of(context).copyWith(
-                  scaffoldBackgroundColor: Colors.black,
-                  colorScheme: ColorScheme.dark().copyWith(
-                    brightness: Brightness.dark,
-                    primary: Colors.white,
-                    onPrimary: Colors.black,
-                    secondary: Colors.black,
-                    onSecondary: Colors.black,
-                    secondaryContainer: Colors.black,
-                    onSecondaryContainer: Colors.black,
-                    secondaryFixed: Colors.black,
-                    secondaryFixedDim: Colors.black,
+                  scaffoldBackgroundColor: Colors.white,
+                  colorScheme: const ColorScheme.light(
+                    primary: AppColors.primary, // selected button color
+                    onPrimary: Colors.white, // selected button text color
+                    onSurface: Colors.black, // date text color
+                    secondaryContainer: Color.fromARGB(255, 176, 186, 237),
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.primary, // Button text color
+                    ),
+                  ),
+                  textTheme: const TextTheme(
+                    bodyMedium: TextStyle(color: Colors.black), // All calendar days text
+                    bodyLarge: TextStyle(color: Colors.black), // Month and year text
                   ),
                 ),
                 child: child!,
@@ -239,10 +243,10 @@ String toTitleCase(String text) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0), // Adjust the value to control the roundness
         ),
-        side: BorderSide(color: ARMM_Blue, width: 2.0),
+        side: BorderSide(color: AppColors.primary, width: 2.0),
 
         // Colors when checked
-        activeColor: ARMM_Blue,  // Fill color of circle
+        activeColor: AppColors.primary,  // Fill color of circle
         checkColor: Colors.white,  // Color of the check icon
 
         title: Text(
@@ -297,7 +301,7 @@ String toTitleCase(String text) {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: ARMM_Blue,
+                  backgroundColor: AppColors.primary,
                 ),
                 child: Text(
                   'Apply',

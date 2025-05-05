@@ -11,11 +11,14 @@ import 'package:armm_app/screens/notifications/notifications.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/bottom_nav.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class DashboardPage extends StatefulWidget {
   final bool fromFaceIdPage;
@@ -164,8 +167,84 @@ class _DashboardPageState extends State<DashboardPage>
     });
   
     if (client == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        backgroundColor: const Color.fromARGB(255, 251, 251, 251),
+        appBar: AppBar(
+          backgroundColor: AppColors.primary,
+          elevation: 0,
+          title: Container(
+            height: 30,
+            width: 150,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.grey[300],
+                radius: 18,
+              ),
+            ),
+            const SizedBox(width: 16),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Skeleton for User breakdown section
+                _buildSkeletonCard(height: 150),
+                const SizedBox(height: 20),
+                
+                // Skeleton for Recent transactions
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 24,
+                      width: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildSkeletonCard(height: 80),
+                    const SizedBox(height: 8),
+                    _buildSkeletonCard(height: 80),
+                    const SizedBox(height: 8),
+                    _buildSkeletonCard(height: 80),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                
+                // Skeleton for Asset structure
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 24,
+                      width: 180,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildSkeletonCard(height: 250),
+                  ],
+                ),
+                const SizedBox(height: 42),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: BottomNavBar(currentItem: NavigationItem.dashboard),
       );
     }
   
@@ -209,9 +288,9 @@ class _DashboardPageState extends State<DashboardPage>
                     position: _offsetAnimation,
                     child: buildRecentTransactionsSection(context),
                   ),
-                  const SizedBox(height: 42),
                   // Assets structure section (pie chart)
                   ...fundCharts,
+                  const SizedBox(height: 42),
                 ],
               ),
             ),
@@ -222,6 +301,16 @@ class _DashboardPageState extends State<DashboardPage>
     );
   }
 
+  // Helper method to build skeleton cards
+  Widget _buildSkeletonCard({required double height}) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(12),
+      ),
+    );
+  }
 
   Widget buildRecentTransactionsSection(BuildContext context) {
     return Column(

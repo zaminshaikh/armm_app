@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthButton extends StatelessWidget {
   final String label;
@@ -22,10 +23,17 @@ class AuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color effectiveBorderColor =
-        borderColor ?? Theme.of(context).primaryColor;
-    final Color effectiveForegroundColor =
-        foregroundColor ?? Theme.of(context).primaryColor;
+    final Color effectiveBorderColor = isEnabled
+        ? (borderColor ?? Theme.of(context).primaryColor)
+        : Colors.grey;
+    
+    final Color effectiveForegroundColor = isEnabled
+        ? (foregroundColor ?? Theme.of(context).primaryColor)
+        : Colors.grey;
+    
+    final Color? effectiveBackgroundColor = isEnabled
+        ? backgroundColor
+        : Colors.transparent;
 
     return SizedBox(
       width: double.infinity,
@@ -36,8 +44,9 @@ class AuthButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(26),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
-          backgroundColor: backgroundColor,
+          backgroundColor: effectiveBackgroundColor,
           foregroundColor: effectiveForegroundColor,
+          splashFactory: NoSplash.splashFactory, // Remove splash effect
         ),
         onPressed: isEnabled ? onPressed : null,
         child: icon != null
@@ -48,7 +57,7 @@ class AuthButton extends StatelessWidget {
                   const SizedBox(width: 18),
                   Text(
                     label,
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
@@ -57,7 +66,7 @@ class AuthButton extends StatelessWidget {
               )
             : Text(
                 label,
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),

@@ -5,6 +5,7 @@ import 'package:armm_app/auth/forgot_password/forgot_password.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/auth_check.dart';
+import 'package:armm_app/components/no_internet_screen.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/faceid.dart';
@@ -19,7 +20,9 @@ import 'package:armm_app/screens/profile/pages/my_profiles_page.dart';
 import 'package:armm_app/screens/profile/pages/settings_page.dart';
 import 'package:armm_app/screens/profile/pages/support_page.dart';
 import 'package:armm_app/screens/profile/profile.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +35,9 @@ import 'package:armm_app/utils/utilities.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:armm_app/components/custom_progress_indicator.dart';
+
+// Define the AppColors.primary color at the top of the file, outside any class
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -194,7 +200,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         }
       }});
 
-    @override
+  @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     final appState = Provider.of<AuthState>(context, listen: false);
     log('AppLifecycleState changed: $state');
@@ -259,7 +265,6 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       appState.setHasNavigatedToFaceIDPage(false);
       appState.setJustAuthenticated(false);
       log('Reset navigation flags after authentication');
-      log('Reset navigation flags after authentication');
     }
   }
 
@@ -279,10 +284,26 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-
+    return StreamBuilder<ConnectivityResult>(
+      stream: Connectivity().onConnectivityChanged.expand((results) => results),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data == ConnectivityResult.none) {
+          return const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: NoInternetScreen(),
+          );
+        }
         return StreamBuilder<User?>(
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, authSnapshot) {
+            if (authSnapshot.connectionState == ConnectionState.waiting) {
+              return const Directionality(
+                textDirection: TextDirection.ltr,
+                child: CustomProgressIndicator(
+                  shouldTimeout: true,
+                ),
+              );
+            }
             final user = authSnapshot.data;
             return StreamProvider<Client?>(
               key: ValueKey(user?.uid),
@@ -320,11 +341,14 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   '/documents': (context) => const DocumentsPage(),
                   '/settings': (context) => const SettingsPage(),
                   '/my_profiles': (context) => const MyProfilesPage(),
+                  '/disclaimer': (context) => const DisclaimerPage(),
                 },
               ),
             );
           },
         );
+      },
+    );
 
       }
 
@@ -332,183 +356,43 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   /// Build the application theme
   ThemeData _buildAppTheme() => ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 251, 251, 251),
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(
+        textTheme: TextTheme(
+          titleLarge: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
-          titleMedium: TextStyle(
+          titleMedium: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
-          titleSmall: TextStyle(
+          titleSmall: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
           labelLarge:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           labelMedium:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           labelSmall:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           displayLarge:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           displayMedium:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           displaySmall:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
-          headlineLarge: TextStyle(
+              GoogleFonts.inter(color: Colors.white),
+          headlineLarge: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
-          headlineMedium: TextStyle(
+          headlineMedium: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
-          headlineSmall: TextStyle(
+          headlineSmall: GoogleFonts.inter(
               color: Colors.white,
-              fontFamily: 'Titillium Web',
               fontWeight: FontWeight.bold),
           bodyLarge:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           bodyMedium:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
           bodySmall:
-              TextStyle(color: Colors.white, fontFamily: 'Titillium Web'),
+              GoogleFonts.inter(color: Colors.white),
         ),
       );
 }
-
-/// Check if the user is authenticated and linked
-Future<bool> isAuthenticated() async {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null) { return false; }
-
-  String uid = user.uid;
-
-  DatabaseService db = DatabaseService(uid);
-
-  bool isLinked = await db.isUIDLinked(uid);
-
-  return isLinked;
-}
-
-class AuthCheck extends StatefulWidget {
-  const AuthCheck({super.key});
-
-  @override
-  State<AuthCheck> createState() => _AuthCheckState();
-}
-
-class _AuthCheckState extends State<AuthCheck> {
-  late Future<bool> _isAuthenticatedAndVerifiedFuture;
-  late Future<bool> _loadAppLockStateFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _isAuthenticatedAndVerifiedFuture = isAuthenticatedAndVerified();
-    _loadAppLockStateFuture = _loadAppLockState();
-  }
-
-  Future<bool> _loadAppLockState() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isAppLockEnabled') ?? false;
-  }
-
-  /// Check if the user is authenticated, email verified, and linked
-  Future<bool> isAuthenticatedAndVerified() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      return false;
-    }
-
-    await user.reload(); 
-
-    if (!user.emailVerified) {
-      return false;
-    }
-
-    String uid = user.uid;
-
-    DatabaseService db = DatabaseService(uid);
-
-    bool isLinked = await db.isUIDLinked(uid);
-
-    return isLinked;
-  }
-
-  @override
-  Widget build(BuildContext context) => StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.userChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          log('AuthCheck: StreamBuilder error: ${snapshot.error}');
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (snapshot.hasData) {
-          final user = snapshot.data!;
-          log('AuthCheck: User is logged in as ${user.email}');
-
-          final authState = Provider.of<AuthState>(context, listen: false);
-
-
-          // Use the stored future
-          return FutureBuilder<bool>(
-            future: _isAuthenticatedAndVerifiedFuture,
-            builder: (context, authSnapshot) {
-              if (authSnapshot.connectionState == ConnectionState.waiting) {
-                log('AuthCheck: FutureBuilder waiting for authentication check.');
-                if (authState.forceDashboard) {
-                  log('AuthCheck: User is not authenticated or linked, but has reloaded the app from the no internet screen. Navigating to DashboardPage.');
-                  return const DashboardPage();
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              } else if (authSnapshot.hasError) {
-                log('AuthCheck: FutureBuilder error: ${authSnapshot.error}');
-                return Center(child: Text('Error: ${authSnapshot.error}'));
-              } else if (authSnapshot.hasData && authSnapshot.data == true) {
-                // Now proceed to check app lock state
-                return FutureBuilder<bool>(
-                  future: _loadAppLockStateFuture,
-                  builder: (context, appLockSnapshot) {
-                    if (appLockSnapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (appLockSnapshot.hasError) {
-                      log('AuthCheck: FutureBuilder error: ${appLockSnapshot.error}');
-                      return Center(
-                          child: Text('Error: ${appLockSnapshot.error}'));
-                    } else if (appLockSnapshot.hasData) {
-                      final isAppLockEnabled = appLockSnapshot.data!;
-                      if (!isAppLockEnabled) {
-                        log('AuthCheck: App lock is disabled. Navigating to DashboardPage.');
-                        return const DashboardPage();
-                      }
-                      log('AuthCheck: App lock is enabled. Navigating to InitialFaceIdPage.');
-                      return const InitialFaceIdPage();
-                    } else {
-                      return const InitialFaceIdPage();
-                    }
-                  },
-                );
-              } else {
-                if (!authState.forceDashboard) {
-                  log('AuthCheck: User is not authenticated or linked. Navigating to OnboardingPage.');
-                  return const OnboardingPage();
-                } else {
-                  return const DashboardPage();
-                }
-              }
-            }
-          );
-        } else {
-          log('AuthCheck: User is not logged in yet.');
-          return const OnboardingPage();
-        }
-      },
-    );
-}
-

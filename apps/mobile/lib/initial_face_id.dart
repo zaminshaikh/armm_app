@@ -7,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
-
+import 'package:google_fonts/google_fonts.dart';
 
 class InitialFaceIdPage extends StatefulWidget {
   const InitialFaceIdPage({super.key});
@@ -81,21 +81,21 @@ class _InitialFaceIdPageState extends State<InitialFaceIdPage>
                   width: 40,
                 ),
                 const SizedBox(height: 40.0),
-                const Text(
+                Text(
                   'ARMM App Locked',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 28,
-                    color: Color(0xFF1C32A4),
+                    color: const Color(0xFF1C32A4),
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16.0),
-                const Text(
+                Text(
                   'Unlock with Face ID to continue',
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 18,
-                    color: Color(0xFF333333),
+                    color: const Color(0xFF333333),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -108,15 +108,15 @@ class _InitialFaceIdPageState extends State<InitialFaceIdPage>
                       await _initialAuthenticate(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1C32A4), // ARMM_Blue
+                      backgroundColor: const Color(0xFF1C32A4), // AppColors.primary
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       elevation: 3,
                     ),
-                    child: const Text(
+                    child: Text(
                       'Use Face ID',
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 18,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

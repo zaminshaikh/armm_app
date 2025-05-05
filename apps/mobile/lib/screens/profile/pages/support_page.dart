@@ -2,6 +2,7 @@ import 'package:armm_app/utils/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:armm_app/utils/utilities.dart';
 import 'faq_section.dart';
 
 class SupportPage extends StatelessWidget {
@@ -25,8 +26,16 @@ class SupportPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  radius: 35,
+                Container(
+                  width: 70, // Set desired width
+                  height: 70, // Set desired height
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,// Circular border
+                    image: DecorationImage(
+                      image: AssetImage('assets/icons/mo_shaikh.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -34,7 +43,7 @@ class SupportPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Mohammed Shaikh',
+                        formatName('Mohammed', 'Shaikh'),
                         style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -43,7 +52,7 @@ class SupportPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Investment Advisor',
+                        'Founder & President',
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           color: Colors.black,

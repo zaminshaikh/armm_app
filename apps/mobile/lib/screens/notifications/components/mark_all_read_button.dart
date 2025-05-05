@@ -15,47 +15,61 @@ class MarkAllAsReadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Only show button if there are unread notifications
     bool hasUnreadNotifications = (client.numNotifsUnread ?? 0) > 0;
-
     if (!hasUnreadNotifications) {
-      return Container(); // Return an empty container if there are no unread notifications
+      return Container();
     }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Align(
-          alignment: Alignment.bottomCenter, // Align to bottom center
+          alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.all(16.0), // Adjust padding as needed
-            child: ElevatedButton(
+            padding: const EdgeInsets.all(16.0),
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.white,
+                // Blue border
+                side: const BorderSide(
+                  color: Color(0xFF1C32A4),
+                  width: 2,
+                ),
+                // Make it pill-shaped
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+              ),
               onPressed: () async {
                 await DatabaseService.withCID(client.uid, client.cid)
                     .markAllNotificationsAsRead();
                 onRefresh();
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4CAF50), // Green color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0), // Add padding to the button
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min, // Add this
-                children: [
-                  Icon(Icons.checklist_rounded, color: Colors.white),
-                  Text(
-                    ' Mark All As Read',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Titillium Web',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'Mark All as Read',
+                      style: TextStyle(
+                        color: Color(0xFF1C32A4),
+                        fontFamily: 'Titillium Web',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(width: 8),
+                    Icon(
+                      Icons.check_circle_rounded,
+                      size: 20,
+                      color: Color(0xFF1C32A4),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

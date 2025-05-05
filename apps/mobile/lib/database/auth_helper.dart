@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io' show Platform;
+import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -19,7 +20,6 @@ Future<void> deleteUserInBuffer() async {
     log('User after delete: ${FirebaseAuth.instance.currentUser ?? 'deleted'}');
   }
 }
-
 
 /// Handles FirebaseAuthException and displays an error message.
 Future<void> handleFirebaseAuthException(
@@ -45,10 +45,10 @@ Future<void> handleFirebaseAuthException(
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Error'),
-        content: Text(errorMessage),
-        actions: <Widget>[
+      return CustomAlertDialog(
+        title: 'Error',
+        message: errorMessage,
+        actions: [
           TextButton(
             child: const Text('OK'),
             onPressed: () {
@@ -60,7 +60,6 @@ Future<void> handleFirebaseAuthException(
     },
   );
 }
-
 
 Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) async {
   if (user == null) return;
@@ -123,9 +122,6 @@ Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) asyn
     log('No messaging token available.');
   }
 }
-
-
-
 
 /// Deletes the Firebase Messaging token when the user signs out.
 Future<void> deleteFirebaseMessagingToken(User? user, BuildContext context) async {
