@@ -225,9 +225,24 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
                               ),
                             ),
                           )
-                        : SvgPicture.asset(
-                            'assets/icons/mystery.svg',
-                            height: 200,
+                        : Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ShaderMask(
+                            shaderCallback: (bounds) {
+                              return LinearGradient(
+                              colors: [AppColors.primary, AppColors.primary, const Color.fromARGB(255, 255, 255, 255)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              ).createShader(bounds);
+                            },
+                            child: SvgPicture.asset(
+                              'assets/icons/mystery.svg',
+                              height: 150,
+                              color: Colors.white, // This color is replaced by the gradient
+                            ),
+                            ),
+                          ],
                           ),
                     const SizedBox(height: 16),
 
@@ -258,6 +273,29 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
                         backgroundColor: _imageFile != null ? Colors.white : AppColors.primary,
                         foregroundColor: _imageFile != null ? AppColors.primary : Colors.white,
                       isEnabled: true,
+                    ),
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AppLockPromptPage()),
+                      );
+                      },
+                      child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Skip for now',
+                        style: GoogleFonts.inter(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      ),
                     ),
                     if (_imageFile != null) ...[
                       const SizedBox(height: 16),
@@ -296,26 +334,6 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
                 ),
               ),
           ],
-        ),
-        bottomNavigationBar: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AppLockPromptPage()),
-                );
-              },
-              child: Text(
-                'Skip for now',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ),
         ),
       ),
     );
