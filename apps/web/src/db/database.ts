@@ -161,6 +161,7 @@ export class DatabaseService {
       phoneNumber: data?.phoneNumber ?? '',
       firstDepositDate: data?.firstDepositDate?.toDate() ?? null,
       beneficiaries: data?.beneficiaries ?? [],
+      linked: data?.linked ?? false,
       lastLoggedIn:
         data?.lastLoggedIn instanceof Timestamp
           ? formatDate(data.lastLoggedIn.toDate())

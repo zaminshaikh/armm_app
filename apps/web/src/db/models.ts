@@ -26,6 +26,7 @@ export interface Client {
   totalYTD: number;
   _selected?: boolean;
   lastLoggedIn?: string | null | undefined;
+  linked: boolean;
   notes?: string | undefined;
   activities?: Activity[];
   graphPoints?: GraphPoint[];
@@ -130,6 +131,7 @@ export const emptyClient: Client = {
   totalAssets: 0,
   ytd: 0,
   totalYTD: 0,
+  linked: false,
   assets: {
     armm: {
       personal: {
