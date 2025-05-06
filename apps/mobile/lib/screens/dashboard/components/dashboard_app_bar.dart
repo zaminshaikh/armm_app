@@ -5,13 +5,13 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'total_assets_section.dart'; // Adjust the import according to your project structure
 import 'package:armm_app/utils/utilities.dart';
+import 'package:firebase_storage/firebase_storage.dart'; // ← added
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Client? client; // ← nullable
   final VoidCallback? onNotificationTap;
   final bool implyLeading;
   final bool showNotificationButton;
-  final Future<String?>? profilePicFuture;
 
   const DashboardAppBar({
     Key? key,
@@ -19,7 +19,6 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onNotificationTap,
     this.implyLeading = false,
     this.showNotificationButton = true,
-    this.profilePicFuture,
   }) : super(key: key);
 
   @override
@@ -29,6 +28,13 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final isSkeleton = client == null;
+    final Future<String?> profilePicFuture = client != null
+        ? FirebaseStorage.instance
+            .ref('profilePics/${client!.cid}.jpg')
+            .getDownloadURL()
+            .catchError((_) => null)
+        : Future.value(null);
+
     return AppBar(
       iconTheme: const IconThemeData(color: Colors.white),
       automaticallyImplyLeading: implyLeading,
