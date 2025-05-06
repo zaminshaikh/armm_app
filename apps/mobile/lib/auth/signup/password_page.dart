@@ -338,7 +338,7 @@ class _PasswordPageState extends State<PasswordPage> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                '1 Capital letter',
+                                '1 Uppercase',
                                 style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
