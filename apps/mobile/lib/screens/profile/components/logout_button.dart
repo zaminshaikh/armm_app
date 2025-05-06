@@ -17,30 +17,30 @@ class LogoutButton extends StatelessWidget {
         return CustomAlertDialog(
           title: "Confirm Logout",
           message: "Are you sure you want to log out?",
-            icon: const Icon(Icons.logout, color: Colors.red),
-            actions: [
-              TextButton(
-                onPressed: () {
+          icon: const Icon(Icons.logout, color: Colors.red),
+          confirmButtonColor: Colors.red,
+          actions: [
+            TextButton(
+              onPressed: () {
                 Navigator.of(dialogContext).pop(false);
-                },
-                child: Text(
+              },
+              child: Text(
                 "Cancel",
                 style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                ),
               ),
-              TextButton(
-                onPressed: () {
+            ),
+            TextButton(
+              onPressed: () {
                 Navigator.of(dialogContext).pop(true);
-                },
-                child: Text(
+              },
+              child: Text(
                 "Log out",
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w600,
-                  color: Colors.red, // Make the logout option red
-                ),
                 ),
               ),
-            ],
+            ),
+          ],
         );
       },
     );

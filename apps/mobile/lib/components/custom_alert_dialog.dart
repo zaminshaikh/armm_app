@@ -8,6 +8,7 @@ class CustomAlertDialog extends StatelessWidget {
   final Widget? icon;
   final Widget? input; // New property for input widgets
   final List<Widget> actions;
+  final Color? confirmButtonColor; // New
 
   const CustomAlertDialog({
     Key? key,
@@ -16,6 +17,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.icon,
     this.input, // Added this new property
     required this.actions,
+    this.confirmButtonColor, // New
   }) : super(key: key);
 
   @override
@@ -80,27 +82,76 @@ class CustomAlertDialog extends StatelessWidget {
           ],
         ),
         actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 20), // More bottom padding
-        actions: actions.map((action) {
-          // Check if action is a TextButton and style it consistently
-          if (action is TextButton) {
-            return TextButton(
-              onPressed: action.onPressed,
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                backgroundColor: Colors.transparent,
-              ),
-              child: DefaultTextStyle(
-                style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
-                    fontSize: 15,
+        actions: actions.length == 2 && actions.every((a) => a is TextButton)
+            ? [
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: (actions[0] as TextButton).onPressed,
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: AppColors.primary),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10), 
+                          ),
+                        ),
+                        child: DefaultTextStyle(
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary,
+                            fontSize: 15,
+                          ),
+                          child: (actions[0] as TextButton).child!,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: (actions[1] as TextButton).onPressed,
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: confirmButtonColor ?? AppColors.primary, 
+                          side: BorderSide(color: confirmButtonColor ?? AppColors.primary),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: DefaultTextStyle(
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
+                          child: (actions[1] as TextButton).child!,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: action.child!,
-              ),
-            );
-          }
-          return action;
-        }).toList(),
+              ]
+            : actions.map((action) {
+                // Check if action is a TextButton and style it consistently
+                if (action is TextButton) {
+                  return TextButton(
+                    onPressed: action.onPressed,
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    child: DefaultTextStyle(
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
+                        fontSize: 15,
+                      ),
+                      child: action.child!,
+                    ),
+                  );
+                }
+                return action;
+              }).toList(),
       ),
     );
   }
