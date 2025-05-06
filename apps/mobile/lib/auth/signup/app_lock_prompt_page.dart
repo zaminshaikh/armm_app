@@ -83,7 +83,12 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
 
               Row(
                 children: [
-                  SvgPicture.asset('assets/icons/auth.svg', width: 24, height: 24),
+                    SvgPicture.asset(
+                    'assets/icons/auth.svg', 
+                    width: 24, 
+                    height: 24,
+                    color: Colors.black,
+                    ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
