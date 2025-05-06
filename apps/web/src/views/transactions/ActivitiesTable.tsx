@@ -154,7 +154,7 @@ const ActivitiesTable: React.FC<TableProps> = ({allActivities, setAllActivities,
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={() => setShowDeleteSelectedModal(true)}
                 >
-                    <CIcon icon={cilTrash} className="me-2" /> Delete {selectedActivities.length} {selectedActivities.length > 1 ? 'Transactions' : 'Transaction'}
+                    <CIcon icon={cilTrash} className="me-2" /> Delete {selectedActivities.length} {selectedActivities.length > 1 ? 'Activities' : 'Activity'}
                 </CButton>
             </div>}
             <CRow className="justify-content-center py-3">

@@ -1,12 +1,14 @@
 // Statements.tsx
 
 import React, { useEffect, useState } from 'react';
-import { CContainer, CButton, CSpinner } from "@coreui/react-pro";
+import { CContainer, CButton, CSpinner, CCol, CRow } from "@coreui/react-pro";
 import { Routes, Route } from 'react-router-dom';
 import ClientStatementsPage from './components/ClientStatementsPage';
 import AddStatementModal from './components/AddStatementsModal';
 import { DatabaseService } from 'src/db/database';
 import GenerateStatementModal from './components/GenerateStatementModal';
+import { cilCloudDownload, cilFile } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
 
 const Statements: React.FC = () => {
   const [clients, setClients] = useState<any[]>([]);
@@ -58,10 +60,23 @@ const Statements: React.FC = () => {
   return (
     <CContainer>
       {/* Add Statement Button */}
-      <div className="d-grid gap-2 py-3">
-          <CButton color='secondary' onClick={() => setShowGenerateStatementModal(true)}>Generate Statement</CButton>
-          <CButton color='primary' onClick={() => setIsAddModalVisible(true)}>Add Statement +</CButton>
-      </div> 
+       
+
+      <CRow className="mb-3 mx-1">
+        <CCol>
+          <CButton color='primary' onClick={() => setIsAddModalVisible(true)} className="w-100">+ Add Statement</CButton>
+        </CCol>
+        <CCol>
+          <CButton
+            color="info"
+            onClick={() => setShowGenerateStatementModal(true)}
+            className="w-100 d-flex align-items-center justify-content-center"
+          >
+            <CIcon icon={cilFile} className="me-2" />
+            Generate Statement
+          </CButton>
+        </CCol>
+      </CRow>
       
       {/* Add Statement Modal */}
       <AddStatementModal

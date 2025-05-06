@@ -20,7 +20,7 @@ import { app } from '../App';
 import config from '../../config.json';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { formatDate, toSentenceCase } from 'src/utils/utilities';
-import { emptyClient, emptyActivity, Client, Activity, ScheduledActivity, StatementData, AssetDetails, GraphPoint } from './models';
+import { emptyClient, emptyActivity, Client, Activity, ScheduledActivity, StatementData, AssetDetails, GraphPoint, Assets } from './models';
 import { roundToNearestHour, formatCurrency } from './utils';
 
 // With these lines instead:
@@ -161,6 +161,7 @@ export class DatabaseService {
       phoneNumber: data?.phoneNumber ?? '',
       firstDepositDate: data?.firstDepositDate?.toDate() ?? null,
       beneficiaries: data?.beneficiaries ?? [],
+      linked: data?.linked ?? false,
       lastLoggedIn:
         data?.lastLoggedIn instanceof Timestamp
           ? formatDate(data.lastLoggedIn.toDate())
@@ -225,7 +226,11 @@ export class DatabaseService {
         const asset = fundAssets[assetType];
         fundDoc[assetType] = {
           amount: asset.amount,
-          firstDepositDate: asset.firstDepositDate ? Timestamp.fromDate(asset.firstDepositDate) : null,
+          firstDepositDate: asset.firstDepositDate 
+            ? asset.firstDepositDate instanceof Date 
+              ? Timestamp.fromDate(asset.firstDepositDate) 
+              : asset.firstDepositDate 
+            : null,
           displayTitle: asset.displayTitle,
           index: asset.index,
         };
@@ -397,74 +402,107 @@ export class DatabaseService {
   // ============================================
 
   /** Retrieves scheduled activities from Firestore */
-  async getScheduledActivities(): Promise<ScheduledActivity[]> {
-    const scheduledActivitiesCollection = collection(this.db, config.SCHEDULED_ACTIVITIES_COLLECTION);
-    const q = query(
-      scheduledActivitiesCollection,
-      where('usersCollectionID', '==', config.FIRESTORE_ACTIVE_USERS_COLLECTION)
-    );
-    const querySnapshot = await getDocs(q);
-    const scheduledActivities: ScheduledActivity[] = querySnapshot.docs.map((docSnap) => {
-      const data = docSnap.data() as ScheduledActivity;
-      let formattedTime = '';
-      const time = data.activity.time instanceof Timestamp ? data.activity.time.toDate() : data.activity.time;
-      if (time instanceof Date) {
-        formattedTime = formatDate(time);
-      }
-      return {
-        ...data,
-        id: docSnap.id,
-        activity: {
-          ...data.activity,
-          formattedTime,
-          parentDocId: data.cid,
-        },
+  getScheduledActivities = async () => {
+      const scheduledActivitiesCollection = collection(this.db, config.SCHEDULED_ACTIVITIES_COLLECTION);
+      // const querySnapshot = await getDocs(scheduledActivitiesCollection);
+      const q = query(scheduledActivitiesCollection, where('usersCollectionID', '==', config.FIRESTORE_ACTIVE_USERS_COLLECTION));
+      const querySnapshot = await getDocs(q)
+
+      const scheduledActivities: ScheduledActivity[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data() as ScheduledActivity;
+
+          // Format the time field
+          let formattedTime = '';
+          const time = data.activity.time instanceof Timestamp ? data.activity.time.toDate() : data.activity.time;
+          if (time instanceof Date) {
+              formattedTime = formatDate(time);
+          }
+
+          // Process changed assets if they exist
+          const processedChangedAssets = data.changedAssets ? { ...data.changedAssets } : null;
+          if (processedChangedAssets) {
+              Object.keys(processedChangedAssets).forEach((fundName) => {
+                  const fund = processedChangedAssets[fundName];
+                  Object.keys(fund).forEach((assetType) => {
+                      if (fund[assetType].firstDepositDate && fund[assetType].firstDepositDate instanceof Timestamp) {
+                          fund[assetType].firstDepositDate = fund[assetType].firstDepositDate.toDate();
+                      }
+                  });
+              });
+          }
+
+          return {
+              ...data,
+              changedAssets: processedChangedAssets,
+              id: doc.id,
+              formattedTime,
+              activity: {
+                  ...data.activity,
+                  formattedTime,
+                  parentDocId: data.cid,
+              },
+          };
+      });
+
+      return scheduledActivities;
+  }
+
+  /**
+   * Schedules an activity by adding it to the 'scheduledActivities' collection.
+   *
+   * @param scheduledActivity - The activity data along with scheduling details.
+   * @returns A promise that resolves when the scheduled activity is added.
+   */
+  async scheduleActivity(activity: Activity, clientState: Client, changedAssets: Assets | null): Promise<void> {
+      delete activity.id;
+      // Add the parentCollectionId field to the activity
+      const activityWithParentId = {
+          ...activity,
+          parentCollection: config.FIRESTORE_ACTIVE_USERS_COLLECTION,
       };
-    });
-    return scheduledActivities;
+      
+      // Filter out undefined properties
+      const filteredActivity = Object.fromEntries(
+          Object.entries(activityWithParentId).filter(([_, v]) => v !== undefined)
+      );
+
+      const scheduledActivity = {
+          cid: clientState.cid,
+          scheduledTime: filteredActivity.time,
+          activity: { ...filteredActivity, parentName: clientState.firstName + ' ' + clientState.lastName },
+          changedAssets,
+          usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION,
+          status: 'pending',
+      };
+
+      // Add the scheduled activity to the 'scheduledActivities' collection
+      await addDoc(collection(this.db, 'scheduledActivities'), scheduledActivity);
   }
 
-  /** Schedules a new activity */
-  async scheduleActivity(activity: Activity, clientState: Client): Promise<void> {
-    delete activity.id;
-    const activityWithParentId = { ...activity, parentCollection: config.FIRESTORE_ACTIVE_USERS_COLLECTION };
-    const filteredActivity = Object.fromEntries(
-      Object.entries(activityWithParentId).filter(([_, v]) => v !== undefined)
-    );
-    const scheduledActivity = {
-      cid: clientState.cid,
-      scheduledTime: filteredActivity.time,
-      activity: { ...filteredActivity, parentName: `${clientState.firstName} ${clientState.lastName}` },
-      clientState,
-      usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION,
-      status: 'pending',
-    };
-    await addDoc(collection(this.db, config.SCHEDULED_ACTIVITIES_COLLECTION), scheduledActivity);
+  async updateScheduledActivity(id: string | undefined, updatedActivity: Activity, clientState: Client, changedAssets: Assets | null) {
+      const docRef = doc(this.db, config.SCHEDULED_ACTIVITIES_COLLECTION, id ?? '');
+
+      const activityWithParentId = { 
+          ...updatedActivity,
+          parentCollection: config.FIRESTORE_ACTIVE_USERS_COLLECTION,
+      }
+      const filteredActivity = Object.fromEntries(
+          Object.entries(activityWithParentId).filter(([_, v]) => v !== undefined)
+      );
+      const updatedScheduledActivity = {
+          cid: clientState.cid,
+          scheduledTime: filteredActivity.time,
+          activity: { ...filteredActivity, parentName: clientState.firstName + ' ' + clientState.lastName },
+          changedAssets,
+          usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION,
+          status: 'pending',
+      };
+      await setDoc(docRef, updatedScheduledActivity, { merge: true });
   }
 
-  /** Updates a scheduled activity */
-  async updateScheduledActivity(updatedActivity: Activity, clientState: Client): Promise<void> {
-    const docRef = doc(this.db, config.SCHEDULED_ACTIVITIES_COLLECTION, updatedActivity.id ?? '');
-    delete updatedActivity.id;
-    const activityWithParentId = { ...updatedActivity, parentCollection: config.FIRESTORE_ACTIVE_USERS_COLLECTION };
-    const filteredActivity = Object.fromEntries(
-      Object.entries(activityWithParentId).filter(([_, v]) => v !== undefined)
-    );
-    const updatedScheduledActivity = {
-      cid: clientState.cid,
-      scheduledTime: filteredActivity.time,
-      activity: { ...filteredActivity, parentName: `${clientState.firstName} ${clientState.lastName}` },
-      clientState,
-      usersCollectionID: config.FIRESTORE_ACTIVE_USERS_COLLECTION,
-      status: 'pending',
-    };
-    await setDoc(docRef, updatedScheduledActivity, { merge: true });
-  }
-
-  /** Deletes a scheduled activity by ID */
-  async deleteScheduledActivity(id: string): Promise<void> {
-    const docRef = doc(this.db, config.SCHEDULED_ACTIVITIES_COLLECTION, id);
-    await deleteDoc(docRef);
+  async deleteScheduledActivity(id: string) {
+      const docRef = doc(this.db, 'scheduledActivities', id);
+      await deleteDoc(docRef);
   }
 
   // ============================================
@@ -518,18 +556,19 @@ export class DatabaseService {
   public async generateStatementPDF(
     client: Client,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    selectedAccount: string // Added selectedAccount parameter
   ): Promise<void> {
     // 1. Find starting balance from graph points
     const graphPoints = await this.getClientGraphPoints(client.cid);
     
-    // Find the last graph point before startDate with Cumulative account
+    // Find the last graph point before startDate with selectedAccount
     const startingPointArray = graphPoints
       .filter(point => {
         const pointDate = point.time instanceof Timestamp ? point.time.toDate() : point.time;
         return pointDate && 
                pointDate < startDate && 
-               point.account === 'Cumulative';
+               point.account === selectedAccount;
       })
       .sort((a, b) => {
         const dateA = a.time instanceof Timestamp ? a.time.toDate() : (a.time || new Date(0));
@@ -543,7 +582,14 @@ export class DatabaseService {
     // 2. Get client's activities within the date range
     const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, client.cid);
     const activitiesCollection = collection(clientRef, config.ACTIVITIES_SUBCOLLECTION);
-    const activitiesSnapshot = await getDocs(activitiesCollection);
+    
+    let activitiesQuery;
+    if (selectedAccount === "Cumulative") {
+      activitiesQuery = query(activitiesCollection);
+    } else {
+      activitiesQuery = query(activitiesCollection, where("recipient", "==", selectedAccount));
+    }
+    const activitiesSnapshot = await getDocs(activitiesQuery);
     
     const activities: Activity[] = [];
     activitiesSnapshot.forEach(doc => {
