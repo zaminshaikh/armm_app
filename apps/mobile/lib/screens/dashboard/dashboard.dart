@@ -169,27 +169,9 @@ class _DashboardPageState extends State<DashboardPage>
     if (client == null) {
       return Scaffold(
         backgroundColor: const Color.fromARGB(255, 251, 251, 251),
-        appBar: AppBar(
-          backgroundColor: AppColors.primary,
-          elevation: 0,
-          title: Container(
-            height: 30,
-            width: 150,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.grey[300],
-                radius: 18,
-              ),
-            ),
-            const SizedBox(width: 16),
-          ],
+        appBar: DashboardAppBar(
+          client: null,
+          showNotificationButton: false,
         ),
         body: SingleChildScrollView(
           child: Padding(
