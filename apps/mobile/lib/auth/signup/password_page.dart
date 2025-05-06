@@ -208,12 +208,16 @@ class _PasswordPageState extends State<PasswordPage> {
       await db.linkNewUser(user.email!);
       log('User $uid connected to Client ID ${widget.cid}');
 
+
       if (!mounted) return true;
+      await updateFirebaseMessagingToken(user, context);
+
       setState(() { isLoading = false; });
 
+      if (!mounted) return true;
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
 
       return true;
