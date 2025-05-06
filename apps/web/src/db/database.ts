@@ -556,18 +556,19 @@ export class DatabaseService {
   public async generateStatementPDF(
     client: Client,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    selectedAccount: string // Added selectedAccount parameter
   ): Promise<void> {
     // 1. Find starting balance from graph points
     const graphPoints = await this.getClientGraphPoints(client.cid);
     
-    // Find the last graph point before startDate with Cumulative account
+    // Find the last graph point before startDate with selectedAccount
     const startingPointArray = graphPoints
       .filter(point => {
         const pointDate = point.time instanceof Timestamp ? point.time.toDate() : point.time;
         return pointDate && 
                pointDate < startDate && 
-               point.account === 'Cumulative';
+               point.account === selectedAccount;
       })
       .sort((a, b) => {
         const dateA = a.time instanceof Timestamp ? a.time.toDate() : (a.time || new Date(0));
@@ -581,7 +582,14 @@ export class DatabaseService {
     // 2. Get client's activities within the date range
     const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, client.cid);
     const activitiesCollection = collection(clientRef, config.ACTIVITIES_SUBCOLLECTION);
-    const activitiesSnapshot = await getDocs(activitiesCollection);
+    
+    let activitiesQuery;
+    if (selectedAccount === "Cumulative") {
+      activitiesQuery = query(activitiesCollection);
+    } else {
+      activitiesQuery = query(activitiesCollection, where("recipient", "==", selectedAccount));
+    }
+    const activitiesSnapshot = await getDocs(activitiesQuery);
     
     const activities: Activity[] = [];
     activitiesSnapshot.forEach(doc => {
