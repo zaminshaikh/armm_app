@@ -205,6 +205,27 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
       child: Scaffold(
         body: Stack(
           children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 40, left: 24, right: 18),
+                            child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              TextButton(
+                                              onPressed: () {
+                                                Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(builder: (_) => const AppLockPromptPage()),
+                                                );
+                                              },
+                                              child: Text(
+                                                'Skip',
+                                                style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.primary),
+                                              ),
+                                              ),
+                                            ],
+                                            ),
+                          ),
+
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
