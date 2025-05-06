@@ -206,15 +206,10 @@ class _PasswordPageState extends State<PasswordPage> {
     if (user != null && user.emailVerified) {
       String uid = user.uid;
       await db.linkNewUser(user.email!);
-      log('User $uid connected to Client ID $widget.signUpData.cid');
+      log('User $uid connected to Client ID ${widget.cid}');
 
-      // await updateFirebaseMessagingToken(user, context);
-            
       if (!mounted) return true;
-      // appState = Provider.of<AuthService>(context, listen: false);
-      setState(() {
-        isLoading = false;
-      });
+      setState(() { isLoading = false; });
 
       await Navigator.pushReplacement(
         context,

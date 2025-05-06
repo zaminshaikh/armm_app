@@ -1,6 +1,11 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/database/auth_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,13 +51,14 @@ class LogoutButton extends StatelessWidget {
     );
 
     if (shouldLogout == true) {
-      await AuthService().signOut();
+      await AuthService().logout(context);
       if (!context.mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const OnboardingPage()),
       );
     }
+
   }
 
   @override
