@@ -509,17 +509,6 @@ export class DatabaseService {
   //             Statement Methods
   // ============================================
 
-  /** Adds a new statement document */
-  async addStatement(statement: StatementData): Promise<void> {
-    try {
-      const statementsCollection = collection(this.db, 'statements');
-      await addDoc(statementsCollection, statement);
-    } catch (error) {
-      console.error('Error adding statement:', error);
-      throw error;
-    }
-  }
-
   /**
    * Retrieves graph points for a specific client
    */

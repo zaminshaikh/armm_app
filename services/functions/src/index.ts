@@ -14,6 +14,7 @@ import { handleActivity, onActivityWrite } from "./triggers/activityTriggers";
 import { onAssetUpdate } from "./triggers/assetTriggers";
 import { onConnectedUsersChange } from "./triggers/connectedUsersTriggers";
 import { githubToNotion } from "./triggers/githubToNotion";
+import { handleStorageDocumentUpload } from "./triggers/documentTriggers"; // Added import
 
 // ======= SCHEDULED =======
 import { scheduledYTDReset } from "./scheduled/scheduledReset";
@@ -27,7 +28,7 @@ import { calculateTotalYTD, calculateYTD } from "./callable/ytd";
 import { uploadProfilePicture } from "./callable/uploadProfilePicture";
 
 // Expose Firestore triggers
-export { handleActivity, onActivityWrite, onAssetUpdate, onConnectedUsersChange, githubToNotion};
+export { handleActivity, onActivityWrite, onAssetUpdate, onConnectedUsersChange, githubToNotion, handleStorageDocumentUpload }; // Added export
 
 // Expose scheduled tasks
 export { scheduledYTDReset, processScheduledActivities };
