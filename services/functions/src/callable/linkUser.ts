@@ -24,7 +24,7 @@ import { addUidToConnectedUsers } from "../helpers/addUidToConnectedUsers";
  * @returns {Promise<void>}
  * @throws {functions.https.HttpsError} If arguments are missing or if linking fails.
  */
-export const linkNewUser = functions.https.onCall(async (data: { email: any; cid: any; uid: any; usersCollectionID: any; }, context: { auth: any; }): Promise<void> => {
+export const linkNewUser = functions.https.onCall(async (data, context): Promise<void> => {
   // Validate that the caller is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError("unauthenticated", "Must be called while authenticated.");

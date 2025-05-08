@@ -16,8 +16,8 @@ export const onConnectedUsersChange = functions.firestore
   .document("{userCollection}/{userId}")
   .onUpdate(
     async (
-      change: { before: { data: () => any; }; after: { data: () => any; }; },
-      context: { params: { userCollection: any; userId: any; }; }
+      change,
+      context
     ) => {
       const userCollection = context.params.userCollection;
       const userId = context.params.userId;

@@ -20,8 +20,8 @@ export const onAssetUpdate = functions.firestore
   .document("/{userCollection}/{userId}/assets/{assetId}")
   .onUpdate(
     async (
-      change: { before: { data: () => any; }; after: { data: () => any; }; },
-      context: { params: { userCollection: any; userId: any; }; }
+      change,
+      context
     ) => {
       const { userCollection, userId } = context.params;
       console.log(`onAssetUpdate triggered for userCollection: ${userCollection}, userId: ${userId}`);

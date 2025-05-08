@@ -20,7 +20,7 @@ import * as admin from "firebase-admin";
  * @returns {Promise<{ exists: boolean }>}
  * @throws {functions.https.HttpsError} If any validation or retrieval error occurs.
  */
-export const checkDocumentExists = functions.https.onCall(async (data: { cid: any; usersCollectionID: any; }, context: any) => {
+export const checkDocumentExists = functions.https.onCall(async (data, context) => {
   const { cid, usersCollectionID } = data;
   if (!cid || !usersCollectionID) {
     throw new functions.https.HttpsError(

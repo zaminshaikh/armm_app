@@ -24,7 +24,7 @@ import { createNotif, sendNotif } from "../helpers/notifications";
  */
 export const handleActivity = functions.firestore
   .document(`/{userCollection}/{userId}/${config.ACTIVITIES_SUBCOLLECTION}/{activityId}`)
-  .onCreate(async (snapshot: { data: () => Activity; }, context: { params: { userId: any; activityId: any; userCollection: any; }; }) => {
+  .onCreate(async (snapshot, context) => {
     const activity = snapshot.data() as Activity;
     const { userId, activityId, userCollection } = context.params;
 
@@ -58,7 +58,7 @@ export const handleActivity = functions.firestore
  */
 export const onActivityWrite = functions.firestore
   .document(`/{userCollection}/{userId}/${config.ACTIVITIES_SUBCOLLECTION}/{activityId}`)
-  .onWrite(async (change: { before: { exists: any; data: () => Activity; }; after: { exists: any; data: () => Activity; }; }, context: { params: { userId: any; userCollection: any; }; }) => {
+  .onWrite(async (change, context) => {
     const { userId, userCollection } = context.params;
 
     // Utility function to determine if this activity impacts YTD

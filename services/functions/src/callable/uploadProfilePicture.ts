@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions/v1';
 import * as admin from 'firebase-admin';
 
 export const uploadProfilePicture = functions.https.onCall(
-  async (data: { contentType?: any; cid?: any; fileBase64?: any; fileExtension?: any }, context: { auth: any }) => {
+  async (data, context) => {
     const { cid, fileBase64, fileExtension } = data;
     // auth guard
     if (!context.auth) {
