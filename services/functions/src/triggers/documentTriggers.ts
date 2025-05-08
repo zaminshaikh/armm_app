@@ -62,7 +62,7 @@ export const handleStorageDocumentUpload = functions.storage
       );
 
       const title = "New Document";
-      const body = `A new document "${fileName}" has been uploaded to your account. Naviagate to the Documents section to view it.`;
+      const body = `A new document "${fileName}" has been uploaded to your account. Navigate to the Documents section to view it.`;
       const message = body; // Using the same content for the 'message' field
 
       const notificationData = {
