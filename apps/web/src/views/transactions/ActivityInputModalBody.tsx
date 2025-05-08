@@ -1,7 +1,7 @@
 import { CCol, CContainer, CFormInput, CFormSelect, CFormSwitch, CInputGroup, CInputGroupText, CModalBody, CMultiSelect, CRow, CTooltip, CFormTextarea } from "@coreui/react-pro";
 import { Option } from "@coreui/react-pro/dist/esm/components/multi-select/types";
 import React, { useEffect, useState, useMemo } from "react";
-import { Activity, Client, DatabaseService, roundToNearestHour} from "src/db/database";
+import { Activity, applyAssetChanges, AssetDetails, Client, DatabaseService, roundToNearestHour, ScheduledActivity} from "src/db/database";
 import { EditAssetsSection } from "../../components/EditAssetsSection";
 import { Timestamp } from 'firebase/firestore';
 // import { ActivityInputModalBody } from "./ActivityInputModalBody.tsx";
@@ -11,7 +11,10 @@ interface ActivityInputProps {
     setActivityState: (clientState: Activity) => void,
     clientState: Client | null,
     setClientState: (clientState: Client | null) => void,
+    scheduledActivity?: ScheduledActivity,
     clientOptions: Option[],
+    initialClientState?: Client | null,
+    setInitialClientState: (clientState: Client | null) => void,
 }
 
 interface ErrorModalProps {
@@ -26,7 +29,7 @@ export const ValidateActivity = (activityState: Activity, setInvalidInputFields:
     let fields: string[] = [];
 
     const fieldValidations: { displayName: string, condition: boolean }[] = [
-        { displayName: 'Transaction Amount', condition: activityState.amount <= 0 || isNaN(activityState.amount) },
+        { displayName: 'Activity Amount', condition: activityState.amount <= 0 || isNaN(activityState.amount) },
         { displayName: 'Fund', condition: activityState.fund === '' },
         { displayName: 'Recipient', condition: activityState.recipient === '' },
         { displayName: 'Time', condition: activityState.time === null },
@@ -51,7 +54,10 @@ export const ActivityInputModalBody: React.FC<ActivityInputProps> = ({
     setActivityState, 
     clientState,
     setClientState,
+    scheduledActivity,
     clientOptions,
+    initialClientState,
+    setInitialClientState
 }) => {
     
     const db = new DatabaseService();
@@ -87,8 +93,6 @@ export const ActivityInputModalBody: React.FC<ActivityInputProps> = ({
     const handleDateTimeChange = (newDate: string, newTime: string) => {
         if (!newDate || !newTime) { return; }
         
-        console.log(`New Date: ${newDate}, New Time: ${newTime}`);
-        
         // Parse date and time components separately to avoid timezone issues
         const [year, month, day] = newDate.split('-').map(Number);
         const [hours, minutes] = newTime.split(':').map(Number);
@@ -101,7 +105,6 @@ export const ActivityInputModalBody: React.FC<ActivityInputProps> = ({
         if (isNaN(combinedDateTime.getTime())) return;
         
         const roundedDate = roundToNearestHour(combinedDateTime);
-        console.log(`Rounded Date: ${roundedDate}`);
         setActivityState({ ...activityState, time: roundedDate });
     };
 
@@ -119,7 +122,6 @@ export const ActivityInputModalBody: React.FC<ActivityInputProps> = ({
 
     useEffect(() => {
         if (activityState.recipient === null || activityState.recipient === '') {return;}
-        console.log(activityState);
         setIsRecipientSameAsClient(activityState.recipient == clientState?.firstName + ' ' + clientState?.lastName);
     }, [activityState.recipient, clientState]);
 
@@ -240,17 +242,29 @@ export const ActivityInputModalBody: React.FC<ActivityInputProps> = ({
                       }
                       
                       const cid = selectedValue.map(selected => selected.value as string)[0];
-                      const client = selectedValue.map(selected => selected.label as string)[0];
+                      const clientName = selectedValue.map(selected => selected.label as string)[0];
                       
                       // Get the client before setting state
-                      const newClientState = await db.getClient(cid);
-                      if (newClientState) {
-                          setClientState(newClientState);
-                          // Update the recipient if needed
-                          if (isRecipientSameAsClient) {
-                              setActivityState({ ...activityState, recipient: client, parentDocId: cid, parentName: client });
+                      const client = await db.getClient(cid);
+                      // Set the initial client by cloning the client object 
+                      // This avoids mutating the original object
+                      setInitialClientState(structuredClone(client));
+                      if (client) {
+                          const changedAssets = scheduledActivity?.changedAssets;
+                          // Clone the client object to avoid mutating the original object
+                          const newClientState = structuredClone(client);
+
+                          // If our scheduled activity has changed assets, we need to update the client state to reflect this
+                          if (changedAssets) {
+                            setClientState(applyAssetChanges(newClientState, changedAssets));
                           } else {
-                              setActivityState({ ...activityState, parentDocId: cid, parentName: client });
+                            setClientState(newClientState);
+                          }
+                          
+                          if (isRecipientSameAsClient) {
+                              setActivityState({ ...activityState, recipient: clientName, parentDocId: cid, parentName: clientName });
+                          } else {
+                              setActivityState({ ...activityState, parentDocId: cid, parentName: clientName });
                           }
                       }
                     }}
@@ -302,7 +316,7 @@ export const ActivityInputModalBody: React.FC<ActivityInputProps> = ({
             </CContainer>            
             <CInputGroup className="mb-3 py-3 px-3">
                 <CInputGroupText as="label" htmlFor="inputGroupSelect01">Fund</CInputGroupText>
-                <CFormSelect disabled id="inputGroupSelect01" defaultValue={"ARMM"} value={activityState.fund != '' ? activityState.fund : undefined}onChange={(e) => {
+                <CFormSelect id="inputGroupSelect01" defaultValue={"ARMM"} value={activityState.fund != '' ? activityState.fund : undefined}onChange={(e) => {
                         setActivityState({...activityState, fund: e.currentTarget.value})
                     }}
                 >

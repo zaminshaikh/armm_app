@@ -60,6 +60,7 @@ export const linkNewUser = functions.https.onCall(async (data: { email: any; cid
     uid,
     email,
     appEmail: email,
+    linked: true,
   };
 
   await userRef.set(updatedData);
