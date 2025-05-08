@@ -9,9 +9,11 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
+    "typeRoots": ["src/types", "node_modules/@types"]
   },
   "compileOnSave": true,
   "include": [
-    "src"
+    "src",
+    "src/types/**/*.d.ts"
   ]
 }

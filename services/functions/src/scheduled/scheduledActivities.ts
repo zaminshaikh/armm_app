@@ -22,7 +22,7 @@ const db = admin.firestore();
  */
 export const processScheduledActivities = functions.pubsub
   .schedule("0 */12 * * *") // Runs every 12 hours
-  .onRun(async (context) => {
+  .onRun(async (context: any) => {
     const now = admin.firestore.Timestamp.now();
     const scheduledActivitiesRef = db.collection("scheduledActivities");
 
@@ -40,7 +40,7 @@ export const processScheduledActivities = functions.pubsub
     const batch = db.batch();
     console.log(`Found ${querySnapshot.size} scheduled activities to process.`);
 
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc: { data: () => any; id: any; }) => {
       const data = doc.data();
       const { cid, activity, clientState, usersCollectionID } = data;
 

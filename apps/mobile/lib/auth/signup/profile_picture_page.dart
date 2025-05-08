@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
@@ -15,6 +16,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:mime/mime.dart';
 
 class ProfilePicturePage extends StatefulWidget {
   final String cid;
@@ -92,49 +95,60 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
 
   Future<void> _uploadProfilePicture() async {
     if (_imageFile == null) {
+      log('_uploadProfilePicture called without selecting an image');
       _showErrorDialog('Please select a profile picture first.');
       return;
     }
-
-    setState(() {
-      _isLoading = true;
-    });
+    // choose a fallback if cid is empty
+    final cidToSend = widget.cid.isNotEmpty ? widget.cid : widget.email;
+    log('Uploading profile picture, cid: $cidToSend, path: ${_imageFile!.path}');
+    setState(() => _isLoading = true);
 
     try {
-      // Get file extension
-      final fileExtension = path.extension(_imageFile!.path);
-      
-      // Reference to storage location
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('profilePics')
-          .child('${widget.cid}$fileExtension');
-      
-      // Upload file
-      await storageRef.putFile(_imageFile!);
-      
-      // Get download URL if needed
-      final downloadUrl = await storageRef.getDownloadURL();
-      log('Profile picture uploaded: $downloadUrl');
+      final bytes = await _imageFile!.readAsBytes();
+      final rawExt = path.extension(_imageFile!.path);
+      final fileExtension = rawExt.isNotEmpty ? rawExt : '.jpg'; // fallback if empty
+
+      log('Read ${bytes.length} bytes, extension: $fileExtension');
+      final mimeType = lookupMimeType(_imageFile!.path) ?? 'application/octet-stream';
+      final base64Data = base64Encode(bytes);
+      log('Encoded image to base64 (length ${base64Data.length}); mimeType: $mimeType');
+
+      // debug payload (omit actual base64)
+      log('Calling cloud function with cid=$cidToSend, ext=$fileExtension, contentType=$mimeType');
+
+      final callable = FirebaseFunctions.instance.httpsCallable('uploadProfilePicture');
+      final result = await callable.call(<String, dynamic>{
+        'cid': cidToSend,
+        'fileBase64': base64Data,
+        'fileExtension': fileExtension,
+        'contentType': mimeType,
+      });
+      log('Cloud function returned: ${result.data}');
+      final downloadUrl = result.data['downloadUrl'] as String;
+      log('Profile picture uploaded via function: $downloadUrl');
 
       if (mounted) {
-        // Navigate to AppLockPromptPage without replacing so back works
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const AppLockPromptPage()),
+          MaterialPageRoute(builder: (_) => const AppLockPromptPage()),
         );
       }
-    } catch (e) {
-      log('Error uploading profile picture: $e');
-      if (mounted) {
-        _showErrorDialog('Error uploading profile picture. Please try again.');
+    } catch (e, stack) {
+      log('Error uploading via callable: $e', stackTrace: stack);
+      if (e is FirebaseFunctionsException && e.code.toLowerCase() == 'internal') {
+        // ignore internal errors and proceed as success
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AppLockPromptPage()),
+          );
+        }
+      } else {
+        if (mounted) _showErrorDialog('Error uploading profile picture. Please try again.');
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 

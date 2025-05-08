@@ -19,7 +19,7 @@ import * as admin from "firebase-admin";
  * @returns {Promise<{ success: boolean; message: string }>} 
  *          Object indicating success and a descriptive message.
  */
-export const unlinkUser = functions.https.onCall(async (data, context) => {
+export const unlinkUser = functions.https.onCall(async (data: { uid: any; cid: any; usersCollectionID: any; }, context: any) => {
   const { uid, cid, usersCollectionID } = data;
   if (!uid || !cid || !usersCollectionID) {
     throw new functions.https.HttpsError(

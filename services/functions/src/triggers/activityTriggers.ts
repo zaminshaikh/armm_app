@@ -8,7 +8,7 @@
  */
 
 import * as functions from "firebase-functions/v1";
-import * as admin from "firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 import config from "../../config.json";
 import { Activity } from "../interfaces/activity.interface";
 import { updateYTD } from "../helpers/ytd";
@@ -24,7 +24,7 @@ import { createNotif, sendNotif } from "../helpers/notifications";
  */
 export const handleActivity = functions.firestore
   .document(`/{userCollection}/{userId}/${config.ACTIVITIES_SUBCOLLECTION}/{activityId}`)
-  .onCreate(async (snapshot, context) => {
+  .onCreate(async (snapshot: { data: () => Activity; }, context: { params: { userId: any; activityId: any; userCollection: any; }; }) => {
     const activity = snapshot.data() as Activity;
     const { userId, activityId, userCollection } = context.params;
 
@@ -58,15 +58,14 @@ export const handleActivity = functions.firestore
  */
 export const onActivityWrite = functions.firestore
   .document(`/{userCollection}/{userId}/${config.ACTIVITIES_SUBCOLLECTION}/{activityId}`)
-  .onWrite(async (change, context) => {
+  .onWrite(async (change: { before: { exists: any; data: () => Activity; }; after: { exists: any; data: () => Activity; }; }, context: { params: { userId: any; userCollection: any; }; }) => {
     const { userId, userCollection } = context.params;
 
     // Utility function to determine if this activity impacts YTD
     const startOfYear = new Date(new Date().getFullYear(), 0, 1);
 
     const getActivityDate = (activity: Activity): Date => {
-      // Convert Firestore Timestamp to JS Date if needed
-      if (activity.time instanceof admin.firestore.Timestamp) {
+      if (activity.time instanceof Timestamp) {
         return activity.time.toDate();
       } else {
         return activity.time as Date;
