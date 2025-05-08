@@ -48,7 +48,7 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -62,6 +62,30 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.arrow_back_ios_rounded,
+                                  color: Color.fromARGB(255, 102, 102, 102),
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Back',
+                                  style: GoogleFonts.inter(fontSize: 14, color: Color.fromARGB(255, 102, 102, 102)),
+                                ),
+                              ],
+                            ),
+                          )
+                        ),
+                      const SizedBox(height: 16),
                       Text(
                         'App Lock & Notifications',
                         style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black),

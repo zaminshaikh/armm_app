@@ -118,8 +118,8 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
       log('Profile picture uploaded: $downloadUrl');
 
       if (mounted) {
-        // Navigate to AppLockPromptPage instead of Dashboard
-        Navigator.pushReplacement(
+        // Navigate to AppLockPromptPage without replacing so back works
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const AppLockPromptPage()),
         );
@@ -205,146 +205,172 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
       child: Scaffold(
         body: Stack(
           children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 40, left: 24, right: 18),
-                            child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              TextButton(
-                                              onPressed: () {
-                                                Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(builder: (_) => const AppLockPromptPage()),
-                                                );
-                                              },
-                                              child: Text(
-                                                'Skip',
-                                                style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.primary),
-                                              ),
-                                              ),
-                                            ],
-                                            ),
-                          ),
-
-            Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 72),
-                    // Top illustration or profile picture preview
-                    _imageFile != null
-                        ? Container(
-                            width: 200,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: FileImage(_imageFile!),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        : Stack(
-                          alignment: Alignment.center,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 80, 24, 24),
+              child: Column(
+                children: [
+                  // new header matching AppLockPromptPage
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ShaderMask(
-                            shaderCallback: (bounds) {
-                              return LinearGradient(
-                              colors: [AppColors.primary, AppColors.primary, const Color.fromARGB(255, 255, 255, 255)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              ).createShader(bounds);
-                            },
-                            child: SvgPicture.asset(
-                              'assets/icons/mystery.svg',
-                              height: 150,
-                              color: Colors.white, // This color is replaced by the gradient
+                            Text(
+                              'Profile Picture',
+                              style: GoogleFonts.inter(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                              softWrap: true,
                             ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Add a profile picture to personalize your account.',
+                              style: GoogleFonts.inter(
+                                  fontSize: 14, color: Colors.grey[600]),
+                              softWrap: true,
                             ),
                           ],
-                          ),
-                    const SizedBox(height: 16),
-
-                    // Title
-                    Text(
-                      'Add a Profile Picture',
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-
-                    // Subtitle
-                    Text(
-                      'Choose a profile picture to personalize your account',
-                      style: GoogleFonts.inter(color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 32),
-
-                    // Select Photo Button
-                    AuthButton(
-                      label: _imageFile != null ? 'Change Photo' : 'Select Photo',
-                      onPressed: _showProfilePictureOptions,
-                        backgroundColor: _imageFile != null ? Colors.white : AppColors.primary,
-                        foregroundColor: _imageFile != null ? AppColors.primary : Colors.white,
-                      isEnabled: true,
-                    ),
-                    const SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AppLockPromptPage()),
-                      );
-                      },
-                      child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Skip for now',
-                        style: GoogleFonts.inter(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
                         ),
                       ),
-                      ),
-                    ),
-                    if (_imageFile != null) ...[
-                      const SizedBox(height: 16),
-                      Row(
+                    ],
+                  ),
+                  const SizedBox(height: 48),
+                  // existing content goes here
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(child: Divider(color: Colors.grey)),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(
-                              'OR',
-                              style: GoogleFonts.inter(color: Colors.grey),
+                          const SizedBox(height: 72),
+                          // Top illustration or profile picture preview
+                          _imageFile != null
+                              ? Container(
+                                  width: 200,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: FileImage(_imageFile!),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                              : Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    ShaderMask(
+                                      shaderCallback: (bounds) {
+                                        return LinearGradient(
+                                          colors: [
+                                            AppColors.primary,
+                                            AppColors.primary,
+                                            const Color.fromARGB(
+                                                255, 255, 255, 255)
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ).createShader(bounds);
+                                      },
+                                      child: SvgPicture.asset(
+                                        'assets/icons/mystery.svg',
+                                        height: 150,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                          const SizedBox(height: 16),
+
+                          // Title
+                          Text(
+                            'Add a Profile Picture',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+
+                          const SizedBox(height: 32),
+
+                          // Select Photo Button
+                          AuthButton(
+                            label: _imageFile != null
+                                ? 'Change Photo'
+                                : 'Select Photo',
+                            onPressed: _showProfilePictureOptions,
+                            backgroundColor: _imageFile != null
+                                ? Colors.white
+                                : AppColors.primary,
+                            foregroundColor: _imageFile != null
+                                ? AppColors.primary
+                                : Colors.white,
+                            isEnabled: true,
+                          ),
+                          const SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AppLockPromptPage()),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 16),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'Skip for now',
+                                style: GoogleFonts.inter(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                           ),
-                          Expanded(child: Divider(color: Colors.grey)),
+                          if (_imageFile != null) ...[
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Divider(color: Colors.grey)),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(
+                                    'OR',
+                                    style: GoogleFonts.inter(
+                                        color: Colors.grey),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Divider(color: Colors.grey)),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            AuthButton(
+                              label: 'Continue',
+                              onPressed: _uploadProfilePicture,
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              isEnabled: true,
+                            ),
+                          ],
+                          const SizedBox(height: 24),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      AuthButton(
-                        label: 'Continue',
-                        onPressed: _uploadProfilePicture,
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        isEnabled: true,
-                      ),
-                    ],
-                    const SizedBox(height: 24),
-                  ],
-                ),
+                    ),
+                  ),
+                ],
               ),
             ),
             if (_isLoading)
