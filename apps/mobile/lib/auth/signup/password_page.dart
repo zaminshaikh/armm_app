@@ -8,6 +8,7 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 import 'package:armm_app/components/mail_app_picker_bottom';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
@@ -209,9 +210,11 @@ class _PasswordPageState extends State<PasswordPage> {
       await db.linkNewUser(user.email!);
       log('User $uid connected to Client ID ${widget.cid}');
       if (!mounted) return true;
+      await updateFirebaseMessagingToken(user, context);
+
       setState(() { isLoading = false; });
 
-      // Navigate to profile picture page instead of dashboard
+      if (!mounted) return true;
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -258,7 +261,7 @@ class _PasswordPageState extends State<PasswordPage> {
   Widget build(BuildContext context) {
     print("Client ID received in PasswordPage: ${widget.cid}"); // DEBUG PRINT
     return Scaffold(
-      body: Stack(
+      body: Stack( // Wrap with Stack
         children: [
           Center(
             child: SingleChildScrollView(
@@ -338,7 +341,7 @@ class _PasswordPageState extends State<PasswordPage> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                '1 Capital letter',
+                                '1 Uppercase',
                                 style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
@@ -432,6 +435,14 @@ class _PasswordPageState extends State<PasswordPage> {
             left: 0,
             child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
+          // Conditionally display overlay and CustomProgressIndicator
+          if (isLoading)
+            Container(
+              color: const Color.fromARGB(255, 94, 94, 94).withOpacity(0.5), // Greyish translucent overlay
+              child: const Center(
+                child: CustomProgressIndicator(),
+              ),
+            ),
         ],
       ),
     );

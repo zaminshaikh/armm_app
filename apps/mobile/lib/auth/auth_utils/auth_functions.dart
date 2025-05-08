@@ -1,4 +1,9 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:armm_app/database/auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class AuthService {
@@ -47,8 +52,25 @@ class AuthService {
     }
   }
 
-  Future<void> signOut() async {
-    await _auth.signOut();
-  }
+  Future<void> logout(BuildContext context) async {
+    log('settings.dart: Signing out...');
+
+    Future<void> handleLogout() async {
+      // Continue sign out asynchronously.
+      await deleteFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
+      await FirebaseAuth.instance.signOut();
+      assert(FirebaseAuth.instance.currentUser == null);
+      log('settings.dart: Successfully signed out');
+      return;
+    }
+    unawaited(handleLogout());
+
+    if (!context.mounted) return;
+    // Immediately navigate away to avoid security rules issues when signed out.
+    await Navigator.of(context).pushNamedAndRemoveUntil('/onboarding', (route) => false);
+
+    // Continue sign out asynchronously.
+    return;
+  } 
 
 }
