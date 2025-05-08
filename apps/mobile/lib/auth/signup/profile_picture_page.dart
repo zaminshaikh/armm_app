@@ -99,27 +99,19 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
       _showErrorDialog('Please select a profile picture first.');
       return;
     }
-    // choose a fallback if cid is empty
-    final cidToSend = widget.cid.isNotEmpty ? widget.cid : widget.email;
-    log('Uploading profile picture, cid: $cidToSend, path: ${_imageFile!.path}');
     setState(() => _isLoading = true);
 
     try {
       final bytes = await _imageFile!.readAsBytes();
+      // extract extension (e.g. ".jpg", ".png")
       final rawExt = path.extension(_imageFile!.path);
-      final fileExtension = rawExt.isNotEmpty ? rawExt : '.jpg'; // fallback if empty
-
-      log('Read ${bytes.length} bytes, extension: $fileExtension');
+      final fileExtension = rawExt.isNotEmpty ? rawExt : '.jpg';
       final mimeType = lookupMimeType(_imageFile!.path) ?? 'application/octet-stream';
       final base64Data = base64Encode(bytes);
-      log('Encoded image to base64 (length ${base64Data.length}); mimeType: $mimeType');
-
-      // debug payload (omit actual base64)
-      log('Calling cloud function with cid=$cidToSend, ext=$fileExtension, contentType=$mimeType');
 
       final callable = FirebaseFunctions.instance.httpsCallable('uploadProfilePicture');
       final result = await callable.call(<String, dynamic>{
-        'cid': cidToSend,
+        'cid': widget.cid.isNotEmpty ? widget.cid : widget.email,
         'fileBase64': base64Data,
         'fileExtension': fileExtension,
         'contentType': mimeType,
