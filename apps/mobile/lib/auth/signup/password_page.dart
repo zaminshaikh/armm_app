@@ -181,7 +181,7 @@ class _PasswordPageState extends State<PasswordPage> {
                 },
                 child: const Text('Continue'),
               ),
-              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail App')),
+              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail')),
             ],
           );
         },

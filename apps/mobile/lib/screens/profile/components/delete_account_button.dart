@@ -142,7 +142,7 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
                     Navigator.of(dialogContext).pop(true);
                     _deleteAccount();
                   },
-                  child: const Text("Delete Account", style: TextStyle(color: Colors.red)),
+                  child: const Text("Delete", style: TextStyle(color: Colors.red)),
                 ),
               ],
             );

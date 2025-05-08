@@ -439,7 +439,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             title: 'Email Change Requested',
                             message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
                             actions: [
-                              TextButton(onPressed: () => openMailApp(parentContext), child: const Text('Open Mail App'))
+                              TextButton(onPressed: () => openMailApp(parentContext), child: const Text('Open Mail'))
                             ],
                           ),
                         );
