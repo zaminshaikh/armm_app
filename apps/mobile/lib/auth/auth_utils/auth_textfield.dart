@@ -12,6 +12,7 @@ class AuthTextField extends StatefulWidget {
   final InputBorder? border;
   final InputBorder? focusedBorder;
   final EdgeInsetsGeometry? contentPadding;
+  final TextInputType? keyboardType;
 
   const AuthTextField({
     Key? key,
@@ -24,6 +25,7 @@ class AuthTextField extends StatefulWidget {
     this.border,
     this.focusedBorder,
     this.contentPadding,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -52,6 +54,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
       child: TextField(
         controller: widget.controller,
         obscureText: _obscureText,
+        keyboardType: widget.keyboardType,
         style: widget.textStyle ??
             GoogleFonts.inter(
               fontSize: 18,
