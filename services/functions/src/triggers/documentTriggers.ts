@@ -70,7 +70,7 @@ export const handleStorageDocumentUpload = functions.storage
         body,
         message,
         isRead: false,
-        type: "file_upload", // A distinct type for this kind of notification
+        type: "document", // A distinct type for this kind of notification
         time: admin.firestore.FieldValue.serverTimestamp(),
         filePath: filePath, // Optionally store the path to the uploaded file
       };
