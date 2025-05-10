@@ -8,6 +8,7 @@ import 'package:armm_app/utils/app_state.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:provider/provider.dart';
 
@@ -110,7 +111,13 @@ class AppleAuthService {
         }
         if (!context.mounted) return false;
         // Update Firebase messaging token
-        await updateFirebaseMessagingToken(user, context);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if (prefs.getBool('notifsSwitchValue') ?? false) {
+          debugPrint('login.dart: Notifications switch is ON, updating Firebase token...'); // Debugging output
+          await updateFirebaseMessagingToken(userCredential.user, context);
+        } else {
+          debugPrint('login.dart: Notifications switch is OFF, not updating Firebase token...'); // Debugging output
+        }
                 
         return true;
       } catch (signInError) {
