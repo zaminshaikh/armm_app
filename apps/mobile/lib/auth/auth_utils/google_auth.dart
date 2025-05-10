@@ -10,7 +10,8 @@ import 'package:armm_app/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/material.dart'; // For Navigator
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // For Navigator
 
 bool showAlert = false;
 
@@ -67,7 +68,13 @@ class GoogleAuthService {
         return null;
       }
           
-      await updateFirebaseMessagingToken(user, context);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool('notifsSwitchValue') ?? false) {
+        debugPrint('login.dart: Notifications switch is ON, updating Firebase token...'); // Debugging output
+        await updateFirebaseMessagingToken(userCredential.user, context);
+      } else {
+        debugPrint('login.dart: Notifications switch is OFF, not updating Firebase token...'); // Debugging output
+      }
 
       // Navigate to Dashboard
       await Navigator.pushReplacement(
