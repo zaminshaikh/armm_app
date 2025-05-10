@@ -15,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
   final TextEditingController emailController;
@@ -78,9 +79,14 @@ class _LoginFormState extends State<LoginForm> {
         email: widget.emailController.text,
         password: widget.passwordController.text,
       );
-      // await updateFirebaseMessagingToken(userCredential.user, context);
-      log('login.dart: Signed in user ${userCredential.user!.uid}'); // Debugging output
-      log('login.dart: Sign in successful, proceeding to dashboard...'); // Debugging output
+      
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool('notifsSwitchValue') ?? false) {
+        log('login.dart: Notifications switch is ON, updating Firebase token...'); // Debugging output
+        await updateFirebaseMessagingToken(userCredential.user, context);
+      } else {
+        log('login.dart: Notifications switch is OFF, not updating Firebase token...'); // Debugging output
+      }
 
       // Set initiallyAuthenticated to true
       Provider.of<AuthState>(context, listen: false)

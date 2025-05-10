@@ -62,8 +62,10 @@
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
+		<key>NSCameraUsageDescription</key>
+		<string>Allow the app to access your camera for taking profile pictures.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>This app requires access to your photo library to allow you to select photos for [purpose, e.g., profile images, document uploads, etc.].</string>
+		<string>Allow the app to access your photo library for selecting profile pictures.</string>
 		<key>NSFaceIDUsageDescription</key>
 		<string>This app uses Face ID to securely authenticate your identity.</string>
 		<key>UIStatusBarHidden</key>

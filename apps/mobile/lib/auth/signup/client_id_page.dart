@@ -217,6 +217,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   AuthTextField(
                     hintText: 'Client ID',
                     controller: _cidController,
+                    keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 12),
 

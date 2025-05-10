@@ -1,6 +1,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/screens/profile/components/delete_account_button.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/resources.dart';
@@ -237,7 +238,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           notifsSwitchValue = true;
                         });
                         await _saveSwitchValue(true);
-                        // Additional logic for enabling notifications if needed.
+                        // Optionally, you can show a dialog or a snackbar to inform the user
+                        updateFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
                       } else {
                         _showPermissionDeniedDialog();
                         setState(() {
@@ -250,7 +252,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         notifsSwitchValue = false;
                       });
                       await _saveSwitchValue(false);
-                      // Additional logic for disabling notifications if needed.
+                      deleteFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
                     }
                   },
                 ),
@@ -439,7 +441,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             title: 'Email Change Requested',
                             message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
                             actions: [
-                              TextButton(onPressed: () => openMailApp(parentContext), child: const Text('Open Mail App'))
+                              TextButton(onPressed: () => openMailApp(parentContext), child: const Text('Open Mail'))
                             ],
                           ),
                         );

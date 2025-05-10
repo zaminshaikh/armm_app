@@ -4,11 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'logout_button.dart';
 
 class ProfileButtons extends StatelessWidget {
-  final VoidCallback onLogout;
 
   const ProfileButtons({
     Key? key,
-    required this.onLogout,
   }) : super(key: key);
 
   @override

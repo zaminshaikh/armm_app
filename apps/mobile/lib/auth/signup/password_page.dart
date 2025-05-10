@@ -8,6 +8,7 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
 import 'package:armm_app/components/mail_app_picker_bottom';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_mail_app/open_mail_app.dart';
+import 'package:armm_app/auth/signup/profile_picture_page.dart';
 
 class PasswordPage extends StatefulWidget {
 
@@ -179,7 +181,7 @@ class _PasswordPageState extends State<PasswordPage> {
                 },
                 child: const Text('Continue'),
               ),
-              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail App')),
+              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail')),
             ],
           );
         },
@@ -206,21 +208,22 @@ class _PasswordPageState extends State<PasswordPage> {
     if (user != null && user.emailVerified) {
       String uid = user.uid;
       await db.linkNewUser(user.email!);
-      log('User $uid connected to Client ID $widget.signUpData.cid');
-
-      // await updateFirebaseMessagingToken(user, context);
-            
+      log('User $uid connected to Client ID ${widget.cid}');
       if (!mounted) return true;
-      // appState = Provider.of<AuthService>(context, listen: false);
-      setState(() {
-        isLoading = false;
-      });
+      await updateFirebaseMessagingToken(user, context);
 
+      setState(() { isLoading = false; });
+
+      if (!mounted) return true;
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
+        MaterialPageRoute(
+          builder: (_) => ProfilePicturePage(
+            cid: widget.cid,
+            email: widget.email,
+          ),
+        ),
       );
-
       return true;
     } else {
       if (!mounted) return false;
@@ -258,7 +261,7 @@ class _PasswordPageState extends State<PasswordPage> {
   Widget build(BuildContext context) {
     print("Client ID received in PasswordPage: ${widget.cid}"); // DEBUG PRINT
     return Scaffold(
-      body: Stack(
+      body: Stack( // Wrap with Stack
         children: [
           Center(
             child: SingleChildScrollView(
@@ -338,7 +341,7 @@ class _PasswordPageState extends State<PasswordPage> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                '1 Capital letter',
+                                '1 Uppercase',
                                 style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
@@ -432,6 +435,14 @@ class _PasswordPageState extends State<PasswordPage> {
             left: 0,
             child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
+          // Conditionally display overlay and CustomProgressIndicator
+          if (isLoading)
+            Container(
+              color: const Color.fromARGB(255, 94, 94, 94).withOpacity(0.5), // Greyish translucent overlay
+              child: const Center(
+                child: CustomProgressIndicator(),
+              ),
+            ),
         ],
       ),
     );

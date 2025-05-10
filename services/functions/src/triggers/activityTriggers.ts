@@ -8,7 +8,7 @@
  */
 
 import * as functions from "firebase-functions/v1";
-import * as admin from "firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 import config from "../../config.json";
 import { Activity } from "../interfaces/activity.interface";
 import { updateYTD } from "../helpers/ytd";
@@ -65,8 +65,7 @@ export const onActivityWrite = functions.firestore
     const startOfYear = new Date(new Date().getFullYear(), 0, 1);
 
     const getActivityDate = (activity: Activity): Date => {
-      // Convert Firestore Timestamp to JS Date if needed
-      if (activity.time instanceof admin.firestore.Timestamp) {
+      if (activity.time instanceof Timestamp) {
         return activity.time.toDate();
       } else {
         return activity.time as Date;

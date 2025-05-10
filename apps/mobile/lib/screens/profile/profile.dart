@@ -36,15 +36,6 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Future<void> _signOut() async {
-    await AuthService().signOut();
-    if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             const NameAndCID(),
             const SizedBox(height: 24),
-            ProfileButtons(onLogout: _signOut),
+            ProfileButtons(),
           ],
         ),
       ),

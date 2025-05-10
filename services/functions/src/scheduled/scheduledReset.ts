@@ -16,7 +16,7 @@ export const scheduledYTDReset = functions.pubsub
   // Cron: minute=0 hour=0 day=1 month=1 => Jan 1st at 00:00
   .schedule("0 0 1 1 *")
   .timeZone("America/New_York") 
-  .onRun(async (context) => {
+  .onRun(async (context: any) => {
     const db = admin.firestore();
     // Adjust userCollection if different from your config
     const userCollection = config.FIRESTORE_ACTIVE_USERS_COLLECTION; 
