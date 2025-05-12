@@ -26,6 +26,7 @@ export interface Client {
   totalYTD: number;
   _selected?: boolean;
   lastLoggedIn?: string | null | undefined;
+  linked: boolean;
   notes?: string | undefined;
   activities?: Activity[];
   graphPoints?: GraphPoint[];
@@ -59,9 +60,10 @@ export interface ScheduledActivity {
   id: string;
   cid: string;
   activity: Activity;
-  clientState: Client;
+  changedAssets: Assets | null;
   status: string;
   scheduledTime: Date;
+  formattedTime: string;
   usersCollectionID: string;
 }
 
@@ -93,10 +95,17 @@ export interface StatementData {
 
 export interface AssetDetails {
     amount: number;
-    firstDepositDate: Date | null;
+    firstDepositDate: Date | Timestamp | null;
     displayTitle: string;
     index: number;
 }
+
+export interface Assets {
+  [fundKey: string]: {
+    [assetType: string]: AssetDetails;
+  };   
+}
+  
 
 // Default objects
 export const emptyClient: Client = {
@@ -122,6 +131,7 @@ export const emptyClient: Client = {
   totalAssets: 0,
   ytd: 0,
   totalYTD: 0,
+  linked: false,
   assets: {
     armm: {
       personal: {
