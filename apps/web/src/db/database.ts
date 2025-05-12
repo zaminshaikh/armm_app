@@ -21,7 +21,7 @@ import config from '../../config.json';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { formatDate, toSentenceCase } from 'src/utils/utilities';
 import { emptyClient, emptyActivity, Client, Activity, ScheduledActivity, StatementData, AssetDetails, GraphPoint, Assets } from './models';
-import { roundToNearestHour, formatCurrency } from './utils';
+import { roundToNearestHour, formatCurrency, formatPDFDate } from './utils';
 
 // With these lines instead:
 import * as pdfMakeModule from 'pdfmake/build/pdfmake';
@@ -34,16 +34,6 @@ const pdfMake = (pdfMakeModule as any).default || pdfMakeModule as any;
 pdfMake.vfs = (pdfFontsModule as any).pdfMake?.vfs;
 
 const functions = getFunctions();
-
-// Add this helper function for formatting dates in the PDF
-function formatPDFDate(date: Date | null | undefined): string {
-  if (!date) return 'N/A';
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-  }).format(date);
-}
 
 export class DatabaseService {
   private db = getFirestore(app);
