@@ -33,7 +33,7 @@ export async function addUidToConnectedUsers(
 
     if (!uidGrantedAccess.includes(uid)) {
       uidGrantedAccess.push(uid);
-      await connectedUserRef.update({ uidGrantedAccess });
+      await connectedUserRef.update({ uidGrantedAccess, linked: true });
       console.log(`Added ${uid} to uidGrantedAccess of user ${connectedUserId}`);
     }
   });

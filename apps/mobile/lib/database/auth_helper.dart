@@ -93,13 +93,6 @@ Future<void> updateFirebaseMessagingToken(User? user, BuildContext context) asyn
 
   // Only attempt subscription and update if we got a token.
   if (token != null) {
-    try {
-      await FirebaseMessaging.instance.subscribeToTopic(user.uid);
-      debugPrint('Subscribed to topic: ${user.uid}');
-    } catch (e) {
-      log('Error subscribing to topic ${user.uid}: $e');
-    }
-
     // Update the token in your database.
     DatabaseService? db = await DatabaseService.fetchCID(user.uid, context);
     if (db != null) {
