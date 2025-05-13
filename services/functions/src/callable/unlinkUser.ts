@@ -10,11 +10,12 @@ import * as admin from "firebase-admin";
 /**
  * Callable: unlinkUser
  * 
- * @description Clears the user's `uid` and `appEmail` in Firestore, then deletes the user from Firebase Auth.
+ * @description Clears the user's `uid` and `appEmail` in Firestore, deletes the user's profile picture
+ *              from Storage, then deletes the user from Firebase Auth.
  *
  * @param {Object} data - The payload from client side.
  * @param {string} data.uid - The Firebase Auth UID to delete.
- * @param {string} data.cid - The Firestore doc ID referencing the user’s record.
+ * @param {string} data.cid - The Firestore doc ID referencing the user's record.
  * @param {string} data.usersCollectionID - The user collection in Firestore.
  * @returns {Promise<{ success: boolean; message: string }>} 
  *          Object indicating success and a descriptive message.
@@ -39,6 +40,30 @@ export const unlinkUser = functions.https.onCall(async (data, context) => {
     // Clear Firestore fields
     await userRef.update({ appEmail: "", uid: "" , linked: false });
     console.log(`Cleared Firestore fields for cid ${cid}`);
+
+    // Delete profile picture from Storage
+    try {
+      // Get a reference to the storage bucket
+      const bucket = admin.storage().bucket();
+      
+      // List all files matching the pattern profilePics/{cid}.*
+      const [files] = await bucket.getFiles({
+        prefix: `profilePics/${cid}.`
+      });
+      
+      if (files.length > 0) {
+        // Delete each file found (typically should be just one)
+        for (const file of files) {
+          await file.delete();
+          console.log(`Deleted profile picture for cid ${cid}: ${file.name}`);
+        }
+      } else {
+        console.log(`No profile picture found for cid ${cid}`);
+      }
+    } catch (storageError) {
+      // Log the error but continue with the process
+      console.error(`Error deleting profile picture for cid ${cid}:`, storageError);
+    }
 
     // Delete from Firebase Auth
     await admin.auth().deleteUser(uid);
