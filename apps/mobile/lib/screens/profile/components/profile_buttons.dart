@@ -208,7 +208,7 @@ class ProfileButtons extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'Authentication',
+                        'App Lock',
                         style: GoogleFonts.inter(
                           textStyle: const TextStyle(
                             fontSize: 14,
