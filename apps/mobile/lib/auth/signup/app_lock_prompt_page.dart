@@ -285,127 +285,222 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 80, 24, 24),
+          padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+              // Modern header with improved layout
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.arrow_back_ios_rounded,
+                            color: Color.fromARGB(255, 102, 102, 102),
+                            size: 14,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Back',
+                            style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 102, 102, 102)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'App Lock & Notifications',
+                    style: GoogleFonts.inter(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                      letterSpacing: -0.5,
+                    ),
+                    softWrap: true,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Configure your app lock and notifications settings here.',
+                    style: GoogleFonts.inter(
+                      fontSize: 14, 
+                      color: Colors.grey[600],
+                      height: 1.3,
+                    ),
+                    softWrap: true,
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              // App Lock toggle with modern styling
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/icons/auth.svg', 
+                        width: 24, 
+                        height: 24,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
                     Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.arrow_back_ios_rounded,
-                                  color: Color.fromARGB(255, 102, 102, 102),
-                                  size: 18,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Back',
-                                  style: GoogleFonts.inter(fontSize: 14, color: Color.fromARGB(255, 102, 102, 102)),
-                                ),
-                              ],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'App Lock',
+                            style: GoogleFonts.inter(
+                              fontSize: 18, 
+                              fontWeight: FontWeight.w600, 
+                              color: Colors.black,
+                              letterSpacing: -0.3,
                             ),
-                          )
-                        ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'App Lock & Notifications',
-                        style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black),
-                        softWrap: true,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Secure your app with biometrics, such as Face ID.',
+                            style: GoogleFonts.inter(
+                              fontSize: 12, 
+                              color: Colors.grey[600],
+                              height: 1.3,
+                            ),
+                            softWrap: true,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Configure your app lock and notifications settings here.',
-                        style: GoogleFonts.inter(fontSize: 14, color: Colors.grey[600]),
-                        softWrap: true,
-                      ),
-                      ],
                     ),
+                    const SizedBox(width: 16),
+                    CupertinoSwitch(
+                      value: _isAppLockEnabled,
+                      activeColor: AppColors.primary,
+                      onChanged: (v) async {
+                        await _toggleAppLock(v);
+                      },
                     ),
-                ]
+                  ],
+                ),
               ),
-
-              const SizedBox(height: 32),
-
-              Row(
-                children: [
-                    SvgPicture.asset(
-                    'assets/icons/auth.svg', 
-                    width: 24, 
-                    height: 24,
-                    color: Colors.black,
-                    ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'App Lock',
-                          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Secure your app with biometrics, such as Face ID.',
-                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
-                          softWrap: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                  CupertinoSwitch(
-                    value: _isAppLockEnabled,
-                    onChanged: (v) async {
-                      await _toggleAppLock(v);
-                    },
-                  ),
-                ],
-              ),
+              
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  SvgPicture.asset('assets/icons/notification.svg', width: 24, height: 24),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Notifications',
-                          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Receive alerts when a transaction has occured or if a statement has been uploaded to your account.',
-                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
-                          softWrap: true,
-                        ),
-                      ],
+              
+              // Notifications toggle with modern styling
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
                     ),
-                  ),
-                  CupertinoSwitch(
-                    value: _isNotificationsEnabled,
-                    onChanged: (v) async {
-                      await _toggleNotifications(v);
-                    },
-                  ),
-                ],
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/icons/notification.svg', 
+                        width: 24, 
+                        height: 24,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Notifications',
+                            style: GoogleFonts.inter(
+                              fontSize: 18, 
+                              fontWeight: FontWeight.w600, 
+                              color: Colors.black,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Receive alerts when a transaction has occured or if a statement has been uploaded to your account.',
+                            style: GoogleFonts.inter(
+                              fontSize: 12, 
+                              color: Colors.grey[600],
+                              height: 1.3,
+                            ),
+                            softWrap: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    CupertinoSwitch(
+                      value: _isNotificationsEnabled,
+                      activeColor: AppColors.primary,
+                      onChanged: (v) async {
+                        await _toggleNotifications(v);
+                      },
+                    ),
+                  ],
+                ),
               ),
+              
               Spacer(),
+              
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: 56,
                 child: ElevatedButton(
                   onPressed: () async {
                     // Show loading indicator
@@ -467,14 +562,46 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    elevation: 1,
+                    shadowColor: AppColors.primary.withOpacity(0.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: Text(
                     'Continue',
                     style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
+                ),
+              ),
+              
+              // Page indicator dots
+              Container(
+                padding: const EdgeInsets.only(top: 30, bottom: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.shade300,
+                      ),
+                    ),
+                    Container(
+                      width: 24,
+                      height: 6,
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
