@@ -89,7 +89,7 @@ export const isUIDLinked = functions.https.onCall(async (data: { uid: any; users
   if (!uid || !usersCollectionID) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "Must provide 'cid' and 'usersCollectionID'."
+      "Must provide 'uid' and 'usersCollectionID'."
     );
   }
 

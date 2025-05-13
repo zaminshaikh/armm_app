@@ -11,7 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-
 /// A service class for interacting with the Firestore database.
 ///
 /// This class handles operations related to the user's data in Firestore,
@@ -49,7 +48,6 @@ class DatabaseService {
   ///
   /// Returns a [Future] that completes with a [DatabaseService] instance or `null` if the [uid] is not found.
   /// Each user in Firestore has a document with a unique [uid] field. If the [uid] is found, the method fetches the [cid] and connected users from the document.
-  
   static Future<DatabaseService?> fetchCID(String uid, BuildContext context) async {
     print('fetchCID: Starting fetch for UID: $uid');
     
@@ -94,7 +92,6 @@ class DatabaseService {
     print('fetchCID: Returning DatabaseService instance for UID: $uid');
     return db;
   }
-
 
   /// Sets the sub-collections for the given [DatabaseService] instance.
   ///
@@ -469,10 +466,6 @@ class DatabaseService {
         return false;
       }
     }
-
-
-
-
 
   /// Checks if a document with a specific ID is linked to a user.
   ///

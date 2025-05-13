@@ -207,6 +207,24 @@ class AppleAuthService {
         
         log('Successfully signed in with Firebase using Apple ID: ${user.uid}');
 
+        // Check if this Apple UID is already linked to any user profile using the cloud function
+        final db = DatabaseService(user.uid); 
+        final bool isAlreadyLinked = await db.isUIDLinked(user.uid);
+        
+        if (isAlreadyLinked) {
+          log('Error: This Apple account is already linked to a user profile.');
+          if (context.mounted) {
+            await CustomAlertDialog.showAlertDialog(
+              context,
+              'Account Already Linked',
+              'This Apple account is already linked to a user profile. You cannot link it to a new profile. Please sign in or contact support.',
+              icon: const Icon(Icons.error_outline, color: Colors.red),
+            );
+          }
+          await FirebaseAuth.instance.signOut(); // Sign out the user
+          return;
+        }
+
         // Process the user data
         String displayName = 'Apple User';
         if (appleCredential.givenName != null && appleCredential.familyName != null) {
