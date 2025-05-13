@@ -221,45 +221,6 @@ class _ClientIDPageState extends State<ClientIDPage> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Continue Button
-                  AuthButton(
-                    label: 'Continue',
-                    onPressed: () async {
-                      log('client_id_page.dart: Checking CID: ${_cidController.text}');
-                      setState(() => isLoading = true);
-                      final bool valid = await isValidCID(_cidController.text);
-                      setState(() => isLoading = false);
-
-                      if (!valid) {
-                        return;
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EmailPage(cid: _cidController.text),
-                        ),
-                      );
-                    },
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    isEnabled: _isCIDValid,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // OR Divider
-                  const Row(
-                    children: [
-                      Expanded(child: Divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text('or sign up with', style: TextStyle(color: Colors.grey)),
-                      ),
-                      Expanded(child: Divider()),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -316,7 +277,44 @@ class _ClientIDPageState extends State<ClientIDPage> {
                       // Add spacing only if both buttons are shown
                     ],
                   ),
+                  const SizedBox(height: 12),
+                  
+                  // OR Divider
+                  const Row(
+                    children: [
+                      Expanded(child: Divider()),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('or', style: TextStyle(color: Colors.grey)),
+                      ),
+                      Expanded(child: Divider()),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
 
+                  // Continue Button
+                  AuthButton(
+                    label: 'Continue with email',
+                    onPressed: () async {
+                      log('client_id_page.dart: Checking CID: ${_cidController.text}');
+                      setState(() => isLoading = true);
+                      final bool valid = await isValidCID(_cidController.text);
+                      setState(() => isLoading = false);
+
+                      if (!valid) {
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EmailPage(cid: _cidController.text),
+                        ),
+                      );
+                    },
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    isEnabled: _isCIDValid,
+                  ),
                   const SizedBox(height: 24),
 
                   // Already have an account? Log in
