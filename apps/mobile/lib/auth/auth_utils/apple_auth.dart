@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
+import 'package:armm_app/auth/signup/profile_picture_page.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -118,6 +120,14 @@ class AppleAuthService {
         } else {
           debugPrint('login.dart: Notifications switch is OFF, not updating Firebase token...'); // Debugging output
         }
+
+        // Navigate to Dashboard
+        if (context.mounted) {
+          await Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const DashboardPage()),
+          );
+        }
                 
         return true;
       } catch (signInError) {
@@ -206,6 +216,24 @@ class AppleAuthService {
         }
         
         log('Successfully signed in with Firebase using Apple ID: ${user.uid}');
+
+        // Check if this Apple UID is already linked to any user profile using the cloud function
+        final db = DatabaseService(user.uid); 
+        final bool isAlreadyLinked = await db.isUIDLinked(user.uid);
+        
+        if (isAlreadyLinked) {
+          log('Error: This Apple account is already linked to a user profile.');
+          if (context.mounted) {
+            await CustomAlertDialog.showAlertDialog(
+              context,
+              'Account Already Linked',
+              'This Apple account is already linked to a user profile. You cannot link it to a new profile. Please sign in or contact support.',
+              icon: const Icon(Icons.error_outline, color: Colors.red),
+            );
+          }
+          await FirebaseAuth.instance.signOut(); // Sign out the user
+          return;
+        }
 
         // Process the user data
         String displayName = 'Apple User';
@@ -304,21 +332,18 @@ class AppleAuthService {
       if (!context.mounted) return;
       await updateFirebaseMessagingToken(user, context);
 
-      // Notify user of success
+      // Navigate to ProfilePicturePage for the next step of onboarding
       if (context.mounted) {
-        await CustomAlertDialog.showAlertDialog(
+        // Navigate to the ProfilePicturePage to continue onboarding
+        await Navigator.push(
           context,
-          'Success',
-          'Your account has been created and linked successfully.',
-          icon: const Icon(Icons.check_circle_outline_rounded,
-              color: Colors.green),
+          MaterialPageRoute(
+            builder: (context) => ProfilePicturePage(
+              cid: cid,
+              email: user.email ?? '',
+            ),
+          ),
         );
-        if (!context.mounted) return;
-        // Update app state and navigate to dashboard
-        Provider.of<AuthState>(context, listen: false)
-            .setInitiallyAuthenticated(true);
-        await Navigator.of(context)
-            .pushNamedAndRemoveUntil('/dashboard', (route) => false);
       }
     } catch (e) {
       log('Error in _processSignUp: $e', stackTrace: StackTrace.current);

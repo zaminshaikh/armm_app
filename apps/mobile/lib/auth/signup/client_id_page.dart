@@ -264,6 +264,31 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Only show Apple button on iOS
+                      SocialTile(
+                        icon: const Icon(
+                          FontAwesomeIcons.google,
+                          color: AppColors.primary,
+                          size: 30,
+                        ),
+                        onTap: () async {
+                          setState(() => isLoading = true);
+                          bool shouldSignUp = await isValidCID(_cidController.text);
+                          if (!shouldSignUp) {
+                            setState(() => isLoading = false);
+                            return;
+                          }
+                          if (!context.mounted) return; 
+                          // Dismiss the keyboard
+                          FocusScope.of(context).unfocus();
+                          try {
+                            await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
+                          } finally {
+                            setState(() => isLoading = false);
+                          }
+                        },
+                      ),
+                      if (Platform.isIOS)
+                        const SizedBox(width: 20),
                       if (Platform.isIOS)
                         SocialTile(
                           icon: const Icon(
@@ -289,31 +314,6 @@ class _ClientIDPageState extends State<ClientIDPage> {
                           }
                         ),
                       // Add spacing only if both buttons are shown
-                      if (Platform.isIOS)
-                        const SizedBox(width: 20),
-                      SocialTile(
-                        icon: const Icon(
-                          FontAwesomeIcons.google,
-                          color: AppColors.primary,
-                          size: 30,
-                        ),
-                        onTap: () async {
-                          setState(() => isLoading = true);
-                          bool shouldSignUp = await isValidCID(_cidController.text);
-                          if (!shouldSignUp) {
-                            setState(() => isLoading = false);
-                            return;
-                          }
-                          if (!context.mounted) return; 
-                          // Dismiss the keyboard
-                          FocusScope.of(context).unfocus();
-                          try {
-                            await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
-                          } finally {
-                            setState(() => isLoading = false);
-                          }
-                        },
-                      ),
                     ],
                   ),
 
