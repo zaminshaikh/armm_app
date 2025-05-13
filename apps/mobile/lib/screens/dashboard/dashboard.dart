@@ -95,7 +95,7 @@ class _DashboardPageState extends State<DashboardPage>
         .instance
         .ref('profilePics/${client!.cid}.jpg')
         .getDownloadURL()
-        .catchError((_) => null);
+        .catchError((_) => '');
     }
   }
 

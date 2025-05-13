@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'total_assets_section.dart'; // Adjust the import according to your project structure
 import 'package:armm_app/utils/utilities.dart';
-import 'package:firebase_storage/firebase_storage.dart'; // ← added
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Client? client; // ← nullable
@@ -35,7 +34,12 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         ? FirebaseStorage.instance
             .ref('profilePics/${client!.cid}.jpg')
             .getDownloadURL()
-            .catchError((_) => null)
+            .then((url) => url as String?) // Convert non-null String to String?
+            .catchError((error) {
+              // Log the error for debugging purposes
+              log('Error loading profile picture: $error');
+              return null as String?; // Return null of type String?
+            })
         : Future.value(null);
 
     return AppBar(
