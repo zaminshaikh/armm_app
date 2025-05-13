@@ -19,9 +19,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 class ClientIDPage extends StatefulWidget {
-
   const ClientIDPage({Key? key}) : super(key: key);
 
   @override
@@ -43,7 +41,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
     final text = _cidController.text;
     // Check if the text is exactly 8 digits
     final isValid = text.length == 8 && RegExp(r'^\d{8}$').hasMatch(text);
-    
+
     if (isValid != _isCIDValid) {
       setState(() {
         _isCIDValid = isValid;
@@ -96,7 +94,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
       );
       return false;
     }
-    
+
     return true;
   }
 
@@ -113,187 +111,124 @@ class _ClientIDPageState extends State<ClientIDPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 72),
+          GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 72),
 
-                  // Center illustration
-                  Center(
-                    child: SvgPicture.asset(
-                      'assets/icons/client_id.svg',
-                      height: 180,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Title text: "First, enter your CID"
-                  Center(
-                    child: Text(
-                      'First, enter your CID',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Subtitle text
-                  const Center(
-                    child: Text(
-                      'This will help us confirm your identity\n'
-                      'to protect your data securely',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        height: 1.5,
+                    // Center illustration
+                    Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/client_id.svg',
+                        height: 180,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 30),
 
-        // "What is my Client ID?" (Clickable text to open a dialog)
-        Center(
-          child: GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                    return CustomAlertDialog(
-                    title: 'What is a Client ID?',
-                    message: 'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
-                    icon: const Icon(
-                      Icons.info_outline_rounded,
-                      color: AppColors.primary,
-                    ),
-                    actions: [
-                      TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppColors.primary,
+                    // Title text: "First, enter your CID"
+                    Center(
+                      child: Text(
+                        'First, enter your CID',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                              color: Colors.black,
+                            ),
+                        textAlign: TextAlign.center,
                       ),
-                      child: const Text('Close'),
-                      ),
-                    ],
-                    );
-                },
-              );
-            },
-            child: Container(
-              color: Colors.transparent,
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.info_outline_rounded,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    'What is my Client ID?',
-                    style: TextStyle(
-                      color: Colors.grey,
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-                  
-                  
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 8),
 
-                  // Client ID Text Field
-                  AuthTextField(
-                    hintText: 'Client ID',
-                    controller: _cidController,
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Continue Button
-                  AuthButton(
-                    label: 'Continue',
-                    onPressed: () async {
-                      log('client_id_page.dart: Checking CID: ${_cidController.text}');
-                      setState(() => isLoading = true);
-                      final bool valid = await isValidCID(_cidController.text);
-                      setState(() => isLoading = false);
-
-                      if (!valid) {
-                        return;
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EmailPage(cid: _cidController.text),
+                    // Subtitle text
+                    const Center(
+                      child: Text(
+                        'This will help us confirm your identity\n'
+                        'to protect your data securely',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          height: 1.5,
                         ),
-                      );
-                    },
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    isEnabled: _isCIDValid,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // OR Divider
-                  const Row(
-                    children: [
-                      Expanded(child: Divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text('or sign up with', style: TextStyle(color: Colors.grey)),
                       ),
-                      Expanded(child: Divider()),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 16),
 
-                  const SizedBox(height: 16),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Only show Apple button on iOS
-                      SocialTile(
-                        icon: const Icon(
-                          FontAwesomeIcons.google,
-                          color: AppColors.primary,
-                          size: 30,
-                        ),
-                        onTap: () async {
-                          setState(() => isLoading = true);
-                          bool shouldSignUp = await isValidCID(_cidController.text);
-                          if (!shouldSignUp) {
-                            setState(() => isLoading = false);
-                            return;
-                          }
-                          if (!context.mounted) return; 
-                          // Dismiss the keyboard
-                          FocusScope.of(context).unfocus();
-                          try {
-                            await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
-                          } finally {
-                            setState(() => isLoading = false);
-                          }
+                    // "What is my Client ID?" (Clickable text to open a dialog)
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomAlertDialog(
+                                title: 'What is a Client ID?',
+                                message:
+                                    'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
+                                icon: const Icon(
+                                  Icons.info_outline_rounded,
+                                  color: AppColors.primary,
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: AppColors.primary,
+                                    ),
+                                    child: const Text('Close'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.info_outline_rounded,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 12),
+                              Text(
+                                'What is my Client ID?',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      if (Platform.isIOS)
-                        const SizedBox(width: 20),
-                      if (Platform.isIOS)
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Client ID Text Field
+                    AuthTextField(
+                      hintText: 'Client ID',
+                      controller: _cidController,
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Only show Apple button on iOS
                         SocialTile(
                           icon: const Icon(
-                            FontAwesomeIcons.apple,
-                            color: Colors.black,
+                            FontAwesomeIcons.google,
+                            color: AppColors.primary,
                             size: 30,
                           ),
                           onTap: () async {
@@ -303,38 +238,104 @@ class _ClientIDPageState extends State<ClientIDPage> {
                               setState(() => isLoading = false);
                               return;
                             }
-                            if (!context.mounted) return; 
+                            if (!context.mounted) return;
+                            // Dismiss the keyboard
+                            FocusScope.of(context).unfocus();
                             try {
-                              await AppleAuthService().signUpWithApple(context, _cidController.text);
+                              await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
                             } finally {
-                              if (mounted){
-                                setState(() => isLoading = false);
-                              }
+                              setState(() => isLoading = false);
                             }
-                          }
+                          },
                         ),
-                      // Add spacing only if both buttons are shown
-                    ],
-                  ),
+                        if (Platform.isIOS) const SizedBox(width: 20),
+                        if (Platform.isIOS)
+                          SocialTile(
+                            icon: const Icon(
+                              FontAwesomeIcons.apple,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                            onTap: () async {
+                              setState(() => isLoading = true);
+                              bool shouldSignUp = await isValidCID(_cidController.text);
+                              if (!shouldSignUp) {
+                                setState(() => isLoading = false);
+                                return;
+                              }
+                              if (!context.mounted) return;
+                              // Dismiss the keyboard
+                              FocusScope.of(context).unfocus();
+                              try {
+                                await AppleAuthService().signUpWithApple(context, _cidController.text);
+                              } finally {
+                                if (mounted) {
+                                  setState(() => isLoading = false);
+                                }
+                              }
+                            },
+                          ),
+                        // Add spacing only if both buttons are shown
+                      ],
+                    ),
+                    const SizedBox(height: 12),
 
-                  const SizedBox(height: 24),
-
-                  // Already have an account? Log in
-                  AuthFooter(
-                    primaryColor: AppColors.primary,
-                    onSignUpPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
+                    // OR Divider
+                    const Row(
+                      children: [
+                        Expanded(child: Divider()),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('or', style: TextStyle(color: Colors.grey)),
                         ),
-                      );
-                    },
-                    questionText: 'Already have an account?',
-                    buttonText: 'Log in',
-                  ),
-                  const SizedBox(height: 24),
-                ],
+                        Expanded(child: Divider()),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Continue Button
+                    AuthButton(
+                      label: 'Continue with email',
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus(); // Dismiss keyboard
+                        log('client_id_page.dart: Checking CID: ${_cidController.text}');
+                        setState(() => isLoading = true);
+                        final bool valid = await isValidCID(_cidController.text);
+                        setState(() => isLoading = false);
+
+                        if (!valid) {
+                          return;
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EmailPage(cid: _cidController.text),
+                          ),
+                        );
+                      },
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      isEnabled: _isCIDValid,
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Already have an account? Log in
+                    AuthFooter(
+                      primaryColor: AppColors.primary,
+                      onSignUpPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
+                      questionText: 'Already have an account?',
+                      buttonText: 'Log in',
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
             ),
           ),
