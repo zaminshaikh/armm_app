@@ -37,6 +37,13 @@ class _SettingsPageState extends State<SettingsPage> {
     _loadSwitchValue();
   }
 
+  @override
+  void dispose() {
+    // Dismiss keyboard if it's open
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.dispose();
+  }
+
   Future<void> _checkNotificationPermission() async {
     var status = await Permission.notification.status;
     setState(() {
@@ -326,6 +333,7 @@ class _SettingsPageState extends State<SettingsPage> {
             TextEditingController newEmailController = TextEditingController();
             TextEditingController currentPasswordController = TextEditingController();
             bool isFormValid = false;
+            bool _isCurrentPasswordVisible = false; // Added for password visibility
 
             // Corrected: This function will now use the dialog's setState
             void validateFormFields(void Function(void Function()) dialogSetState) {
@@ -337,6 +345,7 @@ class _SettingsPageState extends State<SettingsPage> {
             }
 
             Future<void> onContinuePressed() async {
+              FocusScope.of(context).unfocus(); // Dismiss keyboard
               final newEmail = newEmailController.text.trim();
               final currentPassword = currentPasswordController.text.trim();
 
@@ -482,7 +491,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         const SizedBox(height: 24),
                         TextField(
                           controller: currentPasswordController,
-                          obscureText: true,
+                          obscureText: !_isCurrentPasswordVisible,
                           decoration: InputDecoration(
                             hintText: 'Current Password',
                             hintStyle: GoogleFonts.inter(color: Colors.black54),
@@ -492,6 +501,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                               borderSide: BorderSide.none,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                color: Colors.black54,
+                              ),
+                              onPressed: () {
+                                dialogSetState(() {
+                                  _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
+                                });
+                              },
                             ),
                           ),
                           style: GoogleFonts.inter(color: Colors.black),
@@ -586,6 +606,8 @@ class _SettingsPageState extends State<SettingsPage> {
             TextEditingController newPasswordController = TextEditingController();
             TextEditingController currentPasswordController = TextEditingController();
             bool isFormValid = false;
+            bool _isCurrentPasswordVisible = false; // Added for current password visibility
+            bool _isNewPasswordVisible = false; // Added for new password visibility
 
             // Local setState for the dialog
             void validateForm(void Function(void Function()) dialogSetState) {
@@ -597,6 +619,7 @@ class _SettingsPageState extends State<SettingsPage> {
             }
 
             Future<void> onContinuePressed() async {
+              FocusScope.of(context).unfocus(); // Dismiss keyboard
               final newPassword = newPasswordController.text.trim();
               final currentPassword = currentPasswordController.text.trim();
 
@@ -744,7 +767,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         const SizedBox(height: 24),
                         TextField(
                           controller: currentPasswordController,
-                          obscureText: true,
+                          obscureText: !_isCurrentPasswordVisible,
                           decoration: InputDecoration(
                             hintText: 'Current Password',
                             hintStyle: GoogleFonts.inter(color: Colors.black54),
@@ -755,6 +778,17 @@ class _SettingsPageState extends State<SettingsPage> {
                               borderRadius: BorderRadius.circular(30),
                               borderSide: BorderSide.none,
                             ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                color: Colors.black54,
+                              ),
+                              onPressed: () {
+                                dialogSetState(() {
+                                  _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
+                                });
+                              },
+                            ),
                           ),
                           style: GoogleFonts.inter(color: Colors.black),
                           onChanged: (value) => validateForm(dialogSetState),
@@ -762,9 +796,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         const SizedBox(height: 16),
                         TextField(
                           controller: newPasswordController,
-                          obscureText: true,
+                          obscureText: !_isNewPasswordVisible,
                           decoration: InputDecoration(
-                            hintText: 'New Password (min. 6 characters)',
+                            hintText: 'New Password',
                             hintStyle: GoogleFonts.inter(color: Colors.black54),
                             filled: true,
                             fillColor: Color(0xFFF2F3FA),
@@ -772,6 +806,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                               borderSide: BorderSide.none,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isNewPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                color: Colors.black54,
+                              ),
+                              onPressed: () {
+                                dialogSetState(() {
+                                  _isNewPasswordVisible = !_isNewPasswordVisible;
+                                });
+                              },
                             ),
                           ),
                           style: GoogleFonts.inter(color: Colors.black),
