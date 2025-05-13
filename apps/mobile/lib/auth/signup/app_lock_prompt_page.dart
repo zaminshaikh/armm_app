@@ -1,3 +1,15 @@
+/// App Lock & Notifications Setup Page
+/// 
+/// This is part of the signup flow where users can:
+/// 1. Enable/disable app lock with biometric authentication
+/// 2. Enable/disable push notifications
+///
+/// When app lock is enabled, the app will request biometric authentication
+/// (Face ID, Touch ID, or other available method) when the app is opened.
+/// 
+/// When notifications are enabled, the app will register with Firebase Cloud Messaging
+/// to receive push notifications for account activities and statements.
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,15 +19,38 @@ import 'package:provider/provider.dart';
 import 'package:armm_app/utils/resources.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:armm_app/database/auth_helper.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'dart:developer';
 
+/// A page that prompts users to setup app lock and notifications preferences.
+///
+/// This page is shown during the signup flow after creating a user account,
+/// allowing users to enable/disable app lock with biometric authentication
+/// and push notifications.
 class AppLockPromptPage extends StatefulWidget {
+  /// Creates an AppLockPromptPage.
+  /// 
+  /// This page always starts with both toggles in the off position,
+  /// allowing users to opt-in to app lock and notifications.
   const AppLockPromptPage({Key? key}) : super(key: key);
 
   @override
   _AppLockPromptPageState createState() => _AppLockPromptPageState();
 }
 
+/// State for the AppLockPromptPage.
+///
+/// Handles the logic for:
+/// 1. Requesting and managing biometric authentication permissions
+/// 2. Requesting and managing notification permissions
+/// 3. Saving user preferences for app lock and notifications
 class _AppLockPromptPageState extends State<AppLockPromptPage> {
+  // User preferences
   bool _isAppLockEnabled = false;
   bool _isNotificationsEnabled = false;
 
@@ -25,24 +60,222 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
     _loadSettings();
   }
 
+  /// Load user preferences from SharedPreferences.
+  /// 
+  /// Retrieves saved app lock and notifications settings.
+  /// Always starts with both toggles off for new users.
   Future<void> _loadSettings() async {
+    log('Loading app settings');
     final prefs = await SharedPreferences.getInstance();
+    
+    // Always start with both toggles off in the signup flow
+    await prefs.setBool('isAppLockEnabled', false);
+    await prefs.setBool('isNotificationsEnabled', false);
+    
     setState(() {
-      _isAppLockEnabled = prefs.getBool('isAppLockEnabled') ?? false;
-      _isNotificationsEnabled = prefs.getBool('isNotificationsEnabled') ?? false;
+      _isAppLockEnabled = false;
+      _isNotificationsEnabled = false;
     });
+    
+    log('Settings initialized - App lock: $_isAppLockEnabled, Notifications: $_isNotificationsEnabled');
   }
 
-  Future<void> _onToggle(String key, bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(key, value);
-    if (key == 'isAppLockEnabled') {
-      context.read<AuthState>().setAppLockEnabled(value);
+  /// Toggle app lock - requests permission but defers setup logic to Continue button
+  Future<void> _toggleAppLock(bool value) async {
+    log('Toggle app lock requested: $value');
+    
+    if (!value) {
+      // Just turn it off without any permission checks
+      setState(() => _isAppLockEnabled = value);
+      return;
     }
-    setState(() {
-      if (key == 'isAppLockEnabled') _isAppLockEnabled = value;
-      if (key == 'isNotificationsEnabled') _isNotificationsEnabled = value;
-    });
+    
+    // Request biometric authentication when turning on
+    log('Requesting biometric authentication permission');
+    
+    // Use LocalAuthentication to check if biometric authentication is available
+    final LocalAuthentication localAuth = LocalAuthentication();
+    bool canCheckBiometrics = false;
+    
+    try {
+      canCheckBiometrics = await localAuth.canCheckBiometrics;
+      log('Can check biometrics: $canCheckBiometrics');
+      
+      // Check which biometrics are available
+      final availableBiometrics = await localAuth.getAvailableBiometrics();
+      log('Available biometrics: $availableBiometrics');
+    } catch (e) {
+      log('Error checking biometrics: $e');
+    }
+    
+    // If biometrics are available, ask for permission
+    if (canCheckBiometrics) {
+      try {
+        // This will trigger the system permission dialog on iOS and Android
+        bool didAuthenticate = await localAuth.authenticate(
+          localizedReason: 'Please authenticate to enable app lock',
+          options: const AuthenticationOptions(
+            useErrorDialogs: true,
+            stickyAuth: true,
+          ),
+        );
+        
+        log('Authentication result: $didAuthenticate');
+        if (!didAuthenticate) {
+          // User canceled or failed authentication
+          setState(() => _isAppLockEnabled = false);
+          return;
+        }
+        
+        // Authentication succeeded, just update the UI state
+        // The actual setup will be done when the Continue button is pressed
+        setState(() => _isAppLockEnabled = value);
+      } catch (e) {
+        log('Error authenticating: $e');
+        setState(() => _isAppLockEnabled = false);
+        return;
+      }
+    } else {
+      // Show a dialog that biometrics are not available
+      if (mounted) {
+        log('Showing biometrics not available dialog');
+        await showDialog(
+          context: context,
+          builder: (context) => CustomAlertDialog(
+            title: 'Biometrics Not Available',
+            message: 'Your device doesn\'t support or has not set up biometric authentication.',
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        setState(() => _isAppLockEnabled = false);
+      }
+      return;
+    }
+  }
+  
+  /// Configures app lock based on the toggle state
+  /// This method is called when the Continue button is pressed
+  Future<bool> _setupAppLock() async {
+    log('Setting up app lock: $_isAppLockEnabled');
+    
+    // Save preference and update state
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isAppLockEnabled', _isAppLockEnabled);
+    context.read<AuthState>().setAppLockEnabled(_isAppLockEnabled);
+    
+    return true;
+  }
+
+  /// Toggle notifications - requests permission but defers token setup to Continue button
+  Future<void> _toggleNotifications(bool value) async {
+    log('Toggle notifications requested: $value');
+    
+    if (!value) {
+      // Just turn it off without any permission checks
+      setState(() => _isNotificationsEnabled = value);
+      return; // Token deletion will be handled by Continue button
+    }
+    
+    // Request notification permission when turning on
+    log('Requesting notification permission');
+    
+    // Request permission using FirebaseMessaging
+    var settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      provisional: false,
+      criticalAlert: true,
+    );
+    
+    log('Notification authorization status: ${settings.authorizationStatus}');
+    
+    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+      // User denied notification permission
+      log('Notification permission denied');
+      if (mounted) {
+        await showDialog(
+          context: context,
+          builder: (context) => CustomAlertDialog(
+            title: 'Notifications Permission',
+            message: 'Notifications permission was denied. You can enable it in your device settings.',
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+      setState(() => _isNotificationsEnabled = false);
+      return;
+    }
+    
+    // Permission was granted, update the UI state
+    // Token setup will be handled when the Continue button is pressed
+    setState(() => _isNotificationsEnabled = value);
+  }
+  
+  /// Configures notifications based on the toggle state
+  /// This method is called when the Continue button is pressed
+  Future<bool> _setupNotifications() async {
+    log('Setting up notifications: $_isNotificationsEnabled');
+    
+    // Save preference
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isNotificationsEnabled', _isNotificationsEnabled);
+    
+    // Handle Firebase messaging token
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && mounted) {
+      if (_isNotificationsEnabled) {
+        // Update Firebase messaging token
+        log('Updating Firebase messaging token for user: ${user.uid}');
+        try {
+          await updateFirebaseMessagingToken(user, context);
+          log('Successfully updated Firebase messaging token');
+        } catch (e) {
+          log('Error updating Firebase messaging token: $e');
+          // Show error dialog for better user experience
+          if (mounted) {
+            await showDialog(
+              context: context,
+              builder: (context) => CustomAlertDialog(
+                title: 'Notification Setup',
+                message: 'There was an issue enabling notifications. You can try again in settings later.',
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          }
+          // Continue despite error
+        }
+      } else {
+        // Delete Firebase token
+        log('Deleting Firebase messaging token for user: ${user.uid}');
+        try {
+          await deleteFirebaseMessagingToken(user, context);
+          log('Successfully deleted Firebase messaging token');
+        } catch (e) {
+          log('Error deleting Firebase messaging token: $e');
+          // Non-critical error, continue
+        }
+      }
+    } else {
+      log('No user logged in, token management will happen when user logs in');
+    }
+    
+    return true;
   }
 
   @override
@@ -133,7 +366,9 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
                   ),
                   CupertinoSwitch(
                     value: _isAppLockEnabled,
-                    onChanged: (v) => _onToggle('isAppLockEnabled', v),
+                    onChanged: (v) async {
+                      await _toggleAppLock(v);
+                    },
                   ),
                 ],
               ),
@@ -161,7 +396,9 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
                   ),
                   CupertinoSwitch(
                     value: _isNotificationsEnabled,
-                    onChanged: (v) => _onToggle('isNotificationsEnabled', v),
+                    onChanged: (v) async {
+                      await _toggleNotifications(v);
+                    },
                   ),
                 ],
               ),
@@ -170,11 +407,63 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => const DashboardPage()),
+                  onPressed: () async {
+                    // Show loading indicator
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return const CustomProgressIndicator();
+                      },
                     );
+                    
+                    try {
+                      // Permissions were already requested by the toggle buttons
+                      // Now we need to handle the actual setup logic
+                      
+                      // Setup app lock
+                      log('Running app lock setup');
+                      await _setupAppLock();
+                      
+                      // Setup notifications (including token management)
+                      log('Running notifications setup');
+                      await _setupNotifications();
+                      
+                      log('Setup completed - App lock: $_isAppLockEnabled, Notifications: $_isNotificationsEnabled');
+                      
+                      // Close loading dialog
+                      if (mounted) {
+                        Navigator.pop(context);
+                        
+                        // Navigate to dashboard
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const DashboardPage()),
+                        );
+                      }
+                    } catch (e) {
+                      // Handle any unexpected errors
+                      log('Error during setup: $e');
+                      if (mounted) {
+                        // Close loading dialog
+                        Navigator.pop(context);
+                        
+                        // Show error dialog
+                        showDialog(
+                          context: context,
+                          builder: (context) => CustomAlertDialog(
+                            title: 'Setup Error',
+                            message: 'There was an unexpected error during setup. You can adjust your settings later in the app.',
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
