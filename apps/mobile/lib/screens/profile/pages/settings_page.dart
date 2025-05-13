@@ -679,52 +679,166 @@ class _SettingsPageState extends State<SettingsPage> {
                 return;
               }
               
-              try {
-                var user = FirebaseAuth.instance.currentUser;
-                if (user != null) {
-                  await user.updatePassword(newPassword);
+              // First check how the user is authenticated
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                List<String> providers = [];
+                for (var info in user.providerData) {
+                  providers.add(info.providerId);
+                }
+
+                // Check if user is OAuth authenticated
+                if (providers.contains('apple.com')) {
                   if (parentContext.mounted) {
                     showDialog(
                       context: parentContext,
-                      builder: (BuildContext context) {
-                        return CustomAlertDialog(
-                          title: 'Password Updated',
-                          message: 'Your password has been successfully updated.',
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Cannot Change Password',
+                        message: 'You signed up with Apple. Please manage your password through your Apple ID settings.',
+                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                      ),
                     );
                   }
-                }
-              } catch (e) {
-                log('settings.dart: Error updating password: $e');
-                if (parentContext.mounted) {
-                  showDialog(
-                    context: parentContext,
-                    builder: (BuildContext context) {
-                      return CustomAlertDialog(
-                        title: 'Error',
-                        message: 'Error updating password: $e',
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  return;
+                } else if (providers.contains('google.com')) {
+                  if (parentContext.mounted) {
+                    showDialog(
+                      context: parentContext,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Cannot Change Password',
+                        message: 'You signed up with Google. Please manage your password through your Google Account settings.',
+                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                      ),
+                    );
+                  }
+                  return;
                 }
               }
+
+              // First ask for current password to re-authenticate
+              TextEditingController currentPasswordController = TextEditingController();
+              await showDialog(
+                context: parentContext,
+                builder: (context) => CustomAlertDialog(
+                  title: 'Verification Required',
+                  message: 'Please enter your current password to verify your identity.',
+                  input: Container(
+                    width: 300,
+                    child: TextField(
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: Colors.black87,
+                      ),
+                      controller: currentPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Current password',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: Text('Verify'),
+                    ),
+                  ],
+                ),
+              ).then((confirmed) async {
+                if (confirmed == true) {
+                  try {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null && user.email != null) {
+                      // Reauthenticate with the current password
+                      AuthCredential credential = EmailAuthProvider.credential(
+                        email: user.email!,
+                        password: currentPasswordController.text,
+                      );
+                      await user.reauthenticateWithCredential(credential);
+                      
+                      // Now update the password
+                      await user.updatePassword(newPassword);
+                      
+                      if (parentContext.mounted) {
+                        showDialog(
+                          context: parentContext,
+                          builder: (BuildContext context) {
+                            return CustomAlertDialog(
+                              title: 'Password Updated',
+                              message: 'Your password has been successfully updated.',
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
+                  } catch (e) {
+                    log('settings.dart: Error updating password: $e');
+                    if (parentContext.mounted) {
+                      String errorMessage = 'An error occurred while updating your password.';
+                      if (e is FirebaseAuthException) {
+                        switch (e.code) {
+                          case 'requires-recent-login':
+                            errorMessage = 'Please log out and log back in to update your password.';
+                            break;
+                          case 'weak-password':
+                            errorMessage = 'The password is too weak.';
+                            break;
+                          case 'wrong-password':
+                            errorMessage = 'Incorrect current password. Please try again.';
+                            break;
+                          case 'too-many-requests':
+                            errorMessage = 'Too many attempts. Please try again later.';
+                            break;
+                          case 'network-request-failed':
+                            errorMessage = 'Network error. Please check your connection.';
+                            break;
+                          case 'user-mismatch':
+                            errorMessage = 'The credential does not match the user you\'re trying to update.';
+                            break;
+                          case 'user-not-found':
+                            errorMessage = 'No user found for the provided email.';
+                            break;
+                          case 'invalid-credential':
+                            errorMessage = 'The credential provided is invalid or has expired.';
+                            break;
+                          default:
+                            errorMessage = 'Authentication failed: ${e.message}';
+                        }
+                      } else {
+                        errorMessage = 'Error: ${e.toString()}';
+                      }
+                      
+                      showDialog(
+                        context: parentContext,
+                        builder: (context) => CustomAlertDialog(
+                          title: 'Password Change Failed',
+                          message: errorMessage,
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  }
+                }
+              });
             }
 
             return StatefulBuilder(
