@@ -657,20 +657,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   await user.updatePassword(newPassword);
                   
                   if (parentContext.mounted) {
-                    showDialog( // Toast-like notification
-                      context: parentContext,
-                      builder: (BuildContext context) {
-                        return CustomAlertDialog(
-                          title: 'Password Updated',
-                          message: 'Your password has been successfully updated.',
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                          ],
-                        );
-                      },
+                    ScaffoldMessenger.of(parentContext).showSnackBar(
+                      const SnackBar(
+                        content: Text('Your password has been successfully updated.'),
+                        duration: Duration(seconds: 3), // You can adjust the duration
+                      ),
                     );
                   }
                 } catch (e) {
@@ -695,7 +686,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   }
                   log('settings.dart: Error updating password: $errorMessage, code: ${e is FirebaseAuthException ? e.code : 'N/A'}');
                   if (parentContext.mounted) {
-                    showDialog( // Toast-like notification
+                    showDialog( // Toast-like notification for errors
                       context: parentContext,
                       builder: (BuildContext context) {
                         return CustomAlertDialog(
