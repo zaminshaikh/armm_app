@@ -2,6 +2,7 @@
 
 
 import 'package:armm_app/auth/login/login.dart';
+import 'package:armm_app/auth/signup/profile_picture_page.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
@@ -256,14 +257,14 @@ class GoogleAuthService {
         return null;
       }
 
-      // Navigate to the Dashboard page
+      // Navigate to the ProfilePicturePage to continue onboarding
       await Navigator.push(
         context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const DashboardPage(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-              child,
+        MaterialPageRoute(
+          builder: (context) => ProfilePicturePage(
+            cid: cid,
+            email: user.email ?? '',
+          ),
         ),
       );
 
