@@ -460,110 +460,112 @@ class _SettingsPageState extends State<SettingsPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 8),
-                        SvgPicture.asset(
-                          'assets/icons/change_email.svg',
-                          height: 180,
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          'Change Email',
-                          style: GoogleFonts.inter(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                  child: SingleChildScrollView( // Wrap with SingleChildScrollView
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 8),
+                          SvgPicture.asset(
+                            'assets/icons/change_email.svg',
+                            height: 180,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Enter your current password and new email address.',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        TextField(
-                          controller: currentPasswordController,
-                          obscureText: !_isCurrentPasswordVisible,
-                          decoration: InputDecoration(
-                            hintText: 'Current Password',
-                            hintStyle: GoogleFonts.inter(color: Colors.black54),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3FA),
-                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                color: Colors.black54,
-                              ),
-                              onPressed: () {
-                                dialogSetState(() {
-                                  _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
-                                });
-                              },
+                          const SizedBox(height: 24),
+                          Text(
+                            'Change Email',
+                            style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
                           ),
-                          style: GoogleFonts.inter(color: Colors.black),
-                          onChanged: (value) => validateFormFields(dialogSetState), // Corrected
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: newEmailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            hintText: 'New Email',
-                            hintStyle: GoogleFonts.inter(color: Colors.black54),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3FA),
-                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
+                          const SizedBox(height: 12),
+                          Text(
+                            'Enter your current password and new email address.',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              color: Colors.black,
                             ),
                           ),
-                          style: GoogleFonts.inter(color: Colors.black),
-                          onChanged: (value) => validateFormFields(dialogSetState), // Corrected
-                        ),
-                        const SizedBox(height: 24),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: isFormValid ? onContinuePressed : null,
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
+                          const SizedBox(height: 24),
+                          TextField(
+                            controller: currentPasswordController,
+                            obscureText: !_isCurrentPasswordVisible,
+                            decoration: InputDecoration(
+                              hintText: 'Current Password',
+                              hintStyle: GoogleFonts.inter(color: Colors.black54),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3FA),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
                               ),
-                              backgroundColor: isFormValid ? AppColors.primary : Colors.grey[300]!,
-                              disabledBackgroundColor: Colors.transparent, // Consider a less transparent color for disabled
-                              side: BorderSide(
-                                color: isFormValid ? AppColors.primary : Colors.grey[300]!,
-                                width: 2,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.black54,
+                                ),
+                                onPressed: () {
+                                  dialogSetState(() {
+                                    _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
+                                  });
+                                },
                               ),
-                              elevation: 0,
                             ),
-                            child: Text(
-                              'Continue',
-                              style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: isFormValid ? Colors.white : Colors.grey[600]!,
+                            style: GoogleFonts.inter(color: Colors.black),
+                            onChanged: (value) => validateFormFields(dialogSetState), // Corrected
+                          ),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: newEmailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              hintText: 'New Email',
+                              hintStyle: GoogleFonts.inter(color: Colors.black54),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3FA),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                            style: GoogleFonts.inter(color: Colors.black),
+                            onChanged: (value) => validateFormFields(dialogSetState), // Corrected
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: isFormValid ? onContinuePressed : null,
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                backgroundColor: isFormValid ? AppColors.primary : Colors.grey[300]!,
+                                disabledBackgroundColor: Colors.transparent, // Consider a less transparent color for disabled
+                                side: BorderSide(
+                                  color: isFormValid ? AppColors.primary : Colors.grey[300]!,
+                                  width: 2,
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'Continue',
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: isFormValid ? Colors.white : Colors.grey[600]!,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -736,121 +738,123 @@ class _SettingsPageState extends State<SettingsPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 8),
-                        SvgPicture.asset(
-                          'assets/icons/change_password.svg', 
-                          height: 180,
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          'Change Password',
-                          style: GoogleFonts.inter(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                  child: SingleChildScrollView( // Wrap with SingleChildScrollView
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 8),
+                          SvgPicture.asset(
+                            'assets/icons/change_password.svg', 
+                            height: 180,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Enter your current password and new password.',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        TextField(
-                          controller: currentPasswordController,
-                          obscureText: !_isCurrentPasswordVisible,
-                          decoration: InputDecoration(
-                            hintText: 'Current Password',
-                            hintStyle: GoogleFonts.inter(color: Colors.black54),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3FA),
-                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                color: Colors.black54,
-                              ),
-                              onPressed: () {
-                                dialogSetState(() {
-                                  _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
-                                });
-                              },
+                          const SizedBox(height: 24),
+                          Text(
+                            'Change Password',
+                            style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
                           ),
-                          style: GoogleFonts.inter(color: Colors.black),
-                          onChanged: (value) => validateForm(dialogSetState),
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: newPasswordController,
-                          obscureText: !_isNewPasswordVisible,
-                          decoration: InputDecoration(
-                            hintText: 'New Password',
-                            hintStyle: GoogleFonts.inter(color: Colors.black54),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3FA),
-                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _isNewPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                color: Colors.black54,
-                              ),
-                              onPressed: () {
-                                dialogSetState(() {
-                                  _isNewPasswordVisible = !_isNewPasswordVisible;
-                                });
-                              },
+                          const SizedBox(height: 12),
+                          Text(
+                            'Enter your current password and new password.',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              color: Colors.black,
                             ),
                           ),
-                          style: GoogleFonts.inter(color: Colors.black),
-                          onChanged: (value) => validateForm(dialogSetState),
-                        ),
-                        const SizedBox(height: 24),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: isFormValid ? onContinuePressed : null,
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
+                          const SizedBox(height: 24),
+                          TextField(
+                            controller: currentPasswordController,
+                            obscureText: !_isCurrentPasswordVisible,
+                            decoration: InputDecoration(
+                              hintText: 'Current Password',
+                              hintStyle: GoogleFonts.inter(color: Colors.black54),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3FA),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
                               ),
-                              backgroundColor: isFormValid ? AppColors.primary : Colors.grey[300]!,
-                              disabledBackgroundColor: Colors.transparent,
-                              side: BorderSide(
-                                color: isFormValid ? AppColors.primary : Colors.grey[300]!,
-                                width: 2,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.black54,
+                                ),
+                                onPressed: () {
+                                  dialogSetState(() {
+                                    _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
+                                  });
+                                },
                               ),
-                              elevation: 0,
                             ),
-                            child: Text(
-                              'Continue',
-                              style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: isFormValid ? Colors.white : Colors.grey[600]!,
+                            style: GoogleFonts.inter(color: Colors.black),
+                            onChanged: (value) => validateForm(dialogSetState),
+                          ),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: newPasswordController,
+                            obscureText: !_isNewPasswordVisible,
+                            decoration: InputDecoration(
+                              hintText: 'New Password',
+                              hintStyle: GoogleFonts.inter(color: Colors.black54),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3FA),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isNewPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.black54,
+                                ),
+                                onPressed: () {
+                                  dialogSetState(() {
+                                    _isNewPasswordVisible = !_isNewPasswordVisible;
+                                  });
+                                },
+                              ),
+                            ),
+                            style: GoogleFonts.inter(color: Colors.black),
+                            onChanged: (value) => validateForm(dialogSetState),
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: isFormValid ? onContinuePressed : null,
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                backgroundColor: isFormValid ? AppColors.primary : Colors.grey[300]!,
+                                disabledBackgroundColor: Colors.transparent,
+                                side: BorderSide(
+                                  color: isFormValid ? AppColors.primary : Colors.grey[300]!,
+                                  width: 2,
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'Continue',
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: isFormValid ? Colors.white : Colors.grey[600]!,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
