@@ -235,6 +235,14 @@ class ProfileButtons extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+                const SizedBox(height: 8),
+                // ARMM Logo
+                SvgPicture.asset(
+                  'assets/icons/ARMM_Logo.svg',
+                  width: 30,
+                  height: 30,
+                ),
+                const SizedBox(height: 16),
                 Text(
                 'Disclaimer',
                 style: GoogleFonts.inter(
