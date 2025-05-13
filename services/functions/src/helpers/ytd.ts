@@ -7,6 +7,7 @@
 import * as admin from "firebase-admin";
 import config from "../../config.json";
 import { Activity } from "../interfaces/activity.interface";
+import { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 
 /**
  * Calculates the Year-To-Date (YTD) total for a single user, filtering only certain
@@ -37,7 +38,7 @@ export async function calculateYTDForUser(userCid: string, usersCollectionID: st
     .get();
 
   let ytdTotal = 0;
-  snapshot.forEach((doc) => {
+  snapshot.forEach((doc: QueryDocumentSnapshot) => {
     const activity = doc.data() as Activity;
     ytdTotal += activity.amount;
   });
@@ -127,7 +128,7 @@ export async function updateYTD(cid: string, usersCollectionID: string): Promise
       .get();
 
     // For each parent user, recalc their totalYTD and update
-    const updatePromises = parentUsersSnapshot.docs.map(async (doc) => {
+    const updatePromises = parentUsersSnapshot.docs.map(async (doc: QueryDocumentSnapshot) => {
       const parentUserCID = doc.id;
       const parentUserTotalYTD = await calculateTotalYTDForUser(parentUserCID, usersCollectionID);
 

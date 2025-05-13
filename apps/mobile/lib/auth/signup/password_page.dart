@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_mail_app/open_mail_app.dart';
+import 'package:armm_app/auth/signup/profile_picture_page.dart';
 
 class PasswordPage extends StatefulWidget {
 
@@ -208,8 +209,6 @@ class _PasswordPageState extends State<PasswordPage> {
       String uid = user.uid;
       await db.linkNewUser(user.email!);
       log('User $uid connected to Client ID ${widget.cid}');
-
-
       if (!mounted) return true;
       await updateFirebaseMessagingToken(user, context);
 
@@ -218,9 +217,13 @@ class _PasswordPageState extends State<PasswordPage> {
       if (!mounted) return true;
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const DashboardPage()),
+        MaterialPageRoute(
+          builder: (_) => ProfilePicturePage(
+            cid: widget.cid,
+            email: widget.email,
+          ),
+        ),
       );
-
       return true;
     } else {
       if (!mounted) return false;

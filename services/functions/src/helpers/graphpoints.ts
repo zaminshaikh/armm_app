@@ -8,6 +8,7 @@
 import * as admin from "firebase-admin";
 import config from "../../config.json";
 import { Activity } from "../interfaces/activity.interface";
+import { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 
 const db = admin.firestore();
 
@@ -30,7 +31,9 @@ export async function updateGraphpoints(userCollection: string, userId: string):
 
   // Step 1: Clear existing graphpoints
   const existingGraphpoints = await graphpointsRef.get();
-  const deletePromises = existingGraphpoints.docs.map((doc) => doc.ref.delete());
+  const deletePromises = existingGraphpoints.docs.map((doc: QueryDocumentSnapshot) =>
+    doc.ref.delete()
+  );
   await Promise.all(deletePromises);
 
   // Retrieve user's name to interpret "Personal" accounts

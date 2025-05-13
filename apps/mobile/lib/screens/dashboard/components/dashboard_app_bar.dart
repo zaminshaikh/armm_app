@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'total_assets_section.dart'; // Adjust the import according to your project structure
 import 'package:armm_app/utils/utilities.dart';
 import 'package:firebase_storage/firebase_storage.dart'; // ← added
@@ -12,6 +13,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onNotificationTap;
   final bool implyLeading;
   final bool showNotificationButton;
+  final Future<String?>? profilePicFuture;         // ← new
 
   const DashboardAppBar({
     Key? key,
@@ -19,6 +21,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onNotificationTap,
     this.implyLeading = false,
     this.showNotificationButton = true,
+    this.profilePicFuture,                        // ← new
   }) : super(key: key);
 
   @override
@@ -199,4 +202,6 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         );
   }
+
+  // _getProfilePicUrl can be removed or left unused
 }
