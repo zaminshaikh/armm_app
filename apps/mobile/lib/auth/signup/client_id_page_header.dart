@@ -58,7 +58,7 @@ class ClientIDPageHeader extends StatelessWidget {
                 builder: (BuildContext context) {
                   return CustomAlertDialog(
                     title: 'What is a Client ID?',
-                    message: 'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data.',
+                    message: 'A Client ID (CID) is a unique identifier assigned to you. It helps us verify your identity and ensure the security of your data. You will receive your CID from your administrator via email.',
                     icon: const Icon(
                       Icons.info_outline_rounded,
                       color: Colors.blue,
