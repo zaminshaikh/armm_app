@@ -1,8 +1,10 @@
 import 'package:armm_app/utils/app_bar.dart';
+import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:armm_app/utils/utilities.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'faq_section.dart';
 
 class SupportPage extends StatelessWidget {
@@ -88,13 +90,16 @@ class SupportPage extends StatelessWidget {
                         'assets/icons/phone.svg',
                         width: 24,
                         height: 24,
-                        color: Colors.black,
+                        color: AppColors.primary,
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        '+1 (347) 513-3040',
-                        style: GoogleFonts.inter(
-                          color: Colors.black,
+                      GestureDetector(
+                        onTap: () => launchUrl(Uri.parse('tel:+13475133040')),
+                        child: Text(
+                          '+1 (347) 513-3040',
+                          style: GoogleFonts.inter(
+                            color: AppColors.primary,
+                          ),
                         ),
                       ),
                     ],
@@ -106,13 +111,16 @@ class SupportPage extends StatelessWidget {
                         'assets/icons/mail.svg',
                         width: 24,
                         height: 24,
-                        color: Colors.black,
+                        color: AppColors.primary,
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        'mohammed@armmgroup.com',
-                        style: GoogleFonts.inter(
-                          color: Colors.black,
+                      GestureDetector(
+                        onTap: () => launchUrl(Uri.parse('mailto:mohammed@armmgroup.com')),
+                        child: Text(
+                          'mohammed@armmgroup.com',
+                          style: GoogleFonts.inter(
+                            color: AppColors.primary,
+                          ),
                         ),
                       ),
                     ],
