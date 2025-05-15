@@ -68,6 +68,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
         textInputAction: widget.textInputAction ?? TextInputAction.next,
         onSubmitted: widget.onSubmitted,
         autofillHints: widget.autofillHints,
+        cursorColor: AppColors.primary, // Add this line to set cursor color to match app's primary color
         style: widget.textStyle ??
             GoogleFonts.inter(
               fontSize: 18,
