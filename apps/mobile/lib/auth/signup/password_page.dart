@@ -5,6 +5,7 @@ import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:flutter/services.dart';
 import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
@@ -18,11 +19,13 @@ import 'package:armm_app/database/database.dart';
 import 'package:armm_app/utils/resources.dart'; // Import the resources file
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:armm_app/auth/signup/profile_picture_page.dart';
 
+// ignore: must_be_immutable
 class PasswordPage extends StatefulWidget {
 
   final String cid;
@@ -38,6 +41,8 @@ class PasswordPage extends StatefulWidget {
 class _PasswordPageState extends State<PasswordPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _confirmPasswordFocusNode = FocusNode();
   bool isLoading = false;
 
   // Firebase and app state.
@@ -55,6 +60,20 @@ class _PasswordPageState extends State<PasswordPage> {
   bool get _isPasswordValid => _hasMinLength && _hasCapitalLetter && _hasNumber && _passwordsMatch;
 
   // No animation initialization needed as we're using SuccessAnimationHelper
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _dismissKeyboard() {
+    _passwordFocusNode.unfocus();
+    _confirmPasswordFocusNode.unfocus();
+  }
 
   /// Check if the user is authenticated and linked
   Future<bool> isAuthenticated() async {
@@ -247,15 +266,18 @@ class _PasswordPageState extends State<PasswordPage> {
   @override
   Widget build(BuildContext context) {
     print("Client ID received in PasswordPage: ${widget.cid}"); // DEBUG PRINT
-    return Scaffold(
-      body: Stack( // Wrap with Stack
+    return GestureDetector(
+      onTap: _dismissKeyboard,
+      child: Scaffold(
+        body: Stack( // Wrap with Stack
         children: [
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              child: AutofillGroup(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                   // Top illustration
                   const SizedBox(height: 72),
                   SvgPicture.asset(
@@ -370,7 +392,11 @@ class _PasswordPageState extends State<PasswordPage> {
                   AuthTextField(
                     hintText: 'Password',
                     controller: _passwordController,
+                    focusNode: _passwordFocusNode,
                     obscureText: _obscurePassword,
+                    textInputAction: TextInputAction.next,
+                    autofillHints: const [AutofillHints.newPassword],
+                    onSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
                     onChanged: (_) => setState(() {widget.password = _passwordController.text;}),
                   ),
 
@@ -378,7 +404,11 @@ class _PasswordPageState extends State<PasswordPage> {
                   AuthTextField(
                     hintText: 'Confirm Password',
                     controller: _confirmPasswordController,
+                    focusNode: _confirmPasswordFocusNode,
                     obscureText: _obscureConfirmPassword,
+                    textInputAction: TextInputAction.done,
+                    autofillHints: const [AutofillHints.newPassword],
+                    onSubmitted: (_) => _dismissKeyboard(),
                     onChanged: (_) => setState(() {}), // Trigger rebuild to update button state
                   ),
                   const SizedBox(height: 24),
@@ -387,6 +417,8 @@ class _PasswordPageState extends State<PasswordPage> {
                   AuthButton(
                     label: 'Sign Up',
                     onPressed: () async {
+                      // Save credentials to autofill service
+                      TextInput.finishAutofillContext();
                       _signUserUp();
                     },
                     backgroundColor: AppColors.primary,
@@ -413,7 +445,8 @@ class _PasswordPageState extends State<PasswordPage> {
                   ),
 
                   const SizedBox(height: 24),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -431,6 +464,7 @@ class _PasswordPageState extends State<PasswordPage> {
               ),
             ),
         ],
+        ),
       ),
     );
   }

@@ -13,13 +13,17 @@ import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class LoginForm extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final FocusNode emailFocusNode;
+  final FocusNode passwordFocusNode;
   final bool obscurePassword;
   final Color primaryColor;
   final VoidCallback onTogglePassword;
@@ -29,6 +33,8 @@ class LoginForm extends StatefulWidget {
     Key? key,
     required this.emailController,
     required this.passwordController,
+    required this.emailFocusNode,
+    required this.passwordFocusNode,
     required this.obscurePassword,
     required this.primaryColor,
     required this.onTogglePassword,
@@ -50,6 +56,12 @@ class _LoginFormState extends State<LoginForm> {
     validateEmail(widget.emailController.text);
     validatePassword(widget.passwordController.text);
   }
+  
+  @override
+  void dispose() {
+    // No need to dispose controllers here as they are managed by the parent
+    super.dispose();
+  }
 
   void validateEmail(String email) {
     // Simple email validation
@@ -67,6 +79,9 @@ class _LoginFormState extends State<LoginForm> {
 
   // Sign user in method
   Future<bool> signUserIn(BuildContext context) async {
+    // Save credentials to autofill service
+    TextInput.finishAutofillContext();
+    
     setState(() {
       widget.isLoading = true;
     });
@@ -147,12 +162,18 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
-          children: [
-            // Email TextField
+        AutofillGroup(
+          child: Column(
+            children: [
+              // Email TextField
             AuthTextField(
               hintText: 'Email', 
               controller: widget.emailController,
+              focusNode: widget.emailFocusNode,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.username],
+              onSubmitted: (_) => widget.passwordFocusNode.requestFocus(),
               onChanged: (value) => validateEmail(value),
             ),
             const SizedBox(height: 5),
@@ -160,7 +181,11 @@ class _LoginFormState extends State<LoginForm> {
             AuthTextField(
               hintText: 'Password',
               controller: widget.passwordController,
+              focusNode: widget.passwordFocusNode,
               obscureText: widget.obscurePassword,
+              textInputAction: TextInputAction.done,
+              autofillHints: const [AutofillHints.password],
+              onSubmitted: (_) => signUserIn(context),
               onChanged: (value) => validatePassword(value),
             ),
             const SizedBox(height: 12), // Reduced from 16
@@ -196,6 +221,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
           ],
+        ),
         ),
       ],
     );
