@@ -195,7 +195,7 @@ class _EmailPageState extends State<EmailPage> {
                     focusNode: _emailFocusNode,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.done,
-                    autofillHints: const [AutofillHints.newUsername, AutofillHints.email],
+                    autofillHints: const [AutofillHints.newUsername],
                     onSubmitted: (_) => _emailFocusNode.unfocus(),
                   ),
                   const SizedBox(height: 24),

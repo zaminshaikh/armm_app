@@ -187,50 +187,82 @@ class _PasswordPageState extends State<PasswordPage> {
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
       await handleFirebaseAuthException(context, e, widget.email);
+      if (mounted) setState(() { isLoading = false; });
     } catch (e) {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
       await FirebaseAuth.instance.currentUser?.delete();
-    } finally {
-
       if (mounted) setState(() { isLoading = false; });
     }
   }
 
   /// Verifies if the email is confirmed and proceeds accordingly.
   Future<bool> _verifyEmail() async {
-    setState(() { isLoading = true; });
     User? user = FirebaseAuth.instance.currentUser;
     await user?.reload();
     user = FirebaseAuth.instance.currentUser;
 
     if (user != null && user.emailVerified) {
-      String uid = user.uid;
-      await db.linkNewUser(user.email!);
-      log('User $uid connected to Client ID ${widget.cid}');
-      if (!mounted) return true;
-      await updateFirebaseMessagingToken(user, context);
+      try {
+        String uid = user.uid;
+        await db.linkNewUser(user.email!);
+        log('User $uid connected to Client ID ${widget.cid}');
+        if (!mounted) return true;
+        await updateFirebaseMessagingToken(user, context);
 
-      // Show success animation
-      setState(() {
-        isLoading = false;
-      });
-      
-      // Use the helper to show success animation
-      if (context.mounted) {
-        await SuccessAnimationHelper.showSuccessAnimation(context);
-      }
+        // Important: Don't set isLoading to false yet - keep showing the loading indicator
+        // The SuccessAnimationHelper will overlay on top of the loading indicator
+        
+        // Use the helper to show success animation while the loading indicator is still visible
+        if (context.mounted) {
+          await SuccessAnimationHelper.showSuccessAnimation(context);
+        }
+        
+        // Now we can hide the loading indicator after the success animation is complete
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
 
-      if (!mounted) return true;
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => ProfilePicturePage(
-            cid: widget.cid,
-            email: widget.email,
+        if (!mounted) return true;
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProfilePicturePage(
+              cid: widget.cid,
+              email: widget.email,
+            ),
           ),
-        ),
-      );
-      return true;
+        );
+        return true;
+      } catch (e) {
+        log('Error linking user: $e', stackTrace: StackTrace.current);
+        if (!mounted) return false;
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CustomAlertDialog(
+              title: 'Error',
+              message: 'An error occurred while linking the user. Please try again.',
+              icon: const Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return false;
+      } finally {
+        if (mounted) setState(() { isLoading = false; });
+      }
     } else {
       if (!mounted) return false;
       await showDialog(
