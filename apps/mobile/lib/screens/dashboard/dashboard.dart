@@ -81,7 +81,7 @@ class _DashboardPageState extends State<DashboardPage>
   }
 
   void _startClientLoadingTimer() {
-    _clientLoadingTimer = Timer(const Duration(seconds: 3), () {
+    _clientLoadingTimer = Timer(const Duration(seconds: 5), () {
       if (client == null && mounted) {
         // Show error dialog
         showDialog(
