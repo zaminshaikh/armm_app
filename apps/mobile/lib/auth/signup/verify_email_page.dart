@@ -261,23 +261,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 251, 251, 251),
-      appBar: AppBar(
-        title: Text(
-          'Verify Your Email',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(20),
-          ),
-        ),
-        automaticallyImplyLeading: false,
-      ),
       body: Stack(
         children: [
           Padding(
@@ -288,6 +271,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                    const SizedBox(height: 40),
                     // Email Verification Icon
                     Container(
                       alignment: Alignment.center,
@@ -349,30 +333,27 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                     ),
                     const SizedBox(height: 40),
                     AuthButton(
-                      label: "I've Verified My Email, Continue",
+                      label: "Check Verification Status",
                       onPressed: _continueAfterVerification,
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                       borderColor: AppColors.primary,
                     ),
                     const SizedBox(height: 16),
-                    OutlinedButton(
-                      child: Text(
-                        'Resend Verification Email',
-                        style: GoogleFonts.inter(
+                    TextButton(
+                      onPressed: _resendVerificationEmail,
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        textStyle: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.primary,
                         ),
-                      ),
-                      onPressed: _resendVerificationEmail,
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: AppColors.primary, width: 1.5),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(26),
                         ),
                       ),
+                      child: const Text('Resend Verification Email'),
                     ),
                     const SizedBox(height: 40),
                     Container(
