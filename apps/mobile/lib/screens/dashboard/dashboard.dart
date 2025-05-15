@@ -1,14 +1,16 @@
 // lib/screens/dashboard/dashboard.dart
+import 'dart:async';
 import 'dart:developer';
+import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/components/assets_structure_section.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
+
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 import 'package:armm_app/screens/dashboard/components/three_recent_activities.dart';
-import 'package:armm_app/screens/dashboard/components/total_assets_section.dart';
 import 'package:armm_app/screens/dashboard/components/user_breakdown_section.dart';
 import 'package:armm_app/screens/notifications/notifications.dart';
-import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:armm_app/utils/resources.dart';
@@ -19,7 +21,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
-import 'package:armm_app/components/custom_progress_indicator.dart';
 
 class DashboardPage extends StatefulWidget {
   final bool fromFaceIdPage;
@@ -40,11 +41,14 @@ class _DashboardPageState extends State<DashboardPage>
   late final PageController _connectedUsersPageController;
   int _currentConnectedUserPage = 0;
   Future<String?>? _profilePicUrlFuture;
+  Timer? _clientLoadingTimer;
 
   @override
   void initState() {
     super.initState();
     _loadAppLockState();
+    // Initialize the client loading timer
+    _startClientLoadingTimer();
     // Initialize the animation controller and set its value to 1.0 by default
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
@@ -76,8 +80,55 @@ class _DashboardPageState extends State<DashboardPage>
     });
   }
 
+  void _startClientLoadingTimer() {
+    _clientLoadingTimer = Timer(const Duration(seconds: 3), () {
+      if (client == null && mounted) {
+        // Show error dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => CustomAlertDialog(
+            title: 'Connection Timeout',
+            message: 'The connection is taking longer than expected. Please return to the login page and try again.',
+            icon: const Icon(
+              Icons.timer,
+              color: Colors.red,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/onboarding', (Route<dynamic> route) => false);
+                },
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.logout, 
+                      color: Colors.red,
+                      size: 18,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Logout',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    });
+  }
+
   @override
   void dispose() {
+    _clientLoadingTimer?.cancel();
     _connectedUsersPageController.dispose();
     _controller.dispose();
     super.dispose();
@@ -87,6 +138,13 @@ class _DashboardPageState extends State<DashboardPage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     client = Provider.of<Client?>(context);
+    
+    // If client is loaded, cancel the timeout timer
+    if (client != null && _clientLoadingTimer != null) {
+      _clientLoadingTimer!.cancel();
+      _clientLoadingTimer = null;
+    }
+    
     _retrieveActivities();
 
     // Initialize profile‑pic once
@@ -192,7 +250,7 @@ class _DashboardPageState extends State<DashboardPage>
     if (client == null) {
       return Scaffold(
         backgroundColor: const Color.fromARGB(255, 251, 251, 251),
-        appBar: DashboardAppBar(
+        appBar: const DashboardAppBar(
           client: null,
           showNotificationButton: false,
         ),
@@ -249,7 +307,7 @@ class _DashboardPageState extends State<DashboardPage>
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavBar(currentItem: NavigationItem.dashboard),
+        bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.dashboard),
       );
     }
   
@@ -304,7 +362,7 @@ class _DashboardPageState extends State<DashboardPage>
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(currentItem: NavigationItem.dashboard,),
+      bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.dashboard,),
     );
   }
 
