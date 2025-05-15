@@ -7,7 +7,6 @@ class SuccessCheckMark extends StatelessWidget {
   // Using the same colors as the verify email page
   final Color backgroundColor;
   final Color outerCircleColor;
-  final Color middleCircleColor;
   final Color checkMarkColor;
 
   const SuccessCheckMark({
@@ -15,7 +14,6 @@ class SuccessCheckMark extends StatelessWidget {
     required this.animation,
     this.backgroundColor = const Color(0xFF32B64B),
     this.outerCircleColor = const Color(0xFF32B64B),
-    this.middleCircleColor = const Color(0xFF32B64B),
     this.checkMarkColor = Colors.white,
   }) : super(key: key);
 

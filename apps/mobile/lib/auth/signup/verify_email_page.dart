@@ -455,10 +455,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> with SingleTickerProv
           if (_showSuccessAnimation)
             SuccessCheckMark(
               animation: _animation,
-              backgroundColor: const Color(0xFF32B64B),
-              outerCircleColor: const Color(0xFF32B64B),
-              middleCircleColor: const Color(0xFF32B64B),
-              checkMarkColor: Colors.white,
             ),
         ],
       ),

@@ -9,6 +9,7 @@ import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'package:armm_app/utils/success_animation_helper.dart';
 import 'package:armm_app/components/mail_app_picker_bottom';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
@@ -53,7 +54,7 @@ class _PasswordPageState extends State<PasswordPage> {
   
   bool get _isPasswordValid => _hasMinLength && _hasCapitalLetter && _hasNumber && _passwordsMatch;
 
-  final int _passwordSecurityIndicator = 0;
+  // No animation initialization needed as we're using SuccessAnimationHelper
 
   /// Check if the user is authenticated and linked
   Future<bool> isAuthenticated() async {
@@ -128,31 +129,9 @@ class _PasswordPageState extends State<PasswordPage> {
                   
                   if (user != null && user.emailVerified) {
                     Navigator.of(context).pop(); // Close the dialog
-                    
-                    // Show success dialog
-                    if (!mounted) return;
-                    await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomAlertDialog(
-                          title: 'Success',
-                          message: 'Email verified successfully.',
-                          icon: const Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                _verifyEmail(); // Continue with the verification process
-                              },
-                              child: const Text('Continue'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+
+                    _verifyEmail();
+
                   } else {
                     // Show "check your email" dialog
                     if (!mounted) return;
@@ -212,7 +191,15 @@ class _PasswordPageState extends State<PasswordPage> {
       if (!mounted) return true;
       await updateFirebaseMessagingToken(user, context);
 
-      setState(() { isLoading = false; });
+      // Show success animation
+      setState(() {
+        isLoading = false;
+      });
+      
+      // Use the helper to show success animation
+      if (context.mounted) {
+        await SuccessAnimationHelper.showSuccessAnimation(context);
+      }
 
       if (!mounted) return true;
       await Navigator.pushReplacement(
