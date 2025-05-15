@@ -73,11 +73,19 @@ class _LoginSocialState extends State<LoginSocial> {
               ),
               onTap: () async {
                 widget.showLoading();
-                final success = await GoogleAuthService().signInWithGoogle(context);
-                if (success == true && mounted) {
-                  _navigateToDashboard(context);
-                } else {
-                  widget.hideLoading();
+                try {
+                  final success = await GoogleAuthService().signInWithGoogle(context);
+                  if (success == true && mounted) {
+                    // Hide loading before navigation to avoid setState after dispose
+                    widget.hideLoading();
+                    _navigateToDashboard(context);
+                  } else if (mounted) {
+                    widget.hideLoading();
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    widget.hideLoading();
+                  }
                 }
               }
             ),
@@ -93,11 +101,19 @@ class _LoginSocialState extends State<LoginSocial> {
                 ),
                 onTap: () async {
                   widget.showLoading();
-                  final success = await AppleAuthService().signInWithApple(context);
-                  if (success && mounted) {
-                    _navigateToDashboard(context);
-                  } else {
-                    widget.hideLoading();
+                  try {
+                    final success = await AppleAuthService().signInWithApple(context);
+                    if (success && mounted) {
+                      // Hide loading before navigation to avoid setState after dispose
+                      widget.hideLoading();
+                      _navigateToDashboard(context);
+                    } else if (mounted) {
+                      widget.hideLoading();
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      widget.hideLoading();
+                    }
                   }
                 },
               ),

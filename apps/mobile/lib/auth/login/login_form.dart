@@ -107,6 +107,13 @@ class _LoginFormState extends State<LoginForm> {
       Provider.of<AuthState>(context, listen: false)
           .setInitiallyAuthenticated(true);
 
+      // Set isLoading to false before navigation
+      if (mounted) {
+        setState(() {
+          widget.isLoading = false;
+        });
+      }
+
       // Navigate to the dashboard
       Navigator.push(
         context,
@@ -117,33 +124,64 @@ class _LoginFormState extends State<LoginForm> {
     } on FirebaseAuthException catch (e) {
       log('login.dart: Caught FirebaseAuthException: $e'); // Debugging output
       String errorMessage = '';
-      if (e.code == 'user-not-found') {
-        errorMessage =
-            'Email not found. Please check your email or sign up for a new account.';
-        log('login.dart: Error: $errorMessage'); // Debugging output
-      } else {
-        errorMessage =
-            'Error signing in. Please check your email and password. $e';
-        log('login.dart: Error: $errorMessage'); // Debugging output
+      
+      switch (e.code) {
+      case 'user-not-found':
+        errorMessage = 'Email not found. Please check your email or sign up for a new account.';
+        break;
+      case 'wrong-password':
+        errorMessage = 'Incorrect password. Please try again or reset your password.';
+        break;
+      case 'invalid-email':
+        errorMessage = 'The email address is badly formatted.';
+        break;
+      case 'user-disabled':
+        errorMessage = 'This user account has been disabled.';
+        break;
+      case 'too-many-requests':
+        errorMessage = 'Too many failed login attempts. Please try again later.';
+        break;
+      case 'network-request-failed':
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+        break;
+      case 'operation-not-allowed':
+        errorMessage = 'This sign-in method is not allowed. Please contact support.';
+        break;
+      case 'invalid-credential':
+        errorMessage = 'The credentials provided are invalid. Please try again.';
+        break;
+      case 'account-exists-with-different-credential':
+        errorMessage = 'An account already exists with the same email but different sign-in credentials.';
+        break;
+      case 'user-token-expired':
+        errorMessage = 'Your session has expired. Please sign in again.';
+        break;
+      default:
+        errorMessage = 'Error signing in. Please check your email and password.';
+        break;
       }
+      
+      log('login.dart: Error: $errorMessage'); // Debugging output
       log('login.dart: Showing error dialog...'); // Debugging output
+      
       await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomAlertDialog(
-            title: 'Error logging in',
-            message: errorMessage,
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+        title: 'Error logging in',
+        message: errorMessage,
+        actions: <Widget>[
+          TextButton(
+          child: const Text('OK'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          ),
+        ],
+        );
+      },
       );
+      
       log('login.dart: Error dialog shown, returning false...'); // Debugging output
       return false;
     } catch (e) {

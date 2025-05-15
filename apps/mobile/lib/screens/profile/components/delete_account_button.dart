@@ -124,6 +124,7 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
               title: "Confirm Delete Account",
               message: "Are you sure you want to permanently delete your account?",
               input: inputWidget,
+              confirmButtonColor: Colors.red,
               actions: [
                 TextButton(
                   onPressed: () {

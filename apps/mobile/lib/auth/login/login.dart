@@ -28,15 +28,19 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
 
   void showLoading() {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {  // Check if widget is still mounted before setting state
+      setState(() {
+        isLoading = true;
+      });
+    }
   }
 
   void hideLoading() {
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {  // Check if widget is still mounted before setting state
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
   
   void _dismissKeyboard() {
@@ -61,15 +65,17 @@ class _LoginPageState extends State<LoginPage> {
     return GestureDetector(
       onTap: _dismissKeyboard,
       child: Scaffold(
+        resizeToAvoidBottomInset: true, // Ensure the screen resizes when keyboard appears
         body: Stack(
           children: [
             SafeArea(
-              child: Padding( // Changed SingleChildScrollView to Padding
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Spacer(flex: 1), // Added Spacer for flexible top space
+              child: SingleChildScrollView( // Changed Padding to SingleChildScrollView to handle overflow
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 40), // Fixed height instead of Spacer
                   // The illustration, and the "Log in" text
                   LoginHeader(
                     onBackPressed: () => Navigator.of(context).pop(),
@@ -99,11 +105,12 @@ class _LoginPageState extends State<LoginPage> {
                     showLoading: showLoading,
                     hideLoading: hideLoading,
                   ),
-                  const Spacer(flex: 1), // Added Spacer for flexible bottom space
+                  const SizedBox(height: 40), // Fixed height instead of Spacer at bottom
                 ],
               ),
+                ),
+              ),
             ),
-          ),
           Positioned(
             top: 0,
             left: 0,
