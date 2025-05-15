@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClientIDPage extends StatefulWidget {
   const ClientIDPage({Key? key}) : super(key: key);
@@ -300,18 +301,25 @@ class _ClientIDPageState extends State<ClientIDPage> {
                         FocusScope.of(context).unfocus(); // Dismiss keyboard
                         log('client_id_page.dart: Checking CID: ${_cidController.text}');
                         setState(() => isLoading = true);
-                        final bool valid = await isValidCID(_cidController.text);
-                        setState(() => isLoading = false);
+                        bool isValid = await isValidCID(_cidController.text);
+                        if (isValid) {
+                          // Save the CID to SharedPreferences
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('cid', _cidController.text);
+                          log('client_id_page.dart: CID ${_cidController.text} saved to SharedPreferences');
 
-                        if (!valid) {
-                          return;
+                          if (mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EmailPage(cid: _cidController.text),
+                              ),
+                            );
+                          }
                         }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EmailPage(cid: _cidController.text),
-                          ),
-                        );
+                        if (mounted) {
+                          setState(() => isLoading = false);
+                        }
                       },
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,

@@ -381,7 +381,7 @@ class DatabaseService {
   /// ```dart
   /// try {
   ///   DatabaseService db = new DatabaseService(cid, uid);
-  ///   await db.linkUserToDatabase(email, cid);
+  ///   await db.linkNewUser(email, cid);
   ///   log('database.dart: User linked to database successfully.');
   /// } catch (e) {
   ///   log('database.dart: Error linking user to database: $e');
