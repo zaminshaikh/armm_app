@@ -22,6 +22,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
 
   bool _obscurePassword = true;
 
@@ -36,11 +38,18 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = false;
     });
   }
+  
+  void _dismissKeyboard() {
+    _emailFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -49,13 +58,15 @@ class _LoginPageState extends State<LoginPage> {
     // Adjust to match your brand color
     const Color primaryColor = Color(0xFF1C32A4);
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Padding( // Changed SingleChildScrollView to Padding
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
+    return GestureDetector(
+      onTap: _dismissKeyboard,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Padding( // Changed SingleChildScrollView to Padding
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Spacer(flex: 1), // Added Spacer for flexible top space
@@ -70,6 +81,8 @@ class _LoginPageState extends State<LoginPage> {
                   LoginForm(
                     emailController: _emailController,
                     passwordController: _passwordController,
+                    emailFocusNode: _emailFocusNode,
+                    passwordFocusNode: _passwordFocusNode,
                     obscurePassword: _obscurePassword,
                     primaryColor: primaryColor,
                     isLoading: isLoading, // Pass isLoading state
@@ -108,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
         ],
       ),
+    )
     );
   }
 }

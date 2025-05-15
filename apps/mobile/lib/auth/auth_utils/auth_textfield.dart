@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:armm_app/utils/resources.dart';
 import 'package:google_fonts/google_fonts.dart';
       
@@ -13,6 +14,10 @@ class AuthTextField extends StatefulWidget {
   final InputBorder? focusedBorder;
   final EdgeInsetsGeometry? contentPadding;
   final TextInputType? keyboardType;
+  final List<String>? autofillHints;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final void Function(String)? onSubmitted;
 
   const AuthTextField({
     Key? key,
@@ -26,6 +31,10 @@ class AuthTextField extends StatefulWidget {
     this.focusedBorder,
     this.contentPadding,
     this.keyboardType,
+    this.autofillHints,
+    this.focusNode,
+    this.textInputAction,
+    this.onSubmitted,
   }) : super(key: key);
 
   @override
@@ -55,6 +64,10 @@ class _AuthTextFieldState extends State<AuthTextField> {
         controller: widget.controller,
         obscureText: _obscureText,
         keyboardType: widget.keyboardType,
+        focusNode: widget.focusNode,
+        textInputAction: widget.textInputAction ?? TextInputAction.next,
+        onSubmitted: widget.onSubmitted,
+        autofillHints: widget.autofillHints,
         style: widget.textStyle ??
             GoogleFonts.inter(
               fontSize: 18,

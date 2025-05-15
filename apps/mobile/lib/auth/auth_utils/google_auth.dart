@@ -5,9 +5,9 @@ import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/profile_picture_page.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
-import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:armm_app/utils/success_animation_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -164,6 +164,7 @@ class GoogleAuthService {
 
   Future<UserCredential?> signUpWithGoogle(
       BuildContext context, String cid) async {
+    
     // Log the start of the Google sign-up process
     debugPrint('GoogleAuthService: Starting Google sign-up process.');
 
@@ -238,6 +239,9 @@ class GoogleAuthService {
           debugPrint('Attempting to link Google user ${user.uid} to CID: $cid');
           await db.linkNewUser(user.email!);
           await updateFirebaseMessagingToken(user, context);
+          
+          // Show success animation before navigating
+          await SuccessAnimationHelper.showSuccessAnimation(context);
         } catch (e) {
           // If there is an error adding the new user to Firestore, log the error and show an alert
           debugPrint('Error adding new user to Firestore: $e');

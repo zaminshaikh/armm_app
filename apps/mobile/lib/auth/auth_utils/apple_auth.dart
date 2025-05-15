@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:math' as math;
 import 'package:armm_app/auth/signup/profile_picture_page.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/utils/success_animation_helper.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
@@ -331,9 +332,11 @@ class AppleAuthService {
       await db.linkNewUser(userIdentifier);
       if (!context.mounted) return;
       await updateFirebaseMessagingToken(user, context);
-
-      // Navigate to ProfilePicturePage for the next step of onboarding
+      
       if (context.mounted) {
+        // Show success animation before navigating
+        await SuccessAnimationHelper.showSuccessAnimation(context);
+        
         // Navigate to the ProfilePicturePage to continue onboarding
         await Navigator.push(
           context,

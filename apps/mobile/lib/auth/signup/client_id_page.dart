@@ -6,6 +6,7 @@ import 'package:armm_app/auth/auth_utils/auth_back.dart';
 import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:flutter/services.dart';
 import 'package:armm_app/auth/auth_utils/social_tile.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/email_page.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:armm_app/auth/auth_utils/google_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClientIDPage extends StatefulWidget {
   const ClientIDPage({Key? key}) : super(key: key);
@@ -28,6 +30,7 @@ class ClientIDPage extends StatefulWidget {
 
 class _ClientIDPageState extends State<ClientIDPage> {
   final TextEditingController _cidController = TextEditingController();
+  final FocusNode _cidFocusNode = FocusNode();
   bool isLoading = false;
   bool _isCIDValid = false;
 
@@ -35,6 +38,17 @@ class _ClientIDPageState extends State<ClientIDPage> {
   void initState() {
     super.initState();
     _cidController.addListener(_validateCID);
+  }
+  
+  @override
+  void dispose() {
+    _cidController.dispose();
+    _cidFocusNode.dispose();
+    super.dispose();
+  }
+  
+  void _dismissKeyboard() {
+    _cidFocusNode.unfocus();
   }
 
   void _validateCID() {
@@ -98,13 +112,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
     return true;
   }
 
-  @override
-  void dispose() {
-    _cidController.removeListener(_validateCID);
-    _cidController.dispose();
-    isLoading = false;
-    super.dispose();
-  }
+  // Second dispose method removed
 
   @override
   Widget build(BuildContext context) {
@@ -112,11 +120,12 @@ class _ClientIDPageState extends State<ClientIDPage> {
       body: Stack(
         children: [
           GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: _dismissKeyboard,
             child: Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
+                child: AutofillGroup(
+                  child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 72),
@@ -217,7 +226,11 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     AuthTextField(
                       hintText: 'Client ID',
                       controller: _cidController,
+                      focusNode: _cidFocusNode,
                       keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      autofillHints: const [AutofillHints.username],
+                      onSubmitted: (_) => _dismissKeyboard(),
                     ),
                     const SizedBox(height: 12),
 
@@ -240,7 +253,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
                             }
                             if (!context.mounted) return;
                             // Dismiss the keyboard
-                            FocusScope.of(context).unfocus();
+                            _dismissKeyboard();
+                            // Save form data to autofill service
+                            TextInput.finishAutofillContext();
                             try {
                               await GoogleAuthService().signUpWithGoogle(context, _cidController.text);
                             } finally {
@@ -265,7 +280,9 @@ class _ClientIDPageState extends State<ClientIDPage> {
                               }
                               if (!context.mounted) return;
                               // Dismiss the keyboard
-                              FocusScope.of(context).unfocus();
+                              _dismissKeyboard();
+                              // Save form data to autofill service
+                              TextInput.finishAutofillContext();
                               try {
                                 await AppleAuthService().signUpWithApple(context, _cidController.text);
                               } finally {
@@ -297,21 +314,30 @@ class _ClientIDPageState extends State<ClientIDPage> {
                     AuthButton(
                       label: 'Continue with email',
                       onPressed: () async {
-                        FocusScope.of(context).unfocus(); // Dismiss keyboard
+                        _dismissKeyboard(); // Dismiss keyboard
+                        // Save form data to autofill service
+                        TextInput.finishAutofillContext();
                         log('client_id_page.dart: Checking CID: ${_cidController.text}');
                         setState(() => isLoading = true);
-                        final bool valid = await isValidCID(_cidController.text);
-                        setState(() => isLoading = false);
+                        bool isValid = await isValidCID(_cidController.text);
+                        if (isValid) {
+                          // Save the CID to SharedPreferences
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('cid', _cidController.text);
+                          log('client_id_page.dart: CID ${_cidController.text} saved to SharedPreferences');
 
-                        if (!valid) {
-                          return;
+                          if (mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EmailPage(cid: _cidController.text),
+                              ),
+                            );
+                          }
                         }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EmailPage(cid: _cidController.text),
-                          ),
-                        );
+                        if (mounted) {
+                          setState(() => isLoading = false);
+                        }
                       },
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
@@ -339,6 +365,7 @@ class _ClientIDPageState extends State<ClientIDPage> {
               ),
             ),
           ),
+        ),
           Positioned(
             top: 0,
             left: 0,

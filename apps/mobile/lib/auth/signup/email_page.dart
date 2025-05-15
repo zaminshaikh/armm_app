@@ -5,6 +5,7 @@ import 'package:armm_app/auth/auth_utils/auth_footer.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/signup/password_page.dart';
 import 'package:armm_app/utils/resources.dart';
+import 'package:flutter/services.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/components/custom_progress_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class EmailPage extends StatefulWidget {
   final String cid;
   String email = '';
@@ -25,6 +27,7 @@ class EmailPage extends StatefulWidget {
 
 class _EmailPageState extends State<EmailPage> {
   final TextEditingController _emailController = TextEditingController();
+  final FocusNode _emailFocusNode = FocusNode();
   bool _isEmailValid = false;
   bool _isLoading = false;
 
@@ -34,10 +37,15 @@ class _EmailPageState extends State<EmailPage> {
     _emailController.addListener(_validateEmail);
   }
 
+  void _dismissKeyboard() {
+    _emailFocusNode.unfocus();
+  }
+  
   @override
   void dispose() {
     _emailController.removeListener(_validateEmail);
     _emailController.dispose();
+    _emailFocusNode.dispose();
     super.dispose();
   }
 
@@ -136,15 +144,18 @@ class _EmailPageState extends State<EmailPage> {
   @override
   Widget build(BuildContext context) {
     log("Client ID received in EmailPage: ${widget.cid}"); // DEBUG PRINT
-    return Scaffold(
-      body: Stack(
+    return GestureDetector(
+      onTap: _dismissKeyboard,
+      child: Scaffold(
+        body: Stack(
         children: [
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              child: AutofillGroup(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                   const SizedBox(height: 60),
                   // Top illustration
                   SvgPicture.asset(
@@ -181,6 +192,11 @@ class _EmailPageState extends State<EmailPage> {
                   AuthTextField(
                     hintText: 'Email',
                     controller: _emailController,
+                    focusNode: _emailFocusNode,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.done,
+                    autofillHints: const [AutofillHints.newUsername],
+                    onSubmitted: (_) => _emailFocusNode.unfocus(),
                   ),
                   const SizedBox(height: 24),
 
@@ -188,6 +204,9 @@ class _EmailPageState extends State<EmailPage> {
                   AuthButton(
                     label: 'Continue',
                     onPressed: () async {
+                      // Save credentials to autofill service
+                      TextInput.finishAutofillContext();
+                      
                       setState(() {
                         _isLoading = true;
                       });
@@ -231,7 +250,8 @@ class _EmailPageState extends State<EmailPage> {
                   
                   
                   const SizedBox(height: 24),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -243,8 +263,8 @@ class _EmailPageState extends State<EmailPage> {
               child: const Center(
                 child: CustomProgressIndicator(),
               ),
-            ),
-        ],
+            ),          ],
+        ),
       ),
     );
   }
