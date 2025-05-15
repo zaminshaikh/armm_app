@@ -605,6 +605,13 @@ class DatabaseService {
         log('database.dart: Firebase Functions error code: ${e.code}');
         log('database.dart: Firebase Functions error details: ${e.details}');
         
+        // Handle permissions issues that might be related to signBlob permission
+        if (e.code.toLowerCase() == 'permission-denied' || 
+            (e.message?.contains('Permission') ?? false) ||
+            (e.message?.contains('signBlob') ?? false)) {
+          log('database.dart: Permission issue detected. This might be related to IAM permissions for signBlob');
+        }
+        
         // Handle special case for internal errors (which may be expected in some environments)
         if (e.code.toLowerCase() == 'internal') {
           log('database.dart: Internal error occurred but proceeding as success');

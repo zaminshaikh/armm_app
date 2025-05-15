@@ -8,6 +8,7 @@ import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/database/database.dart'; // Import DatabaseService
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/utils/utilities.dart';
+import 'package:armm_app/utils/success_animation_helper.dart'; // Import for success animation
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -22,8 +23,7 @@ class NameAndCID extends StatelessWidget {
       return;
     }
     
-    // Store references to needed services - capturing them while context is valid
-    final scaffoldMessengerState = ScaffoldMessenger.of(context);
+    // Store reference to overlay state - capturing it while context is valid
     OverlayState overlayState = Overlay.of(context);
     late OverlayEntry overlayEntry;
 
@@ -38,6 +38,7 @@ class NameAndCID extends StatelessWidget {
             color: Colors.black.withOpacity(0.5),
             child: Center(
               child: CustomProgressIndicator(),
+
             ),
           ),
         ),
@@ -57,20 +58,14 @@ class NameAndCID extends StatelessWidget {
       // Log success
       log('Profile picture updated successfully. URL: $downloadUrl');
       
-      // Remove overlay
+      // Remove loading overlay
       overlayEntry.remove();
       
-      // Show success message if context is still mounted
-      // Use ScaffoldMessengerState that we captured earlier to avoid animation issues
+      // Show success animation if context is still mounted
       if (context.mounted) {
-        // Clear any existing SnackBars first to prevent animation controller conflicts
-        scaffoldMessengerState.clearSnackBars();
-        scaffoldMessengerState.showSnackBar(
-          const SnackBar(
-            content: Text('Profile picture updated successfully'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+        // Use the SuccessAnimationHelper to show a success animation
+        await SuccessAnimationHelper.showSuccessAnimation(context);
+        log('Profile picture success animation shown');
       }
       
     } catch (e) {
@@ -125,11 +120,17 @@ class NameAndCID extends StatelessWidget {
                   );
                   
                   // Use the stable context for all subsequent operations
-                  if (pickedFile != null && stableContext.mounted) {
+                  if (pickedFile != null) {
                     final file = File(pickedFile.path);
                     log('Picked file: ${file.path}');
-                    await _uploadProfilePicture(stableContext, cid, file);
-                    log('File uploaded: ${file.path}');
+                    
+                    // Check if context is still valid before proceeding
+                    if (stableContext.mounted) {
+                      await _uploadProfilePicture(stableContext, cid, file);
+                      log('File uploaded: ${file.path}');
+                    } else {
+                      log('Context no longer mounted after picking file, upload aborted');
+                    }
                   }
                 },
               ),
@@ -150,9 +151,17 @@ class NameAndCID extends StatelessWidget {
                   );
                   
                   // Use the stable context for all subsequent operations
-                  if (pickedFile != null && stableContext.mounted) {
+                  if (pickedFile != null) {
                     final file = File(pickedFile.path);
-                    await _uploadProfilePicture(stableContext, cid, file);
+                    log('Took photo: ${file.path}');
+                    
+                    // Check if context is still valid before proceeding
+                    if (stableContext.mounted) {
+                      await _uploadProfilePicture(stableContext, cid, file);
+                      log('Photo uploaded: ${file.path}');
+                    } else {
+                      log('Context no longer mounted after taking photo, upload aborted');
+                    }
                   }
                 },
               ),
@@ -166,11 +175,27 @@ class NameAndCID extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final client = Provider.of<Client?>(context);
+    
+    // Create a list of possible image extensions to try
+    Future<String?> getProfilePicUrl(String cid) async {
+      // Try common image extensions
+      for (final ext in ['.jpg', '.jpeg', '.png', '.gif', '.webp']) {
+        try {
+          final url = await FirebaseStorage.instance
+              .ref('profilePics/$cid$ext')
+              .getDownloadURL();
+          return url;
+        } catch (e) {
+          // Continue to the next extension if this one fails
+          log('Image with extension $ext not found for cid: $cid');
+        }
+      }
+      // Return null if no image was found with any extension
+      return null;
+    }
+    
     final profilePicFuture = client != null
-        ? FirebaseStorage.instance
-            .ref('profilePics/${client.cid}.jpg')
-            .getDownloadURL()
-            .catchError((e) => Future.value(null as String?)) // Return empty string instead of null
+        ? getProfilePicUrl(client.cid)
         : Future.value(null as String?);
 
     void _showBottomSheet(BuildContext context, String? imageUrl, String cid) {
