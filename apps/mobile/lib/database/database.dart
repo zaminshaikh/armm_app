@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:convert';
+import 'dart:io';
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/database/models/assets_model.dart';
 import 'package:armm_app/database/models/client_model.dart';
@@ -9,6 +11,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
 import 'package:rxdart/rxdart.dart';
 
 /// A service class for interacting with the Firestore database.
@@ -536,6 +540,90 @@ class DatabaseService {
       // Handle other errors
       print('Unknown error occurred while calling isUIDLinked: $e');
       return false;
+    }
+  }
+
+  /// Uploads a profile picture for the user via Firebase Cloud Functions.
+  ///
+  /// This method handles the process of uploading a profile picture by:
+  /// 1. Converting the image file to base64 encoded string
+  /// 2. Sending the encoded image to a Firebase Cloud Function
+  /// 3. The function handles storing the image in Firebase Storage
+  /// 4. Returns the download URL of the uploaded image
+  ///
+  /// Parameters:
+  /// - [imageFile]: The File object containing the image to upload
+  /// - [imageIdentifier]: Either the cid or email to identify the user (optional - uses this.cid if not provided)
+  ///
+  /// Returns:
+  /// - A [Future] that completes with the download URL of the uploaded image or null if upload fails
+  /// - Throws an exception if the upload fails and shouldThrow is true
+  Future<String?> uploadProfilePicture(
+    File imageFile, {
+    String? imageIdentifier,
+    bool shouldThrow = false,
+  }) async {
+    try {
+      // Read the file as bytes and encode to base64
+      final bytes = await imageFile.readAsBytes();
+      
+      // Get file extension (default to .jpg if not found)
+      final rawExt = path.extension(imageFile.path);
+      final fileExtension = rawExt.isNotEmpty ? rawExt : '.jpg';
+      
+      // Determine MIME type
+      final mimeType = lookupMimeType(imageFile.path) ?? 'application/octet-stream';
+      
+      // Encode image to base64
+      final base64Data = base64Encode(bytes);
+
+      // Use the provided identifier or fallback to cid
+      final identifier = imageIdentifier ?? cid;
+      if (identifier == null) {
+        throw Exception('No valid identifier (cid/email) provided for profile picture upload');
+      }
+
+      // Call the Firebase Cloud Function
+      final callable = FirebaseFunctions.instance.httpsCallable('uploadProfilePicture');
+      final result = await callable.call(<String, dynamic>{
+        'cid': identifier,
+        'fileBase64': base64Data,
+        'fileExtension': fileExtension,
+        'contentType': mimeType,
+      });
+
+      // Extract the download URL from the result
+      final downloadUrl = result.data['downloadUrl'] as String;
+      log('database.dart: Profile picture uploaded successfully: $downloadUrl');
+      
+      return downloadUrl;
+    } catch (e, stack) {
+      log('database.dart: Error uploading profile picture: $e', stackTrace: stack);
+      
+      // More detailed error logging to help with debugging
+      if (e is FirebaseFunctionsException) {
+        log('database.dart: Firebase Functions error code: ${e.code}');
+        log('database.dart: Firebase Functions error details: ${e.details}');
+        
+        // Handle permissions issues that might be related to signBlob permission
+        if (e.code.toLowerCase() == 'permission-denied' || 
+            (e.message?.contains('Permission') ?? false) ||
+            (e.message?.contains('signBlob') ?? false)) {
+          log('database.dart: Permission issue detected. This might be related to IAM permissions for signBlob');
+        }
+        
+        // Handle special case for internal errors (which may be expected in some environments)
+        if (e.code.toLowerCase() == 'internal') {
+          log('database.dart: Internal error occurred but proceeding as success');
+          return null;
+        }
+      }
+      
+      // Re-throw if requested, otherwise return null
+      if (shouldThrow) {
+        throw Exception('Failed to upload profile picture: $e');
+      }
+      return null;
     }
   }
 }

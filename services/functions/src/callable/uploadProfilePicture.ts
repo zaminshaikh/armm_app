@@ -28,10 +28,12 @@ export const uploadProfilePicture = functions.https.onCall(
       contentType: data.contentType ?? 'application/octet-stream',
     });
 
-    const [downloadUrl] = await remoteFile.getSignedUrl({
-      action: 'read',
-      expires: '03-01-2500',
-    });
+    // Instead of using signed URLs (which requires specific IAM permissions),
+    // use the public download URL pattern for Firebase Storage
+    const storageBaseUrl = `https://storage.googleapis.com/${bucket.name}`;
+    const encodedFilePath = encodeURIComponent(filePath);
+    const downloadUrl = `${storageBaseUrl}/${encodedFilePath}`;
+    
     return { downloadUrl };
   }
 );

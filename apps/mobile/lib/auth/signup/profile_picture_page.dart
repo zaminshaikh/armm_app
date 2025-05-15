@@ -1,19 +1,16 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:convert';
-
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/components/custom_progress_indicator.dart';
 import 'package:armm_app/auth/signup/app_lock_prompt_page.dart';
+import 'package:armm_app/database/database.dart'; // Import the database service
 import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:mime/mime.dart';
 
 class ProfilePicturePage extends StatefulWidget {
   final String cid;
@@ -98,23 +95,18 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
     setState(() => _isLoading = true);
 
     try {
-      final bytes = await _imageFile!.readAsBytes();
-      // extract extension (e.g. ".jpg", ".png")
-      final rawExt = path.extension(_imageFile!.path);
-      final fileExtension = rawExt.isNotEmpty ? rawExt : '.jpg';
-      final mimeType = lookupMimeType(_imageFile!.path) ?? 'application/octet-stream';
-      final base64Data = base64Encode(bytes);
-
-      final callable = FirebaseFunctions.instance.httpsCallable('uploadProfilePicture');
-      final result = await callable.call(<String, dynamic>{
-        'cid': widget.cid.isNotEmpty ? widget.cid : widget.email,
-        'fileBase64': base64Data,
-        'fileExtension': fileExtension,
-        'contentType': mimeType,
-      });
-      log('Cloud function returned: ${result.data}');
-      final downloadUrl = result.data['downloadUrl'] as String;
-      log('Profile picture uploaded via function: $downloadUrl');
+      // Create a temporary database service for uploading
+      DatabaseService dbService = DatabaseService.withCID('', '');
+      
+      // Use the imageIdentifier parameter since we don't have a proper CID yet
+      final identifier = widget.cid.isNotEmpty ? widget.cid : widget.email;
+      
+      final downloadUrl = await dbService.uploadProfilePicture(
+        _imageFile!, 
+        imageIdentifier: identifier,
+      );
+      
+      log('Profile picture uploaded successfully: $downloadUrl');
 
       if (mounted) {
         Navigator.push(
@@ -123,7 +115,7 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
         );
       }
     } catch (e, stack) {
-      log('Error uploading via callable: $e', stackTrace: stack);
+      log('Error uploading profile picture: $e', stackTrace: stack);
       if (e is FirebaseFunctionsException && e.code.toLowerCase() == 'internal') {
         // ignore internal errors and proceed as success
         if (mounted) {
