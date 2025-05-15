@@ -7,6 +7,7 @@ import 'package:armm_app/auth/signup/profile_picture_page.dart';
 import 'package:armm_app/auth_check.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'package:armm_app/components/success_check_mark.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/utils/resources.dart'; // For AppColors
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,15 +24,29 @@ class VerifyEmailPage extends StatefulWidget {
   _VerifyEmailPageState createState() => _VerifyEmailPageState();
 }
 
-class _VerifyEmailPageState extends State<VerifyEmailPage> {
+class _VerifyEmailPageState extends State<VerifyEmailPage> with SingleTickerProviderStateMixin {
   bool _isLoading = false;
+  bool _showSuccessAnimation = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   User? get _currentUser => _auth.currentUser;
 
   @override
   void initState() {
     super.initState();
+    // Initialize animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.elasticOut,
+    );
+    
+    // Check if user is null
     if (_currentUser == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
@@ -42,6 +57,12 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
         }
       });
     }
+  }
+  
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   Future<void> _showErrorDialog(String title, String message) async {
@@ -225,12 +246,26 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       }
 
       if (linkedSuccessfully) {
-        log('UID ${freshUser.uid} successfully linked to CID ${widget.cid}. Navigating to Profile Picture Page.');
+        // Show success animation before navigating
         if (mounted) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => ProfilePicturePage(cid: widget.cid, email: freshUser?.email ?? '')),
-            (route) => false,
-          );
+          setState(() {
+            _isLoading = false;
+            _showSuccessAnimation = true;
+          });
+          
+          // Play the animation
+          _animationController.forward();
+          
+          // Wait for the animation to complete before navigating
+          await Future.delayed(const Duration(milliseconds: 1200));
+          
+          if (mounted) {
+            log('UID ${freshUser.uid} successfully linked to CID ${widget.cid}. Navigating to Profile Picture Page.');
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => ProfilePicturePage(cid: widget.cid, email: freshUser?.email ?? '')),
+              (route) => false,
+            );
+          }
         }
       } else {
         log('Failed to link UID ${freshUser.uid} to CID ${widget.cid}. linkUIDtoCID returned false.');
@@ -416,7 +451,15 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             ),
           ),
           if (_isLoading)
-            const CustomProgressIndicator(), 
+            const CustomProgressIndicator(),
+          if (_showSuccessAnimation)
+            SuccessCheckMark(
+              animation: _animation,
+              backgroundColor: const Color(0xFF32B64B),
+              outerCircleColor: const Color(0xFF32B64B),
+              middleCircleColor: const Color(0xFF32B64B),
+              checkMarkColor: Colors.white,
+            ),
         ],
       ),
     );
