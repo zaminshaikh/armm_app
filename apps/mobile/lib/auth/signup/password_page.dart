@@ -5,9 +5,12 @@ import 'package:armm_app/auth/auth_utils/auth_button.dart';
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/auth_utils/auth_textfield.dart';
 import 'package:armm_app/auth/auth_utils/auth_footer.dart';
+import 'package:flutter/services.dart';
 import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'package:armm_app/utils/success_animation_helper.dart';
 import 'package:armm_app/components/mail_app_picker_bottom';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/screens/profile/profile.dart';
@@ -16,10 +19,13 @@ import 'package:armm_app/database/database.dart';
 import 'package:armm_app/utils/resources.dart'; // Import the resources file
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_mail_app/open_mail_app.dart';
+import 'package:armm_app/auth/signup/profile_picture_page.dart';
 
+// ignore: must_be_immutable
 class PasswordPage extends StatefulWidget {
 
   final String cid;
@@ -35,6 +41,8 @@ class PasswordPage extends StatefulWidget {
 class _PasswordPageState extends State<PasswordPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _confirmPasswordFocusNode = FocusNode();
   bool isLoading = false;
 
   // Firebase and app state.
@@ -51,7 +59,21 @@ class _PasswordPageState extends State<PasswordPage> {
   
   bool get _isPasswordValid => _hasMinLength && _hasCapitalLetter && _hasNumber && _passwordsMatch;
 
-  final int _passwordSecurityIndicator = 0;
+  // No animation initialization needed as we're using SuccessAnimationHelper
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _dismissKeyboard() {
+    _passwordFocusNode.unfocus();
+    _confirmPasswordFocusNode.unfocus();
+  }
 
   /// Check if the user is authenticated and linked
   Future<bool> isAuthenticated() async {
@@ -126,31 +148,9 @@ class _PasswordPageState extends State<PasswordPage> {
                   
                   if (user != null && user.emailVerified) {
                     Navigator.of(context).pop(); // Close the dialog
-                    
-                    // Show success dialog
-                    if (!mounted) return;
-                    await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomAlertDialog(
-                          title: 'Success',
-                          message: 'Email verified successfully.',
-                          icon: const Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                _verifyEmail(); // Continue with the verification process
-                              },
-                              child: const Text('Continue'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+
+                    _verifyEmail();
+
                   } else {
                     // Show "check your email" dialog
                     if (!mounted) return;
@@ -179,7 +179,7 @@ class _PasswordPageState extends State<PasswordPage> {
                 },
                 child: const Text('Continue'),
               ),
-              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail App')),
+              TextButton(onPressed: () => openMailApp(context), child: const Text('Open Mail')),
             ],
           );
         },
@@ -187,41 +187,82 @@ class _PasswordPageState extends State<PasswordPage> {
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
       await handleFirebaseAuthException(context, e, widget.email);
+      if (mounted) setState(() { isLoading = false; });
     } catch (e) {
       log('Error signing user up: $e', stackTrace: StackTrace.current);
       await FirebaseAuth.instance.currentUser?.delete();
-    } finally {
-
       if (mounted) setState(() { isLoading = false; });
     }
   }
 
   /// Verifies if the email is confirmed and proceeds accordingly.
   Future<bool> _verifyEmail() async {
-    setState(() { isLoading = true; });
     User? user = FirebaseAuth.instance.currentUser;
     await user?.reload();
     user = FirebaseAuth.instance.currentUser;
 
     if (user != null && user.emailVerified) {
-      String uid = user.uid;
-      await db.linkNewUser(user.email!);
-      log('User $uid connected to Client ID $widget.signUpData.cid');
+      try {
+        String uid = user.uid;
+        await db.linkNewUser(user.email!);
+        log('User $uid connected to Client ID ${widget.cid}');
+        if (!mounted) return true;
+        await updateFirebaseMessagingToken(user, context);
 
-      // await updateFirebaseMessagingToken(user, context);
-            
-      if (!mounted) return true;
-      // appState = Provider.of<AuthService>(context, listen: false);
-      setState(() {
-        isLoading = false;
-      });
+        // Important: Don't set isLoading to false yet - keep showing the loading indicator
+        // The SuccessAnimationHelper will overlay on top of the loading indicator
+        
+        // Use the helper to show success animation while the loading indicator is still visible
+        if (context.mounted) {
+          await SuccessAnimationHelper.showSuccessAnimation(context);
+        }
+        
+        // Now we can hide the loading indicator after the success animation is complete
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
 
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
-      );
-
-      return true;
+        if (!mounted) return true;
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProfilePicturePage(
+              cid: widget.cid,
+              email: widget.email,
+            ),
+          ),
+        );
+        return true;
+      } catch (e) {
+        log('Error linking user: $e', stackTrace: StackTrace.current);
+        if (!mounted) return false;
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CustomAlertDialog(
+              title: 'Error',
+              message: 'An error occurred while linking the user. Please try again.',
+              icon: const Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return false;
+      } finally {
+        if (mounted) setState(() { isLoading = false; });
+      }
     } else {
       if (!mounted) return false;
       await showDialog(
@@ -257,15 +298,18 @@ class _PasswordPageState extends State<PasswordPage> {
   @override
   Widget build(BuildContext context) {
     print("Client ID received in PasswordPage: ${widget.cid}"); // DEBUG PRINT
-    return Scaffold(
-      body: Stack(
+    return GestureDetector(
+      onTap: _dismissKeyboard,
+      child: Scaffold(
+        body: Stack( // Wrap with Stack
         children: [
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              child: AutofillGroup(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                   // Top illustration
                   const SizedBox(height: 72),
                   SvgPicture.asset(
@@ -338,7 +382,7 @@ class _PasswordPageState extends State<PasswordPage> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                '1 Capital letter',
+                                '1 Uppercase',
                                 style: GoogleFonts.inter(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
@@ -380,7 +424,11 @@ class _PasswordPageState extends State<PasswordPage> {
                   AuthTextField(
                     hintText: 'Password',
                     controller: _passwordController,
+                    focusNode: _passwordFocusNode,
                     obscureText: _obscurePassword,
+                    textInputAction: TextInputAction.next,
+                    autofillHints: const [AutofillHints.newPassword],
+                    onSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
                     onChanged: (_) => setState(() {widget.password = _passwordController.text;}),
                   ),
 
@@ -388,7 +436,11 @@ class _PasswordPageState extends State<PasswordPage> {
                   AuthTextField(
                     hintText: 'Confirm Password',
                     controller: _confirmPasswordController,
+                    focusNode: _confirmPasswordFocusNode,
                     obscureText: _obscureConfirmPassword,
+                    textInputAction: TextInputAction.done,
+                    autofillHints: const [AutofillHints.newPassword],
+                    onSubmitted: (_) => _dismissKeyboard(),
                     onChanged: (_) => setState(() {}), // Trigger rebuild to update button state
                   ),
                   const SizedBox(height: 24),
@@ -397,6 +449,8 @@ class _PasswordPageState extends State<PasswordPage> {
                   AuthButton(
                     label: 'Sign Up',
                     onPressed: () async {
+                      // Save credentials to autofill service
+                      TextInput.finishAutofillContext();
                       _signUserUp();
                     },
                     backgroundColor: AppColors.primary,
@@ -423,7 +477,8 @@ class _PasswordPageState extends State<PasswordPage> {
                   ),
 
                   const SizedBox(height: 24),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -432,7 +487,16 @@ class _PasswordPageState extends State<PasswordPage> {
             left: 0,
             child: AuthBack(onBackPressed: () => Navigator.pop(context)),
           ),
+          // Conditionally display overlay and CustomProgressIndicator
+          if (isLoading)
+            Container(
+              color: const Color.fromARGB(255, 94, 94, 94).withOpacity(0.5), // Greyish translucent overlay
+              child: const Center(
+                child: CustomProgressIndicator(),
+              ),
+            ),
         ],
+        ),
       ),
     );
   }

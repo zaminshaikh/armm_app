@@ -2,15 +2,17 @@
 
 
 import 'package:armm_app/auth/login/login.dart';
+import 'package:armm_app/auth/signup/profile_picture_page.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
-import 'package:armm_app/screens/profile/profile.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:armm_app/utils/success_animation_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/material.dart'; // For Navigator
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // For Navigator
 
 bool showAlert = false;
 
@@ -67,7 +69,13 @@ class GoogleAuthService {
         return null;
       }
           
-      await updateFirebaseMessagingToken(user, context);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool('notifsSwitchValue') ?? false) {
+        debugPrint('login.dart: Notifications switch is ON, updating Firebase token...'); // Debugging output
+        await updateFirebaseMessagingToken(userCredential.user, context);
+      } else {
+        debugPrint('login.dart: Notifications switch is OFF, not updating Firebase token...'); // Debugging output
+      }
 
       // Navigate to Dashboard
       await Navigator.pushReplacement(
@@ -156,6 +164,7 @@ class GoogleAuthService {
 
   Future<UserCredential?> signUpWithGoogle(
       BuildContext context, String cid) async {
+    
     // Log the start of the Google sign-up process
     debugPrint('GoogleAuthService: Starting Google sign-up process.');
 
@@ -196,37 +205,43 @@ class GoogleAuthService {
       if (user != null) {
         // Log the user's UID
         debugPrint('GoogleAuthService: User UID: ${user.uid}');
-        // Check if the user exists in Firestore by fetching the CID
         final DatabaseService db = DatabaseService.withCID(user.uid, cid);
 
-        bool uidLinked = await db.isUIDLinked(user.uid);
-        bool docExists = await db.checkDocumentExists(cid);
-        bool docLinked = await db.checkDocumentLinked(cid);
-
-        // Check if CID exists and is not linked.
-        if (uidLinked && docExists && !docLinked) {
+        // Check 1: Is this Google UID already linked to any profile?
+        bool isGoogleUIDAlreadyLinked = await db.isUIDLinked(user.uid);
+        if (isGoogleUIDAlreadyLinked) {
           showAlert = true;
           await showGoogleSignUpFailAlert(context,
-              'Email ${user.email} is already associated with a different account. Please log in instead.');
-          return null;
-        } else if (!docExists) {
-          showAlert = true;
-          await wrongCIDFailAlert(context);
-          return null;
-        } else if (docLinked) {
-          showAlert = true;
-          await showGoogleSignUpFailAlert(context,
-              'User already exists for given Client ID $cid. Please log in instead.');
+              'This Google account is already associated with a user profile. Please try logging in or use a different Google account.');
           return null;
         }
-        // If the user does not exist in Firestore, log it and create a new user
 
+        // Check 2: Does the target CID document exist?
+        bool targetCIDExists = await db.checkDocumentExists(cid);
+        if (!targetCIDExists) {
+          showAlert = true;
+          await wrongCIDFailAlert(context); // Shows: "The CID you entered does not exist..."
+          return null;
+        }
+
+        // Check 3: Is the target CID document already linked (to a different UID, since we passed Check 1)?
+        bool targetCIDLinked = await db.checkDocumentLinked(cid);
+        if (targetCIDLinked) {
+          showAlert = true;
+          await showGoogleSignUpFailAlert(context,
+              'The user profile ID ($cid) is already linked to a different account. Please choose another profile ID or contact support.');
+          return null;
+        }
+
+        // All client-side checks passed. Proceed to attempt linking.
+        // linkNewUser cloud function will perform the final authoritative checks.
         try {
-          // Add the new user to Firestore with the provided CID
-          debugPrint('cid: $cid');
+          debugPrint('Attempting to link Google user ${user.uid} to CID: $cid');
           await db.linkNewUser(user.email!);
           await updateFirebaseMessagingToken(user, context);
-
+          
+          // Show success animation before navigating
+          await SuccessAnimationHelper.showSuccessAnimation(context);
         } catch (e) {
           // If there is an error adding the new user to Firestore, log the error and show an alert
           debugPrint('Error adding new user to Firestore: $e');
@@ -246,14 +261,14 @@ class GoogleAuthService {
         return null;
       }
 
-      // Navigate to the Dashboard page
+      // Navigate to the ProfilePicturePage to continue onboarding
       await Navigator.push(
         context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const DashboardPage(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-              child,
+        MaterialPageRoute(
+          builder: (context) => ProfilePicturePage(
+            cid: cid,
+            email: user.email ?? '',
+          ),
         ),
       );
 

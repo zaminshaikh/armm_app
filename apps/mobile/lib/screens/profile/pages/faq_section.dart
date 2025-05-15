@@ -17,26 +17,27 @@ class FAQSection extends StatefulWidget {
 class _FAQSectionState extends State<FAQSection> {
   final List<FAQItem> _faqItems = [
     FAQItem(
-      question: "What is the role of risk in an investment portfolio?",
-      answer: "Risk is inherent in investing. It’s the potential for losses..."
+      question: "What should I do if I forget my password?",
+      answer:
+          "On the login screen, tap “Forgot Password” and follow the steps to securely reset your credentials via email or SMS verification.",
     ),
     FAQItem(
-      question: "How often should I review my investment portfolio?",
-      answer: "Reviewing your portfolio at least once a year (or quarterly)..."
+      question: "Is the ARMM app available on both iOS and Android?",
+      answer:
+          "The ARMM Group app is available on both Android and iOS for download on the Apple App Store and Google Play Store.",
     ),
     FAQItem(
-      question: "What is diversification, and why is it important?",
-      answer: "Diversification involves spreading your investments across..."
+      question: "How do I enable or disable push notifications?",
+      answer:
+          "You can manage notification preferences under \"Profile Settings\" within the app to stay informed about investment updates, document uploads, and account activity.",
     ),
     FAQItem(
-      question: "Can I customize my investment portfolio based on my preferences?",
-      answer: "Yes, most investment platforms allow you to choose..."
-    ),
-    FAQItem(
-      question: "Are there fees associated with managing an investment portfolio?",
-      answer: "Depending on the platform or advisor, you may incur..."
+      question: "Is there a minimum account balance required to use the ARMM app?",
+      answer:
+          "There is no minimum balance required to access the app; however, investment offerings may have their own minimum contribution requirements.",
     ),
   ];
+  
 
   final List<bool> _isExpanded = [];
 

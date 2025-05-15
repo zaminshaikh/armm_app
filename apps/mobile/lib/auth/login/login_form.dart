@@ -13,12 +13,17 @@ import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class LoginForm extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final FocusNode emailFocusNode;
+  final FocusNode passwordFocusNode;
   final bool obscurePassword;
   final Color primaryColor;
   final VoidCallback onTogglePassword;
@@ -28,6 +33,8 @@ class LoginForm extends StatefulWidget {
     Key? key,
     required this.emailController,
     required this.passwordController,
+    required this.emailFocusNode,
+    required this.passwordFocusNode,
     required this.obscurePassword,
     required this.primaryColor,
     required this.onTogglePassword,
@@ -49,6 +56,12 @@ class _LoginFormState extends State<LoginForm> {
     validateEmail(widget.emailController.text);
     validatePassword(widget.passwordController.text);
   }
+  
+  @override
+  void dispose() {
+    // No need to dispose controllers here as they are managed by the parent
+    super.dispose();
+  }
 
   void validateEmail(String email) {
     // Simple email validation
@@ -66,6 +79,9 @@ class _LoginFormState extends State<LoginForm> {
 
   // Sign user in method
   Future<bool> signUserIn(BuildContext context) async {
+    // Save credentials to autofill service
+    TextInput.finishAutofillContext();
+    
     setState(() {
       widget.isLoading = true;
     });
@@ -78,13 +94,25 @@ class _LoginFormState extends State<LoginForm> {
         email: widget.emailController.text,
         password: widget.passwordController.text,
       );
-      // await updateFirebaseMessagingToken(userCredential.user, context);
-      log('login.dart: Signed in user ${userCredential.user!.uid}'); // Debugging output
-      log('login.dart: Sign in successful, proceeding to dashboard...'); // Debugging output
+      
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool('notifsSwitchValue') ?? false) {
+        log('login.dart: Notifications switch is ON, updating Firebase token...'); // Debugging output
+        await updateFirebaseMessagingToken(userCredential.user, context);
+      } else {
+        log('login.dart: Notifications switch is OFF, not updating Firebase token...'); // Debugging output
+      }
 
       // Set initiallyAuthenticated to true
       Provider.of<AuthState>(context, listen: false)
           .setInitiallyAuthenticated(true);
+
+      // Set isLoading to false before navigation
+      if (mounted) {
+        setState(() {
+          widget.isLoading = false;
+        });
+      }
 
       // Navigate to the dashboard
       Navigator.push(
@@ -96,33 +124,64 @@ class _LoginFormState extends State<LoginForm> {
     } on FirebaseAuthException catch (e) {
       log('login.dart: Caught FirebaseAuthException: $e'); // Debugging output
       String errorMessage = '';
-      if (e.code == 'user-not-found') {
-        errorMessage =
-            'Email not found. Please check your email or sign up for a new account.';
-        log('login.dart: Error: $errorMessage'); // Debugging output
-      } else {
-        errorMessage =
-            'Error signing in. Please check your email and password. $e';
-        log('login.dart: Error: $errorMessage'); // Debugging output
+      
+      switch (e.code) {
+      case 'user-not-found':
+        errorMessage = 'Email not found. Please check your email or sign up for a new account.';
+        break;
+      case 'wrong-password':
+        errorMessage = 'Incorrect password. Please try again or reset your password.';
+        break;
+      case 'invalid-email':
+        errorMessage = 'The email address is badly formatted.';
+        break;
+      case 'user-disabled':
+        errorMessage = 'This user account has been disabled.';
+        break;
+      case 'too-many-requests':
+        errorMessage = 'Too many failed login attempts. Please try again later.';
+        break;
+      case 'network-request-failed':
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+        break;
+      case 'operation-not-allowed':
+        errorMessage = 'This sign-in method is not allowed. Please contact support.';
+        break;
+      case 'invalid-credential':
+        errorMessage = 'The credentials provided are invalid. Please try again.';
+        break;
+      case 'account-exists-with-different-credential':
+        errorMessage = 'An account already exists with the same email but different sign-in credentials.';
+        break;
+      case 'user-token-expired':
+        errorMessage = 'Your session has expired. Please sign in again.';
+        break;
+      default:
+        errorMessage = 'Error signing in. Please check your email and password.';
+        break;
       }
+      
+      log('login.dart: Error: $errorMessage'); // Debugging output
       log('login.dart: Showing error dialog...'); // Debugging output
+      
       await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomAlertDialog(
-            title: 'Error logging in',
-            message: errorMessage,
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+        title: 'Error logging in',
+        message: errorMessage,
+        actions: <Widget>[
+          TextButton(
+          child: const Text('OK'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          ),
+        ],
+        );
+      },
       );
+      
       log('login.dart: Error dialog shown, returning false...'); // Debugging output
       return false;
     } catch (e) {
@@ -141,12 +200,18 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
-          children: [
-            // Email TextField
+        AutofillGroup(
+          child: Column(
+            children: [
+              // Email TextField
             AuthTextField(
               hintText: 'Email', 
               controller: widget.emailController,
+              focusNode: widget.emailFocusNode,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.username],
+              onSubmitted: (_) => widget.passwordFocusNode.requestFocus(),
               onChanged: (value) => validateEmail(value),
             ),
             const SizedBox(height: 5),
@@ -154,7 +219,11 @@ class _LoginFormState extends State<LoginForm> {
             AuthTextField(
               hintText: 'Password',
               controller: widget.passwordController,
+              focusNode: widget.passwordFocusNode,
               obscureText: widget.obscurePassword,
+              textInputAction: TextInputAction.done,
+              autofillHints: const [AutofillHints.password],
+              onSubmitted: (_) => signUserIn(context),
               onChanged: (value) => validatePassword(value),
             ),
             const SizedBox(height: 12), // Reduced from 16
@@ -190,6 +259,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
           ],
+        ),
         ),
       ],
     );

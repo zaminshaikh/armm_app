@@ -89,7 +89,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Authentication',
+        title: 'App Lock',
         implyLeading: true,
         showNotificationButton: false,
       ),

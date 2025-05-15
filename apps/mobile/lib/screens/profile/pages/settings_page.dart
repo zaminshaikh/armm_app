@@ -1,6 +1,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:armm_app/auth/auth_utils/open_mail_app.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
+import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/screens/profile/components/delete_account_button.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/resources.dart';
@@ -34,6 +35,13 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _loadSwitchValue();
+  }
+
+  @override
+  void dispose() {
+    // Dismiss keyboard if it's open
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.dispose();
   }
 
   Future<void> _checkNotificationPermission() async {
@@ -237,7 +245,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           notifsSwitchValue = true;
                         });
                         await _saveSwitchValue(true);
-                        // Additional logic for enabling notifications if needed.
+                        // Optionally, you can show a dialog or a snackbar to inform the user
+                        updateFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
                       } else {
                         _showPermissionDeniedDialog();
                         setState(() {
@@ -250,7 +259,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         notifsSwitchValue = false;
                       });
                       await _saveSwitchValue(false);
-                      // Additional logic for disabling notifications if needed.
+                      deleteFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
                     }
                   },
                 ),
@@ -321,295 +330,242 @@ class _SettingsPageState extends State<SettingsPage> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            TextEditingController emailController = TextEditingController();
-            bool isEmailValid = false;
+            TextEditingController newEmailController = TextEditingController();
+            TextEditingController currentPasswordController = TextEditingController();
+            bool isFormValid = false;
+            bool _isCurrentPasswordVisible = false; // Added for password visibility
 
-            // Save the onPressed logic for the Continue button
+            // Corrected: This function will now use the dialog's setState
+            void validateFormFields(void Function(void Function()) dialogSetState) {
+              final newEmail = newEmailController.text.trim();
+              final currentPassword = currentPasswordController.text.trim();
+              dialogSetState(() { // Use the passed-in setState
+                isFormValid = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(newEmail) && currentPassword.isNotEmpty;
+              });
+            }
+
             Future<void> onContinuePressed() async {
-              Navigator.of(context).pop();
-              
-              String newEmail = emailController.text.trim();
-              bool isValidEmail = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(newEmail);
+              FocusScope.of(context).unfocus(); // Dismiss keyboard
+              final newEmail = newEmailController.text.trim();
+              final currentPassword = currentPasswordController.text.trim();
 
-              if (!isValidEmail) {
+              // Close the dialog first
+              Navigator.of(context).pop();
+
+              if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(newEmail)) {
                 if (parentContext.mounted) {
                   showDialog(
                     context: parentContext,
                     builder: (context) => CustomAlertDialog(
                       title: 'Invalid Email',
                       message: 'Please enter a valid email address.',
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text('OK'),
-                        ),
-                      ],
+                      actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('OK'))],
                     ),
                   );
                 }
                 return;
               }
-              // First check how the user is authenticated
+
               final user = FirebaseAuth.instance.currentUser;
               if (user != null) {
-                List<String> providers = [];
-                for (var info in user.providerData) {
-                  providers.add(info.providerId);
+                List<String> providers = user.providerData.map((info) => info.providerId).toList();
+                if (providers.contains('apple.com') || providers.contains('google.com')) {
+                  String providerName = providers.contains('apple.com') ? 'Apple' : 'Google';
+                  if (parentContext.mounted) {
+                    showDialog(
+                      context: parentContext,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Cannot Change Email',
+                        message: 'You signed up with $providerName. Please update your email through your $providerName ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
+                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                      ),
+                    );
+                  }
+                  return;
                 }
 
-                // Check if user is OAuth authenticated
-                if (providers.contains('apple.com')) {
-                  if (parentContext.mounted) {
-                    showDialog(
-                      context: parentContext,
-                      builder: (context) => CustomAlertDialog(
-                        title: 'Cannot Change Email',
-                        message: 'You signed up with Apple. Please update your email through your Apple ID settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
-                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
-                      ),
-                    );
-                  }
-                  return;
-                } else if (providers.contains('google.com')) {
-                  if (parentContext.mounted) {
-                    showDialog(
-                      context: parentContext,
-                      builder: (context) => CustomAlertDialog(
-                        title: 'Cannot Change Email',
-                        message: 'You signed up with Google. Please update your email through your Google Account settings. Alternatively, you may delete your account and resign up if you wish to continue with a different email.',
-                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
-                      ),
-                    );
-                  }
-                  return;
-                }
-              }
-              // First ask for password to re-authenticate
-              TextEditingController passwordController = TextEditingController();
-              await showDialog(
-                context: parentContext,
-                builder: (context) => CustomAlertDialog(
-                  title: 'Verification Required',
-                  message: 'Please enter your current password to verify your identity.',
-                  input: Container(
-                    width: 300,
-                    child: TextField(
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        color: Colors.black87,
-                      ),
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Current password',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: Text('Verify'),
-                    ),
-                  ],
-                ),
-              ).then((confirmed) async {
-                if (confirmed == true) {
-                  try {
-                    String newEmail = emailController.text.trim();
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null && user.email != null) {
-                      AuthCredential credential = EmailAuthProvider.credential(
-                        email: user.email!,
-                        password: passwordController.text,
-                      );
-                      await user.reauthenticateWithCredential(credential);
-                      await user.verifyBeforeUpdateEmail(newEmail);
-                      if (parentContext.mounted) {
-                        Navigator.of(parentContext).pop();
+                try {
+                  if (user.email == null) {
+                     if (parentContext.mounted) {
                         showDialog(
                           context: parentContext,
                           builder: (context) => CustomAlertDialog(
-                            title: 'Email Change Requested',
-                            message: 'We have sent a verification email to your new email address. Please verify it to complete the update.',
-                            actions: [
-                              TextButton(onPressed: () => openMailApp(parentContext), child: const Text('Open Mail App'))
-                            ],
+                            title: 'Error',
+                            message: 'Your current email is not set.',
+                            actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('OK'))],
                           ),
                         );
                       }
-                    }
-                  } catch (e) {
-                    if (parentContext.mounted) {
-                      String errorMessage = 'An error occurred while updating your email.';
-                      if (e is FirebaseAuthException) {
-                        switch (e.code) {
-                          case 'requires-recent-login':
-                            errorMessage = 'Please log out and log back in to update your email.';
-                            break;
-                          case 'email-already-in-use':
-                            errorMessage = 'This email is already in use by another account.';
-                            break;
-                          case 'invalid-email':
-                            errorMessage = 'The email address is invalid.';
-                            break;
-                          case 'wrong-password':
-                            errorMessage = 'Incorrect password. Please try again.';
-                            break;
-                          case 'too-many-requests':
-                            errorMessage = 'Too many attempts. Please try again later.';
-                            break;
-                          case 'network-request-failed':
-                            errorMessage = 'Network error. Please check your connection.';
-                            break;
-                          case 'user-mismatch':
-                            errorMessage = 'The credential does not match the user you\'re trying to update.';
-                            break;
-                          case 'user-not-found':
-                            errorMessage = 'No user found for the provided email.';
-                            break;
-                          case 'invalid-credential':
-                            errorMessage = 'The credential provided is invalid or has expired. The password entered may be incorrect.';
-                            break;
-                          case 'invalid-verification-code':
-                            errorMessage = 'The verification code is invalid.';
-                            break;
-                          case 'invalid-verification-id':
-                            errorMessage = 'The verification ID is invalid.';
-                            break;
-                          case 'missing-android-pkg-name':
-                            errorMessage = 'An Android package name is required for this operation.';
-                            break;
-                          case 'missing-continue-uri':
-                            errorMessage = 'A continue URL must be provided for this operation.';
-                            break;
-                          case 'missing-ios-bundle-id':
-                            errorMessage = 'An iOS bundle ID is required for this operation.';
-                            break;
-                          case 'invalid-continue-uri':
-                            errorMessage = 'The continue URL provided is invalid.';
-                            break;
-                          case 'unauthorized-continue-uri':
-                            errorMessage = 'The domain of the continue URL is not whitelisted.';
-                            break;
-                          default:
-                            errorMessage = 'Authentication failed: ${e.message}';
-                        }
-                      } else {
-                        errorMessage = 'Error: ${e.toString()}';
-                      }
-                      log('settings.dart: Error updating email: $errorMessage');
-                      showDialog(
-                        context: parentContext,
-                        builder: (context) => CustomAlertDialog(
-                          title: 'Email Change Failed',
-                          message: errorMessage,
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(parentContext).pop(),
-                              child: Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
+                    return;
+                  }
+                  AuthCredential credential = EmailAuthProvider.credential(
+                    email: user.email!,
+                    password: currentPassword,
+                  );
+                  await user.reauthenticateWithCredential(credential);
+                  await user.verifyBeforeUpdateEmail(newEmail);
+
+                  if (parentContext.mounted) {
+                    showDialog( // Toast-like notification
+                      context: parentContext,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Verification Email Sent',
+                        message: 'A verification email has been sent to $newEmail. Please verify it to complete the update.',
+                        actions: [TextButton(onPressed: () { Navigator.of(context).pop(); openMailApp(parentContext); }, child: const Text('Open Mail'))],
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  String errorMessage = 'An error occurred.';
+                  if (e is FirebaseAuthException) {
+                    switch (e.code) {
+                      case 'requires-recent-login':
+                        errorMessage = 'Please log out and log back in to update your email.';
+                        break;
+                      case 'email-already-in-use':
+                        errorMessage = 'This email is already in use by another account.';
+                        break;
+                      case 'invalid-email':
+                        errorMessage = 'The new email address is invalid.';
+                        break;
+                      case 'wrong-password':
+                        errorMessage = 'Incorrect current password. Please try again.';
+                        break;
+                      case 'too-many-requests':
+                        errorMessage = 'Too many attempts. Please try again later.';
+                        break;
+                      default:
+                        errorMessage = e.message ?? 'An unknown error occurred.';
                     }
                   }
+                  log('settings.dart: Error updating email: $errorMessage, code: ${e is FirebaseAuthException ? e.code : 'N/A'}');
+                  if (parentContext.mounted) {
+                    showDialog( // Toast-like notification
+                      context: parentContext,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Email Change Failed',
+                        message: errorMessage,
+                        actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('OK'))],
+                      ),
+                    );
+                  }
                 }
-              });
+              }
             }
 
             return StatefulBuilder(
-              builder: (context, setState) {
+              builder: (context, dialogSetState) { // Ensure this dialogSetState is used for validateFormFields
                 return Dialog(
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 8),
-                        SvgPicture.asset(
-                          'assets/icons/change_email.svg',
-                          height: 180,
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          'Change Email',
-                          style: GoogleFonts.inter(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                  child: SingleChildScrollView( // Wrap with SingleChildScrollView
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 8),
+                          SvgPicture.asset(
+                            'assets/icons/change_email.svg',
+                            height: 180,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'You are changing the email associated with your account.',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        TextField(
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            hintText: 'New Email',
-                            hintStyle: GoogleFonts.inter(color: Colors.black54),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3FA),
-                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
+                          const SizedBox(height: 24),
+                          Text(
+                            'Change Email',
+                            style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
                           ),
-                          style: GoogleFonts.inter(color: Colors.black),
-                          onChanged: (value) {
-                            setState(() {
-                              isEmailValid = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value.trim());
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: isEmailValid ? onContinuePressed : null,
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
+                          const SizedBox(height: 12),
+                          Text(
+                            'Enter your current password and new email address.',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          TextField(
+                            controller: currentPasswordController,
+                            obscureText: !_isCurrentPasswordVisible,
+                            decoration: InputDecoration(
+                              hintText: 'Current Password',
+                              hintStyle: GoogleFonts.inter(color: Colors.black54),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3FA),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
                               ),
-                              backgroundColor: isEmailValid ? AppColors.primary : Colors.grey[300]!,
-                              disabledBackgroundColor: Colors.transparent,
-                              side: BorderSide(
-                                color: Colors.grey[300]!,
-                                width: 2,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.black54,
+                                ),
+                                onPressed: () {
+                                  dialogSetState(() {
+                                    _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
+                                  });
+                                },
                               ),
-                              elevation: 0,
                             ),
-                            child: Text(
-                              'Continue',
-                              style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: isEmailValid ? Colors.white : Colors.grey[600]!,
+                            style: GoogleFonts.inter(color: Colors.black),
+                            onChanged: (value) => validateFormFields(dialogSetState), // Corrected
+                          ),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: newEmailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              hintText: 'New Email',
+                              hintStyle: GoogleFonts.inter(color: Colors.black54),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3FA),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                            style: GoogleFonts.inter(color: Colors.black),
+                            onChanged: (value) => validateFormFields(dialogSetState), // Corrected
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: isFormValid ? onContinuePressed : null,
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                backgroundColor: isFormValid ? AppColors.primary : Colors.grey[300]!,
+                                disabledBackgroundColor: Colors.transparent, // Consider a less transparent color for disabled
+                                side: BorderSide(
+                                  color: isFormValid ? AppColors.primary : Colors.grey[300]!,
+                                  width: 2,
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'Continue',
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: isFormValid ? Colors.white : Colors.grey[600]!,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -642,7 +598,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-
   Widget _buildChangePasswordSection() {
     return GestureDetector(
       onTap: () {
@@ -650,50 +605,122 @@ class _SettingsPageState extends State<SettingsPage> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            TextEditingController passwordController = TextEditingController();
-            bool isPasswordValid = false;
+            TextEditingController newPasswordController = TextEditingController();
+            TextEditingController currentPasswordController = TextEditingController();
+            bool isFormValid = false;
+            bool _isCurrentPasswordVisible = false; // Added for current password visibility
+            bool _isNewPasswordVisible = false; // Added for new password visibility
 
-            // Save the onPressed logic for the Continue button
+            // Local setState for the dialog
+            void validateForm(void Function(void Function()) dialogSetState) {
+              final newPassword = newPasswordController.text.trim();
+              final currentPassword = currentPasswordController.text.trim();
+              dialogSetState(() {
+                isFormValid = newPassword.length >= 6 && currentPassword.isNotEmpty;
+              });
+            }
+
             Future<void> onContinuePressed() async {
+              FocusScope.of(context).unfocus(); // Dismiss keyboard
+              final newPassword = newPasswordController.text.trim();
+              final currentPassword = currentPasswordController.text.trim();
+
+              // Close the dialog first
               Navigator.of(context).pop();
-              
-              String newPassword = passwordController.text.trim();
+
               if (newPassword.length < 6) {
                 if (parentContext.mounted) {
-                  showDialog(
+                  showDialog( // Toast-like notification
                     context: parentContext,
                     builder: (context) => CustomAlertDialog(
                       title: 'Invalid Password',
                       message: 'Password should be at least 6 characters.',
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text('OK'),
-                        ),
-                      ],
+                      actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('OK'))],
                     ),
                   );
                 }
                 return;
               }
               
-              try {
-                var user = FirebaseAuth.instance.currentUser;
-                if (user != null) {
-                  await user.updatePassword(newPassword);
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                List<String> providers = user.providerData.map((info) => info.providerId).toList();
+                if (providers.contains('apple.com') || providers.contains('google.com')) {
+                  String providerName = providers.contains('apple.com') ? 'Apple' : 'Google';
                   if (parentContext.mounted) {
                     showDialog(
                       context: parentContext,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Cannot Change Password',
+                        message: 'You signed up with $providerName. Please manage your password through your $providerName ID settings.',
+                        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))],
+                      ),
+                    );
+                  }
+                  return;
+                }
+
+                try {
+                  if (user.email == null) {
+                     if (parentContext.mounted) {
+                        showDialog(
+                          context: parentContext,
+                          builder: (context) => CustomAlertDialog(
+                            title: 'Error',
+                            message: 'Your current email is not set. Cannot re-authenticate.',
+                            actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('OK'))],
+                          ),
+                        );
+                      }
+                    return;
+                  }
+                  AuthCredential credential = EmailAuthProvider.credential(
+                    email: user.email!,
+                    password: currentPassword,
+                  );
+                  await user.reauthenticateWithCredential(credential);
+                  await user.updatePassword(newPassword);
+                  
+                  if (parentContext.mounted) {
+                    ScaffoldMessenger.of(parentContext).showSnackBar(
+                      const SnackBar(
+                        content: Text('Your password has been successfully updated.'),
+                        duration: Duration(seconds: 3), // You can adjust the duration
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  String errorMessage = 'An error occurred.';
+                  if (e is FirebaseAuthException) {
+                    switch (e.code) {
+                      case 'requires-recent-login':
+                        errorMessage = 'Please log out and log back in to update your password.';
+                        break;
+                      case 'weak-password':
+                        errorMessage = 'The new password is too weak.';
+                        break;
+                      case 'wrong-password':
+                        errorMessage = 'Incorrect current password. Please try again.';
+                        break;
+                      case 'too-many-requests':
+                        errorMessage = 'Too many attempts. Please try again later.';
+                        break;
+                      default:
+                        errorMessage = e.message ?? 'An unknown error occurred.';
+                    }
+                  }
+                  log('settings.dart: Error updating password: $errorMessage, code: ${e is FirebaseAuthException ? e.code : 'N/A'}');
+                  if (parentContext.mounted) {
+                    showDialog( // Toast-like notification for errors
+                      context: parentContext,
                       builder: (BuildContext context) {
                         return CustomAlertDialog(
-                          title: 'Password Updated',
-                          message: 'Your password has been successfully updated.',
+                          title: 'Password Change Failed',
+                          message: errorMessage,
                           actions: <Widget>[
                             TextButton(
                               child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
+                              onPressed: () => Navigator.of(context).pop(),
                             ),
                           ],
                         );
@@ -701,116 +728,133 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                   }
                 }
-              } catch (e) {
-                log('settings.dart: Error updating password: $e');
-                if (parentContext.mounted) {
-                  showDialog(
-                    context: parentContext,
-                    builder: (BuildContext context) {
-                      return CustomAlertDialog(
-                        title: 'Error',
-                        message: 'Error updating password: $e',
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
               }
             }
 
             return StatefulBuilder(
-              builder: (context, setState) {
+              builder: (context, dialogSetState) { // Pass dialogSetState to validateForm
                 return Dialog(
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 8),
-                        SvgPicture.asset(
-                          'assets/icons/change_password.svg', // Assuming this asset exists
-                          height: 180,
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          'Change Password',
-                          style: GoogleFonts.inter(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                  child: SingleChildScrollView( // Wrap with SingleChildScrollView
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 8),
+                          SvgPicture.asset(
+                            'assets/icons/change_password.svg', 
+                            height: 180,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'You are changing the password associated with your account.',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: 'New Password',
-                            hintStyle: GoogleFonts.inter(color: Colors.black54),
-                            filled: true,
-                            fillColor: Color(0xFFF2F3FA),
-                            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
+                          const SizedBox(height: 24),
+                          Text(
+                            'Change Password',
+                            style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
                           ),
-                          style: GoogleFonts.inter(color: Colors.black),
-                          onChanged: (value) {
-                            setState(() {
-                              isPasswordValid = value.trim().length >= 6;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: isPasswordValid ? onContinuePressed : null,
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
+                          const SizedBox(height: 12),
+                          Text(
+                            'Enter your current password and new password.',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          TextField(
+                            controller: currentPasswordController,
+                            obscureText: !_isCurrentPasswordVisible,
+                            decoration: InputDecoration(
+                              hintText: 'Current Password',
+                              hintStyle: GoogleFonts.inter(color: Colors.black54),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3FA),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
                               ),
-                              backgroundColor: isPasswordValid ? AppColors.primary : Colors.grey[300]!,
-                              disabledBackgroundColor: Colors.transparent,
-                              side: BorderSide(
-                                color: Colors.grey[300]!,
-                                width: 2,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.black54,
+                                ),
+                                onPressed: () {
+                                  dialogSetState(() {
+                                    _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
+                                  });
+                                },
                               ),
-                              elevation: 0,
                             ),
-                            child: Text(
-                              'Continue',
-                              style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: isPasswordValid ? Colors.white : Colors.grey[600]!,
+                            style: GoogleFonts.inter(color: Colors.black),
+                            onChanged: (value) => validateForm(dialogSetState),
+                          ),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: newPasswordController,
+                            obscureText: !_isNewPasswordVisible,
+                            decoration: InputDecoration(
+                              hintText: 'New Password',
+                              hintStyle: GoogleFonts.inter(color: Colors.black54),
+                              filled: true,
+                              fillColor: Color(0xFFF2F3FA),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isNewPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.black54,
+                                ),
+                                onPressed: () {
+                                  dialogSetState(() {
+                                    _isNewPasswordVisible = !_isNewPasswordVisible;
+                                  });
+                                },
+                              ),
+                            ),
+                            style: GoogleFonts.inter(color: Colors.black),
+                            onChanged: (value) => validateForm(dialogSetState),
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: isFormValid ? onContinuePressed : null,
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                backgroundColor: isFormValid ? AppColors.primary : Colors.grey[300]!,
+                                disabledBackgroundColor: Colors.transparent,
+                                side: BorderSide(
+                                  color: isFormValid ? AppColors.primary : Colors.grey[300]!,
+                                  width: 2,
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'Continue',
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: isFormValid ? Colors.white : Colors.grey[600]!,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );

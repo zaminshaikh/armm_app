@@ -50,7 +50,7 @@ export const checkDocumentExists = functions.https.onCall(async (data, context) 
  * @returns {Promise<{ isLinked: boolean }>}
  * @throws {functions.https.HttpsError} If any validation or retrieval error occurs.
  */
-export const checkDocumentLinked = functions.https.onCall(async (data, context) => {
+export const checkDocumentLinked = functions.https.onCall(async (data: { cid: any; usersCollectionID: any; }, context: any) => {
   const { cid, usersCollectionID } = data;
   if (!cid || !usersCollectionID) {
     throw new functions.https.HttpsError(
@@ -84,12 +84,12 @@ export const checkDocumentLinked = functions.https.onCall(async (data, context) 
  * @returns {Promise<{ isLinked: boolean }>} - Whether or not the UID is found in that collection.
  * @throws {functions.https.HttpsError} If any validation or retrieval error occurs.
  */
-export const isUIDLinked = functions.https.onCall(async (data, context) => {
+export const isUIDLinked = functions.https.onCall(async (data: { uid: any; usersCollectionID: any; }, context: any) => {
   const { uid, usersCollectionID } = data;
   if (!uid || !usersCollectionID) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "Must provide 'cid' and 'usersCollectionID'."
+      "Must provide 'uid' and 'usersCollectionID'."
     );
   }
 

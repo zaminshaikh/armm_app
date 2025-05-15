@@ -1,24 +1,26 @@
 // lib/screens/dashboard/dashboard.dart
+import 'dart:async';
 import 'dart:developer';
+import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/components/assets_structure_section.dart';
+import 'package:armm_app/components/custom_alert_dialog.dart';
+
 import 'package:armm_app/database/models/activity_model.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:armm_app/screens/dashboard/components/dashboard_app_bar.dart';
 import 'package:armm_app/screens/dashboard/components/three_recent_activities.dart';
-import 'package:armm_app/screens/dashboard/components/total_assets_section.dart';
 import 'package:armm_app/screens/dashboard/components/user_breakdown_section.dart';
 import 'package:armm_app/screens/notifications/notifications.dart';
-import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:armm_app/utils/bottom_nav.dart';
 import 'package:armm_app/utils/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
 
 class DashboardPage extends StatefulWidget {
   final bool fromFaceIdPage;
@@ -36,11 +38,17 @@ class _DashboardPageState extends State<DashboardPage>
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   List<Activity> activities = [];
+  late final PageController _connectedUsersPageController;
+  int _currentConnectedUserPage = 0;
+  Future<String?>? _profilePicUrlFuture;
+  Timer? _clientLoadingTimer;
 
   @override
   void initState() {
     super.initState();
     _loadAppLockState();
+    // Initialize the client loading timer
+    _startClientLoadingTimer();
     // Initialize the animation controller and set its value to 1.0 by default
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
@@ -61,11 +69,68 @@ class _DashboardPageState extends State<DashboardPage>
     _updateAuthState();
     // Validate whether the user is authenticated
     _validateAuth();
+
+    // Initialize controller for connected users carousel
+    _connectedUsersPageController = PageController();
+    _connectedUsersPageController.addListener(() {
+      final page = _connectedUsersPageController.page?.round() ?? 0;
+      if (page != _currentConnectedUserPage) {
+        setState(() => _currentConnectedUserPage = page);
+      }
+    });
+  }
+
+  void _startClientLoadingTimer() {
+    _clientLoadingTimer = Timer(const Duration(seconds: 5), () {
+      if (client == null && mounted) {
+        // Show error dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => CustomAlertDialog(
+            title: 'Connection Timeout',
+            message: 'The connection is taking longer than expected. Please return to the login page and try again.',
+            icon: const Icon(
+              Icons.timer,
+              color: Colors.red,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/onboarding', (Route<dynamic> route) => false);
+                },
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.logout, 
+                      color: Colors.red,
+                      size: 18,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Logout',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // Dispose of the animation controller
+    _clientLoadingTimer?.cancel();
+    _connectedUsersPageController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -73,7 +138,23 @@ class _DashboardPageState extends State<DashboardPage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     client = Provider.of<Client?>(context);
+    
+    // If client is loaded, cancel the timeout timer
+    if (client != null && _clientLoadingTimer != null) {
+      _clientLoadingTimer!.cancel();
+      _clientLoadingTimer = null;
+    }
+    
     _retrieveActivities();
+
+    // Initialize profile‑pic once
+    if (client != null && _profilePicUrlFuture == null) {
+      _profilePicUrlFuture = FirebaseStorage
+        .instance
+        .ref('profilePics/${client!.cid}.jpg')
+        .getDownloadURL()
+        .catchError((_) => '');
+    }
   }
 
   Future<void> _loadAppLockState() async {
@@ -169,27 +250,9 @@ class _DashboardPageState extends State<DashboardPage>
     if (client == null) {
       return Scaffold(
         backgroundColor: const Color.fromARGB(255, 251, 251, 251),
-        appBar: AppBar(
-          backgroundColor: AppColors.primary,
-          elevation: 0,
-          title: Container(
-            height: 30,
-            width: 150,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.grey[300],
-                radius: 18,
-              ),
-            ),
-            const SizedBox(width: 16),
-          ],
+        appBar: const DashboardAppBar(
+          client: null,
+          showNotificationButton: false,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -244,25 +307,27 @@ class _DashboardPageState extends State<DashboardPage>
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavBar(currentItem: NavigationItem.dashboard),
+        bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.dashboard),
       );
     }
   
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 251, 251, 251),
       appBar: client != null
-      ? DashboardAppBar(
-          showNotificationButton: true,
-          onNotificationTap: () {
+        ? DashboardAppBar(
+            client: client!,
+            profilePicFuture: _profilePicUrlFuture,    // ← pass it here
+            showNotificationButton: true,
+            onNotificationTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const NotificationPage(),
           ),
         );
-          },
-          client: client!,
-        ) : null, // Show nothing if client is null
+            },
+          )
+        : null, // Show nothing if client is null
 
       body: SingleChildScrollView(
         child: Column(
@@ -297,7 +362,7 @@ class _DashboardPageState extends State<DashboardPage>
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(currentItem: NavigationItem.dashboard,),
+      bottomNavigationBar: const BottomNavBar(currentItem: NavigationItem.dashboard,),
     );
   }
 
@@ -346,21 +411,41 @@ class _DashboardPageState extends State<DashboardPage>
             ],
           ),
           const SizedBox(height: 20),
-          Column(
-            children: client!.connectedUsers!
-                .map(
-                  (connectedUser) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      UserBreakdownSection(
-                        client: connectedUser!,
-                        isConnectedUser: true,
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                )
-                .toList(),
+          // Expandable carousel so tiles can grow dynamically
+          AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            child: ExpandablePageView.builder(
+              controller: _connectedUsersPageController,
+              onPageChanged: (index) => setState(() => _currentConnectedUserPage = index),
+              scrollDirection: Axis.horizontal,
+              itemCount: client!.connectedUsers!.length,
+              itemBuilder: (context, index) {
+                final connectedUser = client!.connectedUsers![index]!;
+                return UserBreakdownSection(
+                  client: connectedUser,
+                  isConnectedUser: true,
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          // sliding indicator dots
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              client!.connectedUsers!.length,
+              (index) => Container(
+                width: 8,
+                height: 8,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentConnectedUserPage == index
+                      ? AppColors.primary
+                      : Colors.grey,
+                ),
+              ),
+            ),
           ),
         ],
       );

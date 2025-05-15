@@ -4,11 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'logout_button.dart';
 
 class ProfileButtons extends StatelessWidget {
-  final VoidCallback onLogout;
 
   const ProfileButtons({
     Key? key,
-    required this.onLogout,
   }) : super(key: key);
 
   @override
@@ -210,7 +208,7 @@ class ProfileButtons extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'Authentication',
+                        'App Lock',
                         style: GoogleFonts.inter(
                           textStyle: const TextStyle(
                             fontSize: 14,
@@ -237,6 +235,14 @@ class ProfileButtons extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+                const SizedBox(height: 8),
+                // ARMM Logo
+                SvgPicture.asset(
+                  'assets/icons/ARMM_Logo.svg',
+                  width: 30,
+                  height: 30,
+                ),
+                const SizedBox(height: 16),
                 Text(
                 'Disclaimer',
                 style: GoogleFonts.inter(

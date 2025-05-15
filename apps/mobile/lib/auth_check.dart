@@ -1,12 +1,13 @@
 import 'dart:developer';
 
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/auth/signup/client_id_page.dart';
+import 'package:armm_app/auth/signup/verify_email_page.dart';
 import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
-import 'package:armm_app/screens/profile/profile.dart';
-import 'package:armm_app/utils/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:armm_app/components/custom_progress_indicator.dart';
 
@@ -19,34 +20,48 @@ class AuthCheck extends StatefulWidget {
 }
 
 class _AuthCheckState extends State<AuthCheck> {
-  late Future<bool> _isAuthenticatedAndVerifiedFuture;
+  late Future<Map<String, dynamic>> _authCheckFuture;
 
   /// Check if the user is authenticated, email verified, and linked
-  Future<bool> isAuthenticatedAndVerified() async {
+  /// Also check if there's a stored CID in SharedPreferences
+  Future<Map<String, dynamic>> checkAuthAndCID() async {
+    final result = <String, dynamic>{
+      'isAuthenticated': false,
+      'isEmailVerified': false,
+      'isLinked': false,
+      'storedCID': null as String?,
+    };
+    
+    // Check for a stored CID in SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final String? storedCID = prefs.getString('cid');
+    result['storedCID'] = storedCID;
+    
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return false;
+      return result;
     }
 
-    await user.reload(); 
-
-    if (!user.emailVerified) {
-      return false;
-    }
-
+    await user.reload();
+    result['isEmailVerified'] = user.emailVerified;
+    
     String uid = user.uid;
-
     DatabaseService db = DatabaseService(uid);
-
+    
     bool isLinked = await db.isUIDLinked(uid);
-
-    return isLinked;
+    result['isLinked'] = isLinked;
+    
+    result['isAuthenticated'] = true; // User is not null here
+    
+    log('AuthCheck: checkAuthAndCID result: $result');
+    
+    return result;
   }
 
   @override
   void initState() {
     super.initState();
-    _isAuthenticatedAndVerifiedFuture = isAuthenticatedAndVerified();
+    _authCheckFuture = checkAuthAndCID();
   }
 
 
@@ -68,25 +83,57 @@ class _AuthCheckState extends State<AuthCheck> {
         log('AuthCheck: User data received, user is ${user != null ? "signed in" : "null"}');
         if (user != null) {
         // User is signed in
-        return FutureBuilder(
-          future: _isAuthenticatedAndVerifiedFuture,
+        return FutureBuilder<Map<String, dynamic>>(
+          future: _authCheckFuture,
           builder: (context, authSnapshot) {
-            log('AuthCheck: Checking if user is authenticated, verified and linked');
+            log('AuthCheck: Checking authentication status');
             if (authSnapshot.connectionState == ConnectionState.waiting) {
-              log('AuthCheck: Waiting for verification check');
+              log('AuthCheck: Waiting for authentication check');
               return const CustomProgressIndicator(
                 shouldTimeout: true,
               );
             } else if (authSnapshot.hasError) {
-              log('AuthCheck: Error in verification check: ${authSnapshot.error}');
+              log('AuthCheck: Error in authentication check: ${authSnapshot.error}');
               return Center(child: Text('Error: ${authSnapshot.error}'));
-            } else if (authSnapshot.hasData && authSnapshot.data == true) {
-              // User is authenticated, email verified, and linked
-              log('AuthCheck: User is authenticated, email verified, and linked - navigating to Dashboard');
-              return const DashboardPage();
+            } else if (authSnapshot.hasData) {
+              final data = authSnapshot.data!;
+              final bool isEmailVerified = data['isEmailVerified'] ?? false;
+              final bool isLinked = data['isLinked'] ?? false;
+              final String? storedCID = data['storedCID'];
+              
+              // Case 1: User is fully authenticated (email verified and UID linked)
+              if (isEmailVerified && isLinked) {
+                log('AuthCheck: User is authenticated, email verified, and linked - navigating to Dashboard');
+                // If there's still a storedCID, clean it up since we don't need it anymore
+                if (storedCID != null) {
+                  SharedPreferences.getInstance().then((prefs) => prefs.remove('cid'));
+                }
+                return const DashboardPage();
+              }
+              
+              // Case 2: User has a Firebase account, but email not verified yet, and we have a stored CID
+              else if (!isEmailVerified && storedCID != null) {
+                log('AuthCheck: User has unverified email and stored CID - navigating to VerifyEmailPage');
+                return VerifyEmailPage(cid: storedCID);
+              }
+              
+              // Case 3: User's email is verified, not linked, but we have a stored CID
+              else if (isEmailVerified && !isLinked && storedCID != null) {
+                log('AuthCheck: User has verified email, is not linked, and has stored CID - navigating to VerifyEmailPage to complete linking');
+                return VerifyEmailPage(cid: storedCID);
+              }
+              
+              // Case 4: User's email is verified but not linked, and no stored CID
+              else if (isEmailVerified && !isLinked && storedCID == null) {
+                log('AuthCheck: User has verified email but no CID - navigating to ClientIDPage');
+                return const ClientIDPage();
+              }
+              
+              // Default case: Something's incomplete with the signup process
+              log('AuthCheck: User exists but authentication flow is incomplete - navigating to Onboarding');
+              return const OnboardingPage();
             } else {
-              // User is not authenticated, email not verified, or not linked
-              log('AuthCheck: User is NOT fully verified or linked - navigating to Onboarding');
+              log('AuthCheck: No authentication data available - navigating to Onboarding');
               return const OnboardingPage();
             }
           });

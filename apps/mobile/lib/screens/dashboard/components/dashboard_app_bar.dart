@@ -3,21 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/database/models/client_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'total_assets_section.dart'; // Adjust the import according to your project structure
 import 'package:armm_app/utils/utilities.dart';
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Client client;
+  final Client? client; // ← nullable
   final VoidCallback? onNotificationTap;
   final bool implyLeading;
   final bool showNotificationButton;
+  final Future<String?>? profilePicFuture;         // ← new
 
   const DashboardAppBar({
     Key? key,
-    required this.client,
+    this.client, // ← not required
     this.onNotificationTap,
     this.implyLeading = false,
     this.showNotificationButton = true,
+    this.profilePicFuture,                        // ← new
   }) : super(key: key);
 
   @override
@@ -26,6 +29,19 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSkeleton = client == null;
+    final Future<String?> profilePicFuture = client != null
+        ? FirebaseStorage.instance
+            .ref('profilePics/${client!.cid}.jpg')
+            .getDownloadURL()
+            .then((url) => url as String?) // Convert non-null String to String?
+            .catchError((error) {
+              // Log the error for debugging purposes
+              log('Error loading profile picture: $error');
+              return null as String?; // Return null of type String?
+            })
+        : Future.value(null);
+
     return AppBar(
       iconTheme: const IconThemeData(color: Colors.white),
       automaticallyImplyLeading: implyLeading,
@@ -41,9 +57,9 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: const [
-                  Color(0xFF2B41B8),
-                  Color.fromARGB(255, 60, 84, 219),
-                  Color.fromARGB(255, 95, 116, 238),
+              Color(0xFF2B41B8),
+              Color.fromARGB(255, 60, 84, 219),
+              Color.fromARGB(255, 95, 116, 238),
             ],
             begin: Alignment.bottomCenter,
             end: Alignment.topRight,
@@ -59,92 +75,137 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: const Color.fromARGB(54, 255, 255, 255),
-                  child: Text(
-                    '${client.firstName[0]}${client.lastName[0]}',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+                if (isSkeleton)
+                  CircleAvatar(radius: 30, backgroundColor: Colors.grey[300])
+                else
+                  FutureBuilder<String?>(
+                    future: profilePicFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircleAvatar(
+                          radius: 30,
+                          backgroundColor: const Color.fromARGB(54, 255, 255, 255),
+                          child: const CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        );
+                      } else if (snapshot.hasData && snapshot.data != null) {
+                        return CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(snapshot.data!),
+                        );
+                      } else {
+                        return CircleAvatar(
+                          radius: 30,
+                          backgroundColor: const Color.fromARGB(54, 255, 255, 255),
+                          child: Text(
+                            '${client!.firstName[0]}${client!.lastName[0]}',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        );
+                      }
+                    },
                   ),
-                ),
                 const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome back,',
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
+                if (isSkeleton)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(height: 18, width: 100, color: Colors.grey[300]),
+                      const SizedBox(height: 4),
+                      Container(height: 22, width: 150, color: Colors.grey[300]),
+                    ],
+                  )
+                else
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome back,',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    ),
-                    Text(
-                      formatName(client.firstName, client.lastName),
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
+                      Text(
+                        formatName(client!.firstName, client!.lastName),
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
           ),
         ),
       ),
-      actions: showNotificationButton
-          ? [
-              Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                  onPressed: onNotificationTap ?? () {},
-                ),
-              ),
-            ]
-          : null,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: Column(
-          children: [
-            // Total Assets Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: TotalAssetsSection(client: client),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Center(
-                child: SvgPicture.asset(
-                  'assets/icons/ARMM_Logo_white.svg',
-                  height: 18,
-                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                  errorBuilder: (context, error, stackTrace) => const Text(
-                    'ARMM',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+      actions: isSkeleton
+          ? null
+          : (showNotificationButton
+              ? [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.notifications_none,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                      onPressed: onNotificationTap ?? () {},
                     ),
                   ),
+                ]
+              : null),
+      bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(80),
+          child: Column(
+            children: [
+          // Total Assets Section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            child: isSkeleton 
+            ? Container(
+                height: 60,
+                decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(12),
                 ),
+              )
+            : TotalAssetsSection(client: client!),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Center(
+              child: SvgPicture.asset(
+            'assets/icons/ARMM_Logo_white.svg',
+            height: 18,
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            errorBuilder: (context, error, stackTrace) => const Text(
+              'ARMM',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
-            
-            // ARMM Logo
-          ],
+              ),
+            ),
+          ),
+
+          // ARMM Logo
+            ],
+          ),
         ),
-      ),
-    );
+        );
   }
+
+  // _getProfilePicUrl can be removed or left unused
 }

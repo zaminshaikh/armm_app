@@ -1,6 +1,11 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:armm_app/auth/auth_utils/auth_functions.dart';
 import 'package:armm_app/auth/login/login.dart';
 import 'package:armm_app/auth/onboarding/onboarding_page.dart';
+import 'package:armm_app/database/auth_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,42 +22,43 @@ class LogoutButton extends StatelessWidget {
         return CustomAlertDialog(
           title: "Confirm Logout",
           message: "Are you sure you want to log out?",
-            icon: const Icon(Icons.logout, color: Colors.red),
-            actions: [
-              TextButton(
-                onPressed: () {
+          icon: const Icon(Icons.logout, color: Colors.red),
+          confirmButtonColor: Colors.red,
+          actions: [
+            TextButton(
+              onPressed: () {
                 Navigator.of(dialogContext).pop(false);
-                },
-                child: Text(
+              },
+              child: Text(
                 "Cancel",
                 style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                ),
               ),
-              TextButton(
-                onPressed: () {
+            ),
+            TextButton(
+              onPressed: () {
                 Navigator.of(dialogContext).pop(true);
-                },
-                child: Text(
+              },
+              child: Text(
                 "Log out",
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w600,
-                  color: Colors.red, // Make the logout option red
-                ),
                 ),
               ),
-            ],
+            ),
+          ],
         );
       },
     );
 
     if (shouldLogout == true) {
-      await AuthService().signOut();
+      await AuthService().logout(context);
       if (!context.mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const OnboardingPage()),
       );
     }
+
   }
 
   @override

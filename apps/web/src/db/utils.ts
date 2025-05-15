@@ -169,3 +169,21 @@ export const applyAssetChanges = (clientState: Client, changedAssets: any): Clie
 
   return newClientState;
 };
+
+/**
+ * Generates a unique ID for a new client.
+ *
+ * This function creates a unique identifier for a new client by using the current timestamp
+ * and a random number. The generated ID is a string that combines both values, ensuring
+ * uniqueness even if multiple clients are created at the same time.
+ *
+ * @returns A unique string identifier for the new client.
+ */
+export function formatPDFDate(date: Date | null | undefined): string {
+  if (!date) return 'N/A';
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  }).format(date);
+}
