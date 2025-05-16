@@ -11,9 +11,43 @@ import 'package:armm_app/utils/utilities.dart';
 import 'package:armm_app/utils/success_animation_helper.dart'; // Import for success animation
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart'; // Import for image cropping
 
 class NameAndCID extends StatelessWidget {
   const NameAndCID({Key? key}) : super(key: key);
+
+  // Method to crop selected image
+  Future<File?> _cropImage(File imageFile) async {
+    try {
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: imageFile.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 70,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Profile Picture',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+          ),
+          IOSUiSettings(
+            title: 'Crop Profile Picture',
+            aspectRatioLockEnabled: true,
+            resetAspectRatioEnabled: false,
+          ),
+        ],
+      );
+
+      if (croppedFile != null) {
+        return File(croppedFile.path);
+      }
+      return null;
+    } catch (e) {
+      log('Error cropping image: $e');
+      return null;
+    }
+  }
 
   // Helper method to upload profile picture with proper error handling
   Future<void> _uploadProfilePicture(BuildContext context, String cid, File imageFile) async {
@@ -38,7 +72,6 @@ class NameAndCID extends StatelessWidget {
             color: Colors.black.withOpacity(0.5),
             child: Center(
               child: CustomProgressIndicator(),
-
             ),
           ),
         ),
@@ -72,6 +105,9 @@ class NameAndCID extends StatelessWidget {
       // Log error
       log('Error uploading profile picture: $e');
       
+      // Remove loading overlay if still exists
+      overlayEntry.remove();
+      
       // Show error message if context is still mounted
       if (context.mounted) {
         // Safe way to show dialog without animation controller conflicts
@@ -92,6 +128,211 @@ class NameAndCID extends StatelessWidget {
     }
   }
 
+  // Method to select image and directly crop it
+  Future<void> _selectAndPreviewImage(BuildContext parentContext, String cid, ImageSource source) async {
+    final BuildContext stableContext = parentContext;
+    final picker = ImagePicker();
+    
+    try {
+      final pickedFile = await picker.pickImage(
+        source: source,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 80,
+      );
+      
+      if (pickedFile != null) {
+        File imageFile = File(pickedFile.path);
+        log('Image selected: ${imageFile.path}');
+        
+        if (stableContext.mounted) {
+          // Immediately crop the image after selection
+          File? croppedFile = await _cropImage(imageFile);
+          
+          // If cropping was successful, show the preview modal with the cropped image
+          // Otherwise use the original image (in case crop was cancelled)
+          if (stableContext.mounted) {
+            _showPreviewModal(stableContext, croppedFile ?? imageFile, cid);
+          } else {
+            log('Context no longer mounted after cropping image');
+          }
+        } else {
+          log('Context no longer mounted after picking image');
+        }
+      }
+    } catch (e) {
+      log('Error picking image: $e');
+      if (stableContext.mounted) {
+        showDialog(
+          context: stableContext,
+          builder: (BuildContext errorContext) => AlertDialog(
+            title: const Text('Error'),
+            content: Text('Failed to select image: ${e.toString()}'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(errorContext),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
+
+  // Method to show image preview modal
+  void _showPreviewModal(BuildContext context, File imageFile, String cid) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: false,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
+      builder: (modalContext) => WillPopScope(
+        onWillPop: () async => false, // Prevent back button from dismissing
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Handle bar
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  // Preview title
+                  Text(
+                    'Preview',
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  // Image preview
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.file(
+                      imageFile,
+                      fit: BoxFit.cover,
+                      height: 250,
+                      width: 250,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  
+                  // Action buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Edit button
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.edit),
+                          label: const Text('Edit'),
+                          onPressed: () async {
+                            // Don't dismiss the modal
+                            File? croppedFile = await _cropImage(imageFile);
+                            if (croppedFile != null) {
+                              // Update the preview with the cropped image
+                              setState(() {
+                                imageFile = croppedFile;
+                              });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: const Color(0xFFB3E5FC), // Light blue pastel
+                            foregroundColor: const Color(0xFF01579B), // Darker blue
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            textStyle: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      
+                      // Upload button
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.cloud_upload),
+                          label: const Text('Upload'),
+                          onPressed: () async {
+                            Navigator.pop(modalContext);
+                            if (context.mounted) {
+                              await _uploadProfilePicture(context, cid, imageFile);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: const Color(0xFFC8E6C9), // Light green pastel
+                            foregroundColor: const Color(0xFF1B5E20), // Darker green
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            textStyle: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      
+                      // Cancel button
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.cancel),
+                          label: const Text('Cancel'),
+                          onPressed: () => Navigator.pop(modalContext),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: const Color(0xFFFFCCBC), // Light coral/red pastel
+                            foregroundColor: const Color(0xFFBF360C), // Darker red
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            textStyle: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+      ),
+    );
+  }
+
   // Method to show picker for selecting camera or gallery
   Future<void> _showImagePicker(BuildContext parentContext, String cid) async {
     // Store the parent context before showing the bottom sheet
@@ -106,64 +347,23 @@ class NameAndCID extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.photo_library),
                 title: const Text('Choose from Gallery'),
-                onTap: () async {
-                  // Close the bottom sheet
+                onTap: () {
                   Navigator.pop(bottomSheetContext);
-                  
-                  // Use the image picker
-                  final picker = ImagePicker();
-                  final pickedFile = await picker.pickImage(
-                    source: ImageSource.gallery,
-                    maxWidth: 1000,
-                    maxHeight: 1000,
-                    imageQuality: 80,
-                  );
-                  
-                  // Use the stable context for all subsequent operations
-                  if (pickedFile != null) {
-                    final file = File(pickedFile.path);
-                    log('Picked file: ${file.path}');
-                    
-                    // Check if context is still valid before proceeding
-                    if (stableContext.mounted) {
-                      await _uploadProfilePicture(stableContext, cid, file);
-                      log('File uploaded: ${file.path}');
-                    } else {
-                      log('Context no longer mounted after picking file, upload aborted');
-                    }
-                  }
+                  _selectAndPreviewImage(stableContext, cid, ImageSource.gallery);
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.camera_alt),
                 title: const Text('Take a Photo'),
-                onTap: () async {
-                  // Close the bottom sheet
+                onTap: () {
                   Navigator.pop(bottomSheetContext);
-                  
-                  // Use the image picker
-                  final picker = ImagePicker();
-                  final pickedFile = await picker.pickImage(
-                    source: ImageSource.camera,
-                    maxWidth: 1000, 
-                    maxHeight: 1000,
-                    imageQuality: 80,
-                  );
-                  
-                  // Use the stable context for all subsequent operations
-                  if (pickedFile != null) {
-                    final file = File(pickedFile.path);
-                    log('Took photo: ${file.path}');
-                    
-                    // Check if context is still valid before proceeding
-                    if (stableContext.mounted) {
-                      await _uploadProfilePicture(stableContext, cid, file);
-                      log('Photo uploaded: ${file.path}');
-                    } else {
-                      log('Context no longer mounted after taking photo, upload aborted');
-                    }
-                  }
+                  _selectAndPreviewImage(stableContext, cid, ImageSource.camera);
                 },
+              ),
+              ListTile(
+                leading: const Icon(Icons.cancel),
+                title: const Text('Cancel'),
+                onTap: () => Navigator.pop(bottomSheetContext),
               ),
             ],
           ),
