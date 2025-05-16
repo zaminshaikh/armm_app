@@ -90,7 +90,7 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
       return;
     }
     
-    // Request biometric authentication when turning on
+    // Request biometric authentication permission when turning on
     log('Requesting biometric authentication permission');
     
     // Use LocalAuthentication to check if biometric authentication is available
@@ -108,30 +108,25 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
       log('Error checking biometrics: $e');
     }
     
-    // If biometrics are available, ask for permission
+    // If biometrics are available, just check permission status
     if (canCheckBiometrics) {
       try {
-        // This will trigger the system permission dialog on iOS and Android
-        bool didAuthenticate = await localAuth.authenticate(
-          localizedReason: 'Please authenticate to enable app lock',
-          options: const AuthenticationOptions(
-            useErrorDialogs: true,
-            stickyAuth: true,
-          ),
-        );
+        // This will show the native permission dialog if needed, without requiring authentication
+        bool canAuthenticate = false;
         
-        log('Authentication result: $didAuthenticate');
-        if (!didAuthenticate) {
-          // User canceled or failed authentication
+        // On iOS, this shows the permission dialog without requiring actual authentication
+        // The isDeviceSupported call triggers the native "Allow ARMM app to use Face ID" dialog
+        canAuthenticate = await localAuth.isDeviceSupported();
+        
+        if (canAuthenticate) {
+          // Permission dialog was shown, update the UI state
+          // The actual setup will be done when the Continue button is pressed
+          setState(() => _isAppLockEnabled = value);
+        } else {
           setState(() => _isAppLockEnabled = false);
-          return;
         }
-        
-        // Authentication succeeded, just update the UI state
-        // The actual setup will be done when the Continue button is pressed
-        setState(() => _isAppLockEnabled = value);
       } catch (e) {
-        log('Error authenticating: $e');
+        log('Error requesting biometric permission: $e');
         setState(() => _isAppLockEnabled = false);
         return;
       }
@@ -573,6 +568,22 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
                   child: Text(
                     'Continue',
                     style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 24),
+              
+              // Footer text explaining how to change permissions later
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'You can change permissions later in your device Settings > ARMM.',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    height: 1.3,
                   ),
                 ),
               ),
