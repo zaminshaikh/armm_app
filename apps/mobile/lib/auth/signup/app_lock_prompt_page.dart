@@ -63,21 +63,30 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
   /// Load user preferences from SharedPreferences.
   /// 
   /// Retrieves saved app lock and notifications settings.
-  /// Always starts with both toggles off for new users.
+  /// Checks for existing preferences, defaults to false if none found.
   Future<void> _loadSettings() async {
     log('Loading app settings');
     final prefs = await SharedPreferences.getInstance();
     
-    // Always start with both toggles off in the signup flow
-    await prefs.setBool('isAppLockEnabled', false);
-    await prefs.setBool('isNotificationsEnabled', false);
+    // Check if settings already exist
+    final savedAppLock = prefs.getBool('isAppLockEnabled');
+    final savedNotifications = prefs.getBool('isNotificationsEnabled');
+    
+    // Only set defaults if they don't exist already
+    if (savedAppLock == null) {
+      await prefs.setBool('isAppLockEnabled', false);
+    }
+    
+    if (savedNotifications == null) {
+      await prefs.setBool('isNotificationsEnabled', false);
+    }
     
     setState(() {
-      _isAppLockEnabled = false;
-      _isNotificationsEnabled = false;
+      _isAppLockEnabled = savedAppLock ?? false;
+      _isNotificationsEnabled = savedNotifications ?? false;
     });
     
-    log('Settings initialized - App lock: $_isAppLockEnabled, Notifications: $_isNotificationsEnabled');
+    log('Settings loaded - App lock: $_isAppLockEnabled, Notifications: $_isNotificationsEnabled');
   }
 
   /// Toggle app lock - requests permission but defers setup logic to Continue button
@@ -173,6 +182,10 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
     if (!value) {
       // Just turn it off without any permission checks
       setState(() => _isNotificationsEnabled = value);
+      // Save the preference immediately
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isNotificationsEnabled', false);
+      log('Notifications preference saved: false');
       return; // Token deletion will be handled by Continue button
     }
     
@@ -190,7 +203,8 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
     
     log('Notification authorization status: ${settings.authorizationStatus}');
     
-    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+    if (settings.authorizationStatus != AuthorizationStatus.authorized &&
+        settings.authorizationStatus != AuthorizationStatus.provisional) {
       // User denied notification permission
       log('Notification permission denied');
       if (mounted) {
@@ -209,12 +223,27 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
         );
       }
       setState(() => _isNotificationsEnabled = false);
+      // Save the preference immediately
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isNotificationsEnabled', false);
+      log('Notifications preference saved: false');
       return;
     }
     
-    // Permission was granted, update the UI state
-    // Token setup will be handled when the Continue button is pressed
-    setState(() => _isNotificationsEnabled = value);
+    // Permission was granted, update the UI state and save the preference
+    setState(() => _isNotificationsEnabled = true);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isNotificationsEnabled', true);
+    log('Notifications preference saved: true');
+    
+    // Get FCM token but defer registration to Continue button
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      log('FCM token retrieved: ${token != null ? 'success' : 'null'}');
+    } catch (e) {
+      log('Error retrieving FCM token: $e');
+      // We'll try again in _setupNotifications
+    }
   }
   
   /// Configures notifications based on the toggle state

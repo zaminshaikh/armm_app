@@ -129,15 +129,17 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _loadSwitchValue() async {
     final prefs = await SharedPreferences.getInstance();
-    bool savedValue = prefs.getBool('notifsSwitchValue') ?? false;
+    bool savedValue = prefs.getBool('isNotificationsEnabled') ?? false;
     setState(() {
       notifsSwitchValue = savedValue;
     });
+    log('Loaded notification preference: $savedValue');
   }
 
   Future<void> _saveSwitchValue(bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('notifsSwitchValue', value);
+    await prefs.setBool('isNotificationsEnabled', value);
+    log('Saved notification preference: $value');
   }
 
   @override
@@ -239,14 +241,26 @@ class _SettingsPageState extends State<SettingsPage> {
                         alert: true,
                         badge: true,
                         sound: true,
+                        provisional: false,
+                        criticalAlert: true,
                       );
-                      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+                      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
+                          settings.authorizationStatus == AuthorizationStatus.provisional) {
                         setState(() {
                           notifsSwitchValue = true;
                         });
                         await _saveSwitchValue(true);
-                        // Optionally, you can show a dialog or a snackbar to inform the user
-                        updateFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
+                        
+                        // Update Firebase token for the current user
+                        if (FirebaseAuth.instance.currentUser != null) {
+                          try {
+                            await updateFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
+                            log('Successfully updated Firebase messaging token');
+                          } catch (e) {
+                            log('Error updating Firebase messaging token: $e');
+                            // Continue despite error
+                          }
+                        }
                       } else {
                         _showPermissionDeniedDialog();
                         setState(() {
@@ -259,7 +273,17 @@ class _SettingsPageState extends State<SettingsPage> {
                         notifsSwitchValue = false;
                       });
                       await _saveSwitchValue(false);
-                      deleteFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
+                      
+                      // Delete Firebase token for the current user
+                      if (FirebaseAuth.instance.currentUser != null) {
+                        try {
+                          await deleteFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
+                          log('Successfully deleted Firebase messaging token');
+                        } catch (e) {
+                          log('Error deleting Firebase messaging token: $e');
+                          // Non-critical error, continue
+                        }
+                      }
                     }
                   },
                 ),
@@ -278,6 +302,8 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+
+
 
   Widget _buildSecuritySection() {
     return Container(
