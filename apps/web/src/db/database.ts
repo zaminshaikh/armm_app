@@ -667,9 +667,12 @@ export class DatabaseService {
         return {
           columns: [
             {
-              text: `Page ${currentPage} of ${pageCount}`,
+              text: [
+                { text: '6800 Jericho Turnpike, Suite 120W, Syosset, NY 11791\n', style: 'footerText' },
+                { text: 'Contact: info@armmgroup.co', style: 'footerText' }
+              ],
               alignment: 'center',
-              margin: [0, 5, 0, 0],
+              margin: [0, 20, 0, 0], // Increased top margin for better spacing
             },
           ],
         };
@@ -815,6 +818,15 @@ export class DatabaseService {
         summaryTable: {
           margin: [0, 0, 0, 10],
         },
+        footerText: { // Style for the address and contact info
+          fontSize: 10,
+          color: '#2B41B8', // Blue color like the header
+          italics: true,
+        },
+        footerPageNum: { // Style for the page number
+          fontSize: 10,
+          color: '#2B41B8',
+        }
       },
     };
   
