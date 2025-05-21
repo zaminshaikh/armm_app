@@ -669,7 +669,7 @@ export class DatabaseService {
             {
               text: [
                 { text: '6800 Jericho Turnpike, Suite 120W, Syosset, NY 11791\n', style: 'footerText' },
-                { text: 'Contact: info@armmgroup.co', style: 'footerText' }
+                { text: 'Contact: info@armmgroup.com', style: 'footerText' }
               ],
               alignment: 'center',
               margin: [0, 20, 0, 0], // Increased top margin for better spacing
