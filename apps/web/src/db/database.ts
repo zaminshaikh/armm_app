@@ -558,7 +558,7 @@ export class DatabaseService {
     
     // Set starting balance (use the most recent point before startDate, or 0 if none exists)
     let runningBalance = startingPointArray.length > 0 ? startingPointArray[0].amount : 0;
-    
+
     // 2. Get client's activities within the date range
     const clientRef = doc(this.db, config.FIRESTORE_ACTIVE_USERS_COLLECTION, client.cid);
     const activitiesCollection = collection(clientRef, config.ACTIVITIES_SUBCOLLECTION);
@@ -617,14 +617,30 @@ export class DatabaseService {
       };
     });
 
+    // Find the last graph point before or at endDate with selectedAccount
+    const endingPointArray = graphPoints
+      .filter(point => {
+        const pointDate = point.time instanceof Timestamp ? point.time.toDate() : point.time;
+        return pointDate && 
+               pointDate <= endDate && 
+               point.account === selectedAccount;
+      })
+      .sort((a, b) => {
+        const dateA = a.time instanceof Timestamp ? a.time.toDate() : (a.time || new Date(0));
+        const dateB = b.time instanceof Timestamp ? b.time.toDate() : (b.time || new Date(0));
+        return dateB.getTime() - dateA.getTime(); // Sort descending to get most recent first
+      });
+    const endingBalance = endingPointArray.length > 0
+      ? endingPointArray[0].amount
+      : (formattedActivities.length > 0 ? formattedActivities[formattedActivities.length - 1].balance : runningBalance);
+
     const letterhead = {
-          image: armmBase64,
-          width: 110,
-          alignment: 'center',
-          margin: [0, 0, 0, 20],
-      };
-  
-    // 3. Build the PDF document definition
+      image: armmBase64,
+      width: 110,
+      alignment: 'center',
+      margin: [0, 0, 0, 20],
+    };
+      // 3. Build the PDF document definition
     const docDefinition: any = {
       pageSize: 'LETTER',
       pageMargins: [40, 60, 40, 60],
@@ -707,7 +723,7 @@ export class DatabaseService {
             body: [
               [
                 { text: 'Investment Account Total Balance:', style: 'labelText' }, 
-                { text: formatCurrency(client.totalAssets || 0), style: 'valueText', alignment: 'right' }
+                { text: formatCurrency(endingBalance), style: 'valueText', alignment: 'right' }
               ],
             ]
           },
