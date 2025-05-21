@@ -86,15 +86,27 @@ const GenerateStatementModal: React.FC<GenerateStatementModalProps> = ({showModa
             <CInputGroupText>Start Date</CInputGroupText>
             <CFormInput type='date' onChange={
               (e) => {
-                const date = new Date(e.target.value);
-                setStartDate(date);
+                const dateString = e.target.value;
+                if (dateString) {
+                  const [year, month, day] = dateString.split('-').map(Number);
+                  // Create date at midnight in local timezone
+                  setStartDate(new Date(year, month - 1, day));
+                } else {
+                  setStartDate(null);
+                }
               }
             }/>
             <CInputGroupText>End Date</CInputGroupText>
             <CFormInput type='date' onChange={
               (e) => {
-                const date = new Date(e.target.value);
-                setEndDate(date);
+                const dateString = e.target.value;
+                if (dateString) {
+                  const [year, month, day] = dateString.split('-').map(Number);
+                  // Create date at the end of the day in local timezone for an inclusive range
+                  setEndDate(new Date(year, month - 1, day, 23, 59, 59, 999));
+                } else {
+                  setEndDate(null);
+                }
               }
             }/>
           </CInputGroup>
