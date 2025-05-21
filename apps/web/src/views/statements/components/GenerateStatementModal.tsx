@@ -117,7 +117,6 @@ const GenerateStatementModal: React.FC<GenerateStatementModalProps> = ({showModa
               setIsLoading(true);
               await db.generateStatementPDF(currentClient!, startDate!, endDate!, selectedAccount);
               setIsLoading(false);
-              setShowModal(false);
             }
           }
           loading={isLoading}

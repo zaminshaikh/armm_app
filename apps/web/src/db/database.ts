@@ -27,6 +27,7 @@ import { roundToNearestHour, formatCurrency, formatPDFDate } from './utils';
 import * as pdfMakeModule from 'pdfmake/build/pdfmake';
 import * as pdfFontsModule from 'pdfmake/build/vfs_fonts';
 import { format } from 'path';
+import { armmBase64, armmWatermarkBase64 } from './logos';
 
 // Get the correct reference to pdfMake
 const pdfMake = (pdfMakeModule as any).default || pdfMakeModule as any;
@@ -611,15 +612,41 @@ export class DatabaseService {
         date: activityDate ? formatPDFDate(activityDate) : 'N/A',
         type: activity.type || 'Transaction',
         amount: amount,
-        formattedCashflow: formatCurrency(amount),
+        formattedCashflow: (activity.type === 'withdrawal' ? '-' : '') + formatCurrency(amount),
         balance: runningBalance
       };
     });
+
+    const letterhead = {
+          image: armmBase64,
+          width: 110,
+          alignment: 'center',
+          margin: [0, 0, 0, 20],
+      };
   
     // 3. Build the PDF document definition
     const docDefinition: any = {
       pageSize: 'LETTER',
       pageMargins: [40, 60, 40, 60],
+      background: function (_currentPage: number, pageSize: any) {
+          /*
+            * Watermark: 110 % page width, rotated –45 °, and **truly centered**.
+            * Original logo aspect ratio ≈ 28 : 16 (width : height).
+            */
+          const wmWidth  = pageSize.width * 0.7;
+          const wmRatio  = 16 / 28;                 // height / width
+          const wmHeight = wmWidth * wmRatio;
+
+          return {
+              image: armmWatermarkBase64,
+              width: wmWidth,
+              opacity: 0.1,
+              absolutePosition: {
+                  x: (pageSize.width  - wmWidth)  / 2,
+                  y: (pageSize.height - wmHeight) / 2
+              }
+          };
+      },
       footer: (currentPage: number, pageCount: number) => {
         return {
           columns: [
@@ -632,6 +659,7 @@ export class DatabaseService {
         };
       },
       content: [
+        letterhead,
         // Statement Header
         {
           text: 'Account Statement',
