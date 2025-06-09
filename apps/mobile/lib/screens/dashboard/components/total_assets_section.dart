@@ -67,13 +67,13 @@ class TotalAssetsSection extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              // Right Column for YTD (Latest Return)
+              // Right Column for YTD
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const SizedBox(height: 10),
                   Text(
-                    'Latest Return',
+                    'YTD Return',
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
