@@ -197,7 +197,7 @@ export const EditAssetsSection: React.FC<EditAssetsSectionProps> = ({
   };
 
   // Function to handle editing an asset title
-  const handleEditAsset = (fundKey: string, oldAssetType: string, newAssetTitle: string) => {
+  const handleEditAsset = (fundKey: string, assetType: string, newAssetTitle: string) => {
     const assetTitleTrimmed = newAssetTitle.trim();
     if (assetTitleTrimmed === "") {
       alert("Asset name cannot be empty.");
@@ -210,37 +210,35 @@ export const EditAssetsSection: React.FC<EditAssetsSectionProps> = ({
       return;
     }
 
-    // Generate a new type based on the edited title
-    const newAssetType = assetTitleTrimmed.toLowerCase().replace(/\s+/g, "-");
-
     // Check for duplicate asset titles within the same fund
     const fundAssets = clientState.assets[fundKey];
     const duplicateTitle = Object.values(fundAssets).some(
-      (asset) =>
-        asset.displayTitle.toLowerCase() === assetTitleTrimmed.toLowerCase() &&
-        asset.displayTitle.toLowerCase() !== fundAssets[oldAssetType].displayTitle.toLowerCase()
+      (assetDetail) =>
+        assetDetail.displayTitle.toLowerCase() === assetTitleTrimmed.toLowerCase() &&
+        assetType !== assetDetail.displayTitle.toLowerCase().replace(/\\s+/g, "-") // Ensure we are not comparing to itself if title hasn't changed much
     );
     if (duplicateTitle) {
-      alert("An asset with this name already exists.");
+      alert("An asset with this name already exists in this fund.");
       return;
     }
 
     // Update clientState.assets
-    const oldAsset = fundAssets[oldAssetType];
-    const newAssets = {
-      ...fundAssets,
-      [newAssetType]: {
-        ...oldAsset,
-        displayTitle: assetTitleTrimmed,
-      },
+    const assetToUpdate = fundAssets[assetType];
+    const updatedAssetDetails = {
+      ...assetToUpdate,
+      displayTitle: assetTitleTrimmed,
     };
-    delete newAssets[oldAssetType];
+
+    const updatedFundAssets = {
+      ...fundAssets,
+      [assetType]: updatedAssetDetails, // Use the original assetType as the key
+    };
 
     const newState: Client = {
       ...clientState,
       assets: {
         ...clientState.assets,
-        [fundKey]: newAssets,
+        [fundKey]: updatedFundAssets,
       },
     };
     setClientState(newState);

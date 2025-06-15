@@ -9,6 +9,7 @@ import { formatDate, parseDateWithTwoDigitYear, toTitleCase } from 'src/utils/ut
 import countries from '../../utils/countries.json';
 import states from '../../utils/states.json';
 import provinces from '../../utils/provinces.json';
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 interface ClientInputProps {
     clientState: Client,
@@ -233,6 +234,7 @@ export const ClientInputModalBody: React.FC<ClientInputProps> = ({
     const db = new DatabaseService();
     const [ytdLoading, setYTDLoading] = useState(false);
     const [totalYTDLoading, setTotalYTDLoading] = useState(false);
+    const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
 
     const [editActivityIndex, setEditActivityIndex] = useState<number | null>(null);
     const [editedActivity, setEditedActivity] = useState<Activity>(emptyActivity);
@@ -262,8 +264,6 @@ export const ClientInputModalBody: React.FC<ClientInputProps> = ({
         }
     
         setClientState(updatedState);
-        console.log(updatedState.address);
-        console.log(updatedState.state);
     }, [
         clientState.street,
         clientState.city,
@@ -271,8 +271,41 @@ export const ClientInputModalBody: React.FC<ClientInputProps> = ({
         clientState.province,
         clientState.zip,
         clientState.country,
-        setClientState,
+        // Removed setClientState from dependencies to avoid potential infinite loops if not careful with its usage inside this useEffect
     ]);
+
+    useEffect(() => {
+        const fetchProfilePicUrl = async () => {
+            if (!clientState.cid) {
+                setProfilePicUrl(null);
+                return;
+            }
+
+            const storage = getStorage();
+            const extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+            let urlFound = false;
+
+            for (const ext of extensions) {
+                const imagePath = `profilePics/${clientState.cid}${ext}`;
+                try {
+                    const storageRef = ref(storage, imagePath);
+                    const downloadUrl = await getDownloadURL(storageRef);
+                    setProfilePicUrl(downloadUrl);
+                    urlFound = true;
+                    break; // Exit loop once URL is found
+                } catch (error) {
+                    // console.warn(`Profile picture not found with extension ${ext}:`, error);
+                    // Try next extension
+                }
+            }
+
+            if (!urlFound) {
+                setProfilePicUrl(null); // Set to null if no image found after trying all extensions
+            }
+        };
+
+        fetchProfilePicUrl();
+    }, [clientState.cid]);
 
     const handleRemoveActivity = (index: number) => {
         const updatedActivities = clientState.activities?.filter((_, i) => i !== index);
@@ -294,6 +327,13 @@ export const ClientInputModalBody: React.FC<ClientInputProps> = ({
 
     return (
             <CModalBody className="px-5">
+            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                <img 
+                    src={profilePicUrl || '/src/assets/images/placeholder-profile.svg'} 
+                    alt={`${clientState.firstName} ${clientState.lastName}'s profile`} 
+                    style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }}
+                />
+            </div>
             <CInputGroup className="mb-3 py-3">
                 <CInputGroupText>Client's First Name</CInputGroupText>
                 <CFormInput
