@@ -36,6 +36,21 @@ class _FAQSectionState extends State<FAQSection> {
       answer:
           "There is no minimum balance required to access the app; however, investment offerings may have their own minimum contribution requirements.",
     ),
+    FAQItem(
+      question: "How often are transactions updated on the ARMM Group App?",
+      answer:
+          "Transactions on the ARMM Group App are updated regularly, with most activity reflected in real-time or promptly upon confirmation. This allows you to monitor your investment transactions accurately and without delay.",
+    ),
+    FAQItem(
+      question: "How do I request an account statement?",
+      answer:
+          "To request an account statement, simply email your request—along with the specific months or date range you need—to one of the following:\n\n <a href='mailto:info@armmgroup.com'>info@armmgroup.com</a>\n\n <a href='mailto:mohammed@armmgroup.com'>mohammed@armmgroup.com</a>\n\nYour request will typically be processed within 24 hours.\n\nFor urgent needs, feel free to contact your ARMM advisor directly.",
+    ),
+    FAQItem(
+      question: "Can I add to my existing investment?",
+      answer:
+          "Yes. You can make additional investments into your current portfolio. Contact your ARMM Group representative for guidance on the process.",
+    ),
   ];
   
 
