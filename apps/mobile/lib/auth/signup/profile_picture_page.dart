@@ -154,21 +154,6 @@ class _ProfilePicturePageState extends State<ProfilePicturePage> {
                   _pickImage(ImageSource.gallery);
                 },
               ),
-              ListTile(
-               leading: SvgPicture.asset(
-                 'assets/icons/camera.svg',
-                 width: 24,
-                 height: 24,
-               ),
-                title: Text(
-                  'Take a Photo',
-                  style: GoogleFonts.inter(),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickImage(ImageSource.camera);
-                },
-              ),
             ],
           ),
         );
