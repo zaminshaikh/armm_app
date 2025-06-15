@@ -45,7 +45,7 @@ String formatName(String firstName, String lastName, {int maxLength = 15}) {
   if (lastName.isEmpty) return firstName;
   
   // If both names are short enough, return the full name
-  if (firstName.length <= 6 && lastName.length <= 6) {
+  if (firstName.length + lastName.length <= maxLength) {
     return '$firstName $lastName';
   }
   
