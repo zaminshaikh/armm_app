@@ -264,8 +264,6 @@ export const ClientInputModalBody: React.FC<ClientInputProps> = ({
         }
     
         setClientState(updatedState);
-        console.log(updatedState.address);
-        console.log(updatedState.state);
     }, [
         clientState.street,
         clientState.city,
