@@ -353,14 +353,6 @@ class NameAndCID extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Take a Photo'),
-                onTap: () {
-                  Navigator.pop(bottomSheetContext);
-                  _selectAndPreviewImage(stableContext, cid, ImageSource.camera);
-                },
-              ),
-              ListTile(
                 leading: const Icon(Icons.cancel),
                 title: const Text('Cancel'),
                 onTap: () => Navigator.pop(bottomSheetContext),
