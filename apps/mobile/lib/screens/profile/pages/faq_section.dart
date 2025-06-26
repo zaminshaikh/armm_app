@@ -1,9 +1,11 @@
+import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FAQItem {
   final String question;
-  final String answer;
+  final List<Widget> answer;
   FAQItem({required this.question, required this.answer});
 }
 
@@ -18,41 +20,82 @@ class _FAQSectionState extends State<FAQSection> {
   final List<FAQItem> _faqItems = [
     FAQItem(
       question: "What should I do if I forget my password?",
-      answer:
+      answer: [
+        Text(
           "On the login screen, tap “Forgot Password” and follow the steps to securely reset your credentials via email or SMS verification.",
+          style: GoogleFonts.inter(color: Colors.black),
+        ),
+      ],
     ),
     FAQItem(
       question: "Is the ARMM app available on both iOS and Android?",
-      answer:
+      answer: [
+        Text(
           "The ARMM Group app is available on both Android and iOS for download on the Apple App Store and Google Play Store.",
+          style: GoogleFonts.inter(color: Colors.black),
+        ),
+      ],
     ),
     FAQItem(
       question: "How do I enable or disable push notifications?",
-      answer:
+      answer: [
+        Text(
           "You can manage notification preferences under \"Profile Settings\" within the app to stay informed about investment updates, document uploads, and account activity.",
+          style: GoogleFonts.inter(color: Colors.black),
+        ),
+      ],
     ),
     FAQItem(
       question: "Is there a minimum account balance required to use the ARMM app?",
-      answer:
+      answer: [
+        Text(
           "There is no minimum balance required to access the app; however, investment offerings may have their own minimum contribution requirements.",
+          style: GoogleFonts.inter(color: Colors.black),
+        ),
+      ],
     ),
     FAQItem(
       question: "How often are transactions updated on the ARMM Group App?",
-      answer:
+      answer: [
+        Text(
           "Transactions on the ARMM Group App are updated regularly, with most activity reflected in real-time or promptly upon confirmation. This allows you to monitor your investment transactions accurately and without delay.",
+          style: GoogleFonts.inter(color: Colors.black),
+        ),
+      ],
     ),
     FAQItem(
       question: "How do I request an account statement?",
-      answer:
-          "To request an account statement, simply email your request—along with the specific months or date range you need—to one of the following:\n\n <a href='mailto:info@armmgroup.com'>info@armmgroup.com</a>\n\n <a href='mailto:mohammed@armmgroup.com'>mohammed@armmgroup.com</a>\n\nYour request will typically be processed within 24 hours.\n\nFor urgent needs, feel free to contact your ARMM advisor directly.",
+      answer: [
+        Text(
+          "To request an account statement, simply email your request—along with the specific months or date range you need—to one of the following:",
+          style: GoogleFonts.inter(color: Colors.black),
+        ),
+        GestureDetector(
+          onTap: () => launchUrl(Uri.parse('mailto:info@armmgroup.com')),
+          child: Text("info@armmgroup.com",
+              style: GoogleFonts.inter(color: AppColors.primary,)),
+        ),
+        GestureDetector(
+          onTap: () => launchUrl(Uri.parse('mailto:mohammed@armmgroup.com')),
+          child: Text("mohammed@armmgroup.com",
+              style: GoogleFonts.inter(color: AppColors.primary,)),
+        ),
+        Text(
+          "Your request will typically be processed within 24 hours. For urgent needs, feel free to contact your ARMM advisor directly.",
+          style: GoogleFonts.inter(color: Colors.black),
+        ),
+      ],
     ),
     FAQItem(
       question: "Can I add to my existing investment?",
-      answer:
+      answer: [
+        Text(
           "Yes. You can make additional investments into your current portfolio. Contact your ARMM Group representative for guidance on the process.",
+          style: GoogleFonts.inter(color: Colors.black),
+        ),
+      ],
     ),
   ];
-  
 
   final List<bool> _isExpanded = [];
 
@@ -85,8 +128,8 @@ class _FAQSectionState extends State<FAQSection> {
                 highlightColor: Colors.transparent,
               ),
               child: ExpansionTile(
-                tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                childrenPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                 title: Text(
                   item.question,
                   style: GoogleFonts.inter(fontWeight: FontWeight.w600),
@@ -103,12 +146,11 @@ class _FAQSectionState extends State<FAQSection> {
                 children: [
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      item.answer,
-                      style: GoogleFonts.inter(color: Colors.black),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: item.answer,
                     ),
-
                   ),
                 ],
               ),

@@ -30,13 +30,13 @@ class UserBreakdownSection extends StatelessWidget {
     // Scale factor based on value magnitude (logarithmic scale)
     double scaleFactor = 0;
     if (value >= 1000000) { // > 1M
-      scaleFactor = 1.5;
+      scaleFactor = 2;
     } else if (value >= 100000) { // > 100k
-      scaleFactor = 1.2;
+      scaleFactor = 1.5;
     } else if (value >= 10000) { // > 10k
-      scaleFactor = 1.0;
+      scaleFactor = 1.2;
     } else if (value >= 1000) { // > 1k
-      scaleFactor = 0.8;
+      scaleFactor = 1.0;
     }
     
     // Apply scale factor based on type
@@ -117,7 +117,7 @@ class UserBreakdownSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    formatName(client.firstName, client.lastName, maxLength: 12),
+                    formatName(client.firstName, client.lastName, maxLength: 14),
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

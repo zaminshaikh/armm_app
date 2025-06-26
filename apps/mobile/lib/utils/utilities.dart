@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
@@ -38,28 +40,32 @@ String toTitleCase(String input) {
 /// Formats a name to a shortened version if either first or last name is too long
 /// Returns full name if both names are short enough
 /// Otherwise returns first name + last initial or first initial + last name
+/// Uses ellipses if the name is still too long after formatting
 String formatName(String firstName, String lastName, {int maxLength = 15}) {
   // Handle empty cases
-  if (firstName.isEmpty && lastName.isEmpty) return '';
-  if (firstName.isEmpty) return lastName;
-  if (lastName.isEmpty) return firstName;
+  if (firstName.isEmpty && lastName.isEmpty){
+    return '';
+  } else if (firstName.isEmpty) {
+    return lastName.length <= maxLength ? lastName : '${lastName.substring(0, maxLength - 3)}...';
+  } else if (lastName.isEmpty) {
+    return firstName.length <= maxLength ? firstName : '${firstName.substring(0, maxLength - 3)}...';
+  }
   
   // If both names are short enough, return the full name
-  if (firstName.length + lastName.length <= maxLength) {
-    return '$firstName $lastName';
+  String fullName = '$firstName $lastName';
+  if (fullName.length <= maxLength) {
+    return fullName;
   }
+
+  String format1 = '$firstName ${lastName[0]}.';
+  String format2 = '${firstName[0]}. $lastName';
   
-  // Regular format: First name + Last initial (e.g., "John D.")
-  String formatted = '$firstName ${lastName[0]}.';
+  // Choose the shorter format
+  String formatted = format1.length <= format2.length ? format1 : format2;
   
-  // If the formatted name is still too long, use first initial + last name
-  if (formatted.length > maxLength && lastName.length < firstName.length) {
-    formatted = '${firstName[0]}. $lastName';
-  }
-  
-  // If it's still too long, truncate
+  // If it's still too long, truncate with ellipses
   if (formatted.length > maxLength) {
-    formatted = formatted.substring(0, maxLength - 3) + '...';
+    formatted = '${formatted.substring(0, maxLength - 3)}...';
   }
   
   return formatted;
