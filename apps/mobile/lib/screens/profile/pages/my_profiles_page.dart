@@ -128,7 +128,7 @@ Widget clientCard(Client c) {
             children: [
               // --- Name ---
               Text(
-                formatName(c.firstName, c.lastName),
+                formatName(c.firstName, c.lastName, maxLength: 20),
                 style: GoogleFonts.inter(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
