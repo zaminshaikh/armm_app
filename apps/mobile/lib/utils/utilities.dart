@@ -39,28 +39,42 @@ String toTitleCase(String input) {
 /// Returns full name if both names are short enough
 /// Otherwise returns first name + last initial or first initial + last name
 String formatName(String firstName, String lastName, {int maxLength = 15}) {
-  // Handle empty cases
+  // Trim whitespace
+  firstName = firstName.trim();
+  lastName = lastName.trim();
+
+  // Case: Both names empty
   if (firstName.isEmpty && lastName.isEmpty) return '';
-  if (firstName.isEmpty) return lastName;
-  if (lastName.isEmpty) return firstName;
-  
-  // If both names are short enough, return the full name
-  if (firstName.length + lastName.length <= maxLength) {
-    return '$firstName $lastName';
+
+  // Case: Full name is in firstName and lastName is empty
+  if (lastName.isEmpty && firstName.contains(' ')) {
+    final parts = firstName.split(RegExp(r'\s+'));
+    firstName = parts.first;
+    lastName = parts.length > 1 ? parts.last : '';
   }
-  
-  // Regular format: First name + Last initial (e.g., "John D.")
-  String formatted = '$firstName ${lastName[0]}.';
-  
-  // If the formatted name is still too long, use first initial + last name
-  if (formatted.length > maxLength && lastName.length < firstName.length) {
-    formatted = '${firstName[0]}. $lastName';
-  }
-  
-  // If it's still too long, truncate
-  if (formatted.length > maxLength) {
-    formatted = formatted.substring(0, maxLength - 3) + '...';
-  }
-  
-  return formatted;
+
+  // Case: lastName is still empty
+  if (lastName.isEmpty) return firstName.length > maxLength
+      ? '${firstName.substring(0, maxLength - 3)}...'
+      : firstName;
+
+  // Case: firstName is empty
+  if (firstName.isEmpty) return lastName.length > maxLength
+      ? '${lastName.substring(0, maxLength - 3)}...'
+      : lastName;
+
+  // Format: First + Last
+  String full = '$firstName $lastName';
+  if (full.length <= maxLength) return full;
+
+  // Try: First + Last initial
+  String short1 = '$firstName ${lastName[0]}.';
+  if (short1.length <= maxLength) return short1;
+
+  // Try: First initial + Last
+  String short2 = '${firstName[0]}. $lastName';
+  if (short2.length <= maxLength) return short2;
+
+  // Truncate fallback
+  return '${firstName.substring(0, maxLength - 3)}...';
 }
