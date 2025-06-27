@@ -1,90 +1,106 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Application authentication state management
+/// 
+/// Manages authentication-related state including biometric security settings,
+/// user authentication status, and security timing preferences.
 class AuthState extends ChangeNotifier {
-  bool _hasNavigatedToFaceIDPage = false;
-  bool _justAuthenticated = false;
-  bool _initiallyAuthenticated = false;
-  bool _isAppLockEnabled = false;
-  String _selectedTimeOption = 'Immediately'; 
-  double _selectedTimeInMinutes = 0.0; 
-  bool _forceDashboard = false;
+  // Biometric security state
+  bool _isBiometricSecurityEnabled = false;
+  String _securityDelayOption = 'Immediately';
+  double _securityDelayMinutes = 0.0;
+  
+  // Authentication flow state
+  bool _hasJustCompletedAuthentication = false;
+  bool _hasCompletedInitialAuthentication = false;
+  bool _shouldForceDashboardNavigation = false;
 
-  // Getter for _hasNavigatedToFaceIDPage
-  bool get hasNavigatedToFaceIDPage => _hasNavigatedToFaceIDPage;
+  // Security UI state (legacy - will be phased out)
+  bool _hasNavigatedToSecurityScreen = false;
 
-  // Getter for _justAuthenticated
-  bool get justAuthenticated => _justAuthenticated;
+  // Getters for biometric security
+  bool get isBiometricSecurityEnabled => _isBiometricSecurityEnabled;
+  String get securityDelayOption => _securityDelayOption;
+  double get securityDelayMinutes => _securityDelayMinutes;
+  
+  // Getters for authentication flow
+  bool get hasJustCompletedAuthentication => _hasJustCompletedAuthentication;
+  bool get hasCompletedInitialAuthentication => _hasCompletedInitialAuthentication;
+  bool get shouldForceDashboardNavigation => _shouldForceDashboardNavigation;
+  
+  // Legacy getters (for backward compatibility)
+  bool get hasNavigatedToFaceIDPage => _hasNavigatedToSecurityScreen;
+  bool get justAuthenticated => _hasJustCompletedAuthentication;
+  bool get initiallyAuthenticated => _hasCompletedInitialAuthentication;
+  bool get isAppLockEnabled => _isBiometricSecurityEnabled;
+  String get selectedTimeOption => _securityDelayOption;
+  double get selectedTimeInMinutes => _securityDelayMinutes;
+  bool get forceDashboard => _shouldForceDashboardNavigation;
 
-  // Getter for _initiallyAuthenticated
-  bool get initiallyAuthenticated => _initiallyAuthenticated;
-
-  // Getter for _isAppLockEnabled
-  bool get isAppLockEnabled => _isAppLockEnabled;
-
-  // Getter for _selectedTimeOption
-  String get selectedTimeOption => _selectedTimeOption;
-
-  // Getter for _selectedTimeInMinutes
-  double get selectedTimeInMinutes => _selectedTimeInMinutes;
-
-  // Getter for _forceDashboard
-  bool get forceDashboard => _forceDashboard;
-
-  // Load saved settings from SharedPreferences
+  /// Load saved security settings from SharedPreferences
   Future<void> loadSavedSettings() async {
     final prefs = await SharedPreferences.getInstance();
     
-    // Load app lock state
+    // Load biometric security state
     final isEnabled = prefs.getBool('isAppLockEnabled') ?? false;
-    _isAppLockEnabled = isEnabled;
+    _isBiometricSecurityEnabled = isEnabled;
     
-    // Load selected time option
+    // Load security delay time option
     final timeOption = prefs.getString('selectedTimeOption') ?? 'Immediately';
-    _selectedTimeOption = timeOption;
-    _selectedTimeInMinutes = _getTimeInMinutes(timeOption);
+    _securityDelayOption = timeOption;
+    _securityDelayMinutes = _convertTimeOptionToMinutes(timeOption);
     
     notifyListeners();
   }
 
-  // Setter for _hasNavigatedToFaceIDPage
-  void setHasNavigatedToFaceIDPage(bool value) {
-    _hasNavigatedToFaceIDPage = value;
+  /// Set biometric security enabled state
+  void setBiometricSecurityEnabled(bool value) {
+    _isBiometricSecurityEnabled = value;
     notifyListeners();
   }
 
-  // Setter for _justAuthenticated
-  void setJustAuthenticated(bool value) {
-    _justAuthenticated = value;
+  /// Set security delay time option
+  void setSecurityDelayOption(String timeOption) {
+    _securityDelayOption = timeOption;
+    _securityDelayMinutes = _convertTimeOptionToMinutes(timeOption);
     notifyListeners();
   }
 
-  // Setter for _initiallyAuthenticated
-  void setInitiallyAuthenticated(bool value) {
-    _initiallyAuthenticated = value;
+  /// Set just completed authentication state
+  void setJustCompletedAuthentication(bool value) {
+    _hasJustCompletedAuthentication = value;
     notifyListeners();
   }
 
-  // Setter for _isAppLockEnabled
-  void setAppLockEnabled(bool value) {
-    _isAppLockEnabled = value;
+  /// Set initial authentication completed state
+  void setInitialAuthenticationCompleted(bool value) {
+    _hasCompletedInitialAuthentication = value;
     notifyListeners();
   }
 
-  // Setter for _selectedTimeOption
-  void setSelectedTimeOption(String timeOption) {
-    _selectedTimeOption = timeOption;
-    _selectedTimeInMinutes = _getTimeInMinutes(timeOption);
+  /// Set force dashboard navigation state
+  void setForceDashboardNavigation(bool value) {
+    _shouldForceDashboardNavigation = value;
     notifyListeners();
   }
 
-  // Setter for _forceDashboard
-  void setForceDashboard(bool value) {
-    _forceDashboard = value;
+  /// Set security screen navigation state (legacy)
+  void setSecurityScreenNavigated(bool value) {
+    _hasNavigatedToSecurityScreen = value;
     notifyListeners();
   }
+
+  // Legacy setters (for backward compatibility)
+  void setHasNavigatedToFaceIDPage(bool value) => setSecurityScreenNavigated(value);
+  void setJustAuthenticated(bool value) => setJustCompletedAuthentication(value);
+  void setInitiallyAuthenticated(bool value) => setInitialAuthenticationCompleted(value);
+  void setAppLockEnabled(bool value) => setBiometricSecurityEnabled(value);
+  void setSelectedTimeOption(String timeOption) => setSecurityDelayOption(timeOption);
+  void setForceDashboard(bool value) => setForceDashboardNavigation(value);
   
-  double _getTimeInMinutes(String timeOption) {
+  /// Convert time option string to minutes
+  double _convertTimeOptionToMinutes(String timeOption) {
     switch (timeOption) {
       case 'Immediately':
         return 0.0;

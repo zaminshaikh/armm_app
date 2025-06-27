@@ -1,5 +1,6 @@
 // ignore_for_file: empty_catches
 
+import 'package:armm_app/utils/config.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
