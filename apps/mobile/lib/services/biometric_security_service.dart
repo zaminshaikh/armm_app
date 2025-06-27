@@ -9,6 +9,7 @@
 
 import 'dart:async';
 import 'dart:developer';
+import 'package:armm_app/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +17,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:armm_app/utils/app_state.dart';
-import 'package:armm_app/database/database.dart';
 import 'package:armm_app/screens/biometric_authentication/biometric_lock_screen.dart';
 
 /// Manages all biometric security functionality for the application
