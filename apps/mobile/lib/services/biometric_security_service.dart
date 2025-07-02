@@ -84,19 +84,8 @@ class BiometricSecurityService with WidgetsBindingObserver {
     log('BiometricSecurityService: App resumed');
     _isAppInForeground = true;
     _securityDelayTimer?.cancel();
-
-    final context = _navigatorKey.currentContext;
-    if (context == null) {
-      log('BiometricSecurityService: No context available');
-      return;
-    }
-
-    // Check if we need to show biometric authentication
-    final shouldAuthenticateOnResume = await _shouldShowBiometricAuthentication(context);
     
-    if (shouldAuthenticateOnResume && !_isCurrentlyAuthenticating) {
-      await _showBiometricAuthenticationScreen(context);
-    }
+    // No additional action needed since authentication is handled when going to background
   }
 
   /// Handle when app goes to background
@@ -123,17 +112,20 @@ class BiometricSecurityService with WidgetsBindingObserver {
       return;
     }
 
-    // Start security delay timer
-    log('BiometricSecurityService: Starting security timer for $securityDelayMinutes minutes');
-    
+    // Show biometric screen immediately when going to background
     if (securityDelayMinutes <= 0) {
-      // Immediate authentication required - mark for authentication on resume
-      _hasShownBiometricScreen = false;
+      // Immediate authentication required - show now
+      log('BiometricSecurityService: Immediate authentication required, showing biometric screen');
+      await _showBiometricAuthenticationScreen(context);
     } else {
       // Start timer for delayed authentication
-      _securityDelayTimer = Timer(Duration(minutes: securityDelayMinutes.toInt()), () {
-        log('BiometricSecurityService: Security timer expired, marking for authentication');
-        _hasShownBiometricScreen = false;
+      log('BiometricSecurityService: Starting security timer for $securityDelayMinutes minutes');
+      _securityDelayTimer = Timer(Duration(minutes: securityDelayMinutes.toInt()), () async {
+        log('BiometricSecurityService: Security timer expired, showing biometric screen');
+        final currentContext = _navigatorKey.currentContext;
+        if (currentContext != null && !_isCurrentlyAuthenticating) {
+          await _showBiometricAuthenticationScreen(currentContext);
+        }
       });
     }
   }
