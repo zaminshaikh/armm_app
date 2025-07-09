@@ -163,50 +163,54 @@ class MyAppState extends State<MyApp> {
     return StreamBuilder<ConnectivityResult>(
       stream: Connectivity().onConnectivityChanged.expand((results) => results),
       builder: (context, snapshot) {
-        // Show no internet screen if disconnected
         if (snapshot.hasData && snapshot.data == ConnectivityResult.none) {
           return const MaterialApp(
             debugShowCheckedModeBanner: false,
             home: NoInternetScreen(),
           );
         }
-
-        // Build main app with authentication flow
         return StreamBuilder<User?>(
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, authSnapshot) {
             if (authSnapshot.connectionState == ConnectionState.waiting) {
               return const Directionality(
                 textDirection: TextDirection.ltr,
-                child: CustomProgressIndicator(shouldTimeout: true),
+                child: CustomProgressIndicator(
+                  shouldTimeout: true,
+                ),
               );
             }
-
-            return _buildMainApp();
+            final user = authSnapshot.data;
+            return StreamProvider<Client?>(
+              key: ValueKey(user?.uid),
+              create: (_) => _setupClientStream(),
+              catchError: (context, error) {
+                log('main.dart: Error in fetching client stream: $error');
+                return null;
+              },
+              initialData: null,
+              child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                initialRoute: '/',
+                navigatorKey: _biometricService.navigatorKey,
+                builder: (context, child) => MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                    boldText: false,
+                    textScaler: const TextScaler.linear(1),
+                  ),
+                  child: child!,
+                ),
+                title: 'ARMM Group',
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                ),
+                // home: const AuthCheck(),
+                routes: AppRoutes.routes,
+              ),
+            );
           },
         );
-      },
-    );
-  }
-
-  /// Build the main application widget
-  Widget _buildMainApp() {
-    return StreamProvider<Client?>.value(
-      value: clientStream,
-      initialData: null,
-      child: MaterialApp(
-        title: 'ARMM',
-        debugShowCheckedModeBanner: false,
-        navigatorKey: _biometricService.navigatorKey,
-        routes: AppRoutes.routes,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-      ),
-      catchError: (context, error) {
-        log('main.dart: Error in fetching client stream: $error');
-        return null;
       },
     );
   }
