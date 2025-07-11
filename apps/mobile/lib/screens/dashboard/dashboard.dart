@@ -70,6 +70,9 @@ class _DashboardPageState extends State<DashboardPage>
     // Validate whether the user is authenticated
     _validateAuth();
 
+    // Set the onboarding state to complete if this is the first time
+    _setIsOnboardingComplete();
+
     // Initialize controller for connected users carousel
     _connectedUsersPageController = PageController();
     _connectedUsersPageController.addListener(() {
@@ -77,6 +80,13 @@ class _DashboardPageState extends State<DashboardPage>
       if (page != _currentConnectedUserPage) {
         setState(() => _currentConnectedUserPage = page);
       }
+    });
+  }
+
+  void _setIsOnboardingComplete() {
+    // Update the onboarding state in SharedPreferences
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool('isOnboardingComplete', true);
     });
   }
 

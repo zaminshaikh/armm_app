@@ -107,7 +107,7 @@ class BiometricSecurityService with WidgetsBindingObserver {
       return;
     }
 
-    if (!await _isUserAuthenticatedAndLinked()) {
+    if (!await _isUserAuthenticatedAndLinked() || !await _isOnboardingComplete()) {
       log('BiometricSecurityService: User not authenticated, no timer needed');
       return;
     }
@@ -139,6 +139,7 @@ class BiometricSecurityService with WidgetsBindingObserver {
     final hasUserJustAuthenticated = authState.justAuthenticated;
     final isUserAuthenticatedAndLinked = await _isUserAuthenticatedAndLinked();
     final hasTimePassed = _hasSecurityDelayPassed(authState.selectedTimeInMinutes);
+    final isOnboardingComplete = await _isOnboardingComplete();
 
     log('BiometricSecurityService: Security check - '
         'Enabled: $isSecurityEnabled, '
@@ -161,7 +162,8 @@ class BiometricSecurityService with WidgetsBindingObserver {
     // Show if all conditions are met
     return isSecurityEnabled && 
            isUserAuthenticatedAndLinked && 
-           hasTimePassed;
+           hasTimePassed && 
+           isOnboardingComplete;
   }
 
   /// Check if security delay has passed since app was backgrounded
@@ -190,6 +192,18 @@ class BiometricSecurityService with WidgetsBindingObserver {
       return isLinked;
     } catch (e) {
       log('BiometricSecurityService: Error checking user link status: $e');
+      return false;
+    }
+  }
+
+  Future<bool> _isOnboardingComplete() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final isOnboardingComplete = prefs.getBool('isOnboardingComplete') ?? false;
+      log('BiometricSecurityService: Onboarding complete status: $isOnboardingComplete');
+      return isOnboardingComplete;
+    } catch (e) {
+      log('BiometricSecurityService: Error checking onboarding completion: $e');
       return false;
     }
   }
