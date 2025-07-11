@@ -29,10 +29,8 @@ class _BiometricLockScreenState extends State<BiometricLockScreen> with WidgetsB
     WidgetsBinding.instance.addObserver(this);
     _biometricService = BiometricSecurityService.instance;
     
-    // Automatically trigger authentication when screen loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _authenticate(context);
-    });
+    // Don't automatically trigger authentication when screen loads
+    // Authentication will be triggered by app lifecycle events or user action
   }
 
   @override

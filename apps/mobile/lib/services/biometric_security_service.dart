@@ -85,7 +85,7 @@ class BiometricSecurityService with WidgetsBindingObserver {
     _isAppInForeground = true;
     _securityDelayTimer?.cancel();
     
-    // No additional action needed since authentication is handled when going to background
+    // Authentication will be handled by BiometricLockScreen if it's currently shown
   }
 
   /// Handle when app goes to background
@@ -112,16 +112,15 @@ class BiometricSecurityService with WidgetsBindingObserver {
       return;
     }
 
-    // Show biometric screen immediately when going to background
+    // Navigate to biometric screen when security is required
     if (securityDelayMinutes <= 0) {
-      // Immediate authentication required - show now
-      log('BiometricSecurityService: Immediate authentication required, showing biometric screen');
+      log('BiometricSecurityService: Immediate authentication required - showing biometric screen');
       await _showBiometricAuthenticationScreen(context);
     } else {
       // Start timer for delayed authentication
       log('BiometricSecurityService: Starting security timer for $securityDelayMinutes minutes');
       _securityDelayTimer = Timer(Duration(minutes: securityDelayMinutes.toInt()), () async {
-        log('BiometricSecurityService: Security timer expired, showing biometric screen');
+        log('BiometricSecurityService: Security timer expired - showing biometric screen');
         final currentContext = _navigatorKey.currentContext;
         if (currentContext != null && !_isCurrentlyAuthenticating) {
           await _showBiometricAuthenticationScreen(currentContext);
