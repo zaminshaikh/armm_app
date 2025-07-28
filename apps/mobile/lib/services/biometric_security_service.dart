@@ -254,6 +254,7 @@ class BiometricSecurityService with WidgetsBindingObserver {
     final authState = Provider.of<AuthState>(context, listen: false);
     authState.setJustAuthenticated(true);
     authState.setInitiallyAuthenticated(true);
+    authState.setHasAuthenticatedThisSession(true);
   }
 
   /// Handle failed biometric authentication

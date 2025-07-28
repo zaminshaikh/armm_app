@@ -12,6 +12,7 @@ class AuthState extends ChangeNotifier {
   double _securityDelayMinutes = 0.0;
   
   // Authentication flow state
+  bool _hasAuthenticatedThisSession = false;
   bool _hasJustCompletedAuthentication = false;
   bool _hasCompletedInitialAuthentication = false;
   bool _shouldForceDashboardNavigation = false;
@@ -25,6 +26,7 @@ class AuthState extends ChangeNotifier {
   double get securityDelayMinutes => _securityDelayMinutes;
   
   // Getters for authentication flow
+  bool get hasAuthenticatedThisSession => _hasAuthenticatedThisSession;
   bool get hasJustCompletedAuthentication => _hasJustCompletedAuthentication;
   bool get hasCompletedInitialAuthentication => _hasCompletedInitialAuthentication;
   bool get shouldForceDashboardNavigation => _shouldForceDashboardNavigation;
@@ -88,6 +90,11 @@ class AuthState extends ChangeNotifier {
   /// Set security screen navigation state (legacy)
   void setSecurityScreenNavigated(bool value) {
     _hasNavigatedToSecurityScreen = value;
+    notifyListeners();
+  }
+
+  void setHasAuthenticatedThisSession(bool value) {
+    _hasAuthenticatedThisSession = value;
     notifyListeners();
   }
 
