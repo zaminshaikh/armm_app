@@ -580,6 +580,7 @@ export class DatabaseService {
         type: data.type,
         amount: data.amount || 0,
         parentDocId: client.cid,
+        isDividend: data.isDividend || false,
       });
     });
     
@@ -600,11 +601,13 @@ export class DatabaseService {
     const formattedActivities = filteredActivities.map(activity => {
       const activityDate = activity.time instanceof Timestamp ? activity.time.toDate() : activity.time;
       const amount = activity.amount || 0;
-      
+
+      console.log(`isDividend: ${activity.isDividend}`);
+
       // Update running balance based on activity type
       runningBalance = runningBalance + (activity.type == 'withdrawal'
         ? -1
-        : (activity.type == 'profit'
+        : (activity.type == 'profit' && !activity.isDividend 
           ? 0
           : 1)) * amount;
       
