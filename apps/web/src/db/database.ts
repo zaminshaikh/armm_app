@@ -602,8 +602,6 @@ export class DatabaseService {
       const activityDate = activity.time instanceof Timestamp ? activity.time.toDate() : activity.time;
       const amount = activity.amount || 0;
 
-      console.log(`isDividend: ${activity.isDividend}`);
-
       // Update running balance based on activity type
       runningBalance = runningBalance + (activity.type == 'withdrawal'
         ? -1
