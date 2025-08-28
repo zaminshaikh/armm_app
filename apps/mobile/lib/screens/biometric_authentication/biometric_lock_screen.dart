@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, empty_catches, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:armm_app/screens/dashboard/dashboard.dart';
 import 'package:armm_app/services/biometric_security_service.dart';
@@ -17,74 +17,45 @@ class BiometricLockScreen extends StatefulWidget {
 }
 
 class _BiometricLockScreenState extends State<BiometricLockScreen> with WidgetsBindingObserver {
-  final LocalAuthentication auth = LocalAuthentication();
+  final LocalAuthentication _auth = LocalAuthentication();
+  final BiometricSecurityService _biometricService = BiometricSecurityService.instance;
+  
   bool _isAuthenticating = false;
-  bool authenticated = false;
-  late AuthState _authState; // Store reference to AuthState provider
-  late BiometricSecurityService _biometricService;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _biometricService = BiometricSecurityService.instance;
-    
-    // Don't automatically trigger authentication when screen loads
-    // Authentication will be triggered by app lifecycle events or user action
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Safely store reference to the provider
-    _authState = Provider.of<AuthState>(context, listen: false);
   }
 
   @override
   void dispose() {
-    // Remove the observer for this widget's lifecycle events
     WidgetsBinding.instance.removeObserver(this);
-    
-    // Schedule state update for when the framework is unlocked
-    if (authenticated) {
-      // Use a microtask to update state after dispose completes
-      Future.microtask(() {
-        _authState.setHasNavigatedToFaceIDPage(false);
-      });
-    }
-    
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      if (!_isAuthenticating) {
-        _isAuthenticating = true; // Set the flag to prevent multiple calls
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          // Use stored reference instead of accessing Provider directly
-          _authState.setHasNavigatedToFaceIDPage(true);
-          if (mounted) {
-            _authenticate(context).then((_) {
-              _isAuthenticating = false; // Reset the flag after authentication
-            });
-          }
-        });
-      }
+    if (state == AppLifecycleState.resumed && !_isAuthenticating) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _authenticate();
+        }
+      });
     }
   }
 
-  Future<void> _authenticate(BuildContext context) async {
-    if (!mounted) return;
+  Future<void> _authenticate() async {
+    if (!mounted || _isAuthenticating) return;
 
     setState(() {
       _isAuthenticating = true;
     });
 
-    authenticated = false;
+    bool isAuthenticated = false;
 
     try {
-      authenticated = await auth.authenticate(
+      isAuthenticated = await _auth.authenticate(
         localizedReason: 'Please authenticate to login',
         options: const AuthenticationOptions(
           useErrorDialogs: true,
@@ -92,47 +63,34 @@ class _BiometricLockScreenState extends State<BiometricLockScreen> with WidgetsB
         ),
       );
     } catch (e) {
-      print('Authentication error: $e');
+      debugPrint('Authentication error: $e');
     }
 
-    if (authenticated) {
-      if (mounted) {
-        setState(() {
-          _isAuthenticating = false;
-        });
-      }
+    if (!mounted) return;
 
-      // Schedule state updates for next frame when framework is unlocked
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _authState.setJustAuthenticated(true);
-        _authState.setInitiallyAuthenticated(true);
-      });
+    setState(() {
+      _isAuthenticating = false;
+    });
+
+    if (isAuthenticated) {
+      // Update auth state
+      final authState = Provider.of<AuthState>(context, listen: false);
+      authState.setJustCompletedAuthentication(true);
+      authState.setInitialAuthenticationCompleted(true);
+      authState.setHasAuthenticatedThisSession(true);
 
       // Notify BiometricSecurityService of successful authentication
       _biometricService.onBiometricAuthenticationSuccess(context);
 
-      if (mounted) {
-        await Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const DashboardPage(fromFaceIdPage: true),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) => child,
-          ),
-        );
-      }
-    } else {
-      if (mounted) {
-        // Schedule state update for next frame
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _authState.setHasNavigatedToFaceIDPage(false);
-        });
-        
-        setState(() {
-          _isAuthenticating = false;
-        });
-      }
+      // Navigate to dashboard
+      await Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const DashboardPage(fromFaceIdPage: true),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
+        ),
+      );
     }
   }
 
@@ -178,7 +136,7 @@ class _BiometricLockScreenState extends State<BiometricLockScreen> with WidgetsB
                     onPressed: _isAuthenticating
                       ? null
                       : () async {
-                          await _authenticate(context);
+                          await _authenticate();
                         },
 
                     style: ElevatedButton.styleFrom(

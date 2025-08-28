@@ -311,7 +311,7 @@ class AppleAuthService {
           await updateFirebaseMessagingToken(user, context);
           if (context.mounted) {
             Provider.of<AuthState>(context, listen: false)
-                .setInitiallyAuthenticated(true);
+                .setInitialAuthenticationCompleted(true);
             await Navigator.of(context)
                 .pushNamedAndRemoveUntil('/dashboard', (route) => false);
           }

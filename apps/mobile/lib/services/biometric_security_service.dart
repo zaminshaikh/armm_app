@@ -37,14 +37,12 @@ class BiometricSecurityService with WidgetsBindingObserver {
   // State tracking
   Timer? _securityDelayTimer;
   bool _isAppInForeground = true;
-  bool _hasShownBiometricScreen = false;
   bool _isCurrentlyAuthenticating = false;
   DateTime? _lastBackgroundTime;
 
   // Getters
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
   bool get isAppInForeground => _isAppInForeground;
-  bool get hasShownBiometricScreen => _hasShownBiometricScreen;
 
   /// Initialize the biometric security service
   Future<void> initialize() async {
@@ -99,8 +97,8 @@ class BiometricSecurityService with WidgetsBindingObserver {
     if (context == null) return;
 
     final authState = Provider.of<AuthState>(context, listen: false);
-    final isSecurityEnabled = authState.isAppLockEnabled;
-    final securityDelayMinutes = authState.selectedTimeInMinutes;
+    final isSecurityEnabled = authState.isBiometricSecurityEnabled;
+    final securityDelayMinutes = authState.securityDelayMinutes;
 
     if (!isSecurityEnabled) {
       log('BiometricSecurityService: Security disabled, no timer needed');
@@ -134,21 +132,20 @@ class BiometricSecurityService with WidgetsBindingObserver {
     final authState = Provider.of<AuthState>(context, listen: false);
     
     // Check all conditions for showing biometric authentication
-    final isSecurityEnabled = authState.isAppLockEnabled;
-    final hasUserJustAuthenticated = authState.justAuthenticated;
+    final isSecurityEnabled = authState.isBiometricSecurityEnabled;
+    final hasUserJustAuthenticated = authState.hasJustCompletedAuthentication;
     final isUserAuthenticatedAndLinked = await _isUserAuthenticatedAndLinked();
-    final hasTimePassed = _hasSecurityDelayPassed(authState.selectedTimeInMinutes);
+    final hasTimePassed = _hasSecurityDelayPassed(authState.securityDelayMinutes);
     final isOnboardingComplete = await _isOnboardingComplete();
 
     log('BiometricSecurityService: Security check - '
         'Enabled: $isSecurityEnabled, '
         'JustAuth: $hasUserJustAuthenticated, '
         'UserLinked: $isUserAuthenticatedAndLinked, '
-        'TimePassed: $hasTimePassed, '
-        'HasShown: $_hasShownBiometricScreen');
+        'TimePassed: $hasTimePassed');
 
-    // Don't show if already shown or currently showing
-    if (_hasShownBiometricScreen || _isCurrentlyAuthenticating) {
+    // Don't show if currently authenticating
+    if (_isCurrentlyAuthenticating) {
       return false;
     }
 
@@ -213,7 +210,6 @@ class BiometricSecurityService with WidgetsBindingObserver {
     
     log('BiometricSecurityService: Showing biometric authentication screen');
     _isCurrentlyAuthenticating = true;
-    _hasShownBiometricScreen = true;
 
     try {
       await Navigator.of(context).pushReplacement(
@@ -236,7 +232,7 @@ class BiometricSecurityService with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final authState = Provider.of<AuthState>(context, listen: false);
-        authState.setJustAuthenticated(false);
+        authState.setJustCompletedAuthentication(false);
         log('BiometricSecurityService: Reset justAuthenticated flag');
       } catch (e) {
         log('BiometricSecurityService: Error resetting justAuthenticated flag: $e');
@@ -247,20 +243,18 @@ class BiometricSecurityService with WidgetsBindingObserver {
   /// Handle successful biometric authentication
   void onBiometricAuthenticationSuccess(BuildContext context) {
     log('BiometricSecurityService: Biometric authentication successful');
-    _hasShownBiometricScreen = false;
     _isCurrentlyAuthenticating = false;
     
     // Update auth state
     final authState = Provider.of<AuthState>(context, listen: false);
-    authState.setJustAuthenticated(true);
-    authState.setInitiallyAuthenticated(true);
+    authState.setJustCompletedAuthentication(true);
+    authState.setInitialAuthenticationCompleted(true);
     authState.setHasAuthenticatedThisSession(true);
   }
 
   /// Handle failed biometric authentication
   void onBiometricAuthenticationFailure() {
     log('BiometricSecurityService: Biometric authentication failed');
-    _hasShownBiometricScreen = false;
     _isCurrentlyAuthenticating = false;
   }
 
@@ -330,7 +324,7 @@ class BiometricSecurityService with WidgetsBindingObserver {
       // Update state
       if (context.mounted) {
         final authState = Provider.of<AuthState>(context, listen: false);
-        authState.setAppLockEnabled(true);
+        authState.setBiometricSecurityEnabled(true);
       }
 
       log('BiometricSecurityService: Biometric security enabled');
@@ -351,12 +345,11 @@ class BiometricSecurityService with WidgetsBindingObserver {
       // Update state
       if (context.mounted) {
         final authState = Provider.of<AuthState>(context, listen: false);
-        authState.setAppLockEnabled(false);
+        authState.setBiometricSecurityEnabled(false);
       }
 
       // Cancel any pending timers
       _securityDelayTimer?.cancel();
-      _hasShownBiometricScreen = false;
 
       log('BiometricSecurityService: Biometric security disabled');
     } catch (e) {
@@ -372,7 +365,7 @@ class BiometricSecurityService with WidgetsBindingObserver {
 
       if (context.mounted) {
         final authState = Provider.of<AuthState>(context, listen: false);
-        authState.setSelectedTimeOption(timeOption);
+        authState.setSecurityDelayOption(timeOption);
       }
 
       log('BiometricSecurityService: Security delay time set to $timeOption');

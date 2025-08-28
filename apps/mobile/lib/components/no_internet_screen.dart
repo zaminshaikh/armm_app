@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:armm_app/components/custom_alert_dialog.dart';
-import 'package:armm_app/utils/app_state.dart';
-import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -110,9 +106,6 @@ class NoInternetScreenState extends State<NoInternetScreen> with SingleTickerPro
   Future<void> _reload(BuildContext context) async {
     if (_connectionStatus != ConnectivityResult.none) {
       log('Reload initiated - connection available: $_connectionStatus');
-      final authState = Provider.of<AuthState>(context, listen: false);
-      // Set flag to force navigation to dashboard
-      authState.setForceDashboard(true);
       Phoenix.rebirth(context);
     } else {
       await showDialog(

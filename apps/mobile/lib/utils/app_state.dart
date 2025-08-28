@@ -15,30 +15,14 @@ class AuthState extends ChangeNotifier {
   bool _hasAuthenticatedThisSession = false;
   bool _hasJustCompletedAuthentication = false;
   bool _hasCompletedInitialAuthentication = false;
-  bool _shouldForceDashboardNavigation = false;
 
-  // Security UI state (legacy - will be phased out)
-  bool _hasNavigatedToSecurityScreen = false;
-
-  // Getters for biometric security
+  // Getters
   bool get isBiometricSecurityEnabled => _isBiometricSecurityEnabled;
   String get securityDelayOption => _securityDelayOption;
   double get securityDelayMinutes => _securityDelayMinutes;
-  
-  // Getters for authentication flow
   bool get hasAuthenticatedThisSession => _hasAuthenticatedThisSession;
   bool get hasJustCompletedAuthentication => _hasJustCompletedAuthentication;
   bool get hasCompletedInitialAuthentication => _hasCompletedInitialAuthentication;
-  bool get shouldForceDashboardNavigation => _shouldForceDashboardNavigation;
-  
-  // Legacy getters (for backward compatibility)
-  bool get hasNavigatedToFaceIDPage => _hasNavigatedToSecurityScreen;
-  bool get justAuthenticated => _hasJustCompletedAuthentication;
-  bool get initiallyAuthenticated => _hasCompletedInitialAuthentication;
-  bool get isAppLockEnabled => _isBiometricSecurityEnabled;
-  String get selectedTimeOption => _securityDelayOption;
-  double get selectedTimeInMinutes => _securityDelayMinutes;
-  bool get forceDashboard => _shouldForceDashboardNavigation;
 
   /// Load saved security settings from SharedPreferences
   Future<void> loadSavedSettings() async {
@@ -81,30 +65,11 @@ class AuthState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Set force dashboard navigation state
-  void setForceDashboardNavigation(bool value) {
-    _shouldForceDashboardNavigation = value;
-    notifyListeners();
-  }
-
-  /// Set security screen navigation state (legacy)
-  void setSecurityScreenNavigated(bool value) {
-    _hasNavigatedToSecurityScreen = value;
-    notifyListeners();
-  }
-
+  /// Set session authentication state
   void setHasAuthenticatedThisSession(bool value) {
     _hasAuthenticatedThisSession = value;
     notifyListeners();
   }
-
-  // Legacy setters (for backward compatibility)
-  void setHasNavigatedToFaceIDPage(bool value) => setSecurityScreenNavigated(value);
-  void setJustAuthenticated(bool value) => setJustCompletedAuthentication(value);
-  void setInitiallyAuthenticated(bool value) => setInitialAuthenticationCompleted(value);
-  void setAppLockEnabled(bool value) => setBiometricSecurityEnabled(value);
-  void setSelectedTimeOption(String timeOption) => setSecurityDelayOption(timeOption);
-  void setForceDashboard(bool value) => setForceDashboardNavigation(value);
   
   /// Convert time option string to minutes
   double _convertTimeOptionToMinutes(String timeOption) {
