@@ -23,6 +23,9 @@ flutter precache --ios
 echo "=== Running flutter pub get ==="
 flutter pub get
 
+echo "=== Configuring Flutter for iOS release build ==="
+flutter build ios --config-only --release
+
 echo "=== Installing pods ==="
 cd ios
 pod install
