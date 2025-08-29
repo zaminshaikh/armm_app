@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:armm_app/auth_check.dart';
 import 'package:armm_app/components/no_internet_screen.dart';
 import 'package:armm_app/services/biometric_security_service.dart';
 import 'package:armm_app/utils/app_state.dart';
@@ -84,13 +83,16 @@ class MyApp extends StatefulWidget {
   MyAppState createState() => MyAppState();
 }
 
-class MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   late final BiometricSecurityService _biometricService;
   late final Stream<Client?> clientStream;
 
   @override
   void initState() {
     super.initState();
+    
+    // Add this as an observer for app lifecycle changes
+    WidgetsBinding.instance.addObserver(this);
     
     // Initialize biometric security service
     _biometricService = BiometricSecurityService.instance;
@@ -108,8 +110,25 @@ class MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
+    // Remove the observer when disposing
+    WidgetsBinding.instance.removeObserver(this);
     _biometricService.dispose();
     super.dispose();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    log('AppLifecycleState changed: $state');
+  
+    if (state == AppLifecycleState.resumed) {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) { return; }
+      DatabaseService? db = await DatabaseService.fetchCID(user.uid, context);
+      if (db != null) { 
+        await db.updateField('lastLoggedIn', Timestamp.now());
+        log('Updated lastLoggedIn timestamp for user: ${user.uid}');
+      }
+    }
   }
 
   /// Initialize authentication state based on app lock settings
