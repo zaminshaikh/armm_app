@@ -4,9 +4,13 @@ import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/auth/signup/client_id_page.dart';
 import 'package:armm_app/auth/signup/verify_email_page.dart';
 import 'package:armm_app/database/database.dart';
+import 'package:armm_app/screens/biometric_authentication/biometric_lock_screen.dart';
 import 'package:armm_app/screens/dashboard/dashboard.dart';
+import 'package:armm_app/screens/profile/pages/authentication_page.dart';
+import 'package:armm_app/utils/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:armm_app/components/custom_progress_indicator.dart';
@@ -21,6 +25,14 @@ class AuthCheck extends StatefulWidget {
 
 class _AuthCheckState extends State<AuthCheck> {
   late Future<Map<String, dynamic>> _authCheckFuture;
+  late AuthState _authState;
+
+  @override
+  void initState() {
+    super.initState();
+    _authState = Provider.of<AuthState>(context, listen: false);
+    _authCheckFuture = checkAuthAndCID();
+  }
 
   /// Check if the user is authenticated, email verified, and linked
   /// Also check if there's a stored CID in SharedPreferences
@@ -57,13 +69,6 @@ class _AuthCheckState extends State<AuthCheck> {
     
     return result;
   }
-
-  @override
-  void initState() {
-    super.initState();
-    _authCheckFuture = checkAuthAndCID();
-  }
-
 
   @override
   Widget build(BuildContext context) => StreamBuilder<User?>(
@@ -107,6 +112,9 @@ class _AuthCheckState extends State<AuthCheck> {
                 // If there's still a storedCID, clean it up since we don't need it anymore
                 if (storedCID != null) {
                   SharedPreferences.getInstance().then((prefs) => prefs.remove('cid'));
+                }
+                if (_authState.isBiometricSecurityEnabled && !_authState.hasAuthenticatedThisSession) {
+                  return const BiometricLockScreen();
                 }
                 return const DashboardPage();
               }

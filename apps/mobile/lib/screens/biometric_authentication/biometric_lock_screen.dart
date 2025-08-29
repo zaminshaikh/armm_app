@@ -1,67 +1,96 @@
-// ignore_for_file: library_private_types_in_public_api, empty_catches, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:armm_app/screens/dashboard/dashboard.dart';
+import 'package:armm_app/services/biometric_security_service.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
 import 'package:google_fonts/google_fonts.dart';
 
-class InitialFaceIdPage extends StatefulWidget {
-  const InitialFaceIdPage({super.key});
+class BiometricLockScreen extends StatefulWidget {
+  const BiometricLockScreen({super.key});
 
   @override
-  _InitialFaceIdPageState createState() => _InitialFaceIdPageState();
+  _BiometricLockScreenState createState() => _BiometricLockScreenState();
 }
 
-class _InitialFaceIdPageState extends State<InitialFaceIdPage>
-    with WidgetsBindingObserver {
-  final LocalAuthentication auth = LocalAuthentication();
+class _BiometricLockScreenState extends State<BiometricLockScreen> with WidgetsBindingObserver {
+  final LocalAuthentication _auth = LocalAuthentication();
+  final BiometricSecurityService _biometricService = BiometricSecurityService.instance;
+  
+  bool _isAuthenticating = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  Future<void> _initialAuthenticate(BuildContext context) async {
-    if (!mounted) return;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && !_isAuthenticating) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _authenticate();
+        }
+      });
+    }
+  }
+
+  Future<void> _authenticate() async {
+    if (!mounted || _isAuthenticating) return;
+
+    setState(() {
+      _isAuthenticating = true;
+    });
+
+    bool isAuthenticated = false;
 
     try {
-      bool authenticated = await auth.authenticate(
+      isAuthenticated = await _auth.authenticate(
         localizedReason: 'Please authenticate to login',
         options: const AuthenticationOptions(
           useErrorDialogs: true,
           stickyAuth: true,
         ),
       );
-
-      if (authenticated && mounted) {
-        final appState = Provider.of<AuthState>(context, listen: false);
-        appState.setInitiallyAuthenticated(true); // Set the flag
-
-        // Set hasTransitioned to false
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('hasTransitioned', false);
-
-        await Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                 const DashboardPage(fromFaceIdPage: true),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) => child,
-          ),
-        );
-      }
     } catch (e) {
-      // Handle authentication error if needed
+      debugPrint('Authentication error: $e');
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _isAuthenticating = false;
+    });
+
+    if (isAuthenticated) {
+      // Update auth state
+      final authState = Provider.of<AuthState>(context, listen: false);
+      authState.setJustCompletedAuthentication(true);
+      authState.setInitialAuthenticationCompleted(true);
+      authState.setHasAuthenticatedThisSession(true);
+
+      // Notify BiometricSecurityService of successful authentication
+      _biometricService.onBiometricAuthenticationSuccess(context);
+
+      // Navigate to dashboard
+      await Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const DashboardPage(fromFaceIdPage: true),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
+        ),
+      );
     }
   }
 
@@ -104,9 +133,12 @@ class _InitialFaceIdPageState extends State<InitialFaceIdPage>
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      await _initialAuthenticate(context);
-                    },
+                    onPressed: _isAuthenticating
+                      ? null
+                      : () async {
+                          await _authenticate();
+                        },
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1C32A4), // AppColors.primary
                       shape: RoundedRectangleBorder(

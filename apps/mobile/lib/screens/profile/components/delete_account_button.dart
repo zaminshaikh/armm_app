@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/database/auth_helper.dart';
 import 'package:armm_app/database/models/client_model.dart';
+import 'package:armm_app/utils/config.dart';
 import 'package:armm_app/utils/resources.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DeleteAccountButton extends StatefulWidget { // Renamed widget
   final Client client;
@@ -169,6 +171,11 @@ class DeleteAccountButtonState extends State<DeleteAccountButton> { // Renamed s
       log('Cloud function unlinkUser called successfully: ${response.data}');
 
       await FirebaseAuth.instance.signOut();
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('isOnboardingComplete'); // Clear onboarding state
+      await prefs.remove('isAppLockEnabled'); // Clear app lock state
+      await prefs.remove('isNotificationsEnabled'); // Clear biometric security state
 
       assert(FirebaseAuth.instance.currentUser == null);
     }

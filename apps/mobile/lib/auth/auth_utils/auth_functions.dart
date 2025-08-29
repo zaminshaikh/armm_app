@@ -5,6 +5,7 @@ import 'package:armm_app/database/auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -60,6 +61,8 @@ class AuthService {
       await deleteFirebaseMessagingToken(FirebaseAuth.instance.currentUser, context);
       await FirebaseAuth.instance.signOut();
       assert(FirebaseAuth.instance.currentUser == null);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('isOnboardingComplete');
       log('settings.dart: Successfully signed out');
       return;
     }

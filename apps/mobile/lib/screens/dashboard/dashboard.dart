@@ -1,7 +1,6 @@
 // lib/screens/dashboard/dashboard.dart
 import 'dart:async';
 import 'dart:developer';
-import 'package:armm_app/auth/onboarding/onboarding_page.dart';
 import 'package:armm_app/components/assets_structure_section.dart';
 import 'package:armm_app/components/custom_alert_dialog.dart';
 
@@ -70,6 +69,9 @@ class _DashboardPageState extends State<DashboardPage>
     // Validate whether the user is authenticated
     _validateAuth();
 
+    // Set the onboarding state to complete if this is the first time
+    _setIsOnboardingComplete();
+
     // Initialize controller for connected users carousel
     _connectedUsersPageController = PageController();
     _connectedUsersPageController.addListener(() {
@@ -77,6 +79,13 @@ class _DashboardPageState extends State<DashboardPage>
       if (page != _currentConnectedUserPage) {
         setState(() => _currentConnectedUserPage = page);
       }
+    });
+  }
+
+  void _setIsOnboardingComplete() {
+    // Update the onboarding state in SharedPreferences
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool('isOnboardingComplete', true);
     });
   }
 
@@ -160,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage>
   Future<void> _loadAppLockState() async {
     final prefs = await SharedPreferences.getInstance();
     final isEnabled = prefs.getBool('isAppLockEnabled') ?? false;
-    context.read<AuthState>().setAppLockEnabled(isEnabled);
+    context.read<AuthState>().setBiometricSecurityEnabled(isEnabled);
     print('Loaded app lock state: $isEnabled');
   }
 
@@ -168,14 +177,9 @@ class _DashboardPageState extends State<DashboardPage>
     // Initialize our authState if it's null
     authState ??= AuthState();
 
-    // Check if hasNavigatedToFaceIDPage is null and set it to false if it is
-    if (authState?.hasNavigatedToFaceIDPage == null) {
-      authState?.setHasNavigatedToFaceIDPage(false);
-    }
-
+        // Clean up legacy authentication flags if the user came from Face ID page
     if (widget.fromFaceIdPage) {
-      authState?.setHasNavigatedToFaceIDPage(false);
-      authState?.setJustAuthenticated(true);
+      authState?.setJustCompletedAuthentication(true);
     } else {}
   }
 

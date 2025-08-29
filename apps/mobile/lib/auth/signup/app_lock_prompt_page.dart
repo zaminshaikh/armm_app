@@ -170,7 +170,7 @@ class _AppLockPromptPageState extends State<AppLockPromptPage> {
     // Save preference and update state
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isAppLockEnabled', _isAppLockEnabled);
-    context.read<AuthState>().setAppLockEnabled(_isAppLockEnabled);
+    context.read<AuthState>().setBiometricSecurityEnabled(_isAppLockEnabled);
     
     return true;
   }

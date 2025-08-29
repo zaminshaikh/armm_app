@@ -1,44 +1,25 @@
-//// filepath: /Users/omarsyed/development/armm_app/apps/mobile/lib/main.dart
 import 'dart:async';
 import 'dart:developer';
-import 'package:armm_app/auth/forgot_password/forgot_password.dart';
-import 'package:armm_app/auth/login/login.dart';
-import 'package:armm_app/auth/onboarding/onboarding_page.dart';
-import 'package:armm_app/auth_check.dart';
 import 'package:armm_app/components/no_internet_screen.dart';
-import 'package:armm_app/database/database.dart';
-import 'package:armm_app/database/models/client_model.dart';
-import 'package:armm_app/faceid.dart';
-import 'package:armm_app/initial_face_id.dart';
-import 'package:armm_app/screens/activity/activity.dart';
-import 'package:armm_app/screens/analytics/analytics.dart';
-import 'package:armm_app/screens/dashboard/dashboard.dart';
-import 'package:armm_app/screens/profile/pages/authentication_page.dart';
-import 'package:armm_app/screens/profile/pages/disclaimer_page.dart';
-import 'package:armm_app/screens/profile/pages/documents_page.dart';
-import 'package:armm_app/screens/profile/pages/my_profiles_page.dart';
-import 'package:armm_app/screens/profile/pages/settings_page.dart';
-import 'package:armm_app/screens/profile/pages/support_page.dart';
-import 'package:armm_app/screens/profile/profile.dart';
-import 'package:armm_app/utils/resources.dart';
+import 'package:armm_app/services/biometric_security_service.dart';
+import 'package:armm_app/utils/app_state.dart';
+import 'package:armm_app/utils/config.dart';
+import 'package:armm_app/utils/push_notification.dart';
+import 'package:armm_app/utils/app_routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:armm_app/utils/app_state.dart';
-import 'package:armm_app/utils/push_notification.dart';
-import 'package:armm_app/utils/utilities.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 import 'package:armm_app/components/custom_progress_indicator.dart';
+import 'package:armm_app/database/database.dart';
+import 'package:armm_app/database/models/client_model.dart';
 
-// Define the AppColors.primary color at the top of the file, outside any class
-
+/// Main application entry point
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -103,89 +84,68 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  late final BiometricSecurityService _biometricService;
   late final Stream<Client?> clientStream;
-  String? selectedTimeOption;
-  double selectedTimeInMinutes = 1.0; // Default value
-  Timer? _inactivityTimer;
-  bool _isAppLockEnabled = false;
 
   @override
   void initState() {
     super.initState();
-
-    // Add this widget as an observer to the WidgetsBinding instance
+    
+    // Add this as an observer for app lifecycle changes
     WidgetsBinding.instance.addObserver(this);
+    
+    // Initialize biometric security service
+    _biometricService = BiometricSecurityService.instance;
+    _biometricService.initialize();
 
-    // Reset navigation flags when the app initializes
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final appState = Provider.of<AuthState>(context, listen: false);
-      appState.setHasNavigatedToFaceIDPage(false);
+    // Initialize authentication state based on saved settings
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final authState = Provider.of<AuthState>(context, listen: false);
+      await _initializeAuthenticationState(authState);
     });
 
-    // Load the selected time option and app lock state
-    _loadSelectedTimeOption();
-    _loadAppLockState();
-  }
-
-  Future<void> _loadSelectedTimeOption() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      selectedTimeOption = prefs.getString('selectedTimeOption') ?? '1 minute';
-      selectedTimeInMinutes = _getTimeInMinutes(selectedTimeOption!);
-      log('Selected time option: $selectedTimeOption');
-      log('Timer duration in minutes: $selectedTimeInMinutes');
-    });
-  }
-
-  Future<void> _loadAppLockState() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _isAppLockEnabled = prefs.getBool('isAppLockEnabled') ?? false;
-      log('Bruh Loaded app lock state: $_isAppLockEnabled');
-    });
-    if (!mounted) return;
-    final appState = Provider.of<AuthState>(context, listen: false);
-    if (!_isAppLockEnabled) {
-      appState.setInitiallyAuthenticated(true);
-      log('App lock is disabled. Setting initiallyAuthenticated to true.');
-      log('initiallyAuthenticated: ${appState.initiallyAuthenticated}');
-    } else {
-      appState.setInitiallyAuthenticated(false);
-      log('App lock is enabled. Setting initiallyAuthenticated to false.');
-    }
-  }
-
-  double _getTimeInMinutes(String timeOption) {
-    switch (timeOption) {
-      case 'Immediately':
-        return 0.0;
-      case '1 minute':
-        return 1.0;
-      case '2 minute':
-        return 2.0;
-      case '5 minute':
-        return 5.0;
-      case '10 minute':
-        return 10.0;
-      default:
-        return 1.0; // Default to 1 minute if none match
-    }
+    // Set up client data stream
+    clientStream = _setupClientStream();
   }
 
   @override
   void dispose() {
-    // Remove this widget from the observer list
+    // Remove the observer when disposing
     WidgetsBinding.instance.removeObserver(this);
-    _inactivityTimer?.cancel();
-    log('Timer cancelled in dispose');
+    _biometricService.dispose();
     super.dispose();
   }
 
-  /// Stream that provides Client data based on authentication state
-  Stream<Client?> getClientStream() => FirebaseAuth.instance
-        .userChanges()
-        .asyncExpand((User? user) async* {
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    log('AppLifecycleState changed: $state');
+  
+    if (state == AppLifecycleState.resumed) {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) { return; }
+      DatabaseService? db = await DatabaseService.fetchCID(user.uid, context);
+      if (db != null) { 
+        await db.updateField('lastLoggedIn', Timestamp.now());
+        log('Updated lastLoggedIn timestamp for user: ${user.uid}');
+      }
+    }
+  }
+
+  /// Initialize authentication state based on app lock settings
+  Future<void> _initializeAuthenticationState(AuthState authState) async {
+    if (!authState.isBiometricSecurityEnabled) {
+      // If app lock is disabled, ensure user is marked as initially authenticated
+      authState.setInitialAuthenticationCompleted(true);
+      log('MyApp: Biometric security disabled. Setting initiallyAuthenticated to true.');
+    } else {
+      // If app lock is enabled, authentication status will be managed by BiometricSecurityService
+      log('MyApp: Biometric security enabled. Authentication will be managed by BiometricSecurityService.');
+    }
+  }
+
+  /// Set up the client data stream based on authentication state
+  Stream<Client?> _setupClientStream() {
+    return FirebaseAuth.instance.userChanges().asyncExpand((User? user) async* {
       if (user == null) {
         // User is not authenticated
         yield null;
@@ -198,88 +158,23 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         } else {
           yield* db.getClientStream();
         }
-      }});
-
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    final appState = Provider.of<AuthState>(context, listen: false);
-    log('AppLifecycleState changed: $state');
-  
-    if (state == AppLifecycleState.resumed) {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) { return; }
-      DatabaseService? db = await DatabaseService.fetchCID(user.uid, context);
-      if (db != null) { 
-        await db.updateField('lastLoggedIn', Timestamp.now());
       }
-      
-      // Cancel the timer when the app is resumed
-      _inactivityTimer?.cancel();
-      log('Timer cancelled on app resume');
-    } else if ((state == AppLifecycleState.paused ||
-                state == AppLifecycleState.inactive ||
-                state == AppLifecycleState.hidden) &&
-            !appState.hasNavigatedToFaceIDPage &&
-            await isAuthenticated() &&
-            appState.initiallyAuthenticated &&
-            appState.isAppLockEnabled) {
-      // log when all conditions are met
-      log('All conditions met: Navigating to FaceIdPage after timer');
-  
-      // Start a timer for the selected amount of time
-      _inactivityTimer?.cancel();
-      log('Timer cancelled');
-      _inactivityTimer = Timer(Duration(minutes: appState.selectedTimeInMinutes.toInt()), () {
-        // Navigate to FaceIdPage when the timer completes
-        appState.setHasNavigatedToFaceIDPage(true);
-        navigatorKey.currentState?.pushReplacement(
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const FaceIdPage(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
-          ),
-        );
-      });
-      log('Timer started for ${appState.selectedTimeInMinutes} minutes');
-    } else {
-      if (state != AppLifecycleState.paused &&
-          state != AppLifecycleState.inactive &&
-          state != AppLifecycleState.hidden) {
-        log('Condition not met: AppLifecycleState is not paused, inactive, or hidden');
-      }
-      if (appState.hasNavigatedToFaceIDPage) {
-        log('Condition not met: hasNavigatedToFaceIDPage is true');
-      }
-      if (!(await isAuthenticated())) {
-        log('Condition not met: User is not authenticated');
-      }
-      if (!appState.initiallyAuthenticated) {
-        log('Condition not met: initiallyAuthenticated is false');
-      }
-      if (!appState.isAppLockEnabled) {
-        log('Condition not met: isAppLockEnabled is false');
-      }
-    }
-  
-    if (appState.justAuthenticated) {
-      // Reset navigation flags when the user has just authenticated
-      appState.setHasNavigatedToFaceIDPage(false);
-      appState.setJustAuthenticated(false);
-      log('Reset navigation flags after authentication');
-    }
+    });
   }
 
-  /// Check if the user is authenticated and linked
+  /// Check if the user is authenticated and linked to a profile
   Future<bool> isAuthenticated() async {
     final user = FirebaseAuth.instance.currentUser;
-    if (user == null) { return false; }
+    if (user == null) return false;
 
-    String uid = user.uid;
-
-    DatabaseService db = DatabaseService(uid);
-
-    bool isLinked = await db.isUIDLinked(uid);
-
-    return isLinked;
+    try {
+      final db = DatabaseService(user.uid);
+      final isLinked = await db.isUIDLinked(user.uid);
+      return isLinked;
+    } catch (e) {
+      log('MyApp: Error checking authentication: $e');
+      return false;
+    }
   }
 
   @override
@@ -307,7 +202,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             final user = authSnapshot.data;
             return StreamProvider<Client?>(
               key: ValueKey(user?.uid),
-              create: (_) => getClientStream(),
+              create: (_) => _setupClientStream(),
               catchError: (context, error) {
                 log('main.dart: Error in fetching client stream: $error');
                 return null;
@@ -316,7 +211,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
               child: MaterialApp(
                 debugShowCheckedModeBanner: false,
                 initialRoute: '/',
-                navigatorKey: navigatorKey,
+                navigatorKey: _biometricService.navigatorKey,
                 builder: (context, child) => MediaQuery(
                   data: MediaQuery.of(context).copyWith(
                     boldText: false,
@@ -325,74 +220,17 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   child: child!,
                 ),
                 title: 'ARMM Group',
-                theme: _buildAppTheme(),
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                ),
                 // home: const AuthCheck(),
-                routes: {
-                  '/': (context) => const AuthCheck(),
-                  '/login': (context) => const LoginPage(),
-                  '/forgot_password': (context) => const ForgotPasswordPage(),
-                  '/dashboard': (context) => const DashboardPage(),
-                  '/analytics': (context) => const AnalyticsPage(),
-                  '/activity': (context) => const ActivityPage(),
-                  '/profile': (context) => const ProfilePage(),
-                  '/onboarding': (context) => const OnboardingPage(),
-                  '/authentication': (context) => const AuthenticationPage(),
-                  '/support': (context) => const SupportPage(),
-                  '/documents': (context) => const DocumentsPage(),
-                  '/settings': (context) => const SettingsPage(),
-                  '/my_profiles': (context) => const MyProfilesPage(),
-                  '/disclaimer': (context) => const DisclaimerPage(),
-                },
+                routes: AppRoutes.routes,
               ),
             );
           },
         );
       },
     );
-
-      }
-
-
-  /// Build the application theme
-  ThemeData _buildAppTheme() => ThemeData(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 251, 251, 251),
-        textTheme: TextTheme(
-          titleLarge: GoogleFonts.inter(
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          titleMedium: GoogleFonts.inter(
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          titleSmall: GoogleFonts.inter(
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          labelLarge:
-              GoogleFonts.inter(color: Colors.white),
-          labelMedium:
-              GoogleFonts.inter(color: Colors.white),
-          labelSmall:
-              GoogleFonts.inter(color: Colors.white),
-          displayLarge:
-              GoogleFonts.inter(color: Colors.white),
-          displayMedium:
-              GoogleFonts.inter(color: Colors.white),
-          displaySmall:
-              GoogleFonts.inter(color: Colors.white),
-          headlineLarge: GoogleFonts.inter(
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          headlineMedium: GoogleFonts.inter(
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          headlineSmall: GoogleFonts.inter(
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          bodyLarge:
-              GoogleFonts.inter(color: Colors.white),
-          bodyMedium:
-              GoogleFonts.inter(color: Colors.white),
-          bodySmall:
-              GoogleFonts.inter(color: Colors.white),
-        ),
-      );
+  }
 }

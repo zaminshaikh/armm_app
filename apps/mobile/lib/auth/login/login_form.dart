@@ -103,9 +103,9 @@ class _LoginFormState extends State<LoginForm> {
         log('login.dart: Notifications switch is OFF, not updating Firebase token...'); // Debugging output
       }
 
-      // Set initiallyAuthenticated to true
+      // Set initial authentication completed to true
       Provider.of<AuthState>(context, listen: false)
-          .setInitiallyAuthenticated(true);
+          .setInitialAuthenticationCompleted(true);
 
       // Set isLoading to false before navigation
       if (mounted) {

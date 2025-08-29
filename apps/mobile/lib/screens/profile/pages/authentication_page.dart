@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously, duplicate_ignore, prefer_expression_function_bodies, unused_catch_clause, empty_catches, library_private_types_in_public_api
 
-import 'package:armm_app/database/database.dart';
+import 'package:armm_app/services/biometric_security_service.dart';
 import 'package:armm_app/utils/app_bar.dart';
 import 'package:armm_app/utils/app_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,17 +18,17 @@ class AuthenticationPage extends StatefulWidget {
   // ignore: library_private_types_in_public_api
   _AuthenticationPageState createState() => _AuthenticationPageState();
 } 
+
 class _AuthenticationPageState extends State<AuthenticationPage> {
   final Future<void> _initializeWidgetFuture = Future.value();
-
-  // Database service instance
-  DatabaseService? _databaseService;
+  late BiometricSecurityService _biometricService;
 
   String? cid;
 
   @override
   void initState() {
     super.initState();
+    _biometricService = BiometricSecurityService.instance;
     _initializeAuthState();
   }
 
@@ -40,16 +40,15 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   Future<void> _loadSelectedTimeOption() async {
     final prefs = await SharedPreferences.getInstance();
     final timeOption = prefs.getString('selectedTimeOption') ?? 'Immediately'; // Changed default to 'Immediately'
-    context.read<AuthState>().setSelectedTimeOption(timeOption);
+    context.read<AuthState>().setSecurityDelayOption(timeOption);
     print('Loaded selected time option: $timeOption');
   }
 
   // Save the selected time option to SharedPreferences
   Future<void> _saveSelectedTimeOption(String timeOption) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('selectedTimeOption', timeOption);
-      context.read<AuthState>().setSelectedTimeOption(timeOption);
+      await _biometricService.setSecurityDelayTime(context, timeOption);
+      setState(() {});
       print('Saved selected time option: $timeOption');
     } catch (e) {
       print('Error saving time option: $e');
@@ -60,20 +59,68 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   Future<void> _loadAppLockState() async {
     final prefs = await SharedPreferences.getInstance();
     final isEnabled = prefs.getBool('isAppLockEnabled') ?? false;
-    context.read<AuthState>().setAppLockEnabled(isEnabled);
+    context.read<AuthState>().setBiometricSecurityEnabled(isEnabled);
     print('Loaded app lock state: $isEnabled');
   }
 
-  // Save the app lock state to SharedPreferences
+  // Save the app lock state to SharedPreferences with biometric validation
   Future<void> _saveAppLockState(bool isEnabled) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isAppLockEnabled', isEnabled);
-      context.read<AuthState>().setAppLockEnabled(isEnabled);
+      if (isEnabled) {
+        // Try to enable biometric security
+        final success = await _biometricService.enableBiometricSecurity(context);
+        
+        if (!success) {
+          // Show error dialog if biometric setup failed
+          _showBiometricUnavailableDialog();
+        }
+      } else {
+        // Disable biometric security
+        await _biometricService.disableBiometricSecurity(context);
+      }
+      setState(() {});
       print('Saved app lock state: $isEnabled');
     } catch (e) {
       print('Error saving app lock state: $e');
+      _showErrorDialog('Failed to update security settings. Please try again.');
     }
+  }
+
+  /// Show dialog when biometric authentication is not available
+  void _showBiometricUnavailableDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Biometric Authentication Unavailable'),
+        content: const Text(
+          'Biometric authentication is not available on your device or has not been set up. '
+          'Please configure Face ID, Touch ID, or another biometric method in your device settings.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Show error dialog
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -97,7 +144,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         child: Column(
           children: [
             _buildLockFeatureInfo(),
-            if (appState.isAppLockEnabled) _buildSampleCupertinoListSection(),
+            if (appState.isBiometricSecurityEnabled) _buildSampleCupertinoListSection(),
           ],
         ),
       ),
@@ -137,9 +184,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                 Row(
                   children: [
                   CupertinoSwitch(
-                    value: context.watch<AuthState>().isAppLockEnabled,
+                    value: context.watch<AuthState>().isBiometricSecurityEnabled,
                     onChanged: (bool value) {
-                    context.read<AuthState>().setAppLockEnabled(value);
                     _saveAppLockState(value);
                     print('App lock enabled: $value');
                     },
@@ -147,7 +193,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    context.watch<AuthState>().isAppLockEnabled ? 'On' : 'Off',
+                    context.watch<AuthState>().isBiometricSecurityEnabled ? 'On' : 'Off',
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: Colors.grey,
@@ -244,7 +290,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         setState(() {});
         print('Selected time option: $timeOption');
       },
-      trailing: context.watch<AuthState>().selectedTimeOption == timeOption
+      trailing: context.watch<AuthState>().securityDelayOption == timeOption
           ? const Icon(Icons.check_rounded, color: Colors.black)
           : null,
     );
