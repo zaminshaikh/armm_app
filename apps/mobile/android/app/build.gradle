@@ -17,7 +17,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.example.armm_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35  // Override Flutter's default compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
