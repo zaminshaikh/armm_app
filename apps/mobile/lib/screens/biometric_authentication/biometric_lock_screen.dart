@@ -147,7 +147,7 @@ class _BiometricLockScreenState extends State<BiometricLockScreen> with WidgetsB
                       elevation: 3,
                     ),
                     child: Text(
-                      'Use Face ID',
+                      'Unlock',
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         color: Colors.white,
