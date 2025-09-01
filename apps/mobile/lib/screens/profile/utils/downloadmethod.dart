@@ -33,8 +33,25 @@ Future<String> downloadFile(context, clientId, documentName) async {
       final file = File(filePath);
       await file.writeAsBytes(bytes);
     } else {
+      print('No bytes retrieved for file: $documentName');
     }
   } catch (e) {
+    print('Error downloading file $documentName: $e');
+    
+    // Try with URL encoded filename if the first attempt fails
+    try {
+      final encodedDocumentName = Uri.encodeComponent(documentName);
+      final encodedRef = FirebaseStorage.instance.ref().child(Config.get('FIRESTORE_ACTIVE_USERS_COLLECTION')).child(clientId).child(encodedDocumentName);
+      
+      final bytes = await encodedRef.getData();
+      if (bytes != null) {
+        final file = File(filePath);
+        await file.writeAsBytes(bytes);
+        print('Successfully downloaded file with encoded name: $encodedDocumentName');
+      }
+    } catch (encodedError) {
+      print('Error downloading file with encoded name: $encodedError');
+    }
   }
 
   return filePath;

@@ -37,10 +37,24 @@ class _DocumentsPageState extends State<DocumentsPage> {
   final FirebaseStorage storage = FirebaseStorage.instance;
   List<Reference> allFiles = [];
   List<Reference> pdfFiles = [];
+  List<PDF> allPdfFilesWithOwner = []; // Combined list with owner info
   List<Reference> filteredPdfFiles = [];
   List<PDF> pdfFilesConnectedUsers = [];
   List<PDF> filteredPdfFilesConnectedUsers = [];
   bool isSortAscending = true;
+  Set<String> downloadingFiles = {};
+
+  // Helper method to get the correct CID for a file
+  String getFileOwnerCid(String fileName) {
+    // First check if it's from a connected user
+    for (PDF pdfWithOwner in allPdfFilesWithOwner) {
+      if (pdfWithOwner.file.name == fileName) {
+        return pdfWithOwner.cid;
+      }
+    }
+    // If not found in connected users, it's from current user
+    return client!.cid;
+  }
 
   @override
   void didChangeDependencies() {
@@ -69,6 +83,10 @@ class _DocumentsPageState extends State<DocumentsPage> {
   }
   
   Future<void> shareFile(context, clientId, documentName) async {
+    setState(() {
+      downloadingFiles.add(documentName);
+    });
+    
     try {
       // Call downloadFile to get the filePath
       String filePath = await downloadFile(context, clientId, documentName);
@@ -88,6 +106,10 @@ class _DocumentsPageState extends State<DocumentsPage> {
       }
     } catch (e) {
       print('Error sharing file: $e');
+    } finally {
+      setState(() {
+        downloadingFiles.remove(documentName);
+      });
     }
   }
   
@@ -133,6 +155,11 @@ class _DocumentsPageState extends State<DocumentsPage> {
         pdfFiles = userPdfFiles;
         filteredPdfFiles = userPdfFiles;
         allFiles.addAll(userPdfFiles);
+        
+        // Add current user files to allPdfFilesWithOwner with current user's CID
+        final currentUserPdfWithOwner = userPdfFiles.map((file) => PDF(file, client!.cid)).toList();
+        allPdfFilesWithOwner.addAll(currentUserPdfWithOwner);
+        
         print('State updated with user PDF files.');
       });
     }
@@ -172,16 +199,20 @@ class _DocumentsPageState extends State<DocumentsPage> {
         // Use a Set to keep track of already added files
         final existingFiles = pdfFilesConnectedUsers.map((pdfFileWithCid) => pdfFileWithCid.file.name).toSet();
         print('Existing files: $existingFiles');
-  
+
         // Add only the new files that are not already in the list
         final newFiles = allConnectedFiles.where((pdfFileWithCid) => !existingFiles.contains(pdfFileWithCid.file.name)).toList();
         print('New files to add: ${newFiles.map((file) => file.file.name).toList()}');
-  
+
         pdfFilesConnectedUsers.addAll(newFiles);
         filteredPdfFilesConnectedUsers = pdfFilesConnectedUsers;
         allFiles.addAll(newFiles.map((pdf) => pdf.file));
+        
+        // Add connected user files to allPdfFilesWithOwner
+        allPdfFilesWithOwner.addAll(newFiles);
+        
         print('State updated with connected users PDF files.');
-  
+
         // Add filteredPdfFilesConnectedUsers to filteredPdfFiles if not empty
         if (filteredPdfFilesConnectedUsers.isNotEmpty) {
           filteredPdfFiles.addAll(filteredPdfFilesConnectedUsers.map((pdf) => pdf.file));
@@ -487,8 +518,10 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                               ),
                                             ),
                                             onTap: () async {
-                                              await downloadFile(context, client!.cid, filteredPdfFiles[index].name);
-                                              String filePath = await downloadFile(context, client!.cid, filteredPdfFiles[index].name);
+                                              final fileName = filteredPdfFiles[index].name;
+                                              final ownerCid = getFileOwnerCid(fileName);
+                                              await downloadFile(context, ownerCid, fileName);
+                                              String filePath = await downloadFile(context, ownerCid, fileName);
                                               await Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -496,17 +529,31 @@ class _DocumentsPageState extends State<DocumentsPage> {
                                                 ),
                                               );
                                             },
-                                            trailing: IconButton(
-                                              icon: SvgPicture.asset(
-                                                'assets/icons/download.svg',
-                                                width: 30,
-                                                height: 30,
-                                                color: Colors.grey
-                                              ),
-                                              onPressed: () {
-                                                shareFile(context, client!.cid, filteredPdfFiles[index].name);
-                                              },
-                                            ),
+                                            trailing: downloadingFiles.contains(filteredPdfFiles[index].name)
+                                                ? const SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child: CustomProgressIndicator(
+                                                      size: 15.0,
+                                                    ),
+                                                  )
+                                                : SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        final fileName = filteredPdfFiles[index].name;
+                                                        final ownerCid = getFileOwnerCid(fileName);
+                                                        shareFile(context, ownerCid, fileName);
+                                                      },
+                                                      child: SvgPicture.asset(
+                                                        'assets/icons/download.svg',
+                                                        width: 20,
+                                                        height: 20,
+                                                        color: Colors.grey
+                                                      ),
+                                                    ),
+                                                  ),
                                           );
                                         }
                                       },
