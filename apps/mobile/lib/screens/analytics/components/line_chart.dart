@@ -26,7 +26,7 @@ class LineChartSectionState extends State<LineChartSection> {
   List<FlSpot> spots = [];
   double _minAmount = double.maxFinite;
   double _maxAmount = 0.0;
-  String dropdownValue = 'last-week'; // default: 'last-week'
+  String dropdownValue = 'last-year'; // default: 'last-week'
 
   // Variables for account selection
   String? selectedAccount;
