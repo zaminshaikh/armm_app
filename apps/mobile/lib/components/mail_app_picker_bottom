@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -113,29 +114,46 @@ class MailAppPickerSheet extends StatelessWidget {
   }
 
   Future<void> _openSpecificMailApp(String appName) async {
-    String scheme;
-    switch (appName.toLowerCase()) {
-      case 'gmail':
-        scheme = 'googlegmail://';
-        break;
-      case 'outlook':
-        scheme = 'ms-outlook://';
-        break;
-      case 'apple mail':
-        scheme = 'message://';
-        break;
-      default:
-        scheme = 'mailto:';
-    }
-    
-    final uri = Uri.parse(scheme);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      // Fallback to generic mailto
+    // Use platform-specific schemes
+    if (Platform.isAndroid) {
+      // On Android, always use mailto: with external launch mode
+      // This will show the system chooser if multiple mail apps are available
       final mailtoUri = Uri.parse('mailto:');
       if (await canLaunchUrl(mailtoUri)) {
         await launchUrl(mailtoUri, mode: LaunchMode.externalApplication);
+      }
+    } else {
+      // iOS schemes
+      String scheme;
+      switch (appName.toLowerCase()) {
+        case 'gmail':
+          scheme = 'googlegmail://';
+          break;
+        case 'outlook':
+          scheme = 'ms-outlook://';
+          break;
+        case 'apple mail':
+          scheme = 'message://';
+          break;
+        case 'spark':
+          scheme = 'readdle-spark://';
+          break;
+        case 'airmail':
+          scheme = 'airmail://';
+          break;
+        default:
+          scheme = 'mailto:';
+      }
+      
+      final uri = Uri.parse(scheme);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        // Fallback to generic mailto
+        final mailtoUri = Uri.parse('mailto:');
+        if (await canLaunchUrl(mailtoUri)) {
+          await launchUrl(mailtoUri, mode: LaunchMode.externalApplication);
+        }
       }
     }
   }
@@ -153,6 +171,8 @@ class MailAppPickerSheet extends StatelessWidget {
       case 'yahoo mail':
       case 'ymail':
         return FaIcon(FontAwesomeIcons.yahoo, size: 20, color: color);
+      case 'samsung email':
+        return FaIcon(FontAwesomeIcons.envelope, size: 20, color: color);
       case 'fastmail':
         return FaIcon(FontAwesomeIcons.envelope, size: 20, color: color);
       case 'superhuman':
