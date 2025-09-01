@@ -1,29 +1,66 @@
 import 'package:armm_app/components/custom_alert_dialog.dart';
 import 'package:armm_app/components/mail_app_picker_bottom';
 import 'package:flutter/material.dart';
-import 'package:open_mail_app/open_mail_app.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void openMailApp(BuildContext context) async {
-  final result = await OpenMailApp.openMailApp();
+  try {
+    // List of mail app schemes to try in order of preference
+    final List<Map<String, String>> mailApps = [
+      {'name': 'Gmail', 'scheme': 'googlegmail://'},
+      {'name': 'Outlook', 'scheme': 'ms-outlook://'},
+      {'name': 'Apple Mail', 'scheme': 'message://'},
+    ];
 
-  if (!context.mounted) return; // Ensure widget is still mounted before proceeding
+    // Check which mail apps are available
+    List<String> availableApps = [];
+    for (var app in mailApps) {
+      final uri = Uri.parse(app['scheme']!);
+      if (await canLaunchUrl(uri)) {
+        availableApps.add(app['name']!);
+      }
+    }
 
-  // No mail clients at all
-  if (!result.didOpen && !result.canOpen) {
-    _showNoMailAppsDialog(context);
-    return;
-  }
+    // If multiple apps are available, show picker
+    if (availableApps.length > 1 && context.mounted) {
+      showModalBottomSheet(
+        context: context,
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (ctx) => MailAppPickerSheet(options: availableApps),
+      );
+      return;
+    }
 
-  // Several clients → present sheet
-  if (!result.didOpen && result.canOpen) {
-    showModalBottomSheet(
-      context: context,
-      // identical glass‑dim effect you use for dialogs
-      barrierColor: Colors.black.withOpacity(0.6),
-      backgroundColor: Colors.transparent,       // let us draw our own card
-      isScrollControlled: true,                  // sheet hugs content
-      builder: (ctx) => MailAppPickerSheet(options: result.options),
-    );
+    // Try to open the first available app or fallback to mailto
+    bool opened = false;
+    for (var app in mailApps) {
+      final uri = Uri.parse(app['scheme']!);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+        opened = true;
+        break;
+      }
+    }
+
+    // If no specific mail app worked, try generic mailto
+    if (!opened) {
+      final mailtoUrl = Uri.parse('mailto:');
+      if (await canLaunchUrl(mailtoUrl)) {
+        await launchUrl(mailtoUrl, mode: LaunchMode.externalApplication);
+        opened = true;
+      }
+    }
+
+    // If still no mail app can be opened, show dialog
+    if (!opened && context.mounted) {
+      _showNoMailAppsDialog(context);
+    }
+  } catch (e) {
+    if (context.mounted) {
+      _showNoMailAppsDialog(context);
+    }
   }
 }
 

@@ -1,12 +1,12 @@
 import 'package:armm_app/utils/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:open_mail_app/open_mail_app.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MailAppPickerSheet extends StatelessWidget {
-  final List<MailApp> options;
-  const MailAppPickerSheet({super.key, required this.options});
+  final List<String> options;
+  const MailAppPickerSheet({super.key, this.options = const ['Gmail', 'Outlook', 'Apple Mail']});
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +42,15 @@ class MailAppPickerSheet extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // ────── List of installed mail clients ──────
+              // ────── List of mail apps ──────
               ...options.map(
-                (app) => Padding(
+                (appName) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: SizedBox(
                     width: double.infinity,              // make the button full-width
                     child: OutlinedButton(
-                      onPressed: () {
-                        OpenMailApp.openSpecificMailApp(app);
+                      onPressed: () async {
+                        await _openSpecificMailApp(appName);
                         Navigator.of(context).pop();
                       },
                       style: OutlinedButton.styleFrom(
@@ -67,10 +67,10 @@ class MailAppPickerSheet extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _iconFor(app.name, AppColors.primary),
+                          _iconFor(appName, AppColors.primary),
                           const SizedBox(width: 8),
                           Text(
-                            app.name,
+                            appName,
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
@@ -110,6 +110,34 @@ class MailAppPickerSheet extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _openSpecificMailApp(String appName) async {
+    String scheme;
+    switch (appName.toLowerCase()) {
+      case 'gmail':
+        scheme = 'googlegmail://';
+        break;
+      case 'outlook':
+        scheme = 'ms-outlook://';
+        break;
+      case 'apple mail':
+        scheme = 'message://';
+        break;
+      default:
+        scheme = 'mailto:';
+    }
+    
+    final uri = Uri.parse(scheme);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      // Fallback to generic mailto
+      final mailtoUri = Uri.parse('mailto:');
+      if (await canLaunchUrl(mailtoUri)) {
+        await launchUrl(mailtoUri, mode: LaunchMode.externalApplication);
+      }
+    }
   }
 
   Widget _iconFor(String appName, Color color) {

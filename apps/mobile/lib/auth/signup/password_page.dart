@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:open_mail_app/open_mail_app.dart';
 import 'package:armm_app/auth/signup/profile_picture_page.dart';
 
 // ignore: must_be_immutable
