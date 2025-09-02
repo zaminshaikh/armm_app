@@ -339,8 +339,8 @@ class _DocumentsPageState extends State<DocumentsPage> {
         child: SvgPicture.asset(
           'assets/icons/sort.svg',
           color: const Color(0xFF2B41B8),
-          width: 30.0,
-          height: 30.0,
+          width: 32.0,
+          height: 32.0,
         ),
       ),
     );
