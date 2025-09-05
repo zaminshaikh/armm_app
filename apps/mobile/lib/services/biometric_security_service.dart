@@ -99,6 +99,12 @@ class BiometricSecurityService with WidgetsBindingObserver {
     final authState = Provider.of<AuthState>(context, listen: false);
     final isSecurityEnabled = authState.isBiometricSecurityEnabled;
     final securityDelayMinutes = authState.securityDelayMinutes;
+    
+    // Don't trigger biometric auth if image picking is in progress
+    if (authState.isImagePickingInProgress) {
+      log('BiometricSecurityService: Image picking in progress, skipping biometric auth');
+      return;
+    }
 
     if (!isSecurityEnabled) {
       log('BiometricSecurityService: Security disabled, no timer needed');
@@ -137,12 +143,14 @@ class BiometricSecurityService with WidgetsBindingObserver {
     final isUserAuthenticatedAndLinked = await _isUserAuthenticatedAndLinked();
     final hasTimePassed = _hasSecurityDelayPassed(authState.securityDelayMinutes);
     final isOnboardingComplete = await _isOnboardingComplete();
+    final isImagePickingInProgress = authState.isImagePickingInProgress;
 
     log('BiometricSecurityService: Security check - '
         'Enabled: $isSecurityEnabled, '
         'JustAuth: $hasUserJustAuthenticated, '
         'UserLinked: $isUserAuthenticatedAndLinked, '
-        'TimePassed: $hasTimePassed');
+        'TimePassed: $hasTimePassed, '
+        'ImagePicking: $isImagePickingInProgress');
 
     // Don't show if currently authenticating
     if (_isCurrentlyAuthenticating) {
@@ -152,6 +160,11 @@ class BiometricSecurityService with WidgetsBindingObserver {
     // Don't show if user just authenticated successfully
     if (hasUserJustAuthenticated) {
       _resetJustAuthenticatedFlag(context);
+      return false;
+    }
+    
+    // Don't show if image picking is in progress
+    if (isImagePickingInProgress) {
       return false;
     }
 
