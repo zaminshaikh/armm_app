@@ -9,6 +9,7 @@ import 'package:armm_app/database/database.dart'; // Import DatabaseService
 import 'package:google_fonts/google_fonts.dart';
 import 'package:armm_app/utils/utilities.dart';
 import 'package:armm_app/utils/success_animation_helper.dart'; // Import for success animation
+import 'package:armm_app/utils/app_state.dart'; // Import for AuthState
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart'; // Import for image cropping
@@ -133,7 +134,14 @@ class NameAndCID extends StatelessWidget {
     final BuildContext stableContext = parentContext;
     final picker = ImagePicker();
     
+    // Get AuthState to set image picking flag
+    final authState = Provider.of<AuthState>(stableContext, listen: false);
+    
     try {
+      // Set flag to prevent biometric auth during image picking
+      authState.setImagePickingInProgress(true);
+      log('Image picking started - biometric auth disabled');
+      
       final pickedFile = await picker.pickImage(
         source: source,
         maxWidth: 1000,
@@ -152,7 +160,9 @@ class NameAndCID extends StatelessWidget {
           // If cropping was successful, show the preview modal with the cropped image
           // Otherwise use the original image (in case crop was cancelled)
           if (stableContext.mounted) {
+            // Note: Flag will be cleared when user uploads or cancels in the modal
             _showPreviewModal(stableContext, croppedFile ?? imageFile, cid);
+            return; // Don't clear flag here - it will be handled by modal actions
           } else {
             log('Context no longer mounted after cropping image');
           }
@@ -178,6 +188,10 @@ class NameAndCID extends StatelessWidget {
         );
       }
     }
+    
+    // Only clear flag if we didn't show the preview modal (error case or user cancelled)
+    authState.setImagePickingInProgress(false);
+    log('Image picking completed - biometric auth re-enabled');
   }
 
   // Method to show image preview modal
@@ -248,7 +262,8 @@ class NameAndCID extends StatelessWidget {
                           icon: const Icon(Icons.edit),
                           label: const Text('Edit'),
                           onPressed: () async {
-                            // Don't dismiss the modal
+                            // Don't dismiss the modal, just crop the image
+                            // Flag is already active from initial image selection
                             File? croppedFile = await _cropImage(imageFile);
                             if (croppedFile != null) {
                               // Update the preview with the cropped image
@@ -279,9 +294,21 @@ class NameAndCID extends StatelessWidget {
                           icon: const Icon(Icons.cloud_upload),
                           label: const Text('Upload'),
                           onPressed: () async {
-                            Navigator.pop(modalContext);
-                            if (context.mounted) {
-                              await _uploadProfilePicture(context, cid, imageFile);
+                            // Get AuthState to clear flag after upload completes
+                            final authState = Provider.of<AuthState>(context, listen: false);
+                            
+                            try {
+                              // Flag should already be active from image selection
+                              log('Starting profile picture upload - flag already active');
+                              
+                              Navigator.pop(modalContext);
+                              if (context.mounted) {
+                                await _uploadProfilePicture(context, cid, imageFile);
+                              }
+                            } finally {
+                              // Clear flag only after upload is complete
+                              authState.setImagePickingInProgress(false);
+                              log('Profile picture upload completed - biometric auth re-enabled');
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -305,7 +332,13 @@ class NameAndCID extends StatelessWidget {
                         child: ElevatedButton.icon(
                           icon: const Icon(Icons.cancel),
                           label: const Text('Cancel'),
-                          onPressed: () => Navigator.pop(modalContext),
+                          onPressed: () {
+                            // Clear the flag when user cancels
+                            final authState = Provider.of<AuthState>(context, listen: false);
+                            authState.setImagePickingInProgress(false);
+                            log('Image upload cancelled - biometric auth re-enabled');
+                            Navigator.pop(modalContext);
+                          },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             backgroundColor: const Color(0xFFFFCCBC), // Light coral/red pastel

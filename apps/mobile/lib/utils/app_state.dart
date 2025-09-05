@@ -15,6 +15,9 @@ class AuthState extends ChangeNotifier {
   bool _hasAuthenticatedThisSession = false;
   bool _hasJustCompletedAuthentication = false;
   bool _hasCompletedInitialAuthentication = false;
+  
+  // Image picking state - to prevent biometric auth during photo library access
+  bool _isImagePickingInProgress = false;
 
   // Getters
   bool get isBiometricSecurityEnabled => _isBiometricSecurityEnabled;
@@ -23,6 +26,7 @@ class AuthState extends ChangeNotifier {
   bool get hasAuthenticatedThisSession => _hasAuthenticatedThisSession;
   bool get hasJustCompletedAuthentication => _hasJustCompletedAuthentication;
   bool get hasCompletedInitialAuthentication => _hasCompletedInitialAuthentication;
+  bool get isImagePickingInProgress => _isImagePickingInProgress;
 
   /// Load saved security settings from SharedPreferences
   Future<void> loadSavedSettings() async {
@@ -68,6 +72,12 @@ class AuthState extends ChangeNotifier {
   /// Set session authentication state
   void setHasAuthenticatedThisSession(bool value) {
     _hasAuthenticatedThisSession = value;
+    notifyListeners();
+  }
+  
+  /// Set image picking in progress state
+  void setImagePickingInProgress(bool value) {
+    _isImagePickingInProgress = value;
     notifyListeners();
   }
   
