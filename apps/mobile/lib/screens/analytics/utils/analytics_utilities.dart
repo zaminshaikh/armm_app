@@ -9,45 +9,52 @@
 /// - Returns:
 ///   - A double representing the x-coordinate on the chart, or -1.0 if out of range.
 double calculateXValue(DateTime dateTime, String dropdownValue) {
+  // Convert to local time to ensure consistent timezone handling
+  DateTime localDateTime = dateTime.toLocal();
   DateTime now = DateTime.now();
+  
+  // Normalize dates to midnight for consistent day-based calculations
+  DateTime normalizedDateTime = DateTime(localDateTime.year, localDateTime.month, localDateTime.day);
+  DateTime normalizedNow = DateTime(now.year, now.month, now.day);
+  
   DateTime startDate;
   double totalPeriod;
   double maxXValue = maxX(dropdownValue);
 
   switch (dropdownValue) {
     case 'last-week':
-      startDate = now.subtract(const Duration(days: 6));
+      startDate = normalizedNow.subtract(const Duration(days: 6));
       totalPeriod = 7;
       break;
     case 'last-month':
-      startDate = DateTime(now.year, now.month - 1, now.day);
+      startDate = DateTime(normalizedNow.year, normalizedNow.month - 1, normalizedNow.day);
       totalPeriod = 30;
       break;
     case 'last-6-months':
-      startDate = DateTime(now.year, now.month - 5, now.day);
+      startDate = DateTime(normalizedNow.year, normalizedNow.month - 5, normalizedNow.day);
       totalPeriod = 180;
       break;
     case 'last-year':
-      startDate = DateTime(now.year - 1, now.month, now.day);
-      totalPeriod = now.difference(startDate).inDays.toDouble();
+      startDate = DateTime(normalizedNow.year - 1, normalizedNow.month, normalizedNow.day);
+      totalPeriod = normalizedNow.difference(startDate).inDays.toDouble();
       break;
     case 'year-to-date':
-      startDate = DateTime(now.year, 1, 1);
-      totalPeriod = now.difference(startDate).inDays.toDouble();
+      startDate = DateTime(normalizedNow.year, 1, 1);
+      totalPeriod = normalizedNow.difference(startDate).inDays.toDouble();
       break;
     case 'last-2-years':
-      startDate = DateTime(now.year - 2, now.month, now.day);
-      totalPeriod = now.difference(startDate).inDays.toDouble();
+      startDate = DateTime(normalizedNow.year - 2, normalizedNow.month, normalizedNow.day);
+      totalPeriod = normalizedNow.difference(startDate).inDays.toDouble();
       break;
     default:
       return -1.0;  // Return -1.0 if the range is not recognized.
   }
 
-  if (dateTime.isBefore(startDate) || dateTime.isAfter(now)) {
+  if (normalizedDateTime.isBefore(startDate) || normalizedDateTime.isAfter(normalizedNow)) {
     return -1.0;
   }
 
-  double dayDifference = dateTime.difference(startDate).inDays.toDouble();
+  double dayDifference = normalizedDateTime.difference(startDate).inDays.toDouble();
   return (dayDifference / totalPeriod) * maxXValue;
 }
 
@@ -63,6 +70,8 @@ double calculateXValue(DateTime dateTime, String dropdownValue) {
 ///   - A DateTime corresponding to the x-axis value.
 DateTime calculateDateTimeFromXValue(double xValue, String dropdownValue) {
   DateTime now = DateTime.now();
+  // Normalize to midnight for consistent day-based calculations
+  DateTime normalizedNow = DateTime(now.year, now.month, now.day);
   DateTime startDate;
   DateTime endDate;
   double totalPeriod;
@@ -70,28 +79,28 @@ DateTime calculateDateTimeFromXValue(double xValue, String dropdownValue) {
 
   switch (dropdownValue) {
     case 'last-week':
-      startDate = now.subtract(const Duration(days: 6));
-      endDate = now;
+      startDate = normalizedNow.subtract(const Duration(days: 6));
+      endDate = normalizedNow;
       break;
     case 'last-month':
-      startDate = now.subtract(const Duration(days: 29));
-      endDate = now;
+      startDate = normalizedNow.subtract(const Duration(days: 29));
+      endDate = normalizedNow;
       break;
     case 'last-6-months':
-      startDate = DateTime(now.year, now.month - 5, now.day);
-      endDate = now;
+      startDate = DateTime(normalizedNow.year, normalizedNow.month - 5, normalizedNow.day);
+      endDate = normalizedNow;
       break;
     case 'last-year':
-      startDate = DateTime(now.year - 1, now.month, now.day);
-      endDate = now;
+      startDate = DateTime(normalizedNow.year - 1, normalizedNow.month, normalizedNow.day);
+      endDate = normalizedNow;
       break;
     case 'year-to-date':
-      startDate = DateTime(now.year, 1, 1);
-      endDate = now;
+      startDate = DateTime(normalizedNow.year, 1, 1);
+      endDate = normalizedNow;
       break;
     case 'last-2-years':
-      startDate = DateTime(now.year - 2, now.month, now.day);
-      endDate = now;
+      startDate = DateTime(normalizedNow.year - 2, normalizedNow.month, normalizedNow.day);
+      endDate = normalizedNow;
       break;
     default:
       return DateTime.now();
