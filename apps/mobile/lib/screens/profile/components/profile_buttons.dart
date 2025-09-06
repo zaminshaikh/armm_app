@@ -227,6 +227,7 @@ class ProfileButtons extends StatelessWidget {
         const SizedBox(height: 24),
         // Disclaimer Section
         Container(
+          width: double.infinity,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: const Color(0xFFF1F4FF),
