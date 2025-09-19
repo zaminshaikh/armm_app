@@ -133,6 +133,8 @@ function generateInviteEmailHtml(clientName: string, cid: string): string {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
     <title>ARMM Group - Investment App Invitation</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Balinese:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -141,20 +143,22 @@ function generateInviteEmailHtml(clientName: string, cid: string): string {
             padding: 0;
             font-family: 'Open Sans', Arial, sans-serif;
             line-height: 1.6;
-            color: #333333;
-            background-color: #f8f9fa;
+            color: #333333 !important;
+            background-color: #f8f9fa !important;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
         }
         .email-container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #ffffff;
+            background-color: #ffffff !important;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background: linear-gradient(135deg, #2B41B8 0%, #4A5BC7 100%);
+            background: linear-gradient(135deg, #2B41B8 0%, #4A5BC7 100%) !important;
             padding: 30px 40px;
             text-align: center;
-            color: white;
+            color: white !important;
         }
         .logo-container {
             margin-bottom: 20px;
@@ -239,8 +243,8 @@ function generateInviteEmailHtml(clientName: string, cid: string): string {
         }
         .download-link {
             display: block;
-            background-color: #2B41B8;
-            color: white;
+            background-color: #2B41B8 !important;
+            color: white !important;
             text-decoration: none;
             padding: 12px 20px;
             border-radius: 6px;
@@ -250,7 +254,8 @@ function generateInviteEmailHtml(clientName: string, cid: string): string {
             transition: background-color 0.3s ease;
         }
         .download-link:hover {
-            background-color: #1e2d8a;
+            background-color: #1e2d8a !important;
+            color: white !important;
         }
         .cid-highlight {
             background-color: #fff3cd;
@@ -290,8 +295,8 @@ function generateInviteEmailHtml(clientName: string, cid: string): string {
             margin-bottom: 10px;
         }
         .footer {
-            background-color: #2B41B8;
-            color: white;
+            background-color: #2B41B8 !important;
+            color: white !important;
             padding: 30px 40px;
             text-align: center;
             font-size: 14px;
@@ -336,8 +341,8 @@ function generateInviteEmailHtml(clientName: string, cid: string): string {
 <body>
     <div class="email-container">
         <div class="header">
-            <div class="logo-container">
-                <svg width="200" height="70" viewBox="0 0 462 161" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <div class="logo-container">
+                 <svg width="200" height="70" viewBox="0 0 462 161" fill="none" xmlns="http://www.w3.org/2000/svg" style="-webkit-filter: none !important; filter: none !important;">
                     <path d="M204.65 60.8235H182.559L209.918 90.7367H180.395L154.031 60.8235L136.183 40.8814H188.646C194.778 40.8814 199.748 36.194 199.748 30.4118C199.748 24.6295 194.778 19.9421 188.646 19.9421H117.442L99.5928 0H204.65C212.241 0 218.395 5.80346 218.395 12.9624V47.8611C218.395 55.0201 212.241 60.8235 204.65 60.8235Z" fill="white"/>
                     <path d="M78.0508 0.246112L63.0877 16.9508L63.097 16.962L0 90.7367H27.4317L76.7237 34.5331L124.509 90.7367H154.044L78.0508 0.246112Z" fill="white"/>
                     <path d="M158.335 95.8466L158.13 96V95.602L158.335 95.8466Z" fill="white"/>
