@@ -23,7 +23,7 @@ import ProtectedRoute from './ProtectedRoute'
 
 const firebaseConfig = {
     apiKey: "AIzaSyAMOSZ7qE3O-cJrcG6zqpwBL_OyArp1X1o",
-    authDomain: "armm-app.firebaseapp.com",
+    authDomain: "admin.armmgroup.com",
     projectId: "armm-app",
     storageBucket: "armm-app.firebasestorage.app",
     messagingSenderId: "783271592956",
