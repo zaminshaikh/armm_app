@@ -376,8 +376,19 @@ function generateInviteEmailHtml(clientName: string, cid: string): string {
                         <div class="step-title">Download the App</div>
                         <p>Click the appropriate link below based on your device:</p>
                         <div class="download-links">
-                            <a href="https://testflight.apple.com/join/e9kMgByH" class="download-link">📱 Download for iOS</a>
-                            <a href="https://play.google.com/apps/internaltest/4701740371572084825" class="download-link">🤖 Download for Android</a>
+                            <a href="https://testflight.apple.com/join/6XqSFAcr" class="download-link">
+                                <svg width="16" height="16" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 8px; fill: white;">
+                                    <path d="M349.13,136.86c-40.32,0-57.36,19.24-85.44,19.24C234.9,156.1,212.94,137,178,137c-34.2,0-70.67,20.88-93.83,56.45-32.52,50.16-27,144.63,25.67,225.11,18.84,28.81,44,61.12,77,61.47h.6c28.68,0,37.2-18.78,76.67-19h.6c38.88,0,46.68,18.89,75.24,18.89h.6c33-.35,59.51-36.15,78.35-64.85,13.56-20.64,18.6-31,29-54.35-76.19-28.92-88.43-136.93-13.08-178.34-23-28.8-55.32-45.48-85.79-45.48Z"/>
+                                    <path d="M340.25,32c-24,1.63-52,16.91-68.4,36.86-14.88,18.08-27.12,44.9-22.32,70.91h1.92c25.56,0,51.72-15.39,67-35.11C333.17,85.89,344.33,59.29,340.25,32Z"/>
+                                </svg>
+                                Download for iOS
+                            </a>
+                            <a href="https://play.google.com/apps/internaltest/4701234030094728221" class="download-link">
+                                <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 8px; fill: white;">
+                                    <path d="M14.97535,3.01886l.95982-1.73159a.19342.19342,0,0,0-.33833-.18756l-.97045,1.75078a6.54141,6.54141,0,0,0-5.25275,0L8.40316,1.09971a.19342.19342,0,0,0-.33833.18756l.95985,1.7316A5.54614,5.54614,0,0,0,5.93152,7.89522h12.137A5.54615,5.54615,0,0,0,14.97535,3.01886ZM9.19911,5.67446a.5068.5068,0,1,1,.5068-.5068A.50737.50737,0,0,1,9.19911,5.67446Zm5.60178,0a.5068.5068,0,1,1,.5068-.5068A.50737.50737,0,0,1,14.80089,5.67446Zm-8.86946,11.497a1.46713,1.46713,0,0,0,1.46713,1.46713h.9736v3.00095a1.36046,1.36046,0,1,0,2.72091,0V18.63859h1.81386v3.00095a1.36046,1.36046,0,1,0,2.72091,0V18.63859h.97364a1.46713,1.46713,0,0,0,1.46713-1.46713V8.37532H5.93143ZM4.06415,8.14191A1.362,1.362,0,0,0,2.7037,9.50237v5.66846a1.36046,1.36046,0,1,0,2.72091,0V9.50237A1.362,1.362,0,0,0,4.06415,8.14191Zm15.8717,0a1.362,1.362,0,0,0-1.36046,1.36046v5.66846a1.36046,1.36046,0,1,0,2.72091,0V9.50237A1.362,1.362,0,0,0,19.93585,8.14191Z"/>
+                                </svg>
+                                Download for Android
+                            </a>
                         </div>
                         <div class="important-note">
                             <strong>Important:</strong> The app is only available on mobile devices. Please open these links directly on your smartphone or tablet.
@@ -432,11 +443,15 @@ function generateInviteEmailHtml(clientName: string, cid: string): string {
             
             <div class="contact-info">
                 <div class="contact-item">
-                    <span>📞</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 8px; fill: white;">
+                        <path d="M16.86 14.87c.67.1 1.3.44 1.77.97l1.03 1.13a1.75 1.75 0 0 1-.1 2.42 4.84 4.84 0 0 1-3.9 1.16c-3.48-.42-7.09-2.98-9.91-5.8-2.82-2.82-5.38-6.43-5.8-9.91A4.84 4.84 0 0 1 1.11 2c.67-.67 1.75-.74 2.42-.1l1.13 1.03c.53.48.87 1.1.97 1.77l.24 1.65c.09.6-.13 1.21-.58 1.6l-.84.74a13.98 13.98 0 0 0 6.98 6.98l.74-.84c.39-.45 1-.67 1.6-.58l1.65.24Z"/>
+                    </svg>
                     <span>347-513-3040</span>
                 </div>
                 <div class="contact-item">
-                    <span>✉️</span>
+                    <svg width="16" height="16" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 8px; fill: white;">
+                        <path d="M64 128Q64 113 73 105 81 96 96 96L416 96Q431 96 440 105 448 113 448 128L448 144 256 272 64 144 64 128ZM256 328L448 200 448 384Q448 416 416 416L96 416Q64 416 64 384L64 200 256 328Z"/>
+                    </svg>
                     <span>info@armmgroup.com</span>
                 </div>
             </div>
@@ -465,8 +480,8 @@ With this app, you can easily access your up-to-date investment information, por
 GETTING STARTED:
 
 1. Download the App:
-   For iOS Users: https://testflight.apple.com/join/e9kMgByH
-   For Android Users: https://play.google.com/apps/internaltest/4701740371572084825
+   For iOS Users: https://testflight.apple.com/join/6XqSFAcr
+   For Android Users: https://play.google.com/apps/internaltest/4701234030094728221
    
    Important: The app is only available on mobile devices. Please open these links directly on your smartphone or tablet.
 
