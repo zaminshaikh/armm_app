@@ -235,11 +235,11 @@ const DataDeletion = () => {
                     <div className="text-center">
                       <small className="text-medium-emphasis">
                         Need assistance? Contact us at{' '}
-                        <a href="mailto:info@armmgroup.com" className="text-decoration-none">
+                        <a href="mailto:info@armmgroup.com" className="text-light">
                           info@armmgroup.com
                         </a>{' '}
                         or call{' '}
-                        <a href="tel:+1-347-513-3040" className="text-decoration-none">
+                        <a href="tel:+1-347-513-3040" className="text-light">
                           347-513-3040
                         </a>
                       </small>
