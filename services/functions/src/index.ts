@@ -26,6 +26,7 @@ import { isUIDLinked, checkDocumentExists, checkDocumentLinked } from "./callabl
 import { unlinkUser } from "./callable/unlinkUser";
 import { calculateTotalYTD, calculateYTD } from "./callable/ytd";
 import { uploadProfilePicture } from "./callable/uploadProfilePicture";
+import { sendInviteEmail } from "./callable/sendInviteEmail";
 
 // Expose Firestore triggers
 export { handleActivity, onActivityWrite, onAssetUpdate, onConnectedUsersChange, githubToNotion, handleStorageDocumentUpload }; // Added export
@@ -34,4 +35,4 @@ export { handleActivity, onActivityWrite, onAssetUpdate, onConnectedUsersChange,
 export { scheduledYTDReset, processScheduledActivities };
 
 // Expose callable functions
-export { linkNewUser, checkDocumentExists, checkDocumentLinked, unlinkUser, isUIDLinked, calculateTotalYTD, calculateYTD, uploadProfilePicture };
+export { linkNewUser, checkDocumentExists, checkDocumentLinked, unlinkUser, isUIDLinked, calculateTotalYTD, calculateYTD, uploadProfilePicture, sendInviteEmail };
