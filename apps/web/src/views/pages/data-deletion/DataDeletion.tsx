@@ -96,7 +96,11 @@ const DataDeletion = () => {
         })
         setFormData({ cid: '', email: '', reason: '' })
       } else {
-        throw new Error(result.error || 'Failed to submit request')
+        // Show specific error message from backend
+        setSubmitStatus({
+          type: 'error',
+          message: result.error || 'Failed to submit request'
+        })
       }
     } catch (error) {
       console.error('Error submitting deletion request:', error)
@@ -118,7 +122,13 @@ const DataDeletion = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <div className="text-center mb-4">
-                    <h1 className="text-primary mb-2">Data Deletion Request</h1>
+                    <div className="mb-3">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-danger">
+                        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14ZM10 11v6M14 11v6" 
+                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <h1 className="text-light mb-2">Data Deletion Request</h1>
                     <p className="text-medium-emphasis">
                       Request the deletion of your account and associated data from ARMM Group systems
                     </p>
@@ -161,7 +171,7 @@ const DataDeletion = () => {
                       <CFormInput
                         name="email"
                         type="email"
-                        placeholder="Email address"
+                        placeholder="Email address associated with your account"
                         autoComplete="email"
                         value={formData.email}
                         onChange={handleInputChange}
@@ -174,18 +184,23 @@ const DataDeletion = () => {
                         {errors.email}
                       </div>
                     )}
+                    <div className="mb-3">
+                      <small className="text-medium-emphasis">
+                        Please enter the email address associated with your Client ID in our system.
+                      </small>
+                    </div>
 
-                    <CInputGroup className="mb-4">
-                      <CFormInput
+                    <div className="mb-4">
+                      <textarea
                         name="reason"
-                        as="textarea"
+                        className="form-control"
                         rows={3}
                         placeholder="Reason for deletion request (optional)"
                         value={formData.reason}
                         onChange={handleInputChange}
                         disabled={isSubmitting}
                       />
-                    </CInputGroup>
+                    </div>
 
                     <div className="mb-4">
                       <small className="text-medium-emphasis">

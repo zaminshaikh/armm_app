@@ -7,6 +7,7 @@
 import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 import cors from "cors";
+import config from "../../config.json";
 
 // Initialize CORS with proper configuration
 const corsHandler = cors({
@@ -67,9 +68,36 @@ export const sendDataDeletionRequest = functions.https.onRequest(async (req, res
         return;
       }
 
-      // Generate the email content
-      const emailHtml = generateDeletionRequestEmailHtml(cid, email, reason);
-      const emailText = generateDeletionRequestEmailText(cid, email, reason);
+      // Verify that the CID exists and the email matches
+      const usersCollection = admin.firestore().collection(config.FIRESTORE_ACTIVE_USERS_COLLECTION);
+      const userDoc = await usersCollection.doc(cid).get();
+
+      if (!userDoc.exists) {
+        res.status(404).json({ 
+          success: false, 
+          error: "Client ID not found in our records" 
+        });
+        return;
+      }
+
+      const userData = userDoc.data();
+      const storedInitEmail = userData?.initEmail?.toLowerCase();
+      const storedAppEmail = userData?.appEmail?.toLowerCase();
+      const submittedEmail = email.toLowerCase();
+
+      // Check if submitted email matches either initEmail or appEmail
+      if (submittedEmail !== storedInitEmail && submittedEmail !== storedAppEmail) {
+        res.status(400).json({ 
+          success: false, 
+          error: "The email address provided does not match our records for this Client ID" 
+        });
+        return;
+      }
+
+      // Generate the email content with client information
+      const clientName = `${userData?.firstName || ''} ${userData?.lastName || ''}`.trim() || 'N/A';
+      const emailHtml = generateDeletionRequestEmailHtml(cid, email, reason, clientName, userData);
+      const emailText = generateDeletionRequestEmailText(cid, email, reason, clientName, userData);
 
       // Send email using Resend REST API
       const emailResponse = await fetch('https://api.resend.com/emails', {
@@ -80,7 +108,7 @@ export const sendDataDeletionRequest = functions.https.onRequest(async (req, res
         },
         body: JSON.stringify({
           from: "noreply@app.armmgroup.com",
-          to: ["zaminusa@gmail.com"],
+          to: ["zaminusa@gmail.com", "info@armmgroup.com"],
           subject: `Data Deletion Request - Client ID: ${cid}`,
           html: emailHtml,
           text: emailText,
@@ -98,10 +126,12 @@ export const sendDataDeletionRequest = functions.https.onRequest(async (req, res
       await admin.firestore().collection("dataDeletionRequests").add({
         cid,
         email,
+        clientName,
         reason: reason || "No specific reason provided",
         requestedAt: admin.firestore.Timestamp.now(),
         messageId: emailResult.id,
         status: "submitted",
+        emailVerified: true, // Email was verified against stored records
         ipAddress: req.ip || "unknown",
         userAgent: req.get('User-Agent') || "unknown"
       });
@@ -141,7 +171,7 @@ export const sendDataDeletionRequest = functions.https.onRequest(async (req, res
 /**
  * Generate HTML email template for data deletion requests
  */
-function generateDeletionRequestEmailHtml(cid: string, email: string, reason: string): string {
+function generateDeletionRequestEmailHtml(cid: string, email: string, reason: string, clientName: string, userData: any): string {
   const currentDate = new Date().toLocaleString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -252,7 +282,14 @@ function generateDeletionRequestEmailHtml(cid: string, email: string, reason: st
 <body>
     <div class="email-container">
         <div class="header">
-            <h1 class="header-title">🗑️ Data Deletion Request</h1>
+            <div style="margin-bottom: 15px;">
+                <svg width="48" height="48" viewBox="0 0 496.268 496.268" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M106.908,64.516V478.11c0,10.024,8.122,18.157,18.158,18.157h246.139c10.036,0,18.158-8.133,18.158-18.157l-0.438-413.594
+                        H106.908z M168.439,465.627h-27.237V88.851h27.237V465.627z M261.75,465.627h-27.24V88.851h27.24V465.627z M358.592,465.627
+                        h-27.237V88.851h27.237V465.627z M405.931,18.055v28.259H90.337V18.055h96.284V0H309.65v18.055H405.931z"/>
+                </svg>
+            </div>
+            <h1 class="header-title">Data Deletion Request</h1>
             <p class="header-subtitle">User Account & Data Removal Request</p>
         </div>
 
@@ -266,13 +303,18 @@ function generateDeletionRequestEmailHtml(cid: string, email: string, reason: st
                 <h3 style="margin-top: 0; color: #dc3545;">Request Details</h3>
                 
                 <div class="detail-row">
+                    <span class="detail-label">Client Name:</span>
+                    <span class="detail-value"><strong>${clientName}</strong></span>
+                </div>
+                
+                <div class="detail-row">
                     <span class="detail-label">Client ID (CID):</span>
                     <span class="detail-value"><strong>${cid}</strong></span>
                 </div>
                 
                 <div class="detail-row">
                     <span class="detail-label">Email Address:</span>
-                    <span class="detail-value"><strong>${email}</strong></span>
+                    <span class="detail-value"><strong>${email}</strong> ✅ <em>Verified</em></span>
                 </div>
                 
                 <div class="detail-row">
@@ -291,7 +333,7 @@ function generateDeletionRequestEmailHtml(cid: string, email: string, reason: st
             </div>
 
             <div class="priority-notice">
-                <h4 style="margin-top: 0;">🚨 Next Steps Required:</h4>
+                <h4 style="margin-top: 0;">⚠️ Next Steps Required:</h4>
                 <ol style="margin-bottom: 0; padding-left: 20px;">
                     <li><strong>Verify Identity:</strong> Contact the user at <a href="mailto:${email}">${email}</a> to confirm this request</li>
                     <li><strong>Review Account:</strong> Check all systems for data associated with CID: ${cid}</li>
@@ -316,7 +358,7 @@ function generateDeletionRequestEmailHtml(cid: string, email: string, reason: st
 /**
  * Generate plain text version of the data deletion request email
  */
-function generateDeletionRequestEmailText(cid: string, email: string, reason: string): string {
+function generateDeletionRequestEmailText(cid: string, email: string, reason: string, clientName: string, userData: any): string {
   const currentDate = new Date().toLocaleString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -333,8 +375,9 @@ A user has submitted a request to delete their account and all associated data f
 
 REQUEST DETAILS:
 ================
+Client Name: ${clientName}
 Client ID (CID): ${cid}
-Email Address: ${email}
+Email Address: ${email} [VERIFIED]
 Request Date: ${currentDate}
 Reason: ${reason || 'No specific reason provided'}
 
