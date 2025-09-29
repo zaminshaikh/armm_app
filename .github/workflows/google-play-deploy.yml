@@ -6,6 +6,30 @@ on:
       - main
     paths:
       - 'apps/mobile/lib/**'
+      - 'apps/mobile/pubspec.yaml'
+      - '.github/workflows/google-play-deploy.yml'
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 'Release track (internal, alpha, beta, production)'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+      release_status:
+        description: 'Release status'
+        required: true
+        default: 'draft'
+        type: choice
+        options:
+          - draft
+          - completed
+          - halted
+          - inProgress
 
 jobs:
   build-deploy:
@@ -75,10 +99,14 @@ jobs:
           # Decode the Google Play service account from Base64
           echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}" | base64 --decode > service_account.json
 
+          # Use input values or defaults
+          TRACK="${{ github.event.inputs.track || 'internal' }}"
+          STATUS="${{ github.event.inputs.release_status || 'draft' }}"
+
           # Fastlane supply command
           fastlane supply \
-            --track "internal" \
-            --release_status draft \
+            --track "$TRACK" \
+            --release_status "$STATUS" \
             --package_name "com.armm.investmentportfolio" \
             --json_key service_account.json \
             --aab build/app/outputs/bundle/release/app-release.aab \
