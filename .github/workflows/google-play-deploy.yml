@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'apps/mobile/lib/**'
+      - 'apps/mobile/pubspec.yaml'
 
 jobs:
   build-deploy:
