@@ -7,6 +7,7 @@ on:
     paths:
       - 'apps/mobile/lib/**'
       - 'apps/mobile/pubspec.yaml'
+      - '‎.github/workflows/google-play-deploy.yml‎'
 
 jobs:
   build-deploy:
