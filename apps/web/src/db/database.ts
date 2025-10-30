@@ -669,7 +669,7 @@ export class DatabaseService {
           columns: [
             {
               text: [
-                { text: '6800 Jericho Turnpike, Suite 120W, Syosset, NY 11791\n', style: 'footerText' },
+                { text: '865 Merrick Avenue, Suite 180N, Westbury NY 11590\n', style: 'footerText' },
                 { text: 'Contact: info@armmgroup.com', style: 'footerText' }
               ],
               alignment: 'center',
@@ -701,6 +701,10 @@ export class DatabaseService {
               [
                 { text: 'Investor:', style: 'labelText' }, 
                 { text: `${client.firstName} ${client.lastName}`, style: 'valueText' }
+              ],
+              [
+                { text: 'Account:', style: 'labelText' },
+                { text: selectedAccount, style: 'valueText' }
               ],
               [
                 { text: 'Client Since:', style: 'labelText' }, 
