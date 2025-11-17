@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>783271592956-r6ie2kuicbgt1kjr5cg6tar3095arqpu.apps.googleusercontent.com</string>
+	<string>783271592956-ud2ldu3qha0kvalijho8h8jduthbbnnb.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.783271592956-r6ie2kuicbgt1kjr5cg6tar3095arqpu</string>
+	<string>com.googleusercontent.apps.783271592956-ud2ldu3qha0kvalijho8h8jduthbbnnb</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>783271592956-ishen1nnu5q3n2dlh2olfgegh41c59u6.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.armm.investmentportfolio</string>
+	<string>com.armm.portfolio</string>
 	<key>PROJECT_ID</key>
 	<string>armm-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:783271592956:ios:b0c9f3839a747bbf2d2879</string>
+	<string>1:783271592956:ios:bcf5377b320c58de2d2879</string>
 </dict>
 </plist>

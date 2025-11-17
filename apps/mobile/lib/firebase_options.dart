@@ -64,6 +64,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '783271592956',
     projectId: 'armm-app',
     storageBucket: 'armm-app.firebasestorage.app',
-    iosBundleId: 'com.armm.investmentportfolio',
+    iosBundleId: 'com.armm.portfolio',
   );
 }
