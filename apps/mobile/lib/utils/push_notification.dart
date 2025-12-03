@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart' as notifications;
 
 class PushNotificationService {
@@ -11,6 +10,8 @@ class PushNotificationService {
       notifications.FlutterLocalNotificationsPlugin();
 
   // Initialize Firebase Messaging
+  // This method only initializes FCM if permission is already granted
+  // It does NOT request permission - that must be done by the user explicitly
   Future<void> initialize() async {
     try {
       // Get the current notification settings
@@ -19,8 +20,6 @@ class PushNotificationService {
       // Check if notifications are enabled
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
         // Notifications are enabled
-        // Allow the user to toggle the notifications button freely
-  
         // Initialize local notifications
         notifications.AndroidInitializationSettings initializationSettingsAndroid =
             const notifications.AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -34,13 +33,12 @@ class PushNotificationService {
   
         // Configure FCM messaging
         await _configureFCMMessaging();
+        log('Push notifications initialized - permission already granted');
       } else {
         // Notifications are not enabled
-        // Redirect to settings
-        await _firebaseMessaging.requestPermission();
-  
-        // Open app notification settings
-        await AppSettings.openAppSettings();
+        // Do nothing - the app works fine without notifications
+        // Permission can be granted later by the user in Settings
+        log('Push notifications not initialized - no permission granted (this is OK)');
       }
     } catch (e) {
       log('Error initializing Firebase Messaging: $e');
